@@ -6,3 +6,9 @@ Derivelables/~WRL0001.tmp
 Derivelables/~WRL0003.tmp
 Derivelables/~WRL0181.tmp
 Derivelables/~$quirements&UseCase_Unidates.doc
+UniDates/node_modules/
+UniDates/package.json
+UniDates/package-lock.json
+UniDates/.idea
+UniDates/webpack.generated.js
+UniDates/webpack.config.js
