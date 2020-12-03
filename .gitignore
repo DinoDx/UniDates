@@ -12,3 +12,37 @@ UniDates/package-lock.json
 UniDates/.idea
 UniDates/webpack.generated.js
 UniDates/webpack.config.js
+
+UniDates/HELP.md
+UniDates/target/
+UniDates/.mvn/wrapper/maven-wrapper.jar
+UniDates/**/src/main/**/target/
+UniDates/**/src/test/**/target/
+
+### STS ###
+UniDates/.apt_generated
+UniDates/.classpath
+UniDates/.factorypath
+UniDates/.project
+UniDates/.settings
+UniDates/.springBeans
+UniDates/.sts4-cache
+
+### IntelliJ IDEA ###
+UniDates/.idea
+UniDates/*.iws
+UniDates/*.iml
+UniDates/*.ipr
+
+### NetBeans ###
+UniDates/nbproject/private/
+UniDates/nbbuild/
+UniDates/dist/
+UniDates/nbdist/
+UniDates/.nb-gradle/
+UniDates/build/
+UniDates/**/src/main/**/build/
+UniDates/**/src/test/**/build/
+
+### VS Code ###
+UniDates/.vscode/
