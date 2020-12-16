@@ -5,7 +5,7 @@ import com.unidates.Unidates.UniDates.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
-import com.unidates.Unidates.UniDates.Model.Profilo;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
