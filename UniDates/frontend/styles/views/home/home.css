@@ -1,0 +1,40 @@
+.card-home-view vaadin-grid {
+    line-height: var(--lumo-line-height-m);
+    height: 100%;
+}
+
+.card-home-view vaadin-grid,
+.card-home-view vaadin-grid-cell-content {
+    background-color: white;
+    height: 100%;
+}
+
+.card-home-view img{
+   width: 15em;
+}
+
+.card-home-view .card-home {
+    background-color: #7cb5ec;
+    border-radius: var(--lumo-border-radius);
+    box-shadow: var(--lumo-box-shadow-xs);
+    padding: calc(var(--lumo-space-s) * 1.5) var(--lumo-space-m);
+}
+
+.card-home-view .header {
+    align-items: baseline;
+}
+
+.card-home-view .nome {
+    font-size: var(--lumo-font-size-s);
+    font-weight: bold;
+}
+
+.card-home-view .data {
+    color: var(--lumo-tertiary-text-color);
+    font-size: var(--lumo-font-size-xs);
+}
+
+
+.card-home-view .middle-card-home{
+    align-items: center;
+}

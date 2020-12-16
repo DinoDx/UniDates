@@ -1,0 +1,24 @@
+login-view,
+#login-view{
+    align-items: center;
+    padding: 12em;
+    background:slateblue;
+}
+
+#email{
+    color: black;
+}
+
+#login-view h1{
+    color: white;
+}
+
+#accedi{
+    background: black;
+    color: white;
+    border-radius: 17px;
+}
+
+#link{
+    color: white;
+}

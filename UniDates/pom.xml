@@ -53,6 +53,34 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+	<!--Icone -->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-icons-flow</artifactId>
+        </dependency>
+        <!--card -->
+        <dependency>
+            <groupId>com.github.appreciated</groupId>
+            <artifactId>card</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <!-- combobox -->
+        <dependency>
+            <groupId>org.vaadin.gatanaso</groupId>
+            <artifactId>multiselect-combo-box-flow</artifactId>
+            <version>3.0.2</version> <!-- use appropriate version -->
+        </dependency>
+        <!-- move card -->
+        <dependency>
+            <groupId>de.mekaso.vaadin.addons</groupId>
+            <artifactId>carousel</artifactId>
+            <version>0.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.vaddon</groupId>
+            <artifactId>mediaquery</artifactId>
+            <version>4.0.1</version>
+        </dependency>
 	</dependencies>
 
 	<dependencyManagement>

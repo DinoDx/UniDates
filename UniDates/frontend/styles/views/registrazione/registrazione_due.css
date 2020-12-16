@@ -1,0 +1,29 @@
+registrazione_due,
+#registrazione_2{
+    align-items: center;
+    padding: 6.5em;
+    color: black;
+    background:slateblue;
+}
+
+#reset{
+    background: black;
+    color: white;
+    border-radius: 17px;
+}
+
+#conferma{
+    background: black;
+    color: white;
+    border-radius: 17px;
+}
+
+#bottoni{
+    margin-top: 7em;
+    flex: auto;
+}
+
+#altezza{
+    color: black;
+}
+

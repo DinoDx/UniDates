@@ -1,0 +1,28 @@
+#caro {
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: transform 1s;
+    margin-top: 10em;
+    border: blue;
+}
+
+#card{
+    background: #7f5f49;
+    color: #99007c;
+}
+
+#c{
+    color: #99007c;
+    border-radius: 45%;
+    background: #7cb5ec;
+}
+
+#s{
+    color: #99007c;
+    border-radius: 45%;
+    background: #7cb5ec;
+}
+
+#principale {
+    position: absolute;
+}

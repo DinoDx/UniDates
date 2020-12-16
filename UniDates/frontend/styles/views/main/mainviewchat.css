@@ -1,0 +1,13 @@
+#layout_1 {
+    background: black;
+    height: var(--lumo-size-xl);
+}
+
+#layout_1 h1{
+    font-family:sans-serif;
+    margin: auto;
+}
+
+#retry {
+    margin-left: 1em;
+}

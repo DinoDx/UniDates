@@ -1,0 +1,11 @@
+#layout {
+    background: black;
+    height: var(--lumo-size-xl);
+}
+
+#layout h1{
+    font-family:sans-serif;
+    margin-left: 0.6em;
+    margin-bottom: 1em;
+    font-size: 35px;
+}

@@ -1,0 +1,26 @@
+registrazione,
+#registrazione{
+    align-items: center;
+    padding: 10em;
+    background:slateblue;
+}
+
+#bottoni{
+    align-items: center;
+}
+
+#reset{
+    background: black;
+    color: white;
+    border-radius: 17px;
+}
+
+#prosegui{
+    background: black;
+    color: white;
+    border-radius: 20px;
+}
+
+#b{
+    color: white;
+}
