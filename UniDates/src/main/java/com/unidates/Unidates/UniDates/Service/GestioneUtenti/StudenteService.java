@@ -6,8 +6,7 @@ import com.unidates.Unidates.UniDates.Model.DAOs.StudenteDao;
 import com.unidates.Unidates.UniDates.Model.Entity.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Model.Profilo;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

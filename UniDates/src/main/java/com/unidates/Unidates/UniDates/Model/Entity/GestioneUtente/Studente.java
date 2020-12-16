@@ -5,7 +5,7 @@ import com.unidates.Unidates.UniDates.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.Ammonimenti;
 import com.unidates.Unidates.UniDates.Model.Entity.Segnalazioni;
 import com.unidates.Unidates.UniDates.Model.Entity.Sospensioni;
-import com.unidates.Unidates.UniDates.Model.Profilo;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,7 +16,7 @@ public class Studente extends Utente {
 
     private boolean isBanned;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "profilo_id", referencedColumnName = "id")
     private Profilo profilo;
 

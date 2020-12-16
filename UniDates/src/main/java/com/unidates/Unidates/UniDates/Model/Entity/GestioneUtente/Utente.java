@@ -3,8 +3,6 @@ package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 import com.unidates.Unidates.UniDates.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
-import com.unidates.Unidates.UniDates.Model.Profilo;
-import org.aspectj.weaver.ast.Not;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Model;
+package com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo;
 
 import com.unidates.Unidates.UniDates.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
@@ -6,6 +6,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -15,8 +16,11 @@ public class Profilo implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(mappedBy = "profilo")
+    @OneToOne(mappedBy = "profilo", cascade = CascadeType.REMOVE)
     private Studente studente;
+
+    @OneToMany(mappedBy = "profilo", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    private Collection<Foto> listaFoto;
 
     private String nome, cognome, luogoNascita, residenza;
     private Date dataDiNascita;
@@ -47,6 +51,7 @@ public class Profilo implements Serializable {
         this.hobbyList = hobbyList;
     }
 
+    public Long getId() { return id; }
 
     public String getNome() {
         return nome;
@@ -135,4 +140,14 @@ public class Profilo implements Serializable {
     public void setHobbyList(Hobby hobbyList) {
         this.hobbyList = hobbyList;
     }
+
+    public void setId(Long id) { this.id = id; }
+
+    public Studente getStudente() { return studente; }
+
+    public void setStudente(Studente studente) { this.studente = studente; }
+
+    public Collection<Foto> getListaFoto() { return listaFoto; }
+
+    public void setListaFoto(Collection<Foto> listaFoto) { this.listaFoto = listaFoto; }
 }
