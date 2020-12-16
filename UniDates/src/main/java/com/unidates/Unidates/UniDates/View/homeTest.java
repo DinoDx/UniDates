@@ -5,7 +5,6 @@ import com.unidates.Unidates.UniDates.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Profilo;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -25,6 +24,7 @@ public class homeTest extends VerticalLayout {
 
     public homeTest() {
         TextField email = new TextField("Email");
+        TextField email2 = new TextField("Email2");
         TextField password = new TextField("Password");
         Button aggiungiUtente = new Button("Aggiungi utente", buttonClickEvent -> {
             Studente userTest = new Studente();
@@ -34,10 +34,19 @@ public class homeTest extends VerticalLayout {
             Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", new Date(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, Hobby.CALCIO);
 
 
-            gestioneUtentiController.addStudente(userTest, profilo);
+            gestioneUtentiController.registrazioneStudente(userTest, profilo);
         });
 
-        Button aggiungiNotifica = new Button("Aggiungi notifica", buttonClickEvent -> {
+        Button bloccaUtente = new Button("BloccaUtente", buttonClickEvent -> {
+            gestioneUtentiController.bloccaStudente(gestioneUtentiController.findByEmail(email.getValue()).get(),gestioneUtentiController.findByEmail(email2.getValue()).get() );
+        });
+
+        Button stampaListaBloccati = new Button("Stampa lista bloccati 1", buttonClickEvent -> {
+            for (Studente s: gestioneUtentiController.findByEmail(email.getValue()).get().getListaBloccati())
+                System.out.println(s.toString());
+        });
+
+       /* Button aggiungiNotifica = new Button("Aggiungi notifica", buttonClickEvent -> {
             Studente utente =  gestioneUtentiController.findByEmail(email.getValue()).get();
             gestioneUtentiController.addNotifica(new Notifica("Ciao come stai"),utente);
         });
@@ -62,20 +71,24 @@ public class homeTest extends VerticalLayout {
             gestioneUtentiController.addChat(new Chat(), gestioneUtentiController.findByEmail(email.getValue()).get());
         });
 
-        Button mostraChat = new Button("Stampa notifiche", buttonClickEvent -> {
+        Button mostraChat = new Button("Stampa numero chat", buttonClickEvent -> {
             System.out.println(gestioneUtentiController.findByEmail(email.getValue()).get().getListaChat().size());
-        });
+        });*/
 
         add(email);
+        add(email2);
         add(password);
         add(aggiungiUtente);
-        add(mostraUtenti);
+        add(bloccaUtente);
+        add(stampaListaBloccati);
+
+       /* add(mostraUtenti);
         add(trovaUtente);
         add(removeUtente);
         add(aggiungiNotifica);
         add(mostraNotifica);
         add(aggiungiChat);
-        add(mostraChat);
+        add(mostraChat); */
 
     }
 }

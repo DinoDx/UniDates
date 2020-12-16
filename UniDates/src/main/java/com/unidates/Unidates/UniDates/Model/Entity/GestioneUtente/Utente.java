@@ -89,4 +89,16 @@ public abstract class Utente implements Serializable {
     public Collection<Chat> getListaChat() {
         return listaChat;
     }
+
+    @Override
+    public String toString() {
+        return "Utente{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", ruolo=" + ruolo +
+                ", listNotifica=" + listNotifica +
+                ", listaChat=" + listaChat +
+                '}';
+    }
 }

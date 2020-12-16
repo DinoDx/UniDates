@@ -30,25 +30,32 @@ public class GestioneUtentiController {
     ChatService chatService;
 
 
-    @RequestMapping("/add")
-    public void addStudente(Studente studente, Profilo profilo){
-        studenteService.addStudente(studente, profilo);
-        }
-
-    @RequestMapping("/all")
-    public Collection<Studente> findAll(){
-        return studenteService.findAll();
-
+    @RequestMapping("/registrazioneStudente")
+    public boolean registrazioneStudente(Studente studente, Profilo profilo){
+        return studenteService.addStudente(studente, profilo);
     }
 
-    @RequestMapping("/remove")
+    @RequestMapping("/bloccoStudente")
+    public boolean bloccaStudente(Studente studenteBloccante, Studente studenteBloccato){
+       return studenteService.bloccaStudente(studenteBloccante,studenteBloccato);
+    }
+
+    @RequestMapping("/removeStudente")
     public void removeUtente(Studente studente){
         studenteService.removeUtente(studente);
     }
 
-    @RequestMapping("/findByEmail")
-    public Optional<Studente> findByEmail(String email){
+    @RequestMapping("/trovaStudente")
+    public Studente findByEmail(String email){
         return studenteService.findByEmail(email);
+    }
+
+
+
+
+    public Collection<Studente> findAll(){
+        return studenteService.findAll();
+
     }
 
     public void addNotifica(Notifica notifica, Studente studente){ notificaService.addNotifica(notifica, studente); }

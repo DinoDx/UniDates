@@ -36,21 +36,42 @@ public class StudenteService {
 
     }*/
 
-    public void addStudente(Studente studente, Profilo profilo){
+    public boolean addStudente(Studente studente, Profilo profilo){
         try {
             if (!studenteDao.isPresent(studente.getEmail())) {
                 studente.setProfilo(profilo);
                 studente.setListNotifica( new ArrayList<Notifica>());
                 studente.setListaChat(new ArrayList<Chat>());
+                studente.setListaBloccati(new ArrayList<Studente>());
                 studenteDao.saveUtente(studente);
+                return true;
             }
             else throw new AlreadyExistUserException();
         }catch (AlreadyExistUserException alreadyExistUserException){
             alreadyExistUserException.printStackTrace();
+            return false;
         }
 
     }
 
+
+
+    public boolean bloccaStudente(Studente studenteBloccante, Studente studenteBloccato) {
+        studenteBloccante.getListaBloccati().add(studenteBloccato);
+        studenteDao.saveUtente(studenteBloccante);
+        return true;
+    }
+
+    public Studente findByEmail(String email) {
+        try {
+            Studente studente = studenteDao.findByEmail(email);
+            if(studente != null) return studente;
+            else throw new UserNotFoundException();
+        }catch (UserNotFoundException userNotFoundException){
+            userNotFoundException.printStackTrace();
+        }
+       return null;
+    }
 
     public Collection<Studente> findAll(){
         return studenteDao.findAll();
@@ -65,8 +86,5 @@ public class StudenteService {
             userNotFoundException.printStackTrace();
         }
     }
-
-    public Optional<Studente> findByEmail(String email) {
-        return Optional.of(studenteDao.findByEmail(email));
-    }
 }
+
