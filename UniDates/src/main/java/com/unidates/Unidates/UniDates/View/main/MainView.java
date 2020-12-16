@@ -1,7 +1,7 @@
-package com.example.application.views.main;
+package com.unidates.Unidates.UniDates.View.main;
 
-import com.example.application.views.component_home_page.Home;
-import com.example.application.views.component_home_page.Notifiche;
+import com.unidates.Unidates.UniDates.View.component_home_page.Home;
+import com.unidates.Unidates.UniDates.View.component_home_page.Notifiche;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;

@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
 
 
-@Route("")
+@Route("patata")
 public class homeTest extends VerticalLayout {
 
     @Autowired
@@ -38,12 +38,12 @@ public class homeTest extends VerticalLayout {
         });
 
         Button bloccaUtente = new Button("BloccaUtente", buttonClickEvent -> {
-            gestioneUtentiController.bloccaStudente(gestioneUtentiController.findByEmail(email.getValue()).get(),gestioneUtentiController.findByEmail(email2.getValue()).get() );
+           // gestioneUtentiController.bloccaStudente(gestioneUtentiController.findByEmail(email.getValue()).get(),gestioneUtentiController.findByEmail(email2.getValue()).get() );
         });
 
         Button stampaListaBloccati = new Button("Stampa lista bloccati 1", buttonClickEvent -> {
-            for (Studente s: gestioneUtentiController.findByEmail(email.getValue()).get().getListaBloccati())
-                System.out.println(s.toString());
+         //   for (Studente s: gestioneUtentiController.findByEmail(email.getValue()).get().getListaBloccati())
+         //       System.out.println(s.toString());
         });
 
        /* Button aggiungiNotifica = new Button("Aggiungi notifica", buttonClickEvent -> {

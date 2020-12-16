@@ -1,4 +1,4 @@
-package com.example.application.views.main;
+package com.unidates.Unidates.UniDates.View.main;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;

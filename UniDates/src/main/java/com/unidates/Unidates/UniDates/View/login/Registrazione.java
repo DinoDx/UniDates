@@ -1,6 +1,7 @@
-package com.example.application.views.login;
+package com.unidates.Unidates.UniDates.View.login;
 
-import com.example.application.views.main.MainViewLogin;
+
+import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;

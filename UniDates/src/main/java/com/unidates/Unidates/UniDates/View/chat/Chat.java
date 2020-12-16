@@ -1,7 +1,8 @@
-package com.example.application.views.chat;
+package com.unidates.Unidates.UniDates.View.chat;
 
-import com.example.application.views.main.MainView;
-import com.example.application.views.main.MainViewChats;
+import com.unidates.Unidates.UniDates.View.main.MainView;
+
+import com.unidates.Unidates.UniDates.View.main.MainViewChats;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;

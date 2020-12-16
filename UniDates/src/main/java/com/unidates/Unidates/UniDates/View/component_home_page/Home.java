@@ -1,8 +1,8 @@
-package com.example.application.views.component_home_page;
+package com.unidates.Unidates.UniDates.View.component_home_page;
 
 
 import com.example.application.views.Person;
-import com.example.application.views.main.MainView;
+import com.unidates.Unidates.UniDates.View.main.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
