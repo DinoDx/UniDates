@@ -1,23 +1,22 @@
 package com.unidates.Unidates.UniDates.Model;
 
 import com.unidates.Unidates.UniDates.Enum.*;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 
 import javax.persistence.*;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-
-public class Profilo {
+@Table(name = "Profilo")
+public class Profilo implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
-    @MapsId
-    private Utente utente;
+    @OneToOne(mappedBy = "profilo")
+    private Studente studente;
 
     private String nome, cognome, luogoNascita, residenza;
     private Date dataDiNascita;
@@ -30,17 +29,24 @@ public class Profilo {
     private Hobby hobbyList;
 
 
-    public Profilo(){
+    public Profilo() {
 
     }
 
-    public Utente getUtente() {
-        return utente;
+    public Profilo(String nome, String cognome, String luogoNascita, String residenza, Date dataDiNascita, int altezza, Sesso sesso, Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi, Hobby hobbyList) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.luogoNascita = luogoNascita;
+        this.residenza = residenza;
+        this.dataDiNascita = dataDiNascita;
+        this.altezza = altezza;
+        this.sesso = sesso;
+        this.interessi = interessi;
+        this.colori_capelli = colori_capelli;
+        this.colore_occhi = colore_occhi;
+        this.hobbyList = hobbyList;
     }
 
-    public void setUtente(Utente utente) {
-        this.utente = utente;
-    }
 
     public String getNome() {
         return nome;
