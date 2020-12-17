@@ -1,6 +1,10 @@
 package com.unidates.Unidates.UniDates.View.login;
 
 
+import com.unidates.Unidates.UniDates.Controller.GestioneUtenti.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -16,11 +20,20 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpSession;
 
 @Route(value = "registrazione", layout = MainViewLogin.class)
 @PageTitle("Registrazione")
 @CssImport("./styles/views/registrazione/registrazione.css")
 public class Registrazione extends VerticalLayout {
+
+    /*ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+    HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);*/
+
 
     private RadioButtonGroup<String> sessi = new RadioButtonGroup<>();
     private Anchor link;
@@ -63,8 +76,11 @@ public class Registrazione extends VerticalLayout {
             /*resettare i valori delle varie textviews*/
         });
 
+       // httpSession.setAttribute("utente", new Studente(email.getValue(), password.getValue(), null));
+
 
         prosegui = new Button("Continua con la registrazione");
+
         link = new Anchor("/registrazione_due");
         link.add(prosegui);
 

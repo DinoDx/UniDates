@@ -28,10 +28,9 @@ public class homeTest extends VerticalLayout {
 
     public homeTest() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-
         HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
-
         Utente utente =(Utente) httpSession.getAttribute("utente");
+
         TextField email = new TextField("Email");
         TextField email2 = new TextField("Email2");
         TextField password = new TextField("Password");

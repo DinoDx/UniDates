@@ -1,5 +1,9 @@
 package com.unidates.Unidates.UniDates.View.login;
 
+import com.unidates.Unidates.UniDates.Controller.GestioneUtenti.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -17,12 +21,24 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.vaadin.gatanaso.MultiselectComboBox;
+
+import javax.servlet.http.HttpSession;
 
 @Route(value = "registrazione_due", layout = MainViewLogin.class)
 @PageTitle("Registrazione_2")
 @CssImport("./styles/views/registrazione/registrazione_due.css")
 public class Registrazione_due extends VerticalLayout {
+
+   /* @Autowired
+    GestioneUtentiController gestioneUtentiController;
+
+
+    ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+    HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true); */
 
 
     private Select<String> interessi = new Select<>();
@@ -57,7 +73,6 @@ public class Registrazione_due extends VerticalLayout {
         capelli.setPlaceholder("Colore capelli");
         occhi = new TextField("Occhi");
         occhi.setPlaceholder("Colore occhi");
-
 
         MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
         multiselectComboBox.setWidth("100%");
@@ -100,7 +115,11 @@ public class Registrazione_due extends VerticalLayout {
         buttons.setId("bottoni");
         buttons.add(anchor,reset);
 
+       // Studente utente =(Studente) httpSession.getAttribute("utente");
 
+        //Profilo profilo = new Profilo("")
+
+        //gestioneUtentiController.registrazioneStudente(utente, profilo);
 
         layout.add(città,luogo,capelli,occhi,altezza,multiselectComboBox,interessi,value,upload);
         layout.setColspan(multiselectComboBox,3);

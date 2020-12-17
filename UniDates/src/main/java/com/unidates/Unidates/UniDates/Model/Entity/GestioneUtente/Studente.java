@@ -37,9 +37,9 @@ public class Studente extends Utente{
     public Studente() {
     }
 
-    public Studente(String email, String password, boolean isBanned, Profilo profilo) {
+    public Studente(String email, String password, Profilo profilo) {
         super(email, password, Ruolo.STUDENTE);
-        this.isBanned = isBanned;
+        this.isBanned = false;
         this.profilo = profilo;
     }
 
