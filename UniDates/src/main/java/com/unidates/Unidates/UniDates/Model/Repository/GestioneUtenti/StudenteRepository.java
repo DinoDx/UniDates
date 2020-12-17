@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 
-public interface studenteRepository extends JpaRepository<Studente, Long> {
-    @Query("select s from Studente s where s.email= :email")
+public interface StudenteRepository extends JpaRepository<Studente, Long> {
     Studente findByEmail(String email);
 }

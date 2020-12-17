@@ -5,3 +5,4 @@ public enum Ruolo {
         MODERATORE,
         COMMUNITY_MANAGER,
 }
+

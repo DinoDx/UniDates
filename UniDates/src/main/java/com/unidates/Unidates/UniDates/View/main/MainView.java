@@ -52,7 +52,7 @@ public class MainView extends AppLayout {
         menuBar.setId("profile-img");
         MenuItem profile = menuBar.addItem("");
         profile.addComponentAsFirst(new Image("images/user.svg",""));
-        profile.getSubMenu().addItem(new Anchor("/login","Logout"));
+        profile.getSubMenu().addItem(new Anchor("/logout","Logout"));
         profile.getSubMenu().addItem(new Anchor("/profilo-personale","Profilo Personale"));
 
 

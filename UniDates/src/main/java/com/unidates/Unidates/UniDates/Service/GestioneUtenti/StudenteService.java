@@ -8,6 +8,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class StudenteService {
         try {
             if (!studenteDao.isPresent(studente.getEmail())) {
                 studente.setProfilo(profilo);
+                studente.setPassword(new BCryptPasswordEncoder().encode(studente.getPassword()));
                 studente.setListNotifica( new ArrayList<Notifica>());
                 studente.setListaChat(new ArrayList<Chat>());
                 studente.setListaBloccati(new ArrayList<Studente>());

@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Studente extends Utente {
+public class Studente extends Utente{
 
 
     private boolean isBanned;

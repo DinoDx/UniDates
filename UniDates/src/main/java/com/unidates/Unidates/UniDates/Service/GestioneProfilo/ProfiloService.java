@@ -12,12 +12,10 @@ public class ProfiloService {
     private ProfiloRepository profiloRepository;
 
     public void deleteProfile(Profilo profilo){
-
         profiloRepository.deleteById(profilo.getId());
     }
 
     public void updateProfile(Profilo profilo){
-
         profiloRepository.save(profilo);
     }
 }
