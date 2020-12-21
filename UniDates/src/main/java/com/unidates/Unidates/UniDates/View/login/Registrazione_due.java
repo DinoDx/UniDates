@@ -78,7 +78,7 @@ public class Registrazione_due extends VerticalLayout {
         multiselectComboBox.setWidth("100%");
         multiselectComboBox.setLabel("Seleziona Topic");
         multiselectComboBox.setPlaceholder("Scelti...");
-        multiselectComboBox.setItems("Musica","Cinema","Sport","Calcio","Anime","Manga/Fumetti","Serie Tv","Tv","Arte","Teatro","Politica","Videogiochji","Tecnologia","Viaggi","Storia","Informatica","Libri","Cucina","Natura","Fotografia","Disegno","Motori","Moda","Altro");
+        multiselectComboBox.setItems("Musica","Cinema","Sport","Calcio","Anime","Manga","Fumetti","Serie Tv","Tv","Arte","Teatro","Politica","Videogiochji","Tecnologia","Viaggi","Storia","Informatica","Libri","Cucina","Natura","Fotografia","Disegno","Motori","Moda","Altro");
 
         altezza = new NumberField("Altezza (cm)");
         altezza.setHasControls(true);
@@ -108,7 +108,16 @@ public class Registrazione_due extends VerticalLayout {
         anchor = new Anchor("/login");
         anchor.add(confirm);
 
-        Button reset = new Button("Reset");
+        Button reset = new Button("Reset",buttonClickEvent -> {
+            città.setValue("");
+            luogo.setValue("");
+            capelli.setValue("");
+            occhi.setValue("");
+            altezza.setValue(null);
+            interessi.setValue(null);
+            multiselectComboBox.setValue(null);
+            //reset image
+        });
 
         confirm.setId("conferma");
         reset.setId("reset");

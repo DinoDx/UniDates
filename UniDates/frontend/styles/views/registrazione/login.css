@@ -5,20 +5,10 @@ login-view,
     background:slateblue;
 }
 
-#email{
-    color: black;
-}
-
-#login-view h1{
-    color: white;
-}
-
-#accedi{
-    background: black;
-    color: white;
-    border-radius: 17px;
-}
-
 #link{
+    color: white;
+}
+
+.login-view h1 {
     color: white;
 }

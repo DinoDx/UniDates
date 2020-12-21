@@ -8,7 +8,7 @@ $_documentContainer.innerHTML = `
   <style>
     html {
       --lumo-primary-color: hsla(68, 57%, 22%, 0.34);
-      --lumo-primary-text-color: hsl(315,84%,47%);
+      --lumo-primary-text-color: hsl(300,3%,7%);
     }
   </style>
 </custom-style>

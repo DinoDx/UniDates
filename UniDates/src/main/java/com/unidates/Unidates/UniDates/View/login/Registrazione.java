@@ -25,14 +25,15 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 
 @Route(value = "registrazione", layout = MainViewLogin.class)
 @PageTitle("Registrazione")
 @CssImport("./styles/views/registrazione/registrazione.css")
 public class Registrazione extends VerticalLayout {
 
-    /*ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-    HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);*/
+    //ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+    //HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
 
 
     private RadioButtonGroup<String> sessi = new RadioButtonGroup<>();
@@ -73,10 +74,15 @@ public class Registrazione extends VerticalLayout {
         Button reset = new Button("Reset",buttonClickEvent -> {
             nome.setValue("");
             cognome.setValue("");
-            /*resettare i valori delle varie textviews*/
+            email.setValue("");
+            password.setValue("");
+            conferma_password.setValue("");
+            picker.setValue(null);
+            sessi.setValue(null);
         });
 
-       // httpSession.setAttribute("utente", new Studente(email.getValue(), password.getValue(), null));
+
+        //httpSession.setAttribute("utente", new Studente(email.getValue(), password.getValue(), null));
 
 
         prosegui = new Button("Continua con la registrazione");
@@ -91,8 +97,6 @@ public class Registrazione extends VerticalLayout {
 
         buttons.add(link,reset);
         add(layout,sessi,buttons);
-
-
     }
 
 }

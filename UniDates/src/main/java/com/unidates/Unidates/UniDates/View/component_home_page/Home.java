@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-@Route(value = "", layout = MainView.class)
+@Route(value = "home", layout = MainView.class)
 @CssImport("./styles/views/home/home.css")
 @PageTitle("Home")
 public class Home extends Div implements AfterNavigationObserver {
