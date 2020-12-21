@@ -1,7 +1,9 @@
 package com.unidates.Unidates.UniDates.View;
 
+import com.unidates.Unidates.UniDates.Controller.GestioneProfilo.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtenti.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.*;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
@@ -23,6 +25,9 @@ public class homeTest extends VerticalLayout {
 
     @Autowired
     GestioneUtentiController gestioneUtentiController;
+
+    @Autowired
+    GestioneProfiloController gestioneProfiloController;
 
 
 
@@ -88,6 +93,23 @@ public class homeTest extends VerticalLayout {
             System.out.println(gestioneUtentiController.findByEmail(email.getValue()).get().getListaChat().size());
         });*/
 
+        Button aggiungiFoto = new Button("Aggiungi Foto", buttonClickEvent -> {
+            gestioneProfiloController.addFoto(gestioneUtentiController.findByEmail(email.getValue()).getProfilo(),new Foto("Url prova " ));
+            for(Foto f : gestioneProfiloController.findAllFoto())
+                System.out.println(f.getUrl());
+        });
+
+        Button modificaProfilo = new Button("Modifica Profilo", buttonClickEvent -> {
+            Profilo nuovoProfilo = gestioneUtentiController.findByEmail(email.getValue()).getProfilo();
+            nuovoProfilo.setCognome("Update");
+            nuovoProfilo.setNome("Update");
+            gestioneProfiloController.updateProfile(nuovoProfilo);
+
+            System.out.println(gestioneUtentiController.findByEmail(email.getValue()).getProfilo().getNome());
+            System.out.println(gestioneUtentiController.findByEmail(email.getValue()).getProfilo().getCognome());
+        });
+
+
 
         add(email);
         add(email2);
@@ -99,6 +121,8 @@ public class homeTest extends VerticalLayout {
         add(mostraUtenti);
         add(trovaUtente);
         add(removeUtente);
+        add(aggiungiFoto);
+        add(modificaProfilo);
         /*
         add(aggiungiNotifica);
         add(mostraNotifica);

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Collection;
+
 @Controller
 @RequestMapping("/api/ProfileManager")
 public class GestioneProfiloController {
@@ -38,7 +40,13 @@ public class GestioneProfiloController {
         profiloService.updateProfile(profilo);
     }
 
+    @RequestMapping("/findFoto")
+    public Foto findFotoById(Long id){
+        return fotoService.findById(id);
+    }
 
-
-
+    @RequestMapping("/findAllFoto")
+    public Collection<Foto> findAllFoto(){
+        return fotoService.findAll();
+    }
 }
