@@ -3,6 +3,7 @@ package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 
 import com.unidates.Unidates.UniDates.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.Ammonimenti;
+import com.unidates.Unidates.UniDates.Model.Entity.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.Segnalazioni;
 import com.unidates.Unidates.UniDates.Model.Entity.Sospensioni;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
@@ -33,6 +34,9 @@ public class Studente extends Utente{
 
     @OneToMany(mappedBy = "studente", cascade = CascadeType.REMOVE)
     private List<Ammonimenti> listAmmonimenti;
+
+    @OneToMany(mappedBy = "studente1", cascade = CascadeType.REMOVE)
+    private List<Match> listMatch;
 
     public Studente() {
     }
@@ -65,6 +69,38 @@ public class Studente extends Utente{
 
     public void setListaBloccati(List<Studente> listaBloccati) {
         this.listaBloccati = listaBloccati;
+    }
+
+    public List<Segnalazioni> getListSegnalazioni() {
+        return listSegnalazioni;
+    }
+
+    public void setListSegnalazioni(List<Segnalazioni> listSegnalazioni) {
+        this.listSegnalazioni = listSegnalazioni;
+    }
+
+    public List<Sospensioni> getListSospensioni() {
+        return listSospensioni;
+    }
+
+    public void setListSospensioni(List<Sospensioni> listSospensioni) {
+        this.listSospensioni = listSospensioni;
+    }
+
+    public List<Ammonimenti> getListAmmonimenti() {
+        return listAmmonimenti;
+    }
+
+    public void setListAmmonimenti(List<Ammonimenti> listAmmonimenti) {
+        this.listAmmonimenti = listAmmonimenti;
+    }
+
+    public List<Match> getListMatch() {
+        return listMatch;
+    }
+
+    public void setListMatch(List<Match> listMatch) {
+        this.listMatch = listMatch;
     }
 
     @Override
