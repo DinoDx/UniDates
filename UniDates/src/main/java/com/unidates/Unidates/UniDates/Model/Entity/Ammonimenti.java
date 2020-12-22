@@ -7,6 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Ammonimenti")
 public class Ammonimenti {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -14,4 +15,12 @@ public class Ammonimenti {
     @ManyToOne
     @JoinColumn(name = "studente_id")
     private Studente studente;
+
+    @ManyToOne
+    @JoinColumn(name = "moderatore_id")
+    private Moderatore moderatore;
+
+    public Ammonimenti(){
+
+    }
 }

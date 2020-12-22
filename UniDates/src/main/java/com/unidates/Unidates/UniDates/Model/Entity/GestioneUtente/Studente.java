@@ -103,6 +103,11 @@ public class Studente extends Utente{
         this.listMatch = listMatch;
     }
 
+    public void addAmmonimento(Ammonimenti ammonimento){
+        listAmmonimenti.add(ammonimento);
+    }
+
+
     @Override
     public String toString() {
         return super.toString() + "Studente{" +
