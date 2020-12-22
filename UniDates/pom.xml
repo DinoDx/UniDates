@@ -84,11 +84,11 @@
             <artifactId>carousel</artifactId>
             <version>0.5.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.vaddon</groupId>
-            <artifactId>mediaquery</artifactId>
-            <version>4.0.1</version>
-        </dependency>
+		<dependency>
+			<groupId>com.vaadin.componentfactory</groupId>
+			<artifactId>chat</artifactId>
+			<version>2.0.1</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
