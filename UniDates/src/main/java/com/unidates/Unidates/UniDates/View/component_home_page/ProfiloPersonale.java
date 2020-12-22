@@ -22,7 +22,6 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.vaddon.CustomMediaQuery;
 
 import java.util.Arrays;
 import java.util.List;

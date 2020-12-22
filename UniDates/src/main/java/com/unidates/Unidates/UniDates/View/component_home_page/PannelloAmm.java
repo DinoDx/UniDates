@@ -1,6 +1,5 @@
 package com.unidates.Unidates.UniDates.View.component_home_page;
 
-import com.github.appreciated.card.Card;
 import com.github.appreciated.card.ClickableCard;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
