@@ -1,7 +1,6 @@
 package com.unidates.Unidates.UniDates.Model.Entity;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 
 import javax.persistence.*;
 
@@ -16,6 +15,10 @@ public class Segnalazioni {
     @JoinColumn(name = "foto_id")
     private Foto foto;
 
+    @ManyToOne
+    @JoinColumn(name = "moderatore_id")
+    private Moderatore moderatore;
+
     private String motivazione;
 
     private String dettagli;
@@ -27,6 +30,14 @@ public class Segnalazioni {
 
         this.motivazione = motivazione;
         this.dettagli = dettagli;
+    }
+
+    public Moderatore getModeratore() {
+        return moderatore;
+    }
+
+    public void setModeratore(Moderatore moderatore) {
+        this.moderatore = moderatore;
     }
 
     public Long getId() {

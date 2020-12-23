@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.Service.GestioneModerazione;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
+import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.Segnalazioni;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneModerazione.SegnalazioniRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,11 @@ public class SegnalazioniService {
     @Autowired
     SegnalazioniRepository segnalazioniRepository;
 
-    public void addSegnalazione(Foto foto, String motivazione, String dettagli){
+    public void addSegnalazione(Moderatore moderatore, Foto foto, String motivazione, String dettagli){
 
-        foto.addSegnalazione(new Segnalazioni(motivazione, dettagli));
+        Segnalazioni segnalazione = new Segnalazioni(motivazione, dettagli);
+        segnalazione.setFoto(foto);
+        segnalazione.setModeratore(moderatore);
+        segnalazioniRepository.save(segnalazione);
     }
 }

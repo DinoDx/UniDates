@@ -14,15 +14,13 @@ public class AmmonimentiService {
     @Autowired
     AmmonimentiRepository ammonimentiRepository;
 
-    @Autowired
-    StudenteRepository studenteRepository;
 
     public void sendAmmonimento(Moderatore moderatore, Studente studente, String motivazione, String dettagli){
 
         Ammonimenti ammonimento = new Ammonimenti(motivazione, dettagli);
-        studente.addAmmonimento(ammonimento);
-        ammonimento.setUsernameStudente(studente.getEmail());
-        moderatore.addAmmonimento(ammonimento);
+        ammonimento.setStudente(studente);
+        ammonimento.setModeratore(moderatore);
+        ammonimentiRepository.save(ammonimento);
     }
 
 }

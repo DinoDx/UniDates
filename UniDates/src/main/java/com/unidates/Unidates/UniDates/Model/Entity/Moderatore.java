@@ -18,6 +18,9 @@ public class Moderatore extends Utente {
     @JoinColumn(name = "studente_id", referencedColumnName = "id")
     private Studente studente;
 
+    @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
+    private Collection<Segnalazioni> segnalazioniRicevute;
+
     public Moderatore(){
     }
 
@@ -37,6 +40,14 @@ public class Moderatore extends Utente {
 
     public void setAmmonimentiInviati(Collection<Ammonimenti> ammonimentiInviati) {
         AmmonimentiInviati = ammonimentiInviati;
+    }
+
+    public Collection<Segnalazioni> getSegnalazioniRicevute() {
+        return segnalazioniRicevute;
+    }
+
+    public void setSegnalazioniRicevute(Collection<Segnalazioni> segnalazioniRicevute) {
+        this.segnalazioniRicevute = segnalazioniRicevute;
     }
 
     public Studente getStudente() {

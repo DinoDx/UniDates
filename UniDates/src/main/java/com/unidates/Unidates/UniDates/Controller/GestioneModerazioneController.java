@@ -36,8 +36,8 @@ public class GestioneModerazioneController {
     ModeratoreService moderatoreService;
 
     @RequestMapping("/segnalaFoto")
-    public void segnalaFoto(Foto foto, String motivazione, String dettagli){
-        segnalazioniService.addSegnalazione(foto, motivazione, dettagli);
+    public void segnalaFoto(Moderatore moderatore, Foto foto, String motivazione, String dettagli){
+        segnalazioniService.addSegnalazione(moderatore, foto, motivazione, dettagli);
     }
 
     @RequestMapping("/inviaAmmonimento")
@@ -46,8 +46,8 @@ public class GestioneModerazioneController {
     }
 
     @RequestMapping("/sospendiUtente")
-    public void sospendiUtente(Studente studente){
-        sospensioniService.suspendStudente(studente);
+    public void sospendiUtente(Studente studente, int durata, String dettagli){
+        sospensioniService.suspendStudente(studente, durata, dettagli);
     }
 
     @RequestMapping("/ammonimentiRicevuti")
@@ -60,10 +60,10 @@ public class GestioneModerazioneController {
         return moderatoreService.findByEmail(moderatore.getEmail()).getAmmonimentiInviati();
     }
 
-   /* @RequestMapping("/segnalazioniUtente")
-    public Collection<Segnalazioni> showSegnalazioni(Studente studente){
-        return studenteService.findByEmail(studente.getEmail()).getListSegnalazioni();
+    @RequestMapping("/segnalazioniUtente")
+    public Collection<Segnalazioni> showSegnalazioni(Moderatore moderatore){
+        return moderatoreService.findByEmail(moderatore.getEmail()).getSegnalazioniRicevute();
 
-    } */
+    }
 
 }
