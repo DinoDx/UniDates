@@ -17,4 +17,8 @@ public class GestioneInterazioniController {
         matchService.aggiungiMatch(studente1, studente2);
     }
 
+    public void findMatch(Studente studente1, Studente studente2){
+
+    }
+
 }

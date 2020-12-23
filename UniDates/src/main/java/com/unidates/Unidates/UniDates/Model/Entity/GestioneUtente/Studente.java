@@ -35,6 +35,9 @@ public class Studente extends Utente{
     @OneToMany(mappedBy = "studente1", cascade = CascadeType.REMOVE)
     private List<Match> listMatch;
 
+    @OneToMany(mappedBy = "studente2", cascade = CascadeType.REMOVE)
+    private List<Match> listMatchRicevuti;
+
     public Studente() {
     }
 
@@ -96,6 +99,13 @@ public class Studente extends Utente{
         listAmmonimenti.add(ammonimento);
     }
 
+    public List<Match> getListMatchRicevuti() {
+        return listMatchRicevuti;
+    }
+
+    public void setListMatchRicevuti(List<Match> listMatchRicevuti) {
+        this.listMatchRicevuti = listMatchRicevuti;
+    }
 
     @Override
     public String toString() {

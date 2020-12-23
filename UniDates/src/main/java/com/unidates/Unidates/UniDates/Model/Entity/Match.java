@@ -12,8 +12,6 @@ public class Match {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String prova;
-
     @ManyToOne
     @JoinColumn(name = "studente1_id")
     private Studente studente1;
@@ -70,9 +68,8 @@ public class Match {
     public String toString() {
         return "Match{" +
                 "id=" + id +
-                ", prova='" + prova + '\'' +
-                ", studente1=" + studente1 +
-                ", studente2=" + studente2 +
+                ", studente1=" + studente1.getEmail() +
+                ", studente2=" + studente2.getEmail() +
                 ", likedByStudent1=" + likedByStudent1 +
                 ", likeByStudent2=" + likeByStudent2 +
                 '}';

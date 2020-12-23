@@ -121,6 +121,9 @@ public class homeTest extends VerticalLayout {
 
             for (Match m : gestioneUtentiController.findByEmail(email.getValue()).getListMatch())
                 System.out.println(m.toString());
+
+            for (Match m : gestioneUtentiController.findByEmail(email.getValue()).getListMatchRicevuti())
+                System.out.println(m.toString());
         });
 
 
