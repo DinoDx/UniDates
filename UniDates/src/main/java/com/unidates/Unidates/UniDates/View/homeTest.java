@@ -11,6 +11,8 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
+import com.unidates.Unidates.UniDates.Model.Repository.GestioneProfilo.FotoRepository;
+import com.unidates.Unidates.UniDates.Service.GestioneProfilo.FotoService;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -112,16 +114,15 @@ public class homeTest extends VerticalLayout {
 
 
 
-       /* Button segnalaFoto = new Button("Segnala Foto", buttonClickEvent -> {
+       Button segnalaFoto = new Button("Segnala Foto", buttonClickEvent -> {
             Foto foto = new Foto("url di prova");
             gestioneProfiloController.addFoto(gestioneUtentiController.findByEmail(email.getValue()).getProfilo(),foto);
             Moderatore moderatore = new Moderatore("ciaomod", "ciaomod");
             gestioneUtentiController.registrazioneModeratore(moderatore,gestioneUtentiController.findByEmail(email.getValue()));
             gestioneModerazioneController.segnalaFoto(moderatore, foto,"porcodio", "foto dimmerda");
 
-            System.out.println(foto.getSegnalazioniRicevuto().size());
-            System.out.print(moderatore.getSegnalazioniRicevute().size());
-        }); */ // DA AGGIUSTARE
+            gestioneProfiloController.findAllFoto().forEach(f -> System.out.printf("id_Foto: %s, numero elementi: %S", f.getId(), f.getSegnalazioniRicevuto().size()));
+        });
 
 
 
