@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Model.Repository.GestioneModerazione;
+package com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti;
 
 import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
 import org.dom4j.rule.Mode;

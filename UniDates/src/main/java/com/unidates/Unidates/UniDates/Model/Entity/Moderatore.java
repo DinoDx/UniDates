@@ -14,7 +14,7 @@ public class Moderatore extends Utente {
     @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
     private Collection<Ammonimenti> AmmonimentiInviati;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToOne
     @JoinColumn(name = "studente_id", referencedColumnName = "id")
     private Studente studente;
 
@@ -24,10 +24,10 @@ public class Moderatore extends Utente {
     public Moderatore(){
     }
 
-    public Moderatore(String email, String password, Studente studente) {
+    public Moderatore(String email, String password) {
         super(email, password, Ruolo.MODERATORE);
         AmmonimentiInviati = new ArrayList<Ammonimenti>();
-        this.studente = studente;
+        segnalazioniRicevute = new ArrayList<Segnalazioni>();
     }
 
     public void addAmmonimento(Ammonimenti ammonimento){

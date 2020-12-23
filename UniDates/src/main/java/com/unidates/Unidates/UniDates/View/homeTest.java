@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.View;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
+import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneProfilo.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtenti.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.*;
@@ -9,6 +10,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.Match;
+import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -33,6 +35,9 @@ public class homeTest extends VerticalLayout {
 
     @Autowired
     GestioneInterazioniController gestioneInterazioniController;
+
+    @Autowired
+    GestioneModerazioneController gestioneModerazioneController;
 
 
 
@@ -105,6 +110,21 @@ public class homeTest extends VerticalLayout {
         });
 
 
+
+
+       /* Button segnalaFoto = new Button("Segnala Foto", buttonClickEvent -> {
+            Foto foto = new Foto("url di prova");
+            gestioneProfiloController.addFoto(gestioneUtentiController.findByEmail(email.getValue()).getProfilo(),foto);
+            Moderatore moderatore = new Moderatore("ciaomod", "ciaomod");
+            gestioneUtentiController.registrazioneModeratore(moderatore,gestioneUtentiController.findByEmail(email.getValue()));
+            gestioneModerazioneController.segnalaFoto(moderatore, foto,"porcodio", "foto dimmerda");
+
+            System.out.println(foto.getSegnalazioniRicevuto().size());
+            System.out.print(moderatore.getSegnalazioniRicevute().size());
+        }); */ // DA AGGIUSTARE
+
+
+
         Button modificaProfilo = new Button("Modifica Profilo", buttonClickEvent -> {
             Profilo nuovoProfilo = gestioneUtentiController.findByEmail(email.getValue()).getProfilo();
             nuovoProfilo.setCognome("Update");
@@ -139,6 +159,7 @@ public class homeTest extends VerticalLayout {
         add(removeUtente);
         add(aggiungiFoto);
         add(modificaProfilo);
+        add(segnalaFoto);
         /*
         add(aggiungiNotifica);
         add(mostraNotifica);

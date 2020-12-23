@@ -5,8 +5,10 @@ import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Model.DAOs.StudenteDao;
 import com.unidates.Unidates.UniDates.Model.Entity.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
+import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
+import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.ModeratoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class StudenteService {
 
     @Autowired
     private StudenteDao studenteDao;
+
+    @Autowired
+    private ModeratoreRepository moderatoreRepository;
 
 
     /*public void addUtente(Utente utente, Profilo profilo){
@@ -86,6 +91,12 @@ public class StudenteService {
         }catch (UserNotFoundException userNotFoundException){
             userNotFoundException.printStackTrace();
         }
+    }
+
+    public boolean addModeratore(Moderatore moderatore, Studente studente) {
+        moderatore.setStudente(studente);
+        moderatoreRepository.save(moderatore);
+        return true;
     }
 }
 

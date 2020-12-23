@@ -3,6 +3,7 @@ package com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo;
 import com.unidates.Unidates.UniDates.Model.Entity.Segnalazioni;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -17,8 +18,8 @@ public class Foto  {
     @JoinColumn(name="profilo_id")
     private Profilo profilo;
 
-    @OneToMany(mappedBy = "foto", cascade = CascadeType.REMOVE)
-    private Collection<Segnalazioni> SegnalazioniRicevute;
+    @OneToMany(mappedBy = "foto", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    private Collection<Segnalazioni> segnalazioniRicevute;
 
     private String url;
 
@@ -26,7 +27,7 @@ public class Foto  {
 
     public Foto(String url){
         this.url = url;
-        this.SegnalazioniRicevute = null;
+        this.segnalazioniRicevute = new ArrayList<Segnalazioni>();
     }
 
     public Long getId() {
@@ -54,15 +55,15 @@ public class Foto  {
     }
 
     public Collection<Segnalazioni> getSegnalazioniRicevuto() {
-        return SegnalazioniRicevute;
+        return segnalazioniRicevute;
     }
 
     public void setSegnalazioniRicevuto(Collection<Segnalazioni> segnalazioniRicevuto) {
-        SegnalazioniRicevute = segnalazioniRicevuto;
+        segnalazioniRicevute = segnalazioniRicevuto;
     }
 
     public void addSegnalazione(Segnalazioni segnalazione){
-        SegnalazioniRicevute.add(segnalazione);
+        segnalazioniRicevute.add(segnalazione);
     }
 
 }

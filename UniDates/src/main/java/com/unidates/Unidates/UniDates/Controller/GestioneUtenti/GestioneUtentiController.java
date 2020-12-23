@@ -2,6 +2,7 @@ package com.unidates.Unidates.UniDates.Controller.GestioneUtenti;
 
 import com.unidates.Unidates.UniDates.Model.Entity.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
+import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Service.ChatService;
@@ -32,6 +33,11 @@ public class GestioneUtentiController {
     @RequestMapping("/registrazioneStudente")
     public boolean registrazioneStudente(Studente studente, Profilo profilo){
         return studenteService.addStudente(studente, profilo);
+    }
+
+    @RequestMapping("/registrazioneModeratore")
+    public boolean registrazioneModeratore(Moderatore moderatore, Studente studente){
+        return studenteService.addModeratore(moderatore, studente);
     }
 
     @RequestMapping("/bloccoStudente")
