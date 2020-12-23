@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Date;
 
 
-@Route("testaRobe")
+@Route("")
 public class homeTest extends VerticalLayout {
 
     @Autowired

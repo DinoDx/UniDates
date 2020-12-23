@@ -60,10 +60,10 @@ public class GestioneModerazioneController {
         return moderatoreService.findByEmail(moderatore.getEmail()).getAmmonimentiInviati();
     }
 
-    @RequestMapping("/segnalazioniUtente")
+   /* @RequestMapping("/segnalazioniUtente")
     public Collection<Segnalazioni> showSegnalazioni(Studente studente){
         return studenteService.findByEmail(studente.getEmail()).getListSegnalazioni();
 
-    }
+    } */
 
 }

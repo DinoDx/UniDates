@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface MatchRepository extends JpaRepository<Match, Long> {
      Match findAllByStudente1AndStudente2(Studente studente1, Studente studente2);
+
 }

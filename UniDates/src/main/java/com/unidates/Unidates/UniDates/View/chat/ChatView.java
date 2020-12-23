@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Route(value = "chat",layout = MainViewChats.class)
-@RouteAlias("")
+@Route( value = "chat",layout = MainViewChats.class)
+@RouteAlias("chat")
 public class ChatView extends VerticalLayout {
     private static int MESSAGE_LOAD_NUMBER = 100;
     private int messageStartNum1 = 0;

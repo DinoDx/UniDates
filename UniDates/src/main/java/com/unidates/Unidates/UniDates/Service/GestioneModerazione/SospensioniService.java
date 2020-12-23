@@ -11,7 +11,7 @@ public class SospensioniService {
     @Autowired
     SospensioniRepository sospensioniRepository;
 
-    public suspendStudente(Studente){
+    public void suspendStudente(Studente studente){
 
     }
 }
