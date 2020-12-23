@@ -6,10 +6,11 @@ import com.unidates.Unidates.UniDates.View.main.MainViewChats;
 import com.vaadin.componentfactory.Chat;
 import com.vaadin.componentfactory.model.Message;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H6;
-import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -21,24 +22,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Route(value = "chat",layout = MainViewChats.class)
-@RouteAlias("")
+@Route(layout = MainViewChats.class)
+@CssImport("./styles/views/home/chatview.css")
 public class ChatView extends VerticalLayout {
+
     private static int MESSAGE_LOAD_NUMBER = 100;
     private int messageStartNum1 = 0;
     private int messageStartNum2 = 0;
 
     public ChatView() {
+        setAlignItems(Alignment.CENTER);
         add(createCard());
     }
 
             public ClickableCard createCard(){
                 ClickableCard card = new ClickableCard(componentEvent -> {
                     Notification notifica = new Notification();
-                    VerticalLayout layout = new VerticalLayout();
+                    HorizontalLayout layout = new HorizontalLayout();
                     layout.setAlignItems(FlexComponent.Alignment.CENTER);
-                    layout.getStyle().set("width","40em");
-                    Button ann = new Button("Annulla",buttonClickEvent -> {
+                    Button ann = new Button("Chiudi Chat",buttonClickEvent -> {
                         notifica.close();
                     });
                     notifica.setPosition(Notification.Position.MIDDLE);
@@ -46,10 +48,20 @@ public class ChatView extends VerticalLayout {
                     notifica.add(layout);
                     notifica.open();
                 });
+                card.setId("openchat");
 
-                card.getStyle().set("width","10em");
-                card.getStyle().set("height","10em");
-                card.add("CIAOOOOOOOOOOOOOOOOOO");
+                HorizontalLayout hori = new HorizontalLayout();
+                Image chatimg = new Image("https://randomuser.me/api/portraits/men/42.jpg","ciao");
+
+                HorizontalLayout hori1 = new HorizontalLayout();
+                Icon icon = new Icon(VaadinIcon.COMMENT_O);
+                Span span = new Span("Entra nella chat di .....");
+
+                hori1.add(icon,span);
+                hori1.setId("hori1");
+                hori.add(chatimg,hori1);
+                hori.setId("hori");
+                card.add(hori);
                 return card;
             }
 
