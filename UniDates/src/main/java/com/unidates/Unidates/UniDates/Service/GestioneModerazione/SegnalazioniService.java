@@ -12,8 +12,8 @@ public class SegnalazioniService {
     @Autowired
     SegnalazioniRepository segnalazioniRepository;
 
-    public void addSegnalazione(Foto foto){
+    public void addSegnalazione(Foto foto, String motivazione, String dettagli){
 
-        foto.addSegnalazione(new Segnalazioni());
+        foto.addSegnalazione(new Segnalazioni(motivazione, dettagli));
     }
 }

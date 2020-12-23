@@ -36,13 +36,13 @@ public class GestioneModerazioneController {
     ModeratoreService moderatoreService;
 
     @RequestMapping("/segnalaFoto")
-    public void segnalaFoto(Foto foto){
-        segnalazioniService.addSegnalazione(foto);
+    public void segnalaFoto(Foto foto, String motivazione, String dettagli){
+        segnalazioniService.addSegnalazione(foto, motivazione, dettagli);
     }
 
     @RequestMapping("/inviaAmmonimento")
-    public void inviaAmmonimento(Studente studente){
-        ammonimentiService.sendAmmonimento(studente);
+    public void inviaAmmonimento(Moderatore moderatore, Studente studente, String motivazione, String dettagli){
+        ammonimentiService.sendAmmonimento(moderatore, studente, motivazione, dettagli);
     }
 
     @RequestMapping("/sospendiUtente")

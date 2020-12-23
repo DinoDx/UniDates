@@ -27,9 +27,6 @@ public class Studente extends Utente{
     private List<Studente> listaBloccati;
 
     @OneToMany(mappedBy = "studente", cascade = CascadeType.REMOVE)
-    private List<Segnalazioni> listSegnalazioni;
-
-    @OneToMany(mappedBy = "studente", cascade = CascadeType.REMOVE)
     private List<Sospensioni> listSospensioni;
 
     @OneToMany(mappedBy = "studente", cascade = CascadeType.REMOVE)
@@ -71,14 +68,6 @@ public class Studente extends Utente{
         this.listaBloccati = listaBloccati;
     }
 
-    public List<Segnalazioni> getListSegnalazioni() {
-        return listSegnalazioni;
-    }
-
-    public void setListSegnalazioni(List<Segnalazioni> listSegnalazioni) {
-        this.listSegnalazioni = listSegnalazioni;
-    }
-
     public List<Sospensioni> getListSospensioni() {
         return listSospensioni;
     }
@@ -114,7 +103,6 @@ public class Studente extends Utente{
                 "isBanned=" + isBanned +
                 ", profilo=" + profilo +
                 ", listaBloccati=" + listaBloccati +
-                ", listSegnalazioni=" + listSegnalazioni +
                 ", listSospensioni=" + listSospensioni +
                 ", listAmmonimenti=" + listAmmonimenti +
                 '}';
