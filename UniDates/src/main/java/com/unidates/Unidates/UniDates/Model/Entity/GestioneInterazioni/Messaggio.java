@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Model.Entity;
+package com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni;
 
 import javax.persistence.*;
 
@@ -9,7 +9,7 @@ public class Messaggio {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "chat_id")
     private Chat chat;
 

@@ -2,17 +2,17 @@ package com.unidates.Unidates.UniDates.View;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
-import com.unidates.Unidates.UniDates.Controller.GestioneProfilo.GestioneProfiloController;
-import com.unidates.Unidates.UniDates.Controller.GestioneUtenti.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
+import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.*;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
-import com.unidates.Unidates.UniDates.Model.Entity.Match;
-import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Repository.GestioneProfilo.FotoRepository;
-import com.unidates.Unidates.UniDates.Service.GestioneProfilo.FotoService;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Moderatore;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -52,12 +52,14 @@ public class homeTest extends VerticalLayout {
         TextField email2 = new TextField("Email2");
         TextField password = new TextField("Password");
         Text text;
+        TextField messaggio = new TextField("Messaggio");
         if(utente != null) {
             text = new Text(utente.getEmail());
             add(text);
         }
         Button aggiungiUtente = new Button("Aggiungi utente", buttonClickEvent -> {
             Studente userTest = new Studente();
+            userTest.setRuolo(Ruolo.STUDENTE);
             userTest.setEmail(email.getValue());
             userTest.setPassword(password.getValue());
 
@@ -148,9 +150,48 @@ public class homeTest extends VerticalLayout {
         });
 
 
+        Button sendMessage = new Button("Invio messaggio", buttonClickEvent -> {
+            Messaggio toSend = new Messaggio();
+            toSend.setTestoMessaggio(messaggio.getValue());
+            gestioneInterazioniController.sendMessage(gestioneUtentiController.findByEmail(email.getValue()), gestioneUtentiController.findByEmail(email2.getValue()),toSend);
+            Utente mittente = gestioneUtentiController.findByEmail(email.getValue());
+            Utente destinatario = gestioneUtentiController.findByEmail(email2.getValue());
+
+          /*  for(Chat c : mittente.getMittente()){
+                System.out.println("Mittente:"+ c.getMittente().getEmail());
+                System.out.println("Destinatario:"+ c.getDestinatario().getEmail());
+                System.out.println("# messaggi:" + c.getMessaggi().size());
+                for( Messaggio m: c.getMessaggi())
+                    System.out.println("Testo messaggio:"+ m.getTestoMessaggio());
+            }
+
+            for(Chat c : destinatario.getDestinatario()){
+                System.out.println("Mittente:"+ c.getMittente().getEmail());
+                System.out.println("Destinatario:"+ c.getDestinatario().getEmail());
+                System.out.println("# messaggi:" + c.getMessaggi().size());
+                for( Messaggio m: c.getMessaggi())
+                    System.out.println("Testo messaggio:"+ m.getTestoMessaggio());
+            }*/
+
+           gestioneUtentiController.findByEmail(email.getValue()).getMittente().forEach(chat -> {
+               System.out.println("Messaggi di: "+ gestioneUtentiController.findByEmail(email.getValue()).getEmail());
+               chat.getMessaggi().forEach(messaggio1 -> {
+                       System.out.println("Mittente:" + chat.getMittente().getEmail() + " Destinatario:"+ chat.getDestinatario().getEmail() + " Testo messaggio:" + messaggio1.getTestoMessaggio());
+               });
+           });
+            gestioneUtentiController.findByEmail(email2.getValue()).getDestinatario().forEach(chat -> {
+                System.out.println("Messaggi di: "+ gestioneUtentiController.findByEmail(email2.getValue()).getEmail());
+                chat.getMessaggi().forEach(messaggio1 -> {
+                    System.out.println("Mittente:" + chat.getMittente().getEmail() + " Destinatario:"+ chat.getDestinatario().getEmail() + " Testo messaggio:" + messaggio1.getTestoMessaggio());
+                });
+            });
+        });
+
+
         add(email);
         add(email2);
         add(password);
+        add(messaggio);
         add(aggiungiUtente);
         add(bloccaUtente);
         add(stampaListaBloccati);
@@ -161,6 +202,7 @@ public class homeTest extends VerticalLayout {
         add(aggiungiFoto);
         add(modificaProfilo);
         add(segnalaFoto);
+        add(sendMessage);
         /*
         add(aggiungiNotifica);
         add(mostraNotifica);

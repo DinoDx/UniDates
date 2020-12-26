@@ -2,10 +2,9 @@ package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 
 
 import com.unidates.Unidates.UniDates.Enum.Ruolo;
-import com.unidates.Unidates.UniDates.Model.Entity.Ammonimenti;
-import com.unidates.Unidates.UniDates.Model.Entity.Match;
-import com.unidates.Unidates.UniDates.Model.Entity.Segnalazioni;
-import com.unidates.Unidates.UniDates.Model.Entity.Sospensioni;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimenti;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensioni;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 
 import javax.persistence.*;

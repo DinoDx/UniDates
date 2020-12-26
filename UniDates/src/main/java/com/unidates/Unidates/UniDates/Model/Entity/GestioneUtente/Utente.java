@@ -1,8 +1,8 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 
 import com.unidates.Unidates.UniDates.Enum.Ruolo;
-import com.unidates.Unidates.UniDates.Model.Entity.Chat;
-import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,8 +26,12 @@ public abstract class Utente implements Serializable {
     @OneToMany(mappedBy = "utente", cascade = CascadeType.REMOVE)//DA RISOLVERE LA QUESTIONE FETCH
     private Collection<Notifica> listNotifica;
 
-    @OneToMany(mappedBy = "utente",cascade = CascadeType.REMOVE) //DA RISOLVERE LA QUESTIONE FETCH
-    private Collection<Chat> listaChat;
+    @OneToMany(mappedBy = "mittente",cascade = CascadeType.REMOVE) //DA RISOLVERE LA QUESTIONE FETCH
+    private Collection<Chat> mittente;
+
+    @OneToMany(mappedBy = "destinatario", cascade = CascadeType.REMOVE)
+    private Collection<Chat> destinatario;
+
 
 
     public Utente() {
@@ -80,12 +84,24 @@ public abstract class Utente implements Serializable {
         this.listNotifica = listNotifica;
     }
 
-    public void setListaChat(ArrayList<Chat> chats) {
-        this.listaChat = chats;
+    public void setMittente(ArrayList<Chat> chats) {
+        this.mittente = chats;
     }
 
-    public Collection<Chat> getListaChat() {
-        return listaChat;
+    public Collection<Chat> getMittente() {
+        return mittente;
+    }
+
+    public void setMittente(Collection<Chat> mittente) {
+        this.mittente = mittente;
+    }
+
+    public Collection<Chat> getDestinatario() {
+        return destinatario;
+    }
+
+    public void setDestinatario(Collection<Chat> destinatario) {
+        this.destinatario = destinatario;
     }
 
     @Override
@@ -96,7 +112,8 @@ public abstract class Utente implements Serializable {
                 ", password='" + password + '\'' +
                 ", ruolo=" + ruolo +
                 ", listNotifica=" + listNotifica +
-                ", listaChat=" + listaChat +
+                ", mittente=" + mittente +
+                ", destinatario=" + destinatario +
                 '}';
     }
 }

@@ -1,10 +1,10 @@
 package com.unidates.Unidates.UniDates.Controller;
 
-import com.unidates.Unidates.UniDates.Model.Entity.Ammonimenti;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimenti;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Entity.Segnalazioni;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Moderatore;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazioni;
 import com.unidates.Unidates.UniDates.Service.GestioneModerazione.AmmonimentiService;
 import com.unidates.Unidates.UniDates.Service.GestioneModerazione.ModeratoreService;
 import com.unidates.Unidates.UniDates.Service.GestioneModerazione.SegnalazioniService;

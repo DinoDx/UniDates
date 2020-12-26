@@ -1,9 +1,9 @@
-package com.unidates.Unidates.UniDates.Controller.GestioneUtenti;
+package com.unidates.Unidates.UniDates.Controller;
 
-import com.unidates.Unidates.UniDates.Model.Entity.Chat;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Moderatore;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Service.ChatService;
 import com.unidates.Unidates.UniDates.Service.NotificaService;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/UserManager")
@@ -63,7 +62,8 @@ public class GestioneUtentiController {
 
     }
 
-    public void addNotifica(Notifica notifica, Studente studente){ notificaService.addNotifica(notifica, studente); }
+    /*public void addNotifica(Notifica notifica, Studente studente){ notificaService.addNotifica(notifica, studente); }
 
     public void addChat(Chat chat ,Studente studente){chatService.createChat(chat, studente);}
+     */
 }

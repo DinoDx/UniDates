@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Model.Entity;
+package com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;

@@ -1,19 +1,15 @@
 package com.unidates.Unidates.UniDates.Service.GestioneInterazioni;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.Match;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneInterazioni.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.rmi.MarshalException;
-import java.util.Collection;
 
 @Service
 public class  MatchService {
     @Autowired
 
-    //da aggiustare il match giá presente
     private MatchRepository matchRepository;
 
     public void aggiungiMatch(Studente invia, Studente riceve){
@@ -38,9 +34,23 @@ public class  MatchService {
 
         Match reverse = matchRepository.findAllByStudente1AndStudente2(studente2, studente1);
 
-        if(invia == null)
-            return reverse;
-        else return invia;
+        return invia == null ? reverse: invia;
+    }
+
+    public boolean isValidMatch(Studente studente1, Studente studente2){
+        Match invia = matchRepository.findAllByStudente1AndStudente2(studente1, studente2);
+
+        Match reverse = matchRepository.findAllByStudente1AndStudente2(studente2, studente1);
+
+        if(invia != null){
+            return invia.isLikeByStudent2() && invia.isLikedByStudent1();
+        }
+        else if(reverse != null){
+            return reverse.isLikedByStudent1() && reverse.isLikeByStudent2();
+        }
+        else {
+            return false;
+        }
     }
 }
 

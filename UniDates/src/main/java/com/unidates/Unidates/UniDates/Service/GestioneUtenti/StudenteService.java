@@ -3,10 +3,10 @@ package com.unidates.Unidates.UniDates.Service.GestioneUtenti;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Model.DAOs.StudenteDao;
-import com.unidates.Unidates.UniDates.Model.Entity.Chat;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Moderatore;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.ModeratoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 @Service
 public class StudenteService {
@@ -47,7 +46,7 @@ public class StudenteService {
                 studente.setProfilo(profilo);
                 studente.setPassword(new BCryptPasswordEncoder().encode(studente.getPassword()));
                 studente.setListNotifica( new ArrayList<Notifica>());
-                studente.setListaChat(new ArrayList<Chat>());
+                studente.setMittente(new ArrayList<Chat>());
                 studente.setListaBloccati(new ArrayList<Studente>());
                 studenteDao.saveUtente(studente);
                 return true;

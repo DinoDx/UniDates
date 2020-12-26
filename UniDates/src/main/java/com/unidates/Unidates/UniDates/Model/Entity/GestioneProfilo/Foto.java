@@ -1,6 +1,6 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo;
 
-import com.unidates.Unidates.UniDates.Model.Entity.Segnalazioni;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazioni;
 
 import javax.persistence.*;
 import java.util.ArrayList;

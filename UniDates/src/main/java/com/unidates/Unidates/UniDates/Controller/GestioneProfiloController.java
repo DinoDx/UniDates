@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Controller.GestioneProfilo;
+package com.unidates.Unidates.UniDates.Controller;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
