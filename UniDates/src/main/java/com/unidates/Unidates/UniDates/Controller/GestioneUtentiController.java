@@ -32,6 +32,10 @@ public class GestioneUtentiController {
         return studenteService.addStudente(studente, profilo);
     }
 
+    @RequestMapping("/updateStudente")
+    public boolean updateStudente(Studente studente, Profilo profilo){
+        return studenteService.modificaStudente(studente, profilo);
+    }
     @RequestMapping("/registrazioneModeratore")
     public boolean registrazioneModeratore(Moderatore moderatore, Studente studente){
         return studenteService.addModeratore(moderatore, studente);
