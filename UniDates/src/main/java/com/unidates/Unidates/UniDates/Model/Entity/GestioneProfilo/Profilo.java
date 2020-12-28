@@ -6,7 +6,13 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
 import java.util.*;
+
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Date;
+
 
 @Entity
 @Table(name = "Profilo")
@@ -22,8 +28,8 @@ public class Profilo implements Serializable {
     private Collection<Foto> listaFoto;
 
     private String nome, cognome, luogoNascita, residenza;
-    private Date dataDiNascita;
-    private int altezza;
+    private LocalDate dataDiNascita;
+    private double altezza;
     private Sesso sesso;
     private Interessi interessi;
     private Colori_Capelli colori_capelli;
@@ -37,7 +43,10 @@ public class Profilo implements Serializable {
 
     }
 
-    public Profilo(String nome, String cognome, String luogoNascita, String residenza, Date dataDiNascita, int altezza, Sesso sesso, Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi, Collection<Hobby> hobbyList) {
+
+    public Profilo(String nome, String cognome, String luogoNascita, String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso, Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi, Collection<Hobby> hobbyList) {
+
+
         this.nome = nome;
         this.cognome = cognome;
         this.luogoNascita = luogoNascita;
@@ -85,19 +94,19 @@ public class Profilo implements Serializable {
         this.residenza = residenza;
     }
 
-    public Date getDataDiNascita() {
+    public LocalDate getDataDiNascita() {
         return dataDiNascita;
     }
 
-    public void setDataDiNascita(Date dataDiNascita) {
+    public void setDataDiNascita(LocalDate dataDiNascita) {
         this.dataDiNascita = dataDiNascita;
     }
 
-    public int getAltezza() {
+    public double getAltezza() {
         return altezza;
     }
 
-    public void setAltezza(int altezza) {
+    public void setAltezza(double altezza) {
         this.altezza = altezza;
     }
 

@@ -1,12 +1,17 @@
 package com.unidates.Unidates.UniDates.View.login;
 
 
+import com.unidates.Unidates.UniDates.Enum.Sesso;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -16,14 +21,18 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpSession;
 
 @Route(value = "registrazione", layout = MainViewLogin.class)
 @PageTitle("Registrazione")
 @CssImport("./styles/views/registrazione/registrazione.css")
 public class Registrazione extends VerticalLayout {
 
-    //ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-    //HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
+    ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+    HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
 
 
     private RadioButtonGroup<String> sessi = new RadioButtonGroup<>();
@@ -46,7 +55,8 @@ public class Registrazione extends VerticalLayout {
         DatePicker picker = new DatePicker("Data di nascita");
 
         sessi.setLabel("Il tuo sesso:");
-        sessi.setItems("Uomo", "Donna", "Altro");
+        Sesso[] sess = Sesso.values();
+        sessi.setItems(sess[0].toString(),sess[1].toString(),sess[2].toString());
         sessi.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
 
         EmailField email = new EmailField("Email");
@@ -71,8 +81,14 @@ public class Registrazione extends VerticalLayout {
             sessi.setValue(null);
         });
 
-
-        //httpSession.setAttribute("utente", new Studente(email.getValue(), password.getValue(), null));
+        //Sessione
+        Profilo profilo = new Profilo();
+        profilo.setNome(nome.getValue());
+        profilo.setCognome(cognome.getValue());
+        profilo.setDataDiNascita(picker.getValue());
+        profilo.setSesso(Sesso.valueOf(sessi.getValue()));
+        Studente studente = new Studente(email.getValue(),password.getValue(),profilo);
+        httpSession.setAttribute("utente_reg", studente);
 
 
         prosegui = new Button("Continua con la registrazione");

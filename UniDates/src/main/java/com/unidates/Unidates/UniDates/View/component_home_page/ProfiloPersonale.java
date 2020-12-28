@@ -2,14 +2,17 @@ package com.unidates.Unidates.UniDates.View.component_home_page;
 
 
 import com.example.application.views.Person;
+import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.View.main.MainViewProfile;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -22,7 +25,12 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +40,15 @@ import java.util.List;
 @CssImport("./styles/views/home/profilopersonale.css")
 public class ProfiloPersonale extends VerticalLayout implements AfterNavigationObserver {
 
-    Grid<Person> grid = new Grid<>();
+
+    ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+    HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
+    Studente registrato= (Studente) httpSession.getAttribute("utente_reg");
+
+    @Autowired
+    GestioneProfiloController controller;
+
+    Grid<Profilo> grid = new Grid<>();
     private Select<String> interessi = new Select<>();
 
     public ProfiloPersonale(){
@@ -41,11 +57,11 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
         setSizeFull();
         grid.setWidth("100%");
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
-        grid.addComponentColumn((person -> createSingleUser(person)));
+        grid.addComponentColumn((profile -> createSingleUser(profile)));
         add(grid);
     }
 
-    private VerticalLayout createSingleUser(Person person){
+    private VerticalLayout createSingleUser(Profilo profile){
         VerticalLayout utente = new VerticalLayout();
         utente.addClassName("card-home");
         utente.setSpacing(false);
@@ -57,7 +73,7 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
         nome.setSpacing(false);
         nome.getThemeList().add("spacing-s");
 
-        Span nome_utente = new Span(person.getName());
+        Span nome_utente = new Span(registrato.getProfilo().getNome());
         nome.addClassName("nome");
         nome.add(nome_utente);
 
@@ -67,12 +83,16 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
         middle.setSpacing(false);
         middle.getThemeList().add("spacing-s");
 
+        //IMMAGINE DA VEDERE PER LA SESSIONE
         VerticalLayout image = new VerticalLayout();
         image.addClassName("photo");
         Image image_profilo = new Image();
-        image_profilo.setSrc(person.getImage());
+        ArrayList<Foto> list = (ArrayList<Foto>) registrato.getProfilo().getListaFoto();
+        image_profilo.setSrc(list.get(0).getUrl());
+        image_profilo.setAlt("Foto non presente");
         image.setId("foto");
         image.add(image_profilo);
+
 
 
         VerticalLayout all_info = new VerticalLayout();
@@ -80,18 +100,20 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
         //info 1
         HorizontalLayout info_uno = new HorizontalLayout();
         TextField name = new TextField("Nome");
-        name.setValue(person.getName());
+        name.setValue(registrato.getProfilo().getNome());
         name.setEnabled(false);
 
         TextField cognome = new TextField("Cognome");
+        cognome.setValue(registrato.getProfilo().getCognome());
         cognome.setEnabled(false);
 
-        TextField date = new TextField("Data");
-        date.setValue(person.getDate());
+        //DATA DA VEDERE PER LA SESSIONE
+        DatePicker date = new DatePicker("Data di nascita");
+        date.setValue(registrato.getProfilo().getDataDiNascita());
         date.setEnabled(false);
 
         EmailField email_profilo = new EmailField("Email");
-        //setta email
+        email_profilo.setValue(registrato.getEmail());
         email_profilo.setEnabled(false);
 
         info_uno.add(name,cognome,date,email_profilo);
@@ -100,14 +122,17 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
         HorizontalLayout info_due = new HorizontalLayout();
 
         NumberField altezza = new NumberField("Altezza (cm)");
+        altezza.setValue(registrato.getProfilo().getAltezza());
         altezza.setHasControls(true);
         altezza.setStep(1);
         altezza.setMin(150.00);
         altezza.setEnabled(false);
 
         TextField città = new TextField("Città");
+        città.setValue(registrato.getProfilo().getResidenza());
         città.setEnabled(false);
         TextField luogo = new TextField("Luogo di nascita");
+        luogo.setValue(registrato.getProfilo().getLuogoNascita());
         luogo.setEnabled(false);
 
         info_due.add(altezza,città,luogo);
@@ -115,13 +140,18 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
         //info 3
         HorizontalLayout info_tre = new HorizontalLayout();
 
+
+        //DA VEDERE PER LA SESSIONE SIA OCCHI CHE CAPELLI CHE INTERESSI , UGUALE AL LOG?!
         TextField capelli = new TextField("Capelli");
+        capelli.setValue(registrato.getProfilo().getColori_capelli().toString());
         capelli.setEnabled(false);
 
         TextField occhi = new TextField("Occhi");
+        occhi.setValue(registrato.getProfilo().getColore_occhi().toString());
         occhi.setEnabled(false);
 
         interessi.setLabel("Interessi");
+        interessi.setValue(registrato.getProfilo().getInteressi().toString());
         interessi.setItems("Uomo","Donna","Altro");
         interessi.setEnabled(false);
 
@@ -145,7 +175,27 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
 
         Button conferma = new Button("Conferma", buttonClickEvent -> {
             name.setEnabled(false);
+            cognome.setEnabled(false);
             date.setEnabled(false);
+            email_profilo.setEnabled(false);
+            città.setEnabled(false);
+            luogo.setEnabled(false);
+            occhi.setEnabled(false);
+            capelli.setEnabled(false);
+            //MANCANO I TOPIC
+            altezza.setEnabled(false);
+            interessi.setEnabled(false);
+            //VEDERE IMMAGINE
+
+            registrato.getProfilo().setAltezza(altezza.getValue());
+            registrato.getProfilo().setNome(name.getValue());
+            registrato.getProfilo().setCognome(cognome.getValue());
+            registrato.getProfilo().setDataDiNascita(date.getValue());
+            registrato.setEmail(email_profilo.getValue());
+            registrato.getProfilo().setResidenza(città.getValue());
+            registrato.getProfilo().setLuogoNascita(luogo.getValue());
+            registrato.getProfilo().setColore_occhi(occhi.getValue().toString());
+
         });
         conferma.setEnabled(false);
         conferma.setId("confirm");
@@ -190,28 +240,12 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
 
     @Override
     public void afterNavigation(AfterNavigationEvent afterNavigationEvent) {
-        List<Person> persons = Arrays.asList( //
-                createPerson("https://randomuser.me/api/portraits/men/42.jpg", "John Smith", "May 8",
-                        "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document without relying on meaningful content (also called greeking).",
-                        "1K", "500", "20")
+        List<Profilo> persons = Arrays.asList( //
+                registrato.getProfilo()
         );
 
         grid.setItems(persons);
     }
 
 
-
-    private static Person createPerson(String image, String name, String date, String post, String likes,
-                                       String comments, String shares) {
-        Person p = new Person();
-        p.setImage(image);
-        p.setName(name);
-        p.setDate(date);
-        p.setPost(post);
-        p.setLikes(likes);
-        p.setComments(comments);
-        p.setShares(shares);
-
-        return p;
-    }
 }
