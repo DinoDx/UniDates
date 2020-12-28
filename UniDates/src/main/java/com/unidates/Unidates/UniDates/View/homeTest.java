@@ -157,34 +157,10 @@ public class homeTest extends VerticalLayout {
             Utente mittente = gestioneUtentiController.findByEmail(email.getValue());
             Utente destinatario = gestioneUtentiController.findByEmail(email2.getValue());
 
-          /*  for(Chat c : mittente.getMittente()){
-                System.out.println("Mittente:"+ c.getMittente().getEmail());
-                System.out.println("Destinatario:"+ c.getDestinatario().getEmail());
-                System.out.println("# messaggi:" + c.getMessaggi().size());
-                for( Messaggio m: c.getMessaggi())
-                    System.out.println("Testo messaggio:"+ m.getTestoMessaggio());
-            }
+            gestioneUtentiController.findByEmail(email.getValue()).getMittente().forEach(chat -> { //.getMittente() tutte le chat che l'utente ha iniziato -- .getDestinatario() // tutte le chat che l'utente ha ricevuto
+                chat.getMessaggi().forEach(messaggio1 -> System.out.println(messaggio1.getTestoMessaggio()));
+            });          // in questo caso la funzione stampa tutti i messaggi di tutte le chat che l'utente nel campo email, ha INIZIATO
 
-            for(Chat c : destinatario.getDestinatario()){
-                System.out.println("Mittente:"+ c.getMittente().getEmail());
-                System.out.println("Destinatario:"+ c.getDestinatario().getEmail());
-                System.out.println("# messaggi:" + c.getMessaggi().size());
-                for( Messaggio m: c.getMessaggi())
-                    System.out.println("Testo messaggio:"+ m.getTestoMessaggio());
-            }*/
-
-           gestioneUtentiController.findByEmail(email.getValue()).getMittente().forEach(chat -> {
-               System.out.println("Messaggi di: "+ gestioneUtentiController.findByEmail(email.getValue()).getEmail());
-               chat.getMessaggi().forEach(messaggio1 -> {
-                       System.out.println("Mittente:" + chat.getMittente().getEmail() + " Destinatario:"+ chat.getDestinatario().getEmail() + " Testo messaggio:" + messaggio1.getTestoMessaggio());
-               });
-           });
-            gestioneUtentiController.findByEmail(email2.getValue()).getDestinatario().forEach(chat -> {
-                System.out.println("Messaggi di: "+ gestioneUtentiController.findByEmail(email2.getValue()).getEmail());
-                chat.getMessaggi().forEach(messaggio1 -> {
-                    System.out.println("Mittente:" + chat.getMittente().getEmail() + " Destinatario:"+ chat.getDestinatario().getEmail() + " Testo messaggio:" + messaggio1.getTestoMessaggio());
-                });
-            });
         });
 
 

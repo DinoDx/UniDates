@@ -23,15 +23,14 @@ public abstract class Utente implements Serializable {
 
 
 
-    @OneToMany(mappedBy = "utente", cascade = CascadeType.REMOVE)//DA RISOLVERE LA QUESTIONE FETCH
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.REMOVE)
     private Collection<Notifica> listNotifica;
 
-    @OneToMany(mappedBy = "mittente",cascade = CascadeType.REMOVE) //DA RISOLVERE LA QUESTIONE FETCH
+    @OneToMany(mappedBy = "mittente",cascade = CascadeType.REMOVE)
     private Collection<Chat> mittente;
 
     @OneToMany(mappedBy = "destinatario", cascade = CascadeType.REMOVE)
     private Collection<Chat> destinatario;
-
 
 
     public Utente() {
