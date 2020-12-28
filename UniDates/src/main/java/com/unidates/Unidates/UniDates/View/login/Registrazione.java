@@ -81,17 +81,19 @@ public class Registrazione extends VerticalLayout {
             sessi.setValue(null);
         });
 
-        //Sessione
-        Profilo profilo = new Profilo();
-        profilo.setNome(nome.getValue());
-        profilo.setCognome(cognome.getValue());
-        profilo.setDataDiNascita(picker.getValue());
-        profilo.setSesso(Sesso.valueOf(sessi.getValue()));
-        Studente studente = new Studente(email.getValue(),password.getValue(),profilo);
-        httpSession.setAttribute("utente_reg", studente);
 
 
-        prosegui = new Button("Continua con la registrazione");
+
+        prosegui = new Button("Continua con la registrazione",buttonClickEvent -> {
+            //Sessione
+            Profilo profilo = new Profilo();
+            profilo.setNome(nome.getValue());
+            profilo.setCognome(cognome.getValue());
+            profilo.setDataDiNascita(picker.getValue());
+            profilo.setSesso(Sesso.valueOf(sessi.getValue()));
+            Studente studente = new Studente(email.getValue(),password.getValue(),profilo);
+            httpSession.setAttribute("utente_reg", studente);
+        });
 
         link = new Anchor("/registrazione_due");
         link.add(prosegui);

@@ -1,9 +1,9 @@
 package com.unidates.Unidates.UniDates.Enum;
 
 public enum Sesso {
-    UOMO("Uomo"),
-    DONNA("Donna"),
-    ALTRO("Altro");
+    UOMO("UOMO"),
+    DONNA("DONNA"),
+    ALTRO("ALTRO");
 
     private String sesso;
     private Sesso(String sesso){

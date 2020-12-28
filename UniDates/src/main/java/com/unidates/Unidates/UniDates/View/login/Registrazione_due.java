@@ -3,6 +3,7 @@ package com.unidates.Unidates.UniDates.View.login;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.Colore_Occhi;
 import com.unidates.Unidates.UniDates.Enum.Colori_Capelli;
+import com.unidates.Unidates.UniDates.Enum.Hobby;
 import com.unidates.Unidates.UniDates.Enum.Interessi;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
@@ -31,6 +32,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.vaadin.gatanaso.MultiselectComboBox;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Route(value = "registrazione_due", layout = MainViewLogin.class)
 @PageTitle("Registrazione_2")
@@ -94,7 +98,10 @@ public class Registrazione_due extends VerticalLayout implements BeforeEnterObse
         multiselectComboBox.setWidth("100%");
         multiselectComboBox.setLabel("Seleziona Topic");
         multiselectComboBox.setPlaceholder("Scelti...");
-        multiselectComboBox.setItems("Musica","Cinema","Sport","Calcio","Anime","Manga","Fumetti","Serie Tv","Tv","Arte","Teatro","Politica","Videogiochji","Tecnologia","Viaggi","Storia","Informatica","Libri","Cucina","Natura","Fotografia","Disegno","Motori","Moda","Altro");
+        Hobby [] topic = Hobby.values();
+        List<String> topiclist = new ArrayList<String>();
+        for(Hobby h : topic) topiclist.add(h.toString());
+        multiselectComboBox.setItems(topiclist);
 
         altezza = new NumberField("Altezza (cm)");
         altezza.setHasControls(true);
@@ -121,7 +128,23 @@ public class Registrazione_due extends VerticalLayout implements BeforeEnterObse
         });
 
 
-        confirm = new Button("Conferma");
+        confirm = new Button("Conferma",buttonClickEvent -> {
+            //Sessione
+            Profilo profilo = da_registrare.getProfilo();
+            profilo.setResidenza(città.getValue());
+            profilo.setLuogoNascita(luogo.getValue());
+            profilo.setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
+            profilo.setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
+            profilo.setAltezza(altezza.getValue());
+            profilo.setInteressi(Interessi.valueOf(interessi.getValue()));
+            //hobby
+            ArrayList<Hobby> hobby = new ArrayList<Hobby>();
+            for(String s : multiselectComboBox.getValue()) hobby.add(Hobby.valueOf(s));
+            profilo.setHobbyList(hobby);
+            //image
+
+            gestioneUtentiController.registrazioneStudente(da_registrare, profilo);
+        });
         anchor = new Anchor("/login");
         anchor.add(confirm);
 
@@ -140,18 +163,6 @@ public class Registrazione_due extends VerticalLayout implements BeforeEnterObse
         reset.setId("reset");
         buttons.setId("bottoni");
         buttons.add(anchor,reset);
-
-        //Sessione
-        Profilo profilo = da_registrare.getProfilo();
-        profilo.setResidenza(città.getValue());
-        profilo.setLuogoNascita(luogo.getValue());
-        profilo.setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
-        profilo.setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
-        profilo.setAltezza(altezza.getValue());
-        profilo.setInteressi(Interessi.valueOf(interessi.getValue()));
-        //profilo.setHobbyList(multiselectComboBox.getValue());
-
-        gestioneUtentiController.registrazioneStudente(da_registrare, profilo);
 
         layout.add(città,luogo,capelli,occhi,altezza,multiselectComboBox,interessi,value,upload);
         layout.setColspan(multiselectComboBox,3);

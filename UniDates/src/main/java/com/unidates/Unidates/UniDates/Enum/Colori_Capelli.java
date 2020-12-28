@@ -1,13 +1,13 @@
 package com.unidates.Unidates.UniDates.Enum;
 
 public enum Colori_Capelli {
-    NERI("Neri"),
-    BIONDI("Biondi"),
-    CASTANI("Castani"),
-    AMBRA("Ambra"),
-    GRIGI("Grigi"),
-    ROSSI("Rossi"),
-    ALTRO("Altro");
+    NERI("NERI"),
+    BIONDI("BIONDI"),
+    CASTANI("CASTANI"),
+    AMBRA("AMBRA"),
+    GRIGI("GRIGI"),
+    ROSSI("ROSSI"),
+    ALTRO("ALTRO");
 
     private String colore ;
     private Colori_Capelli(String colore){

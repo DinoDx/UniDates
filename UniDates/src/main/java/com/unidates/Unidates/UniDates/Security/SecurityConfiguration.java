@@ -51,6 +51,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(
                 "/VAADIN/**",
+                "/registrazione",
+                "/registrazione_due",
                 "/favicon.ico",
                 "/robots.txt",
                 "/manifest.webmanifest",

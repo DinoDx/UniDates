@@ -3,6 +3,11 @@ package com.unidates.Unidates.UniDates.View.component_home_page;
 
 import com.example.application.views.Person;
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
+import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Enum.Colore_Occhi;
+import com.unidates.Unidates.UniDates.Enum.Colori_Capelli;
+import com.unidates.Unidates.UniDates.Enum.Hobby;
+import com.unidates.Unidates.UniDates.Enum.Interessi;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
@@ -28,11 +33,10 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.vaadin.gatanaso.MultiselectComboBox;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 @Route(value = "profilo-personale", layout = MainViewProfile.class)
@@ -43,10 +47,10 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
 
     ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
     HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
-    Studente registrato= (Studente) httpSession.getAttribute("utente_reg");
+    Studente registrato= (Studente) httpSession.getAttribute("utente");
 
     @Autowired
-    GestioneProfiloController controller;
+    GestioneUtentiController controller;
 
     Grid<Profilo> grid = new Grid<>();
     private Select<String> interessi = new Select<>();
@@ -59,6 +63,8 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
         grid.addComponentColumn((profile -> createSingleUser(profile)));
         add(grid);
+
+        System.out.println(registrato.getProfilo().getInteressi().toString() + registrato);;
     }
 
     private VerticalLayout createSingleUser(Profilo profile){
@@ -87,8 +93,8 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
         VerticalLayout image = new VerticalLayout();
         image.addClassName("photo");
         Image image_profilo = new Image();
-        ArrayList<Foto> list = (ArrayList<Foto>) registrato.getProfilo().getListaFoto();
-        image_profilo.setSrc(list.get(0).getUrl());
+      /*  ArrayList<Foto> list = (ArrayList<Foto>) registrato.getProfilo().getListaFoto();
+        image_profilo.setSrc(list.get(0).getUrl());*/
         image_profilo.setAlt("Foto non presente");
         image.setId("foto");
         image.add(image_profilo);
@@ -152,10 +158,25 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
 
         interessi.setLabel("Interessi");
         interessi.setValue(registrato.getProfilo().getInteressi().toString());
-        interessi.setItems("Uomo","Donna","Altro");
+        Interessi [] interess = Interessi.values();
+        interessi.setItems(interess[0].toString(),interess[1].toString(),interess[2].toString(),interess[3].toString());
         interessi.setEnabled(false);
 
-        info_tre.add(capelli,occhi,interessi);
+        MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
+        multiselectComboBox.setWidth("100%");
+        multiselectComboBox.setLabel("Topic Selezionati..");
+        ArrayList<String> hobby = new ArrayList<String>();
+
+        Hobby [] topic = Hobby.values();
+        List<String> topiclist = new ArrayList<String>();
+        for(Hobby h : topic) topiclist.add(h.toString());
+        multiselectComboBox.setItems(topiclist);
+
+        for(Hobby h : registrato.getProfilo().getHobbyList()) hobby.add(h.toString());
+        multiselectComboBox.setItems(hobby);
+        multiselectComboBox.setEnabled(false);
+
+        info_tre.add(capelli,occhi,interessi,multiselectComboBox);
 
 
         MemoryBuffer img = new MemoryBuffer();
@@ -182,7 +203,7 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
             luogo.setEnabled(false);
             occhi.setEnabled(false);
             capelli.setEnabled(false);
-            //MANCANO I TOPIC
+            multiselectComboBox.setEnabled(false);
             altezza.setEnabled(false);
             interessi.setEnabled(false);
             //VEDERE IMMAGINE
@@ -194,7 +215,15 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
             registrato.setEmail(email_profilo.getValue());
             registrato.getProfilo().setResidenza(città.getValue());
             registrato.getProfilo().setLuogoNascita(luogo.getValue());
-            registrato.getProfilo().setColore_occhi(occhi.getValue().toString());
+            registrato.getProfilo().setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
+            registrato.getProfilo().setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
+            registrato.getProfilo().setInteressi(Interessi.valueOf(interessi.getValue()));
+            //hobby
+            ArrayList<Hobby> hob = new ArrayList<Hobby>();
+            for(String s : multiselectComboBox.getValue()) hob.add(Hobby.valueOf(s));
+            registrato.getProfilo().setHobbyList(hob);
+
+            controller.updateStudente(registrato,registrato.getProfilo());
 
         });
         conferma.setEnabled(false);
@@ -202,8 +231,17 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
 
         Button modifica = new Button("Modifica",buttonClickEvent -> {
             name.setEnabled(true);
-            conferma.setEnabled(true);
+            cognome.setEnabled(true);
             date.setEnabled(true);
+            email_profilo.setEnabled(true);
+            città.setEnabled(true);
+            luogo.setEnabled(true);
+            occhi.setEnabled(true);
+            capelli.setEnabled(true);
+            multiselectComboBox.setEnabled(true);
+            altezza.setEnabled(true);
+            interessi.setEnabled(true);
+            multiselectComboBox.setEnabled(true);
         });
         modifica.setId("modifica");
 
