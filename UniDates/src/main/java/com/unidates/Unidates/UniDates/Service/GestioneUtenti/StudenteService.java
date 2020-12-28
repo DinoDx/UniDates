@@ -97,5 +97,11 @@ public class StudenteService {
         moderatoreRepository.save(moderatore);
         return true;
     }
+
+    public boolean modificaStudente(Studente studente, Profilo profilo) {
+        studente.setProfilo(profilo);
+        studenteDao.saveUtente(studente);
+        return true;
+    }
 }
 
