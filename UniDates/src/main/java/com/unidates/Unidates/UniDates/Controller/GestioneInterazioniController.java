@@ -5,11 +5,10 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Service.ChatService;
+import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.ChatService;
 import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.MatchService;
 import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 

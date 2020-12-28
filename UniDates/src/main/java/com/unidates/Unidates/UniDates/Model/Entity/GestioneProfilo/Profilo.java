@@ -6,8 +6,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Table(name = "Profilo")
@@ -30,14 +29,15 @@ public class Profilo implements Serializable {
     private Colori_Capelli colori_capelli;
     private Colore_Occhi colore_occhi;
 
-    private Hobby hobbyList;
+    @ElementCollection
+    private Collection<Hobby> hobbyList;
 
 
     public Profilo() {
 
     }
 
-    public Profilo(String nome, String cognome, String luogoNascita, String residenza, Date dataDiNascita, int altezza, Sesso sesso, Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi, Hobby hobbyList) {
+    public Profilo(String nome, String cognome, String luogoNascita, String residenza, Date dataDiNascita, int altezza, Sesso sesso, Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi, Collection<Hobby> hobbyList) {
         this.nome = nome;
         this.cognome = cognome;
         this.luogoNascita = luogoNascita;
@@ -133,11 +133,11 @@ public class Profilo implements Serializable {
         this.colore_occhi = colore_occhi;
     }
 
-    public Hobby getHobbyList() {
+    public Collection<Hobby> getHobbyList() {
         return hobbyList;
     }
 
-    public void setHobbyList(Hobby hobbyList) {
+    public void setHobbyList(Collection<Hobby> hobbyList) {
         this.hobbyList = hobbyList;
     }
 

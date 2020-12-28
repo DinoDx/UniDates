@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Service;
+package com.unidates.Unidates.UniDates.Service.GestioneInterazioni;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
