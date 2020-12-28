@@ -31,13 +31,13 @@ public class GestioneProfiloController {
     }
 
     @RequestMapping("/deleteProfile")
-    public void deleteProfile(Profilo profilo){
-        profiloService.deleteProfile(profilo);
+    public void deleteProfile(Profilo profilo, String password){
+        profiloService.deleteProfile(profilo, password);
     }
 
     @RequestMapping("/editProfile")
-    public void updateProfile(Profilo profilo){
-        profiloService.updateProfile(profilo);
+    public void updateProfile(Profilo profilo, String password){
+        profiloService.updateProfile(profilo, password);
     }
 
     @RequestMapping("/findFoto")

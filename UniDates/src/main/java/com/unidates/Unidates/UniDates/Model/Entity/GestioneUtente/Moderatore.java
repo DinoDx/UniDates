@@ -1,6 +1,8 @@
-package com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione;
+package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 
 import com.unidates.Unidates.UniDates.Enum.Ruolo;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimenti;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazioni;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 
@@ -28,10 +30,6 @@ public class Moderatore extends Utente {
         super(email, password, Ruolo.MODERATORE);
         AmmonimentiInviati = new ArrayList<Ammonimenti>();
         segnalazioniRicevute = new ArrayList<Segnalazioni>();
-    }
-
-    public void addAmmonimento(Ammonimenti ammonimento){
-        AmmonimentiInviati.add(ammonimento);
     }
 
     public Collection<Ammonimenti> getAmmonimentiInviati() {

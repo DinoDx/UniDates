@@ -13,11 +13,15 @@ public class ProfiloService {
     @Autowired
     private ProfiloRepository profiloRepository;
 
-    public void deleteProfile(Profilo profilo){
+    public void deleteProfile(Profilo profilo, String password){
+
+        if(password==profilo.getStudente().getPassword())
         profiloRepository.deleteById(profilo.getId());
     }
 
-    public void updateProfile(Profilo profilo){
+    public void updateProfile(Profilo profilo, String password){
+
+        if(password==profilo.getStudente().getPassword())
         profiloRepository.save(profilo);
     }
 }

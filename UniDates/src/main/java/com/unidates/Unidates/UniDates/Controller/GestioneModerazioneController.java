@@ -3,10 +3,10 @@ package com.unidates.Unidates.UniDates.Controller;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimenti;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Moderatore;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazioni;
 import com.unidates.Unidates.UniDates.Service.GestioneModerazione.AmmonimentiService;
-import com.unidates.Unidates.UniDates.Service.GestioneModerazione.ModeratoreService;
+import com.unidates.Unidates.UniDates.Service.GestioneUtenti.ModeratoreService;
 import com.unidates.Unidates.UniDates.Service.GestioneModerazione.SegnalazioniService;
 import com.unidates.Unidates.UniDates.Service.GestioneModerazione.SospensioniService;
 import com.unidates.Unidates.UniDates.Service.GestioneUtenti.StudenteService;
@@ -34,6 +34,7 @@ public class GestioneModerazioneController {
 
     @Autowired
     ModeratoreService moderatoreService;
+
 
     @RequestMapping("/segnalaFoto")
     public void segnalaFoto(Moderatore moderatore, Foto foto, String motivazione, String dettagli){
