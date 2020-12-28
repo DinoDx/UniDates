@@ -1,8 +1,11 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione;
 
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "Ammonimenti")
@@ -21,7 +24,12 @@ public class Ammonimenti {
     private Moderatore moderatore;
 
     private String usernameStudente;
+
+    @NotNull
     private String motivazione;
+
+    @NotNull
+    @Size(min = 2, max = 1000)
     private String dettagli;
 
     public Ammonimenti(){

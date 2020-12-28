@@ -1,7 +1,7 @@
 package com.unidates.Unidates.UniDates.Service.GestioneModerazione;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Moderatore;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazioni;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneModerazione.SegnalazioniRepository;
 import org.springframework.beans.factory.annotation.Autowired;

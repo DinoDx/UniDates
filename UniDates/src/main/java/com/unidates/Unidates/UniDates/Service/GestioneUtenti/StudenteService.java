@@ -5,7 +5,7 @@ import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Model.DAOs.StudenteDao;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Moderatore;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.ModeratoreRepository;

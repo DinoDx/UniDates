@@ -1,10 +1,12 @@
 package com.unidates.Unidates.UniDates.Controller;
 
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Moderatore;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
-import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.ChatService;
-import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.NotificaService;
+import com.unidates.Unidates.UniDates.Service.ChatService;
+import com.unidates.Unidates.UniDates.Service.NotificaService;
 import com.unidates.Unidates.UniDates.Service.GestioneUtenti.StudenteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +34,6 @@ public class GestioneUtentiController {
         return studenteService.addStudente(studente, profilo);
     }
 
-    @RequestMapping("/updateStudente")
-    public boolean updateStudente(Studente studente, Profilo profilo){
-        return studenteService.modificaStudente(studente, profilo);
-    }
     @RequestMapping("/registrazioneModeratore")
     public boolean registrazioneModeratore(Moderatore moderatore, Studente studente){
         return studenteService.addModeratore(moderatore, studente);

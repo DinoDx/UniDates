@@ -5,14 +5,13 @@ import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.*;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Moderatore;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -127,7 +126,7 @@ public class homeTest extends VerticalLayout {
         });
 
 
-
+        /*
         Button modificaProfilo = new Button("Modifica Profilo", buttonClickEvent -> {
             Profilo nuovoProfilo = gestioneUtentiController.findByEmail(email.getValue()).getProfilo();
             nuovoProfilo.setCognome("Update");
@@ -137,7 +136,7 @@ public class homeTest extends VerticalLayout {
             System.out.println(gestioneUtentiController.findByEmail(email.getValue()).getProfilo().getNome());
             System.out.println(gestioneUtentiController.findByEmail(email.getValue()).getProfilo().getCognome());
         });
-
+        */
 
         Button aggiungiMatch1 = new Button("Aggiungi Match 1", buttonClickEvent ->{
             gestioneInterazioniController.aggiungiMatch(gestioneUtentiController.findByEmail(email.getValue()), gestioneUtentiController.findByEmail(email2.getValue()));
@@ -176,7 +175,7 @@ public class homeTest extends VerticalLayout {
         add(trovaUtente);
         add(removeUtente);
         add(aggiungiFoto);
-        add(modificaProfilo);
+        //add(modificaProfilo);
         add(segnalaFoto);
         add(sendMessage);
         /*
