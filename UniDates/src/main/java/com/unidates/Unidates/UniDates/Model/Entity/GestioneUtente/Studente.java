@@ -94,9 +94,7 @@ public class Studente extends Utente{
         this.listMatch = listMatch;
     }
 
-    public void addAmmonimento(Ammonimenti ammonimento){
-        listAmmonimenti.add(ammonimento);
-    }
+
 
     public List<Match> getListMatchRicevuti() {
         return listMatchRicevuti;
@@ -104,6 +102,26 @@ public class Studente extends Utente{
 
     public void setListMatchRicevuti(List<Match> listMatchRicevuti) {
         this.listMatchRicevuti = listMatchRicevuti;
+    }
+
+    public void addBloccato(Studente studente){
+        listaBloccati.add(studente);
+    }
+
+    public void addSospensione(Sospensioni sospensione){
+        listSospensioni.add(sospensione);
+    }
+
+    public void addAmmonimento(Ammonimenti ammonimento){
+        listAmmonimenti.add(ammonimento);
+    }
+
+    public void addMatch(Match match){
+        listMatch.add(match);
+    }
+
+    public void addMatchRicevuto(Match match){
+        listMatchRicevuti.add(match);
     }
 
     @Override

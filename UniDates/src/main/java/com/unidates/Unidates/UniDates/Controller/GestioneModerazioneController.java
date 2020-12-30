@@ -12,6 +12,7 @@ import com.unidates.Unidates.UniDates.Service.GestioneModerazione.SospensioniSer
 import com.unidates.Unidates.UniDates.Service.GestioneUtenti.StudenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collection;
@@ -38,16 +39,19 @@ public class GestioneModerazioneController {
 
     @RequestMapping("/segnalaFoto")
     public void segnalaFoto(Moderatore moderatore, Foto foto, String motivazione, String dettagli){
+        checkSegnalazione(motivazione, dettagli);
         segnalazioniService.addSegnalazione(moderatore, foto, motivazione, dettagli);
     }
 
     @RequestMapping("/inviaAmmonimento")
     public void inviaAmmonimento(Moderatore moderatore, Studente studente, String motivazione, String dettagli){
+        checkAmmonimento(motivazione, dettagli);
         ammonimentiService.sendAmmonimento(moderatore, studente, motivazione, dettagli);
     }
 
     @RequestMapping("/sospendiUtente")
     public void sospendiUtente(Studente studente, int durata, String dettagli){
+        checkSospensione(durata, dettagli);
         sospensioniService.suspendStudente(studente, durata, dettagli);
     }
 
@@ -65,6 +69,27 @@ public class GestioneModerazioneController {
     public Collection<Segnalazioni> showSegnalazioni(Moderatore moderatore){
         return moderatoreService.findByEmail(moderatore.getEmail()).getSegnalazioniRicevute();
 
+    }
+
+    public Boolean checkSegnalazione(String motivazione, String dettagli){
+        if(motivazione != null && dettagli != dettagli)
+            return true;
+
+        return false;
+    }
+
+    public Boolean checkAmmonimento(String motivazione, String dettagli){
+        if(motivazione != null && dettagli != dettagli)
+            return true;
+
+        return false;
+    }
+
+    public boolean checkSospensione(int durata, String dettagli){
+        if(durata != 0 && dettagli != null)
+            return true;
+
+        return false;
     }
 
 }

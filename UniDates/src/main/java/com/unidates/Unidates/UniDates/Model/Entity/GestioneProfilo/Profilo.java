@@ -159,4 +159,6 @@ public class Profilo implements Serializable {
     public Collection<Foto> getListaFoto() { return listaFoto; }
 
     public void setListaFoto(Collection<Foto> listaFoto) { this.listaFoto = listaFoto; }
+
+    public void addFoto(Foto foto) { listaFoto.add(foto); }
 }

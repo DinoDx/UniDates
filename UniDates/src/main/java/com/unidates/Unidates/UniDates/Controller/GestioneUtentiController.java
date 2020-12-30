@@ -31,6 +31,8 @@ public class GestioneUtentiController {
 
     @RequestMapping("/registrazioneStudente")
     public boolean registrazioneStudente(Studente studente, Profilo profilo){
+        checkStudente(studente);
+        checkProfilo(profilo);
         return studenteService.addStudente(studente, profilo);
     }
 
@@ -51,6 +53,7 @@ public class GestioneUtentiController {
 
     @RequestMapping("/trovaStudente")
     public Studente findByEmail(String email){
+        checkEmail(email);
         return studenteService.findByEmail(email);
     }
 
@@ -71,4 +74,26 @@ public class GestioneUtentiController {
 
     public void addChat(Chat chat ,Studente studente){chatService.createChat(chat, studente);}
      */
+
+    public boolean checkEmail(String email){
+        if (email != null)
+            return true;
+
+        return false;
+    }
+
+    public boolean checkProfilo(Profilo profilo){
+        if (profilo.getNome() != null && profilo.getCognome() != null)
+            return true;
+
+        return false;
+    }
+
+
+    private boolean checkStudente(Studente studente) {
+        if(studente.getEmail() != null && studente.getPassword() != null)
+            return true;
+
+        return false;
+    }
 }

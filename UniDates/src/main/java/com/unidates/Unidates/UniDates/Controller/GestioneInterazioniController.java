@@ -36,11 +36,19 @@ public class GestioneInterazioniController {
 
     public void sendMessage(Utente mittente, Utente destinatario, Messaggio messaggio){
         try {
+            checkMessaggio(messaggio);
             messageService.sendMessage(mittente, destinatario, messaggio);
         }
         catch (MatchNotFoundException matchNotFoundException){
             matchNotFoundException.printStackTrace();
         }
+    }
+
+    public boolean checkMessaggio(Messaggio messaggio){
+        if(messaggio != null)
+            return true;
+
+        return false;
     }
 
 }

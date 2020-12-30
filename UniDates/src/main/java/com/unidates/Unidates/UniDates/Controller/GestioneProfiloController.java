@@ -22,6 +22,7 @@ public class GestioneProfiloController {
 
     @RequestMapping("/addFoto")
     public void addFoto(Profilo profilo, Foto foto){
+        checkFoto(foto);
         fotoService.addFoto(profilo, foto);
     }
 
@@ -32,11 +33,14 @@ public class GestioneProfiloController {
 
     @RequestMapping("/deleteProfile")
     public void deleteProfile(Profilo profilo, String password){
+        checkPassword(password, profilo);
         profiloService.deleteProfile(profilo, password);
     }
 
     @RequestMapping("/editProfile")
     public void updateProfile(Profilo profilo, String password){
+        checkPassword(password, profilo);
+        checkProfilo(profilo);
         profiloService.updateProfile(profilo, password);
     }
 
@@ -48,5 +52,26 @@ public class GestioneProfiloController {
     @RequestMapping("/findAllFoto")
     public Collection<Foto> findAllFoto(){
         return fotoService.findAll();
+    }
+
+    public boolean checkFoto(Foto foto){
+        if(foto.getUrl() != null)
+            return true;
+
+        return false;
+    }
+
+    public boolean checkPassword (String password, Profilo profilo){
+        if(password==profilo.getStudente().getPassword())
+            return true;
+
+        return false;
+    }
+
+    public boolean checkProfilo(Profilo profilo){
+        if (profilo.getNome() != null && profilo.getCognome() != null)
+            return true;
+
+        return false;
     }
 }

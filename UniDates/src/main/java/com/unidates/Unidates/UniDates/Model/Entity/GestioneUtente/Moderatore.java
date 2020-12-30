@@ -55,4 +55,8 @@ public class Moderatore extends Utente {
     public void setStudente(Studente studente) {
         this.studente = studente;
     }
+
+    public void addSegnalazione(Segnalazioni segnalazione){
+        segnalazioniRicevute.add(segnalazione);
+    }
 }
