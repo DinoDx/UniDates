@@ -63,8 +63,6 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
         grid.addComponentColumn((profile -> createSingleUser(profile)));
         add(grid);
-
-       // System.out.println(registrato.getProfilo().getInteressi().toString() + registrato);;
     }
 
     private VerticalLayout createSingleUser(Profilo profile){
@@ -147,7 +145,7 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
         HorizontalLayout info_tre = new HorizontalLayout();
 
 
-        //DA VEDERE PER LA SESSIONE SIA OCCHI CHE CAPELLI CHE INTERESSI , UGUALE AL LOG?!
+
         TextField capelli = new TextField("Capelli");
         capelli.setValue(registrato.getProfilo().getColori_capelli().toString());
         capelli.setEnabled(false);
@@ -165,16 +163,11 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
         MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
         multiselectComboBox.setWidth("100%");
         multiselectComboBox.setLabel("Topic Selezionati..");
-        ArrayList<String> hobby = new ArrayList<String>();
-
         Hobby [] topic = Hobby.values();
         List<String> topiclist = new ArrayList<String>();
         for(Hobby h : topic) topiclist.add(h.toString());
         multiselectComboBox.setItems(topiclist);
-
-        for(Hobby h : registrato.getProfilo().getHobbyList()) hobby.add(h.toString());
-        multiselectComboBox.setItems(hobby);
-        multiselectComboBox.setEnabled(false);
+        //multiselectComboBox.setEnabled(false);
 
         info_tre.add(capelli,occhi,interessi,multiselectComboBox);
 
@@ -226,7 +219,6 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
             controller.updateStudente(registrato,registrato.getProfilo());
 
         });
-        conferma.setEnabled(false);
         conferma.setId("confirm");
 
         Button modifica = new Button("Modifica",buttonClickEvent -> {
@@ -248,6 +240,8 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
 
         Notification notifica = new Notification();
         notifica.setId("notifica");
+        PasswordField propria = new PasswordField("Inserisci password corrente");
+        propria.getStyle().set("margin-left","2em");
         PasswordField prima = new PasswordField("Nuova password:");
         prima.getStyle().set("margin-left","2em");
         PasswordField secondo = new PasswordField("Conferma password");
@@ -260,7 +254,9 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
             //implmenmtare invio notifica
         });
         conf.getStyle().set("margin-left","2em");
-        notifica.add(prima,secondo,conf,annulla);
+        notifica.add(propria,prima,secondo,conf,annulla);
+
+
         Button chpassword = new Button("Cambia Password",buttonClickEvent -> {
             notifica.open();
         });
