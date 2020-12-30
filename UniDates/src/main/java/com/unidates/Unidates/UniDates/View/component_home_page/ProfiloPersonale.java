@@ -64,7 +64,7 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
         grid.addComponentColumn((profile -> createSingleUser(profile)));
         add(grid);
 
-        System.out.println(registrato.getProfilo().getInteressi().toString() + registrato);;
+       // System.out.println(registrato.getProfilo().getInteressi().toString() + registrato);;
     }
 
     private VerticalLayout createSingleUser(Profilo profile){

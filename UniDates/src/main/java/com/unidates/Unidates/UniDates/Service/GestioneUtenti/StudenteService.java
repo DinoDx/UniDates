@@ -103,5 +103,9 @@ public class StudenteService {
         studenteDao.saveUtente(studente);
         return true;
     }
+
+    public void updatestudente(Studente studente) {
+        studenteDao.saveUtente(studente);
+    }
 }
 

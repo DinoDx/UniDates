@@ -2,11 +2,11 @@ package com.unidates.Unidates.UniDates.Controller;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Moderatore;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
-import com.unidates.Unidates.UniDates.Service.ChatService;
-import com.unidates.Unidates.UniDates.Service.NotificaService;
+import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.ChatService;
+import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.NotificaService;
 import com.unidates.Unidates.UniDates.Service.GestioneUtenti.StudenteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +54,17 @@ public class GestioneUtentiController {
         return studenteService.findByEmail(email);
     }
 
-
+    public void updatestudente(Studente studente){
+        studenteService.updatestudente(studente);
+    }
 
 
     public Collection<Studente> findAll(){
         return studenteService.findAll();
 
+    }
+
+    public void updateStudente(Studente registrato, Profilo profilo) {
     }
 
     /*public void addNotifica(Notifica notifica, Studente studente){ notificaService.addNotifica(notifica, studente); }
