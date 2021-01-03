@@ -26,11 +26,6 @@ public class GestioneInterazioniController {
         matchService.aggiungiMatch(studente1, studente2);
     }
 
-    @RequestMapping("/findMatch")
-    public Match findMatch (Studente studente1, Studente studente2){
-        return matchService.trovaMatch(studente1, studente2);
-    }
-
     public void sendMessage(Utente mittente, Utente destinatario, Messaggio messaggio){
         try {
             checkMessaggio(messaggio);

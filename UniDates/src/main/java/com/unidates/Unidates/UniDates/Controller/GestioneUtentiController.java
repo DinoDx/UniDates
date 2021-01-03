@@ -1,5 +1,6 @@
 package com.unidates.Unidates.UniDates.Controller;
 
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
@@ -39,14 +40,19 @@ public class GestioneUtentiController {
         return utenteService.registrazioneModeratore(moderatore, studente);
     }
 
+    @RequestMapping("/registrazioneCommunityManager")
+    public boolean registrazioneModeratore(CommunityManager communityManager, Studente studente){
+        return utenteService.registrazioneCommunityManager(communityManager, studente);
+    }
+
     @RequestMapping("/bloccoStudente")
     public boolean bloccaStudente(Studente studenteBloccante, Studente studenteBloccato){
        return utenteService.bloccaStudente(studenteBloccante,studenteBloccato);
     }
 
-    @RequestMapping("/removeStudente")
-    public void removeUtente(Studente studente){
-      //  utenteService.removeUtente(studente);
+    @RequestMapping("/sbloccoStudente")
+    public boolean sbloccaStudente(Studente studenteBloccante, Studente studenteBloccato){
+        return utenteService.sbloccaStudente(studenteBloccante,studenteBloccato);
     }
 
     @RequestMapping("/trovaStudente")
@@ -55,23 +61,6 @@ public class GestioneUtentiController {
         return (Studente) utenteService.findUtenteByEmail(email);
     }
 
-    public void updatestudente(Studente studente){
-        utenteService.updatestudente(studente);
-    }
-
-
-    public Collection<Studente> findAll(){
-        return utenteService.findAll();
-
-    }
-
-    public void updateStudente(Studente registrato, Profilo profilo) {
-    }
-
-    /*public void addNotifica(Notifica notifica, Studente studente){ notificaService.addNotifica(notifica, studente); }
-
-    public void addChat(Chat chat ,Studente studente){chatService.createChat(chat, studente);}
-     */
 
     public boolean checkEmail(String email){
         if (email != null)

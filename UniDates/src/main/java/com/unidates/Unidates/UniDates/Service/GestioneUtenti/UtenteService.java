@@ -107,6 +107,12 @@ public class UtenteService {
         return true;
     }
 
+    public boolean sbloccaStudente(Studente studenteBloccante, Studente studenteBloccato) {
+        studenteBloccante.getListaBloccati().remove(studenteBloccato);
+        studenteRepository.save(studenteBloccante);
+        return true;
+    }
+
 
 
 // PER TESTING
@@ -125,6 +131,7 @@ public class UtenteService {
     public void updatestudente(Studente studente) {
         studenteRepository.save(studente);
     }
+
 
 
 }
