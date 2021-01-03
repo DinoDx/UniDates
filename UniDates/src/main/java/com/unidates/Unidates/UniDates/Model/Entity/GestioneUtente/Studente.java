@@ -15,6 +15,7 @@ public class Studente extends Utente{
 
 
     private boolean isBanned;
+    private boolean isActive;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "profilo_id", referencedColumnName = "id")
@@ -122,6 +123,14 @@ public class Studente extends Utente{
 
     public void addMatchRicevuto(Match match){
         listMatchRicevuti.add(match);
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override

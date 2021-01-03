@@ -6,13 +6,11 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazioni;
 import com.unidates.Unidates.UniDates.Service.GestioneModerazione.AmmonimentiService;
-import com.unidates.Unidates.UniDates.Service.GestioneUtenti.ModeratoreService;
 import com.unidates.Unidates.UniDates.Service.GestioneModerazione.SegnalazioniService;
 import com.unidates.Unidates.UniDates.Service.GestioneModerazione.SospensioniService;
-import com.unidates.Unidates.UniDates.Service.GestioneUtenti.StudenteService;
+import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collection;
@@ -31,10 +29,7 @@ public class GestioneModerazioneController {
     SospensioniService sospensioniService;
 
     @Autowired
-    StudenteService studenteService;
-
-    @Autowired
-    ModeratoreService moderatoreService;
+    UtenteService utenteService;
 
 
     @RequestMapping("/segnalaFoto")
@@ -57,17 +52,20 @@ public class GestioneModerazioneController {
 
     @RequestMapping("/ammonimentiRicevuti")
     public Collection<Ammonimenti> showAmmonimentiRicevuti(Studente studente){
-        return studenteService.findByEmail(studente.getEmail()).getListAmmonimenti();
+        Studente s = (Studente) utenteService.findUtenteByEmail(studente.getEmail());
+        return s.getListAmmonimenti();
     }
 
     @RequestMapping("/ammonimentiInviati")
     public Collection<Ammonimenti> showAmmonimentiInviati(Moderatore moderatore){
-        return moderatoreService.findByEmail(moderatore.getEmail()).getAmmonimentiInviati();
+        Moderatore m = (Moderatore) utenteService.findUtenteByEmail(moderatore.getEmail());
+        return m.getAmmonimentiInviati();
     }
 
     @RequestMapping("/segnalazioniUtente")
     public Collection<Segnalazioni> showSegnalazioni(Moderatore moderatore){
-        return moderatoreService.findByEmail(moderatore.getEmail()).getSegnalazioniRicevute();
+        Moderatore m = (Moderatore) utenteService.findUtenteByEmail(moderatore.getEmail());
+        return m.getSegnalazioniRicevute();
 
     }
 

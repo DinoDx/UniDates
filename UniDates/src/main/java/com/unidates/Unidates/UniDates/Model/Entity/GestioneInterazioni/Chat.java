@@ -6,6 +6,7 @@ import jdk.jfr.MemoryAddress;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "Chat")
@@ -32,6 +33,10 @@ public class Chat implements Serializable {
         this.mittente = mittente;
         this.destinatario = destinatario;
         this.messaggi = messaggi;
+    }
+
+    public void aggiungiMessaggio(Messaggio messaggio){
+        messaggi.add(messaggio);
     }
 
     public Long getId() {

@@ -1,13 +1,11 @@
 package com.unidates.Unidates.UniDates.Controller;
 
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.ChatService;
 import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.NotificaService;
-import com.unidates.Unidates.UniDates.Service.GestioneUtenti.StudenteService;
+import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +18,7 @@ import java.util.Collection;
 public class GestioneUtentiController {
 
     @Autowired
-    StudenteService studenteService;
+    UtenteService utenteService;
 
     @Autowired
     NotificaService notificaService;
@@ -33,37 +31,37 @@ public class GestioneUtentiController {
     public boolean registrazioneStudente(Studente studente, Profilo profilo){
         checkStudente(studente);
         checkProfilo(profilo);
-        return studenteService.addStudente(studente, profilo);
+        return utenteService.registrazioneStudente(studente, profilo);
     }
 
     @RequestMapping("/registrazioneModeratore")
     public boolean registrazioneModeratore(Moderatore moderatore, Studente studente){
-        return studenteService.addModeratore(moderatore, studente);
+        return utenteService.registrazioneModeratore(moderatore, studente);
     }
 
     @RequestMapping("/bloccoStudente")
     public boolean bloccaStudente(Studente studenteBloccante, Studente studenteBloccato){
-       return studenteService.bloccaStudente(studenteBloccante,studenteBloccato);
+       return utenteService.bloccaStudente(studenteBloccante,studenteBloccato);
     }
 
     @RequestMapping("/removeStudente")
     public void removeUtente(Studente studente){
-        studenteService.removeUtente(studente);
+      //  utenteService.removeUtente(studente);
     }
 
     @RequestMapping("/trovaStudente")
     public Studente findByEmail(String email){
         checkEmail(email);
-        return studenteService.findByEmail(email);
+        return (Studente) utenteService.findUtenteByEmail(email);
     }
 
     public void updatestudente(Studente studente){
-        studenteService.updatestudente(studente);
+        utenteService.updatestudente(studente);
     }
 
 
     public Collection<Studente> findAll(){
-        return studenteService.findAll();
+        return utenteService.findAll();
 
     }
 
