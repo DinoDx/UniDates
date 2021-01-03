@@ -7,7 +7,6 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.ChatService;
 import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.MatchService;
-import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +20,6 @@ public class GestioneInterazioniController {
     @Autowired
     private ChatService chatService;
 
-    @Autowired
-    private MessageService messageService;
 
     @RequestMapping("/aggiungiMatch")
     public void aggiungiMatch(Studente studente1, Studente studente2){
@@ -31,13 +28,13 @@ public class GestioneInterazioniController {
 
     @RequestMapping("/findMatch")
     public Match findMatch (Studente studente1, Studente studente2){
-        return matchService.findMatch(studente1, studente2);
+        return matchService.trovaMatch(studente1, studente2);
     }
 
     public void sendMessage(Utente mittente, Utente destinatario, Messaggio messaggio){
         try {
             checkMessaggio(messaggio);
-            messageService.sendMessage(mittente, destinatario, messaggio);
+            chatService.inviaMessaggio(mittente, destinatario, messaggio);
         }
         catch (MatchNotFoundException matchNotFoundException){
             matchNotFoundException.printStackTrace();

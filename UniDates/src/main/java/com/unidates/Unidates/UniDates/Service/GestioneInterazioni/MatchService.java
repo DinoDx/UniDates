@@ -29,19 +29,15 @@ public class  MatchService {
         }
     }
 
-    public Match findMatch(Studente studente1, Studente studente2){
+    public Match trovaMatch(Studente studente1, Studente studente2){
         Match invia = matchRepository.findAllByStudente1AndStudente2(studente1, studente2);
-
         Match reverse = matchRepository.findAllByStudente1AndStudente2(studente2, studente1);
-
         return invia == null ? reverse: invia;
     }
 
     public boolean isValidMatch(Studente studente1, Studente studente2){
         Match invia = matchRepository.findAllByStudente1AndStudente2(studente1, studente2);
-
         Match reverse = matchRepository.findAllByStudente1AndStudente2(studente2, studente1);
-
         if(invia != null){
             return invia.isLikeByStudent2() && invia.isLikedByStudent1();
         }
@@ -52,5 +48,7 @@ public class  MatchService {
             return false;
         }
     }
+
+    private void eliminaMatch(Studente studente1, Studente studente2){}
 }
 

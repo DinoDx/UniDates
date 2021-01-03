@@ -6,13 +6,19 @@ import com.unidates.Unidates.UniDates.Model.Repository.NotificaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class NotificaService {
     @Autowired
     private NotificaRepository notificaRepository;
 
-    public void addNotifica(Notifica notifica, Utente utente) {
+    public void agiunginNotifica(Notifica notifica, Utente utente) {
         notifica.setUtente(utente);
         notificaRepository.save(notifica);
+    }
+
+    public List<Notifica> visualizzaNotifiche(Utente u){
+        return (List<Notifica>) u.getListNotifica();
     }
 }
