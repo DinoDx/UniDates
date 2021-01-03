@@ -24,7 +24,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 @Route("")
@@ -109,7 +108,7 @@ public class homeTest extends VerticalLayout {
         });*/
 
         Button aggiungiFoto = new Button("Aggiungi Foto", buttonClickEvent -> {
-            gestioneProfiloController.addFoto(gestioneUtentiController.findByEmail(email.getValue()).getProfilo(),new Foto("Url prova " ));
+            gestioneProfiloController.aggiungiFoto(gestioneUtentiController.findByEmail(email.getValue()).getProfilo(),new Foto("Url prova " ));
             for(Foto f : gestioneProfiloController.findAllFoto())
                 System.out.println(f.getUrl());
         });
@@ -119,7 +118,7 @@ public class homeTest extends VerticalLayout {
 
        Button segnalaFoto = new Button("Segnala Foto", buttonClickEvent -> {
             Foto foto = new Foto("url di prova");
-            gestioneProfiloController.addFoto(gestioneUtentiController.findByEmail(email.getValue()).getProfilo(),foto);
+            gestioneProfiloController.aggiungiFoto(gestioneUtentiController.findByEmail(email.getValue()).getProfilo(),foto);
             Moderatore moderatore = new Moderatore("ciaomod", "ciaomod");
             gestioneUtentiController.registrazioneModeratore(moderatore,gestioneUtentiController.findByEmail(email.getValue()));
             gestioneModerazioneController.segnalaFoto(moderatore, foto,"porcodio", "foto dimmerda");

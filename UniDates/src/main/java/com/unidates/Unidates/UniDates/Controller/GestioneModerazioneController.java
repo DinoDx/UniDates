@@ -1,13 +1,12 @@
 package com.unidates.Unidates.UniDates.Controller;
 
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimenti;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazioni;
-import com.unidates.Unidates.UniDates.Service.GestioneModerazione.AmmonimentiService;
-import com.unidates.Unidates.UniDates.Service.GestioneModerazione.SegnalazioniService;
-import com.unidates.Unidates.UniDates.Service.GestioneModerazione.SospensioniService;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
+import com.unidates.Unidates.UniDates.Service.GestioneModerazione.ModerazioneService;
 import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,13 +19,7 @@ import java.util.Collection;
 public class GestioneModerazioneController {
 
     @Autowired
-    AmmonimentiService ammonimentiService;
-
-    @Autowired
-    SegnalazioniService segnalazioniService;
-
-    @Autowired
-    SospensioniService sospensioniService;
+    ModerazioneService moderazioneService;
 
     @Autowired
     UtenteService utenteService;
@@ -35,38 +28,40 @@ public class GestioneModerazioneController {
     @RequestMapping("/segnalaFoto")
     public void segnalaFoto(Moderatore moderatore, Foto foto, String motivazione, String dettagli){
         checkSegnalazione(motivazione, dettagli);
-        segnalazioniService.addSegnalazione(moderatore, foto, motivazione, dettagli);
+        moderazioneService.inviaSegnalazione(moderatore, foto, motivazione, dettagli);
     }
 
     @RequestMapping("/inviaAmmonimento")
     public void inviaAmmonimento(Moderatore moderatore, Studente studente, String motivazione, String dettagli){
         checkAmmonimento(motivazione, dettagli);
-        ammonimentiService.sendAmmonimento(moderatore, studente, motivazione, dettagli);
+        moderazioneService.inviaAmmonimento(moderatore, studente, motivazione, dettagli);
     }
 
     @RequestMapping("/sospendiUtente")
     public void sospendiUtente(Studente studente, int durata, String dettagli){
         checkSospensione(durata, dettagli);
-        sospensioniService.suspendStudente(studente, durata, dettagli);
+        moderazioneService.inviaSospensione(studente, durata, dettagli);
     }
 
     @RequestMapping("/ammonimentiRicevuti")
-    public Collection<Ammonimenti> showAmmonimentiRicevuti(Studente studente){
-        Studente s = (Studente) utenteService.findUtenteByEmail(studente.getEmail());
-        return s.getListAmmonimenti();
+    public Collection<Ammonimento> showAmmonimentiRicevuti(Studente studente){
+        return moderazioneService.visualizzaAmmonimentiRicevuti(studente);
     }
 
     @RequestMapping("/ammonimentiInviati")
-    public Collection<Ammonimenti> showAmmonimentiInviati(Moderatore moderatore){
-        Moderatore m = (Moderatore) utenteService.findUtenteByEmail(moderatore.getEmail());
-        return m.getAmmonimentiInviati();
+    public Collection<Ammonimento> showAmmonimentiInviati(Moderatore moderatore){
+        return moderazioneService.visualizzaAmmonimentiInviati(moderatore);
     }
 
     @RequestMapping("/segnalazioniUtente")
-    public Collection<Segnalazioni> showSegnalazioni(Moderatore moderatore){
-        Moderatore m = (Moderatore) utenteService.findUtenteByEmail(moderatore.getEmail());
-        return m.getSegnalazioniRicevute();
+    public Collection<Segnalazione> showSegnalazioni(Moderatore moderatore){
+        return moderazioneService.visualizzaSegnalazioniRicevute(moderatore);
 
+    }
+
+    @RequestMapping("/sospensioniUtente")
+    public Collection<Sospensione> visualizzaSospensioni(Studente studente){
+        return moderazioneService.visualizzaSospensioni(studente);
     }
 
     public Boolean checkSegnalazione(String motivazione, String dettagli){

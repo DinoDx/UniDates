@@ -1,10 +1,8 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 
 import com.unidates.Unidates.UniDates.Enum.Ruolo;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimenti;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazioni;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,38 +12,38 @@ import java.util.Collection;
 public class Moderatore extends Utente {
 
     @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
-    private Collection<Ammonimenti> AmmonimentiInviati;
+    private Collection<Ammonimento> ammonimentoInviati;
 
     @OneToOne
     @JoinColumn(name = "studente_id", referencedColumnName = "id")
     private Studente studente;
 
     @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
-    private Collection<Segnalazioni> segnalazioniRicevute;
+    private Collection<Segnalazione> segnalazioneRicevute;
 
     public Moderatore(){
     }
 
     public Moderatore(String email, String password) {
         super(email, password, Ruolo.MODERATORE);
-        AmmonimentiInviati = new ArrayList<Ammonimenti>();
-        segnalazioniRicevute = new ArrayList<Segnalazioni>();
+        ammonimentoInviati = new ArrayList<Ammonimento>();
+        segnalazioneRicevute = new ArrayList<Segnalazione>();
     }
 
-    public Collection<Ammonimenti> getAmmonimentiInviati() {
-        return AmmonimentiInviati;
+    public Collection<Ammonimento> getAmmonimentiInviati() {
+        return ammonimentoInviati;
     }
 
-    public void setAmmonimentiInviati(Collection<Ammonimenti> ammonimentiInviati) {
-        AmmonimentiInviati = ammonimentiInviati;
+    public void setAmmonimentiInviati(Collection<Ammonimento> ammonimentoInviati) {
+        this.ammonimentoInviati = ammonimentoInviati;
     }
 
-    public Collection<Segnalazioni> getSegnalazioniRicevute() {
-        return segnalazioniRicevute;
+    public Collection<Segnalazione> getSegnalazioniRicevute() {
+        return segnalazioneRicevute;
     }
 
-    public void setSegnalazioniRicevute(Collection<Segnalazioni> segnalazioniRicevute) {
-        this.segnalazioniRicevute = segnalazioniRicevute;
+    public void setSegnalazioniRicevute(Collection<Segnalazione> segnalazioneRicevute) {
+        this.segnalazioneRicevute = segnalazioneRicevute;
     }
 
     public Studente getStudente() {
@@ -56,7 +54,7 @@ public class Moderatore extends Utente {
         this.studente = studente;
     }
 
-    public void addSegnalazione(Segnalazioni segnalazione){
-        segnalazioniRicevute.add(segnalazione);
+    public void addSegnalazione(Segnalazione segnalazione){
+        segnalazioneRicevute.add(segnalazione);
     }
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Sospensioni")
-public class Sospensioni {
+public class Sospensione {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -19,11 +19,11 @@ public class Sospensioni {
 
     private String dettagli;
 
-    public Sospensioni(){
+    public Sospensione(){
 
     }
 
-    public Sospensioni(int durata, String dettagli){
+    public Sospensione(int durata, String dettagli){
         this.durata = durata;
         this.dettagli = dettagli;
     }

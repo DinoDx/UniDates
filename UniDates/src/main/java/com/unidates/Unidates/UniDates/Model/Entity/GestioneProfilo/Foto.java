@@ -1,6 +1,6 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo;
 
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazioni;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class Foto  {
     private Profilo profilo;
 
     @OneToMany(mappedBy = "foto", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-    private Collection<Segnalazioni> segnalazioniRicevute;
+    private Collection<Segnalazione> segnalazioneRicevute;
 
     private String url;
 
@@ -27,7 +27,7 @@ public class Foto  {
 
     public Foto(String url){
         this.url = url;
-        this.segnalazioniRicevute = new ArrayList<Segnalazioni>();
+        this.segnalazioneRicevute = new ArrayList<Segnalazione>();
     }
 
     public Long getId() {
@@ -54,16 +54,16 @@ public class Foto  {
         this.url = url;
     }
 
-    public Collection<Segnalazioni> getSegnalazioniRicevuto() {
-        return segnalazioniRicevute;
+    public Collection<Segnalazione> getSegnalazioniRicevuto() {
+        return segnalazioneRicevute;
     }
 
-    public void setSegnalazioniRicevuto(Collection<Segnalazioni> segnalazioniRicevuto) {
-        segnalazioniRicevute = segnalazioniRicevuto;
+    public void setSegnalazioniRicevuto(Collection<Segnalazione> segnalazioneRicevuto) {
+        segnalazioneRicevute = segnalazioneRicevuto;
     }
 
-    public void addSegnalazione(Segnalazioni segnalazione){
-        segnalazioniRicevute.add(segnalazione);
+    public void addSegnalazione(Segnalazione segnalazione){
+        segnalazioneRicevute.add(segnalazione);
     }
 
 }

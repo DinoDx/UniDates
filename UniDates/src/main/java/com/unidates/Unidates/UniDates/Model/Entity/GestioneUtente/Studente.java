@@ -2,9 +2,9 @@ package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 
 
 import com.unidates.Unidates.UniDates.Enum.Ruolo;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimenti;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensioni;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 
 import javax.persistence.*;
@@ -27,10 +27,10 @@ public class Studente extends Utente{
     private List<Studente> listaBloccati;
 
     @OneToMany(mappedBy = "studente", cascade = CascadeType.REMOVE)
-    private List<Sospensioni> listSospensioni;
+    private List<Sospensione> listSospensione;
 
     @OneToMany(mappedBy = "studente", cascade = CascadeType.REMOVE)
-    private List<Ammonimenti> listAmmonimenti;
+    private List<Ammonimento> listAmmonimento;
 
     @OneToMany(mappedBy = "studente1", cascade = CascadeType.REMOVE)
     private List<Match> listMatch;
@@ -72,20 +72,20 @@ public class Studente extends Utente{
         this.listaBloccati = listaBloccati;
     }
 
-    public List<Sospensioni> getListSospensioni() {
-        return listSospensioni;
+    public List<Sospensione> getListSospensioni() {
+        return listSospensione;
     }
 
-    public void setListSospensioni(List<Sospensioni> listSospensioni) {
-        this.listSospensioni = listSospensioni;
+    public void setListSospensioni(List<Sospensione> listSospensione) {
+        this.listSospensione = listSospensione;
     }
 
-    public List<Ammonimenti> getListAmmonimenti() {
-        return listAmmonimenti;
+    public List<Ammonimento> getListAmmonimenti() {
+        return listAmmonimento;
     }
 
-    public void setListAmmonimenti(List<Ammonimenti> listAmmonimenti) {
-        this.listAmmonimenti = listAmmonimenti;
+    public void setListAmmonimenti(List<Ammonimento> listAmmonimento) {
+        this.listAmmonimento = listAmmonimento;
     }
 
     public List<Match> getListMatch() {
@@ -110,12 +110,12 @@ public class Studente extends Utente{
         listaBloccati.add(studente);
     }
 
-    public void addSospensione(Sospensioni sospensione){
-        listSospensioni.add(sospensione);
+    public void addSospensione(Sospensione sospensione){
+        listSospensione.add(sospensione);
     }
 
-    public void addAmmonimento(Ammonimenti ammonimento){
-        listAmmonimenti.add(ammonimento);
+    public void addAmmonimento(Ammonimento ammonimento){
+        listAmmonimento.add(ammonimento);
     }
 
     public void addMatch(Match match){
@@ -140,8 +140,8 @@ public class Studente extends Utente{
                 "isBanned=" + isBanned +
                 ", profilo=" + profilo +
                 ", listaBloccati=" + listaBloccati +
-                ", listSospensioni=" + listSospensioni +
-                ", listAmmonimenti=" + listAmmonimenti +
+                ", listSospensioni=" + listSospensione +
+                ", listAmmonimenti=" + listAmmonimento +
                 '}';
     }
 }

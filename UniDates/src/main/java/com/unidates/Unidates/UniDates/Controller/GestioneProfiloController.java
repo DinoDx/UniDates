@@ -2,13 +2,11 @@ package com.unidates.Unidates.UniDates.Controller;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
-import com.unidates.Unidates.UniDates.Service.GestioneProfilo.FotoService;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Service.GestioneProfilo.ProfiloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Collection;
 
 @Controller
 @RequestMapping("/api/ProfileManager")
@@ -17,41 +15,34 @@ public class GestioneProfiloController {
     @Autowired
     ProfiloService profiloService;
 
-    @Autowired
-    FotoService fotoService;
 
-    @RequestMapping("/addFoto")
-    public void addFoto(Profilo profilo, Foto foto){
+    @RequestMapping("/aggiungiFoto")
+    public void aggiungiFoto(Profilo profilo, Foto foto){
         checkFoto(foto);
-        fotoService.addFoto(profilo, foto);
+        profiloService.aggiungiFoto(profilo, foto);
     }
 
-    @RequestMapping("/deleteFoto")
-    public void deleteFoto(Foto foto){
-        fotoService.deleteFoto(foto);
+    @RequestMapping("/eliminaFoto")
+    public void eliminaFoto(Foto foto){
+        profiloService.eliminaFoto(foto);
     }
 
-    @RequestMapping("/deleteProfile")
-    public void deleteProfile(Profilo profilo, String password){
+    @RequestMapping("/eliminaProfile")
+    public void eliminaProfilo(Profilo profilo, String password){
         checkPassword(password, profilo);
-        profiloService.deleteProfile(profilo, password);
+        profiloService.eliminaProfilo(profilo, password);
     }
 
-    @RequestMapping("/editProfile")
-    public void updateProfile(Profilo profilo, String password){
+    @RequestMapping("/modificaProfile")
+    public void modificaProfilo(Profilo profilo, String password){
         checkPassword(password, profilo);
         checkProfilo(profilo);
-        profiloService.updateProfile(profilo, password);
+        profiloService.modificaProfilo(profilo, password);
     }
 
-    @RequestMapping("/findFoto")
-    public Foto findFotoById(Long id){
-        return fotoService.findById(id);
-    }
-
-    @RequestMapping("/findAllFoto")
-    public Collection<Foto> findAllFoto(){
-        return fotoService.findAll();
+    @RequestMapping("/visualizzaProfilo")
+    public Profilo visualizzaProfilo(Studente studente){
+        return profiloService.visualizzaProfilo(studente);
     }
 
     public boolean checkFoto(Foto foto){
