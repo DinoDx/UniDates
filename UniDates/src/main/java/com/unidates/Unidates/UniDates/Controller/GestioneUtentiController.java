@@ -29,34 +29,34 @@ public class GestioneUtentiController {
 
 
     @RequestMapping("/registrazioneStudente")
-    public boolean registrazioneStudente(Studente studente, Profilo profilo){
-        checkStudente(studente);
-        checkProfilo(profilo);
-        return utenteService.registrazioneStudente(studente, profilo);
+    public boolean registrazioneStudente(Studente s, Profilo p){
+        checkStudente(s);
+        checkProfilo(p);
+        return utenteService.registrazioneStudente(s, p);
     }
 
     @RequestMapping("/registrazioneModeratore")
-    public boolean registrazioneModeratore(Moderatore moderatore, Studente studente){
-        return utenteService.registrazioneModeratore(moderatore, studente);
+    public boolean registrazioneModeratore(Moderatore m, Studente s){
+        return utenteService.registrazioneModeratore(m, s);
     }
 
     @RequestMapping("/registrazioneCommunityManager")
-    public boolean registrazioneModeratore(CommunityManager communityManager, Studente studente){
-        return utenteService.registrazioneCommunityManager(communityManager, studente);
+    public boolean registrazioneModeratore(CommunityManager cm, Studente s){
+        return utenteService.registrazioneCommunityManager(cm, s);
     }
 
     @RequestMapping("/bloccoStudente")
-    public boolean bloccaStudente(Studente studenteBloccante, Studente studenteBloccato){
-       return utenteService.bloccaStudente(studenteBloccante,studenteBloccato);
+    public boolean bloccaStudente(Studente sBloccante, Studente sBloccato){
+       return utenteService.bloccaStudente(sBloccante,sBloccato);
     }
 
     @RequestMapping("/sbloccoStudente")
-    public boolean sbloccaStudente(Studente studenteBloccante, Studente studenteBloccato){
-        return utenteService.sbloccaStudente(studenteBloccante,studenteBloccato);
+    public boolean sbloccaStudente(Studente sBloccante, Studente sBloccato){
+        return utenteService.sbloccaStudente(sBloccante,sBloccato);
     }
 
     @RequestMapping("/trovaStudente")
-    public Studente findByEmail(String email){
+    public Studente trovaUtente(String email){
         checkEmail(email);
         return (Studente) utenteService.findUtenteByEmail(email);
     }
@@ -69,16 +69,16 @@ public class GestioneUtentiController {
         return false;
     }
 
-    public boolean checkProfilo(Profilo profilo){
-        if (profilo.getNome() != null && profilo.getCognome() != null)
+    public boolean checkProfilo(Profilo p){
+        if (p.getNome() != null && p.getCognome() != null)
             return true;
 
         return false;
     }
 
 
-    private boolean checkStudente(Studente studente) {
-        if(studente.getEmail() != null && studente.getPassword() != null)
+    private boolean checkStudente(Studente s) {
+        if(s.getEmail() != null && s.getPassword() != null)
             return true;
 
         return false;

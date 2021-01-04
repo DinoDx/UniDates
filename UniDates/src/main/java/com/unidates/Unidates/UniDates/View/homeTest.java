@@ -70,11 +70,11 @@ public class homeTest extends VerticalLayout {
         });
 
         Button bloccaUtente = new Button("BloccaUtente", buttonClickEvent -> {
-            gestioneUtentiController.bloccaStudente(gestioneUtentiController.findByEmail(email.getValue()),gestioneUtentiController.findByEmail(email2.getValue()));
+            gestioneUtentiController.bloccaStudente(gestioneUtentiController.trovaUtente(email.getValue()),gestioneUtentiController.trovaUtente(email2.getValue()));
         });
 
         Button stampaListaBloccati = new Button("Stampa lista bloccati 1", buttonClickEvent -> {
-           for (Studente s: gestioneUtentiController.findByEmail(email.getValue()).getListaBloccati())
+           for (Studente s: gestioneUtentiController.trovaUtente(email.getValue()).getListaBloccati())
               System.out.println(s.toString());
         });
 
@@ -89,14 +89,14 @@ public class homeTest extends VerticalLayout {
         }); */
 
         Button mostraUtenti = new Button("Mostra utenti", buttonClickEvent -> {
-            for(Studente u : gestioneUtentiController.findAll())
-                System.out.println(u.getProfilo().getNome());
+           // for(Studente u : gestioneUtentiController.findAll())
+           //     System.out.println(u.getProfilo().getNome());
 
         });
 
-        Button trovaUtente = new Button("Trova utente", buttonClickEvent -> System.out.println(gestioneUtentiController.findByEmail(email.getValue()).getEmail()));
+        Button trovaUtente = new Button("Trova utente", buttonClickEvent -> System.out.println(gestioneUtentiController.trovaUtente(email.getValue()).getEmail()));
         Button removeUtente = new Button("Rimuovi utente", buttonClickEvent -> {
-            gestioneUtentiController.removeUtente(gestioneUtentiController.findByEmail(email.getValue()));
+          //  gestioneUtentiController.removeUtente(gestioneUtentiController.trovaUtente(email.getValue()));
         });
         /*
         Button aggiungiChat = new Button("Aggiungi chat", buttonClickEvent -> {
@@ -108,8 +108,8 @@ public class homeTest extends VerticalLayout {
         });*/
 
         Button aggiungiFoto = new Button("Aggiungi Foto", buttonClickEvent -> {
-            gestioneProfiloController.aggiungiFoto(gestioneUtentiController.findByEmail(email.getValue()).getProfilo(),new Foto("Url prova " ));
-            for(Foto f : gestioneProfiloController.findAllFoto())
+            gestioneProfiloController.aggiungiFoto(gestioneUtentiController.trovaUtente(email.getValue()).getProfilo(),new Foto("Url prova " ));
+            for(Foto f : gestioneProfiloController.visualizzaProfilo(gestioneUtentiController.trovaUtente(email.getValue())).getListaFoto())
                 System.out.println(f.getUrl());
         });
 
@@ -118,12 +118,12 @@ public class homeTest extends VerticalLayout {
 
        Button segnalaFoto = new Button("Segnala Foto", buttonClickEvent -> {
             Foto foto = new Foto("url di prova");
-            gestioneProfiloController.aggiungiFoto(gestioneUtentiController.findByEmail(email.getValue()).getProfilo(),foto);
+            gestioneProfiloController.aggiungiFoto(gestioneUtentiController.trovaUtente(email.getValue()).getProfilo(),foto);
             Moderatore moderatore = new Moderatore("ciaomod", "ciaomod");
-            gestioneUtentiController.registrazioneModeratore(moderatore,gestioneUtentiController.findByEmail(email.getValue()));
-            gestioneModerazioneController.segnalaFoto(moderatore, foto,"porcodio", "foto dimmerda");
+            gestioneUtentiController.registrazioneModeratore(moderatore,gestioneUtentiController.trovaUtente(email.getValue()));
+          //  gestioneModerazioneController.inviaSegnalazione(new Foto("ciao"));
 
-            gestioneProfiloController.findAllFoto().forEach(f -> System.out.printf("id_Foto: %s, numero elementi: %S", f.getId(), f.getSegnalazioniRicevuto().size()));
+            gestioneProfiloController.visualizzaProfilo(gestioneUtentiController.trovaUtente(email.getValue())).getListaFoto().forEach(f -> System.out.printf("id_Foto: %s, numero elementi: %S", f.getId(), f.getSegnalazioniRicevuto().size()));
         });
 
 
@@ -140,12 +140,12 @@ public class homeTest extends VerticalLayout {
         */
 
         Button aggiungiMatch1 = new Button("Aggiungi Match 1", buttonClickEvent ->{
-            gestioneInterazioniController.aggiungiMatch(gestioneUtentiController.findByEmail(email.getValue()), gestioneUtentiController.findByEmail(email2.getValue()));
+            gestioneInterazioniController.aggiungiMatch(gestioneUtentiController.trovaUtente(email.getValue()), gestioneUtentiController.trovaUtente(email2.getValue()));
 
-            for (Match m : gestioneUtentiController.findByEmail(email.getValue()).getListMatch())
+            for (Match m : gestioneUtentiController.trovaUtente(email.getValue()).getListMatch())
                 System.out.println(m.toString());
 
-            for (Match m : gestioneUtentiController.findByEmail(email.getValue()).getListMatchRicevuti())
+            for (Match m : gestioneUtentiController.trovaUtente(email.getValue()).getListMatchRicevuti())
                 System.out.println(m.toString());
         });
 
@@ -153,11 +153,11 @@ public class homeTest extends VerticalLayout {
         Button sendMessage = new Button("Invio messaggio", buttonClickEvent -> {
             Messaggio toSend = new Messaggio();
             toSend.setTestoMessaggio(messaggio.getValue());
-            gestioneInterazioniController.sendMessage(gestioneUtentiController.findByEmail(email.getValue()), gestioneUtentiController.findByEmail(email2.getValue()),toSend);
-            Utente mittente = gestioneUtentiController.findByEmail(email.getValue());
-            Utente destinatario = gestioneUtentiController.findByEmail(email2.getValue());
+            gestioneInterazioniController.inviaMessaggio(gestioneUtentiController.trovaUtente(email.getValue()), gestioneUtentiController.trovaUtente(email2.getValue()),toSend);
+            Utente mittente = gestioneUtentiController.trovaUtente(email.getValue());
+            Utente destinatario = gestioneUtentiController.trovaUtente(email2.getValue());
 
-            gestioneUtentiController.findByEmail(email.getValue()).getMittente().forEach(chat -> { //.getMittente() tutte le chat che l'utente ha iniziato -- .getDestinatario() // tutte le chat che l'utente ha ricevuto
+            gestioneUtentiController.trovaUtente(email.getValue()).getMittente().forEach(chat -> { //.getMittente() tutte le chat che l'utente ha iniziato -- .getDestinatario() // tutte le chat che l'utente ha ricevuto
                 chat.getMessaggi().forEach(messaggio1 -> System.out.println(messaggio1.getTestoMessaggio()));
             });          // in questo caso la funzione stampa tutti i messaggi di tutte le chat che l'utente nel campo email, ha INIZIATO
 

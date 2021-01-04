@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/ModManager")
@@ -25,61 +26,61 @@ public class GestioneModerazioneController {
     UtenteService utenteService;
 
 
-    @RequestMapping("/segnalaFoto")
-    public void segnalaFoto(Moderatore moderatore, Foto foto, String motivazione, String dettagli){
-        checkSegnalazione(motivazione, dettagli);
-        moderazioneService.inviaSegnalazione(moderatore, foto, motivazione, dettagli);
+    @RequestMapping("/inviaSegnalazione")
+    public void inviaSegnalazione(Foto f, Segnalazione s){
+        checkSegnalazione(s);
+        moderazioneService.inviaSegnalazione(s,f);
     }
 
     @RequestMapping("/inviaAmmonimento")
-    public void inviaAmmonimento(Moderatore moderatore, Studente studente, String motivazione, String dettagli){
-        checkAmmonimento(motivazione, dettagli);
-        moderazioneService.inviaAmmonimento(moderatore, studente, motivazione, dettagli);
+    public void inviaAmmonimento(Ammonimento a,Moderatore m, Studente s){
+        checkAmmonimento(a);
+        moderazioneService.inviaAmmonimento(a, s, m);
     }
 
-    @RequestMapping("/sospendiUtente")
-    public void sospendiUtente(Studente studente, int durata, String dettagli){
-        checkSospensione(durata, dettagli);
-        moderazioneService.inviaSospensione(studente, durata, dettagli);
+    @RequestMapping("/inviaSospensione")
+    public void inviaSospensione(Sospensione sp, Studente s){
+        checkSospensione(sp);
+        moderazioneService.inviaSospensione(sp, s);
     }
 
-    @RequestMapping("/ammonimentiRicevuti")
-    public Collection<Ammonimento> showAmmonimentiRicevuti(Studente studente){
-        return moderazioneService.visualizzaAmmonimentiRicevuti(studente);
+    @RequestMapping("/visualizzaAmmonimentiRicevuti")
+    public List<Ammonimento> showAmmonimentiRicevuti(Studente s){
+        return (List<Ammonimento>) moderazioneService.visualizzaAmmonimentiRicevuti(s);
     }
 
-    @RequestMapping("/ammonimentiInviati")
-    public Collection<Ammonimento> showAmmonimentiInviati(Moderatore moderatore){
-        return moderazioneService.visualizzaAmmonimentiInviati(moderatore);
+    @RequestMapping("/visualizzaAmmonimentiInviati")
+    public List<Ammonimento> showAmmonimentiInviati(Moderatore m){
+        return (List<Ammonimento>) moderazioneService.visualizzaAmmonimentiInviati(m);
     }
 
-    @RequestMapping("/segnalazioniUtente")
-    public Collection<Segnalazione> showSegnalazioni(Moderatore moderatore){
-        return moderazioneService.visualizzaSegnalazioniRicevute(moderatore);
+    @RequestMapping("/visualizzaSegnalazioni")
+    public List<Segnalazione> visualizzaSegnazioni(Moderatore m){
+        return (List<Segnalazione>) moderazioneService.visualizzaSegnalazioniRicevute(m);
 
     }
 
     @RequestMapping("/sospensioniUtente")
-    public Collection<Sospensione> visualizzaSospensioni(Studente studente){
-        return moderazioneService.visualizzaSospensioni(studente);
+    public List<Sospensione> visualizzaSospensioni(Studente s){
+        return (List<Sospensione>) moderazioneService.visualizzaSospensioni(s);
     }
 
-    public Boolean checkSegnalazione(String motivazione, String dettagli){
-        if(motivazione != null && dettagli != dettagli)
+    public Boolean checkSegnalazione(Segnalazione s){
+        if(s.getMotivazione() != null && s.getDettagli() != null)
             return true;
 
         return false;
     }
 
-    public Boolean checkAmmonimento(String motivazione, String dettagli){
-        if(motivazione != null && dettagli != dettagli)
+    public Boolean checkAmmonimento(Ammonimento a){
+        if(a.getMotivazione() != null && a.getDettagli() != null)
             return true;
 
         return false;
     }
 
-    public boolean checkSospensione(int durata, String dettagli){
-        if(durata != 0 && dettagli != null)
+    public boolean checkSospensione(Sospensione sp){
+        if(sp.getDurata() != 0 && sp.getDettagli() != null)
             return true;
 
         return false;

@@ -9,6 +9,8 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneModerazione.AmmonimentiRepository;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneModerazione.SegnalazioniRepository;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneModerazione.SospensioniRepository;
+import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.StudenteRepository;
+import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.UtenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,28 +28,27 @@ public class ModerazioneService {
     @Autowired
     SospensioniRepository sospensioniRepository;
 
+    @Autowired
+    UtenteRepository utenteRepository;
 
 
-    public void inviaSegnalazione(Moderatore moderatore, Foto foto, String motivazione, String dettagli){
-        Segnalazione segnalazione = new Segnalazione(motivazione, dettagli);
-        segnalazione.setFoto(foto);
-        segnalazione.setModeratore(moderatore);
-        segnalazioniRepository.save(segnalazione);
+
+    public void inviaSegnalazione(Segnalazione s ,Foto f){
+        s.setFoto(f);
+        // s.setModeratore(moderatore); moderatore scelto in automatico dal Service
+        segnalazioniRepository.save(s);
     }
 
-    public void inviaAmmonimento(Moderatore moderatore, Studente studente, String motivazione, String dettagli){
-        Ammonimento ammonimento = new Ammonimento(motivazione, dettagli);
-        ammonimento.setStudente(studente);
-        ammonimento.setModeratore(moderatore);
-        ammonimentiRepository.save(ammonimento);
+    public void inviaAmmonimento(Ammonimento a, Studente s, Moderatore m){
+        a.setStudente(s);
+        a.setModeratore(m);
+        ammonimentiRepository.save(a);
     }
 
-    public void inviaSospensione(Studente studente, int durata, String dettagli){
-        Sospensione sospensione = new Sospensione(durata, dettagli);
+    public void inviaSospensione(Sospensione sospensione,Studente studente){
         sospensione.setStudente(studente);
-        sospendiUtente(studente);
+        sospendiStudente(studente);
         sospensioniRepository.save(sospensione);
-
     }
 
     public Collection<Segnalazione> visualizzaSegnalazioniRicevute(Moderatore moderatore) {
@@ -67,8 +68,9 @@ public class ModerazioneService {
         return studente.getListSospensioni();
     }
 
-    private void sospendiUtente(Studente studente){
+    private void sospendiStudente(Studente studente){
         studente.setBanned(true);
+        utenteRepository.save(studente);
     }
 
 }

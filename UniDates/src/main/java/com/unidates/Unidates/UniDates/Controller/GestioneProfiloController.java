@@ -17,49 +17,49 @@ public class GestioneProfiloController {
 
 
     @RequestMapping("/aggiungiFoto")
-    public void aggiungiFoto(Profilo profilo, Foto foto){
-        checkFoto(foto);
-        profiloService.aggiungiFoto(profilo, foto);
+    public void aggiungiFoto(Profilo p, Foto f){
+        checkFoto(f);
+        profiloService.aggiungiFoto(p, f);
     }
 
     @RequestMapping("/eliminaFoto")
-    public void eliminaFoto(Foto foto){
-        profiloService.eliminaFoto(foto);
+    public void eliminaFoto(Foto f){
+        profiloService.eliminaFoto(f);
     }
 
     @RequestMapping("/eliminaProfile")
-    public void eliminaProfilo(Profilo profilo, String password){
-        checkPassword(password, profilo);
-        profiloService.eliminaProfilo(profilo, password);
+    public void eliminaProfilo(Profilo p, String password){
+        checkPassword(password, p);
+        profiloService.eliminaProfilo(p, password);
     }
 
     @RequestMapping("/modificaProfile")
-    public void modificaProfilo(Profilo profilo, String password){
-        checkPassword(password, profilo);
-        checkProfilo(profilo);
-        profiloService.modificaProfilo(profilo, password);
+    public void modificaProfilo(Profilo p, String password){
+        checkPassword(password, p);
+        checkProfilo(p);
+        profiloService.modificaProfilo(p, password);
     }
 
     @RequestMapping("/visualizzaProfilo")
-    public Profilo visualizzaProfilo(Studente studente){
-        return profiloService.visualizzaProfilo(studente);
+    public Profilo visualizzaProfilo(Studente s){
+        return profiloService.visualizzaProfilo(s);
     }
 
-    public boolean checkFoto(Foto foto){
+    private boolean checkFoto(Foto foto){
         if(foto.getUrl() != null)
             return true;
 
         return false;
     }
 
-    public boolean checkPassword (String password, Profilo profilo){
+    private boolean checkPassword (String password, Profilo profilo){
         if(password==profilo.getStudente().getPassword())
             return true;
 
         return false;
     }
 
-    public boolean checkProfilo(Profilo profilo){
+    private boolean checkProfilo(Profilo profilo){
         if (profilo.getNome() != null && profilo.getCognome() != null)
             return true;
 

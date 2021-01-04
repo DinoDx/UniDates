@@ -1,15 +1,20 @@
 package com.unidates.Unidates.UniDates.Controller;
 
 import com.unidates.Unidates.UniDates.Exception.MatchNotFoundException;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.ChatService;
 import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.MatchService;
+import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.NotificaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/interactionManager")
@@ -20,24 +25,38 @@ public class GestioneInterazioniController {
     @Autowired
     private ChatService chatService;
 
+    @Autowired
+    private NotificaService notificaService;
+
 
     @RequestMapping("/aggiungiMatch")
-    public void aggiungiMatch(Studente studente1, Studente studente2){
-        matchService.aggiungiMatch(studente1, studente2);
+    public void aggiungiMatch(Studente s1, Studente s2){
+        matchService.aggiungiMatch(s1, s2);
     }
 
-    public void sendMessage(Utente mittente, Utente destinatario, Messaggio messaggio){
+    @RequestMapping("/inviaMessaggio")
+    public void inviaMessaggio(Utente mittente, Utente destinatario, Messaggio m){
         try {
-            checkMessaggio(messaggio);
-            chatService.inviaMessaggio(mittente, destinatario, messaggio);
+            checkMessaggio(m);
+            chatService.inviaMessaggio(mittente, destinatario, m);
         }
         catch (MatchNotFoundException matchNotFoundException){
             matchNotFoundException.printStackTrace();
         }
     }
 
-    public boolean checkMessaggio(Messaggio messaggio){
-        if(messaggio != null)
+    @RequestMapping("/visualizzaArchivioChat")
+    public List<Chat> visualizzaArchivioChat(Utente u){
+        return chatService.visualizzaArchivioChat(u);
+    }
+
+    @RequestMapping("/visualizzaNotifica")
+    public List<Notifica> visualizzaNotifica(Utente u){
+        return notificaService.visualizzaNotifiche(u);
+    }
+
+    private boolean checkMessaggio(Messaggio m){
+        if(m != null)
             return true;
 
         return false;
