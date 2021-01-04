@@ -216,7 +216,7 @@ public class ProfiloPersonale extends VerticalLayout implements AfterNavigationO
             for(String s : multiselectComboBox.getValue()) hob.add(Hobby.valueOf(s));
             registrato.getProfilo().setHobbyList(hob);
 
-            controller.updateStudente(registrato,registrato.getProfilo());
+            //controller.updateStudente(registrato,registrato.getProfilo());
 
         });
         conferma.setId("confirm");
