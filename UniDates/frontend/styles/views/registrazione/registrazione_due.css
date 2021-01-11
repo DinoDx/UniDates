@@ -1,29 +1,16 @@
 registrazione_due,
-#registrazione_2{
-    align-items: center;
-    padding: 6.5em;
-    color: black;
-    background:slateblue;
+#layout-sinistra{
+
 }
 
-#reset{
-    background: black;
-    color: white;
-    border-radius: 17px;
+#layout-destra{
+
 }
 
-#conferma{
-    background: black;
-    color: white;
-    border-radius: 17px;
+#layouts-vertical{
 }
 
-#bottoni{
-    margin-top: 7em;
-    flex: auto;
+#tuamadre{
+    background: #7cb5ec;
+    border: 3px solid #99007c;
 }
-
-#altezza{
-    color: black;
-}
-

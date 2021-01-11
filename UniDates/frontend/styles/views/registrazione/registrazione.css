@@ -1,26 +1,18 @@
 registrazione,
-#registrazione{
+#Div-principale{
+    background-color: #7cb5ec;
+    border-color: black;
+    margin: 9.6em;
+    border: 3px solid black;
+    border-radius: 2em;
+    width: 45%;
     align-items: center;
-    background:slateblue;
-    background-size: auto;
 }
 
-#bottoni{
-    align-items: center;
+#Layout-registazione{
+    background-color: red;
 }
 
-#reset{
-    background: black;
-    color: white;
-    border-radius: 17px;
-}
-
-#prosegui{
-    background: black;
-    color: white;
-    border-radius: 20px;
-}
-
-#proseguiButton{
-    color: white;
+#titolo-registrazione{
+    text-align: center;
 }

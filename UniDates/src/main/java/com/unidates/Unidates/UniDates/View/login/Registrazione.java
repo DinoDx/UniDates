@@ -1,24 +1,18 @@
 package com.unidates.Unidates.UniDates.View.login;
 
 
-import com.unidates.Unidates.UniDates.Enum.Sesso;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -35,8 +29,8 @@ public class Registrazione extends VerticalLayout {
     HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
 
 
-    private RadioButtonGroup<String> sessi = new RadioButtonGroup<>();
-    private Anchor link;
+    /*private RadioButtonGroup<String> sessi = new RadioButtonGroup<>();
+
     private Button prosegui;
 
     public Registrazione() {
@@ -104,7 +98,59 @@ public class Registrazione extends VerticalLayout {
         buttons.setId("bottoni");
 
         buttons.add(link,reset);
-        add(layout,sessi,buttons);
+       add(layout,sessi,buttons);
+    }*/
+
+    private Anchor link;
+
+    private Registrazione(){
+        setId("Layout-registazione");
+        Div principale = new Div(form());
+        principale.setId("Div-principale");
+        setAlignItems(Alignment.CENTER);
+        add(principale);
     }
 
+    public Div form(){
+        Div registazione = new Div();
+        VerticalLayout campi = new VerticalLayout();
+        campi.setAlignItems(Alignment.CENTER);
+
+        //Vertical fields
+        EmailField email = new EmailField();
+        email.setPlaceholder("Inserisci email universitaria");
+        email.setLabel("E-mail Universitaria");
+
+        PasswordField password = new PasswordField();
+        password.setLabel("Password");
+        password.setPlaceholder("Inserisci la password");
+
+        PasswordField conferma_password = new PasswordField();
+        conferma_password.setLabel("Conferma Password");
+        conferma_password.setPlaceholder("Conferma password inserita");
+
+        //Horizontal Buttons
+        HorizontalLayout buttons = new HorizontalLayout();
+        Button reset = new Button("Reset",buttonClickEvent -> {
+            email.setValue("");
+            password.setValue("");
+            conferma_password.setValue("");
+        });
+
+        Button prosegui = new Button("Continua con la registrazione",buttonClickEvent -> {
+            //Sessione
+            Profilo profilo = new Profilo();
+            Studente studente = new Studente(email.getValue(),password.getValue(),profilo);
+            httpSession.setAttribute("utente_reg", studente);
+        });
+        link = new Anchor("/registrazione_due");
+        link.add(prosegui);
+
+        buttons.add(link,reset);
+        campi.add(email,password,conferma_password,buttons);
+        H2 titolo = new H2("Inserisci i dati del tuo account!");
+        titolo.setId("titolo-registrazione");
+        registazione.add(titolo,campi);
+        return registazione;
+    }
 }

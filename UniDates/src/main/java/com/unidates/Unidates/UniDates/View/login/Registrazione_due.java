@@ -1,27 +1,23 @@
 package com.unidates.Unidates.UniDates.View.login;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
-import com.unidates.Unidates.UniDates.Enum.Colore_Occhi;
-import com.unidates.Unidates.UniDates.Enum.Colori_Capelli;
-import com.unidates.Unidates.UniDates.Enum.Hobby;
-import com.unidates.Unidates.UniDates.Enum.Interessi;
+import com.unidates.Unidates.UniDates.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -33,7 +29,6 @@ import org.vaadin.gatanaso.MultiselectComboBox;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Route(value = "registrazione_due", layout = MainViewLogin.class)
@@ -49,20 +44,7 @@ public class Registrazione_due extends VerticalLayout implements BeforeEnterObse
 
     Studente da_registrare = (Studente) httpSession.getAttribute("utente_reg");
 
-
-
-    private Select<String> interessi = new Select<>();
-    private TextField città;
-    private TextField luogo;
-    private Select<String> capelli = new Select<>();
-    private Select<String> occhi = new Select<>();
-    private NumberField altezza;
-    private FormLayout layout;
-    private Button confirm;
-    private MemoryBuffer image;
-    private Anchor anchor;
-
-
+/*
     public Registrazione_due() {
 
         httpSession.removeAttribute("utente_reg");
@@ -124,7 +106,7 @@ public class Registrazione_due extends VerticalLayout implements BeforeEnterObse
         upload.setMaxFiles(600000);
         Div output = new Div();
         upload.addSucceededListener(event -> {
-            /*vedere il metodo per far visualzzare l'immagine caricata*/
+            vedere il metodo per far visualzzare l'immagine caricata
         });
 
 
@@ -169,6 +151,121 @@ public class Registrazione_due extends VerticalLayout implements BeforeEnterObse
 
         add(layout,buttons);
 
+    }
+*/
+
+
+    private Select<String> interessi = new Select<>();
+    private TextField nome;
+    private TextField residenza;
+    private TextField luogo_di_nascita;
+    private  TextField cognome;
+    private DatePicker picker = new DatePicker();
+    private Select<String> capelli = new Select<>();
+    private Select<String> occhi = new Select<>();
+    private NumberField altezza;
+    private Anchor anchor;
+    private MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
+
+    public Registrazione_due(){
+        httpSession.removeAttribute("utente_reg");
+        setSizeFull();
+        VerticalLayout padre = new VerticalLayout();
+        padre.setAlignItems(Alignment.CENTER);
+        padre.setId("tuamadre");
+        padre.setWidth("70%");
+        setAlignItems(Alignment.CENTER);
+
+        HorizontalLayout verticals = new HorizontalLayout();
+        verticals.setId("layouts-vertical");
+        VerticalLayout sinistra = new VerticalLayout(primo());
+        VerticalLayout destra = new VerticalLayout(secondo());
+
+        verticals.add(sinistra,destra);
+
+        Checkbox checkbox = new Checkbox();
+        checkbox.setLabel("Acconsenti il trattamento dei dati");
+
+        Button conferma = new Button("Conferma",buttonClickEvent -> {
+            //Sessione
+            Profilo profilo = da_registrare.getProfilo();
+            profilo.setResidenza(residenza.getValue());
+            profilo.setLuogoNascita(luogo_di_nascita.getValue());
+            profilo.setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
+            profilo.setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
+            profilo.setAltezza(altezza.getValue());
+            profilo.setInteressi(Interessi.valueOf(interessi.getValue()));
+            //hobby
+            ArrayList<Hobby> hobby = new ArrayList<Hobby>();
+            for(String s : multiselectComboBox.getValue()) hobby.add(Hobby.valueOf(s));
+            profilo.setHobbyList(hobby);
+            //image
+
+            gestioneUtentiController.registrazioneStudente(da_registrare, profilo);
+        });
+
+        anchor = new Anchor("/login");
+        anchor.add(conferma);
+        H2 titolo = new H2("Inserisci i dati del profilo!");
+        titolo.setId("titolo-registrazione");
+
+        padre.add(titolo,verticals,checkbox,anchor);
+        add(padre);
+    }
+
+    public VerticalLayout primo(){
+        VerticalLayout sinistra = new VerticalLayout();
+        sinistra.setId("layout-sinistra");
+        nome = new TextField("Nome");
+        cognome = new TextField("Cognome");
+        picker = new DatePicker("Data di nascita");
+        luogo_di_nascita = new TextField("Luogo di nascita");
+        residenza = new TextField("Residenza");
+
+        sessi.setLabel("Il tuo sesso:");
+        Sesso[] sess = Sesso.values();
+        sessi.setItems(sess[0].toString(),sess[1].toString(),sess[2].toString());
+        sessi.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
+
+        sinistra.add(nome,cognome,picker,luogo_di_nascita,residenza,sessi);
+        return sinistra;
+    }
+
+
+    private RadioButtonGroup<String> sessi = new RadioButtonGroup<>();
+    public VerticalLayout secondo(){
+        VerticalLayout destra = new VerticalLayout();
+        destra.setId("layout-destra");
+
+        multiselectComboBox.setWidth("100%");
+        multiselectComboBox.setLabel("Seleziona Topic");
+        multiselectComboBox.setPlaceholder("Scelti...");
+        Hobby [] topic = Hobby.values();
+        List<String> topiclist = new ArrayList<String>();
+        for(Hobby h : topic) topiclist.add(h.toString());
+        multiselectComboBox.setItems(topiclist);
+
+        interessi.setLabel("Interessi");
+        Interessi [] interess = Interessi.values();
+        interessi.setItems(interess[0].toString(),interess[1].toString(),interess[2].toString(),interess[3].toString());
+
+        capelli.setLabel("Capelli");
+        capelli.setPlaceholder("Colore capelli");
+        Colori_Capelli [] colore_cap = Colori_Capelli.values();
+        capelli.setItems(colore_cap[0].toString(),colore_cap[1].toString(),colore_cap[2].toString(),colore_cap[3].toString(),colore_cap[4].toString(),colore_cap[5].toString(),colore_cap[6].toString());
+
+        occhi.setLabel("Occhi");
+        occhi.setPlaceholder("Colore occhi");
+        Colore_Occhi [] colore_occhi = Colore_Occhi.values();
+        occhi.setItems(colore_occhi[0].toString(),colore_occhi[1].toString(),colore_occhi[2].toString(),colore_occhi[3].toString(),colore_occhi[4].toString(),colore_occhi[5].toString(),colore_occhi[6].toString());
+
+        altezza = new NumberField("Altezza (cm)");
+        altezza.setHasControls(true);
+        altezza.setStep(1);
+        altezza.setMin(150.00);
+
+        destra.add(interessi,capelli,occhi,altezza,multiselectComboBox);
+        return destra;
     }
 
     @Override
