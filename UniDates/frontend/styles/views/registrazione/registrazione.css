@@ -1,8 +1,8 @@
 registrazione,
 #registrazione{
     align-items: center;
-    padding: 10em;
     background:slateblue;
+    background-size: auto;
 }
 
 #bottoni{
@@ -21,6 +21,6 @@ registrazione,
     border-radius: 20px;
 }
 
-#b{
+#proseguiButton{
     color: white;
 }

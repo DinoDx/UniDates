@@ -44,26 +44,27 @@ public class GestioneModerazioneController {
         moderazioneService.inviaSospensione(sp, s);
     }
 
-    @RequestMapping("/visualizzaAmmonimentiRicevuti")
-    public List<Ammonimento> showAmmonimentiRicevuti(Studente s){
-        return (List<Ammonimento>) moderazioneService.visualizzaAmmonimentiRicevuti(s);
-    }
-
     @RequestMapping("/visualizzaAmmonimentiInviati")
     public List<Ammonimento> showAmmonimentiInviati(Moderatore m){
         return (List<Ammonimento>) moderazioneService.visualizzaAmmonimentiInviati(m);
     }
 
-    @RequestMapping("/visualizzaSegnalazioni")
-    public List<Segnalazione> visualizzaSegnazioni(Moderatore m){
-        return (List<Segnalazione>) moderazioneService.visualizzaSegnalazioniRicevute(m);
-
+    @RequestMapping("/visualizzaAmmonimentiRicevuti")
+    public List<Ammonimento> showAmmonimentiRicevuti(Studente s){
+        return (List<Ammonimento>) moderazioneService.visualizzaAmmonimentiRicevuti(s);
     }
 
     @RequestMapping("/sospensioniUtente")
     public List<Sospensione> visualizzaSospensioni(Studente s){
         return (List<Sospensione>) moderazioneService.visualizzaSospensioni(s);
     }
+
+    @RequestMapping("/visualizzaSegnalazioniRicevute")
+    public List<Segnalazione> visualizzaSegnazioniRicevute(Moderatore m){
+        return (List<Segnalazione>) moderazioneService.visualizzaSegnalazioniRicevute(m);
+
+    }
+
 
     public Boolean checkSegnalazione(Segnalazione s){
         if(s.getMotivazione() != null && s.getDettagli() != null)

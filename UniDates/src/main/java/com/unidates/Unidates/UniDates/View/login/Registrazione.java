@@ -98,7 +98,7 @@ public class Registrazione extends VerticalLayout {
         link = new Anchor("/registrazione_due");
         link.add(prosegui);
 
-        prosegui.setId("b");
+        prosegui.setId("proseguiButton");
         reset.setId("reset");
         link.setId("prosegui");
         buttons.setId("bottoni");

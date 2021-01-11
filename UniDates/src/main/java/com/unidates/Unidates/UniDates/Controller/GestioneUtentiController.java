@@ -4,6 +4,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManag
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.ChatService;
 import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.NotificaService;
 import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
@@ -21,11 +22,6 @@ public class GestioneUtentiController {
     @Autowired
     UtenteService utenteService;
 
-    @Autowired
-    NotificaService notificaService;
-
-    @Autowired
-    ChatService chatService;
 
 
     @RequestMapping("/registrazioneStudente")
@@ -55,10 +51,10 @@ public class GestioneUtentiController {
         return utenteService.sbloccaStudente(sBloccante,sBloccato);
     }
 
-    @RequestMapping("/trovaStudente")
-    public Studente trovaUtente(String email){
+    @RequestMapping("/trovaUtente")
+    public Utente trovaUtente(String email){
         checkEmail(email);
-        return (Studente) utenteService.findUtenteByEmail(email);
+        return utenteService.findUtenteByEmail(email);
     }
 
 

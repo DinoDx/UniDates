@@ -3,6 +3,7 @@ package com.unidates.Unidates.UniDates.View.login;
 
 
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
@@ -10,6 +11,8 @@ import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
+
+import java.awt.*;
 
 
 @Route(value = "login", layout = MainViewLogin.class)
@@ -30,7 +33,10 @@ public class Login extends VerticalLayout implements BeforeEnterListener {
         login.setI18n(createLoginI18n());
         login.setId("login");
         login.setAction("login");
-        link = new Anchor("/registrazione", "Clicca qui per registrarti !");
+        //login.addForgotPasswordListener();
+        link = new Anchor("/registrazione" );
+        Button registrati = new Button("Clicca qui per registrarti !");
+        link.add(registrati);
         link.setId("link");
         add(new H1("Accedi a Unidates"), login,link);
     }

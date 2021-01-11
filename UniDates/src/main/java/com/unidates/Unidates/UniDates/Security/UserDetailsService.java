@@ -29,6 +29,6 @@ public class UserDetailsService implements org.springframework.security.core.use
         HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
         httpSession.setAttribute("utente", utente);
 
-        return User.withUsername(utente.getEmail()).password(utente.getPassword()).roles("test").build();
+        return User.withUsername(utente.getEmail()).password(utente.getPassword()).roles(utente.getRuolo().toString()).build();
     }
 }
