@@ -1,5 +1,8 @@
 package com.unidates.Unidates.UniDates.Controller;
 
+import com.unidates.Unidates.UniDates.Exception.InvalidBanFormatException;
+import com.unidates.Unidates.UniDates.Exception.InvalidReportFormatException;
+import com.unidates.Unidates.UniDates.Exception.InvalidWarningFormatException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
@@ -22,26 +25,26 @@ public class GestioneModerazioneController {
     @Autowired
     ModerazioneService moderazioneService;
 
-    @Autowired
-    UtenteService utenteService;
-
 
     @RequestMapping("/inviaSegnalazione")
     public void inviaSegnalazione(Foto f, Segnalazione s){
-        checkSegnalazione(s);
-        moderazioneService.inviaSegnalazione(s,f);
+        if(checkSegnalazione(s))
+            moderazioneService.inviaSegnalazione(s,f);
+        else throw new InvalidReportFormatException();
     }
 
     @RequestMapping("/inviaAmmonimento")
     public void inviaAmmonimento(Ammonimento a,Moderatore m, Studente s){
-        checkAmmonimento(a);
-        moderazioneService.inviaAmmonimento(a, s, m);
+        if(checkAmmonimento(a))
+            moderazioneService.inviaAmmonimento(a, s, m);
+        else throw new InvalidWarningFormatException();
     }
 
     @RequestMapping("/inviaSospensione")
     public void inviaSospensione(Sospensione sp, Studente s){
-        checkSospensione(sp);
-        moderazioneService.inviaSospensione(sp, s);
+        if(checkSospensione(sp))
+            moderazioneService.inviaSospensione(sp, s);
+        else throw new InvalidBanFormatException();
     }
 
     @RequestMapping("/visualizzaAmmonimentiInviati")
@@ -67,23 +70,29 @@ public class GestioneModerazioneController {
 
 
     public Boolean checkSegnalazione(Segnalazione s){
-        if(s.getMotivazione() != null && s.getDettagli() != null)
-            return true;
-
+        if(s.getMotivazione() != null && s.getDettagli() != null) {
+            if(s.getDettagli().length() > 0 && s.getDettagli().length() < 250){
+                return true;
+            }
+        }
         return false;
     }
 
     public Boolean checkAmmonimento(Ammonimento a){
-        if(a.getMotivazione() != null && a.getDettagli() != null)
-            return true;
-
+        if(a.getMotivazione() != null && a.getDettagli() != null) {
+            if(a.getDettagli().length() > 0 && a.getDettagli().length() < 250){
+                return true;
+            }
+        }
         return false;
     }
 
     public boolean checkSospensione(Sospensione sp){
-        if(sp.getDurata() != 0 && sp.getDettagli() != null)
-            return true;
-
+        if(sp.getDurata() != 0 && sp.getDettagli() != null){
+            if(sp.getDettagli().length() > 0 && sp.getDettagli().length() < 250){
+                return true;
+            }
+        }
         return false;
     }
 

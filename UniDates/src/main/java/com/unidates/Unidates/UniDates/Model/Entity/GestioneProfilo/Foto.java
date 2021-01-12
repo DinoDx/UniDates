@@ -21,12 +21,12 @@ public class Foto  {
     @OneToMany(mappedBy = "foto", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private Collection<Segnalazione> segnalazioneRicevute;
 
-    private String url;
+    private byte[] img;
 
     public Foto(){ }
 
-    public Foto(String url){
-        this.url = url;
+    public Foto(byte[] img){
+        this.img = img;
         this.segnalazioneRicevute = new ArrayList<Segnalazione>();
     }
 
@@ -46,12 +46,12 @@ public class Foto  {
         this.profilo = profilo;
     }
 
-    public String getUrl() {
-        return url;
+    public byte[] getImg() {
+        return img;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setImg(byte[] img) {
+        this.img = img;
     }
 
     public Collection<Segnalazione> getSegnalazioniRicevuto() {

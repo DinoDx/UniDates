@@ -1,5 +1,10 @@
 package com.unidates.Unidates.UniDates.Controller;
 
+import com.unidates.Unidates.UniDates.Enum.Interessi;
+import com.unidates.Unidates.UniDates.Enum.Sesso;
+import com.unidates.Unidates.UniDates.Exception.InvalidModifyFormatException;
+import com.unidates.Unidates.UniDates.Exception.InvalidPhotoException;
+import com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
@@ -18,8 +23,9 @@ public class GestioneProfiloController {
 
     @RequestMapping("/aggiungiFoto")
     public void aggiungiFoto(Profilo p, Foto f){
-        checkFoto(f);
-        profiloService.aggiungiFoto(p, f);
+        if (checkFoto(f))
+                profiloService.aggiungiFoto(p, f);
+            else throw new InvalidPhotoException();
     }
 
     @RequestMapping("/eliminaFoto")
@@ -29,15 +35,16 @@ public class GestioneProfiloController {
 
     @RequestMapping("/eliminaProfile")
     public void eliminaProfilo(Profilo p, String password){
-        checkPassword(password, p);
+        if(password.equals(p.getStudente().getPassword()))
         profiloService.eliminaProfilo(p, password);
+        else throw new PasswordMissmatchException();
     }
 
     @RequestMapping("/modificaProfile")
     public void modificaProfilo(Profilo p, String password){
-        checkPassword(password, p);
-        checkProfilo(p);
-        profiloService.modificaProfilo(p, password);
+        if(checkProfilo(p))
+            profiloService.modificaProfilo(p, password);
+        throw new InvalidModifyFormatException();
     }
 
     @RequestMapping("/visualizzaProfilo")
@@ -45,23 +52,26 @@ public class GestioneProfiloController {
         return profiloService.visualizzaProfilo(s);
     }
 
-    private boolean checkFoto(Foto foto){
-        if(foto.getUrl() != null)
-            return true;
-
+    private boolean checkFoto(Foto f){
+        if(f != null){
+            if(f.getImg().length > 0 && f.getImg().length < 10000000){
+                return true;
+            }
+        }
         return false;
     }
 
-    private boolean checkPassword (String password, Profilo profilo){
-        if(password==profilo.getStudente().getPassword())
-            return true;
-
-        return false;
-    }
-
-    private boolean checkProfilo(Profilo profilo){
-        if (profilo.getNome() != null && profilo.getCognome() != null)
-            return true;
+    private boolean checkProfilo(Profilo p){
+        if (p.getNome() != null && p.getCognome() != null && p.getLuogoNascita() != null && p.getResidenza() != null && p.getDataDiNascita() != null && p.getAltezza() != 0 && p.getSesso() != null && p.getInteressi() != null && p.getColori_capelli() != null && p.getColore_occhi() != null && p.getHobbyList().size() > 0){
+            if (p.getNome().length() > 0 && p.getCognome().length() > 0 && p.getLuogoNascita().length() > 0 && p.getResidenza().length() > 0){
+                if(p.getSesso() == Sesso.UOMO || p.getSesso() == Sesso.DONNA || p.getSesso() == Sesso.ALTRO){
+                    if(p.getInteressi() == Interessi.UOMINI || p.getInteressi() == Interessi.DONNE || p.getInteressi() == Interessi.ENTRAMBI || p.getInteressi() == Interessi.ALTRO){
+                        // Controlli su colore occhi e capelli
+                        if(!p.getHobbyList().contains(null)) return true;
+                    }
+                }
+            }
+        }
 
         return false;
     }

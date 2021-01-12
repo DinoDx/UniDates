@@ -5,6 +5,7 @@ import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.*;
+import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
@@ -16,6 +17,9 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.ErrorParameter;
+import com.vaadin.flow.router.HasErrorParameter;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -43,8 +48,6 @@ public class homeTest extends VerticalLayout {
     @Autowired
     GestioneModerazioneController gestioneModerazioneController;
 
-
-
     public homeTest() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Da qui possiamo accedere al ruolo dell'utente autenticato
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
@@ -57,10 +60,10 @@ public class homeTest extends VerticalLayout {
         TextField email2 = new TextField("Email2");
         TextField password = new TextField("Password");
         Text text;
+
         TextField messaggio = new TextField("Messaggio");
 
         add(new Text(authentication.getAuthorities().toString())); // Stampa il ruolo dell'utente autenticato
-
         if(utente != null) {
             text = new Text(utente.getEmail());
             add(text);
@@ -202,4 +205,6 @@ public class homeTest extends VerticalLayout {
     Studente trovaStudente(String email){
         return (Studente) gestioneUtentiController.trovaUtente(email);
     }
+
+
 }

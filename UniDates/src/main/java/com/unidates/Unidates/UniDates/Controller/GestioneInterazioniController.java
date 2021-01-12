@@ -1,5 +1,6 @@
 package com.unidates.Unidates.UniDates.Controller;
 
+import com.unidates.Unidates.UniDates.Exception.InvalidMessageFormatException;
 import com.unidates.Unidates.UniDates.Exception.MatchNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
@@ -36,13 +37,9 @@ public class GestioneInterazioniController {
 
     @RequestMapping("/inviaMessaggio")
     public void inviaMessaggio(Utente mittente, Utente destinatario, Messaggio m){
-        try {
-            checkMessaggio(m);
+        if(checkMessaggio(m))
             chatService.inviaMessaggio(mittente, destinatario, m);
-        }
-        catch (MatchNotFoundException matchNotFoundException){
-            matchNotFoundException.printStackTrace();
-        }
+        else throw new InvalidMessageFormatException();
     }
 
     @RequestMapping("/visualizzaArchivioChat")
@@ -56,9 +53,8 @@ public class GestioneInterazioniController {
     }
 
     private boolean checkMessaggio(Messaggio m){
-        if(m != null)
+        if(m != null && m.getTestoMessaggio().length() > 0 && m.getTestoMessaggio().length() < 250)
             return true;
-
         return false;
     }
 
