@@ -1,6 +1,5 @@
 package com.unidates.Unidates.UniDates.Controller;
 
-import com.unidates.Unidates.UniDates.Enum.Hobby;
 import com.unidates.Unidates.UniDates.Enum.Interessi;
 import com.unidates.Unidates.UniDates.Enum.Sesso;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
@@ -9,16 +8,11 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.ChatService;
-import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.NotificaService;
 import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Collection;
 
 @Controller
 @RequestMapping("/api/UserManager")

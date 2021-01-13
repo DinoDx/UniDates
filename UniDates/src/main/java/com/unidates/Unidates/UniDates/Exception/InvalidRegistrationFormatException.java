@@ -5,6 +5,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 public class InvalidRegistrationFormatException extends RuntimeException {
     public InvalidRegistrationFormatException(){
-        super();
+        super("Uno o più dati inseriti non sono validi");
     }
 }
