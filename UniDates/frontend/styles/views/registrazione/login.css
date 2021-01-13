@@ -12,3 +12,8 @@ login-view,
 .login-view h1 {
     color: white;
 }
+
+#pulsante-registrati{
+    color: black;
+    background: white;
+}

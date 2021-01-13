@@ -21,6 +21,7 @@ public class Foto  {
     @OneToMany(mappedBy = "foto", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private Collection<Segnalazione> segnalazioneRicevute;
 
+    @Column(length = 10000000)
     private byte[] img;
 
     public Foto(){ }

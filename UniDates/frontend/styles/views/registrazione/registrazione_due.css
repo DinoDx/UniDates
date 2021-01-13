@@ -10,7 +10,12 @@ registrazione_due,
 #layouts-vertical{
 }
 
-#tuamadre{
+#principale{
     background: #7cb5ec;
     border: 3px solid #99007c;
+}
+
+#component{
+    max-width:150px;
+    max-height:150px;
 }

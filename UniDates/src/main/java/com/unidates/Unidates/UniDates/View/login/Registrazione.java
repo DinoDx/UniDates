@@ -4,8 +4,11 @@ package com.unidates.Unidates.UniDates.View.login;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
@@ -102,6 +105,9 @@ public class Registrazione extends VerticalLayout {
     }*/
 
     private Anchor link;
+    private EmailField email;
+    private PasswordField password;
+    private PasswordField conferma_password;
 
     private Registrazione(){
         setId("Layout-registazione");
@@ -117,15 +123,17 @@ public class Registrazione extends VerticalLayout {
         campi.setAlignItems(Alignment.CENTER);
 
         //Vertical fields
-        EmailField email = new EmailField();
+        email = new EmailField();
         email.setPlaceholder("Inserisci email universitaria");
         email.setLabel("E-mail Universitaria");
 
-        PasswordField password = new PasswordField();
+        password = new PasswordField();
         password.setLabel("Password");
         password.setPlaceholder("Inserisci la password");
 
-        PasswordField conferma_password = new PasswordField();
+
+
+        conferma_password = new PasswordField();
         conferma_password.setLabel("Conferma Password");
         conferma_password.setPlaceholder("Conferma password inserita");
 
@@ -137,16 +145,33 @@ public class Registrazione extends VerticalLayout {
             conferma_password.setValue("");
         });
 
+        //MESSAGGIO DI ERRORE
+        Dialog dialog = new Dialog();
+        dialog.add(new Text("Le password non corrispondono, riprova!"));
+        dialog.setWidth("200px");
+        dialog.setHeight("150px");
+
         Button prosegui = new Button("Continua con la registrazione",buttonClickEvent -> {
             //Sessione
-            Studente studente = new Studente(email.getValue(),password.getValue());
-            httpSession.setAttribute("utente_reg", studente);
-        });
-        link = new Anchor("/registrazione_due");
-        link.add(prosegui);
+            String prima_password = password.getValue();
+            String seconda_password = conferma_password.getValue();
 
-        buttons.add(link,reset);
+            if(prima_password.equals(seconda_password) && (!prima_password.isEmpty() || !seconda_password.isEmpty())) {
+                Studente studente = new Studente(email.getValue(), password.getValue());
+                httpSession.setAttribute("utente_reg", studente);
+                UI.getCurrent().navigate("registrazione_due");
+            }
+                else if((prima_password.isEmpty() && seconda_password.isEmpty()) || !prima_password.equals(seconda_password)){
+                    dialog.open();
+                }
+                    else{
+                        dialog.open();
+                    }
+
+        });
+        buttons.add(prosegui,reset);
         campi.add(email,password,conferma_password,buttons);
+
         H2 titolo = new H2("Inserisci i dati del tuo account!");
         titolo.setId("titolo-registrazione");
         registazione.add(titolo,campi);

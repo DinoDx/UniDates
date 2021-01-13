@@ -24,7 +24,7 @@ public class Profilo implements Serializable {
     @OneToOne(mappedBy = "profilo", cascade = CascadeType.REMOVE)
     private Studente studente;
 
-    @OneToMany(mappedBy = "profilo", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "profilo", cascade = {CascadeType.MERGE, CascadeType.REMOVE,CascadeType.PERSIST})
     private Collection<Foto> listaFoto;
 
     private String nome, cognome, luogoNascita, residenza;
