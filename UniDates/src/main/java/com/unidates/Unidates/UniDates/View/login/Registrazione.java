@@ -139,8 +139,7 @@ public class Registrazione extends VerticalLayout {
 
         Button prosegui = new Button("Continua con la registrazione",buttonClickEvent -> {
             //Sessione
-            Profilo profilo = new Profilo();
-            Studente studente = new Studente(email.getValue(),password.getValue(),profilo);
+            Studente studente = new Studente(email.getValue(),password.getValue());
             httpSession.setAttribute("utente_reg", studente);
         });
         link = new Anchor("/registrazione_due");

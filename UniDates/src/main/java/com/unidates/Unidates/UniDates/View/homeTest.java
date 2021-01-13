@@ -8,11 +8,13 @@ import com.unidates.Unidates.UniDates.Enum.*;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
+import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -21,9 +23,11 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.HasErrorParameter;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -35,6 +39,11 @@ import java.util.ArrayList;
 
 @Route("")
 public class homeTest extends VerticalLayout {
+
+
+
+    @Autowired
+    UtenteService utenteService;
 
     @Autowired
     GestioneUtentiController gestioneUtentiController;
@@ -77,7 +86,7 @@ public class homeTest extends VerticalLayout {
             Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new ArrayList<Hobby>());
 
 
-            gestioneUtentiController.registrazioneStudente(userTest, profilo);
+            gestioneUtentiController.registrazioneStudente(userTest, profilo, VaadinServletRequest.getCurrent());
         });
 
         Button bloccaUtente = new Button("BloccaUtente", buttonClickEvent -> {
@@ -110,7 +119,7 @@ public class homeTest extends VerticalLayout {
 
         Button trovaUtente = new Button("Trova utente", buttonClickEvent -> System.out.println(gestioneUtentiController.trovaUtente(email.getValue()).getEmail()));
         Button removeUtente = new Button("Rimuovi utente", buttonClickEvent -> {
-          //  gestioneUtentiController.removeUtente(gestioneUtentiController.trovaUtente(email.getValue()));
+           gestioneProfiloController.eliminaProfilo(trovaStudente(email.getValue()).getProfilo(), password.getValue());
         });
         /*
         Button aggiungiChat = new Button("Aggiungi chat", buttonClickEvent -> {
@@ -122,25 +131,29 @@ public class homeTest extends VerticalLayout {
         });*/
 
         Button aggiungiFoto = new Button("Aggiungi Foto", buttonClickEvent -> {
-            gestioneProfiloController.aggiungiFoto(trovaStudente(email.getValue()).getProfilo(),new Foto("Url prova " ));
-            for(Foto f : gestioneProfiloController.visualizzaProfilo(trovaStudente(email.getValue())).getListaFoto())
-                System.out.println(f.getUrl());
+          //  gestioneProfiloController.aggiungiFoto(trovaStudente(email.getValue()).getProfilo(),new Foto("Url prova " ));
+           // for(Foto f : gestioneProfiloController.visualizzaProfilo(trovaStudente(email.getValue())).getListaFoto())
+              //  System.out.println(f.getUrl());
         });
 
 
 
 
-       /*Button segnalaFoto = new Button("Segnala Foto", buttonClickEvent -> {
-            Foto foto = new Foto("url di prova");
-            gestioneProfiloController.aggiungiFoto(gestioneUtentiController.trovaUtente(email.getValue()).getProfilo(),foto);
-            Moderatore moderatore = new Moderatore("ciaomod", "ciaomod");
-            gestioneUtentiController.registrazioneModeratore(moderatore,gestioneUtentiController.trovaUtente(email.getValue()));
+       Button aggiungiModeratore = new Button("Aggiungi moderatore", buttonClickEvent -> {
+            Moderatore moderatore = new Moderatore();
+            gestioneUtentiController.registrazioneModeratore(moderatore, utenteService.trovaStudente(email.getValue()));
           //  gestioneModerazioneController.inviaSegnalazione(new Foto("ciao"));
-
-            gestioneProfiloController.visualizzaProfilo(gestioneUtentiController.trovaUtente(email.getValue())).getListaFoto().forEach(f -> System.out.printf("id_Foto: %s, numero elementi: %S", f.getId(), f.getSegnalazioniRicevuto().size()));
+           
         });
 
-        */
+        Button aggiungiCM = new Button("aggiungiCM", buttonClickEvent -> {
+            CommunityManager cm = new CommunityManager();
+            gestioneUtentiController.registrazioneCommunityManager(cm, utenteService.trovaStudente(email.getValue()));
+            //  gestioneModerazioneController.inviaSegnalazione(new Foto("ciao"));
+
+        });
+
+
 
         /*
         Button modificaProfilo = new Button("Modifica Profilo", buttonClickEvent -> {
@@ -192,7 +205,8 @@ public class homeTest extends VerticalLayout {
         add(removeUtente);
         add(aggiungiFoto);
         //add(modificaProfilo);
-        //add(segnalaFoto);
+        add(aggiungiModeratore);
+        add(aggiungiCM);
         add(sendMessage);
         /*
         add(aggiungiNotifica);
@@ -203,7 +217,7 @@ public class homeTest extends VerticalLayout {
     }
 
     Studente trovaStudente(String email){
-        return (Studente) gestioneUtentiController.trovaUtente(email);
+        return utenteService.trovaStudente(email);
     }
 
 

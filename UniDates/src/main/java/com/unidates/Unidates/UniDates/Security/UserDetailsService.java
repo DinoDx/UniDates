@@ -1,7 +1,12 @@
 package com.unidates.Unidates.UniDates.Security;
 
+import com.unidates.Unidates.UniDates.Enum.Ruolo;
+import com.unidates.Unidates.UniDates.Exception.NotConfirmedAccountException;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.UtenteRepository;
+import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.CommunityManagerRepository;
+import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.ModeratoreRepository;
+import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.StudenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,19 +21,22 @@ import javax.servlet.http.HttpSession;
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     @Autowired
-    private UtenteRepository utenteRepository;
+    private StudenteRepository studenteRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Utente utente = utenteRepository.findByEmail(email);
+        Studente utente = studenteRepository.findByEmail(email);
+
         if(utente == null){
             throw new UsernameNotFoundException(email);
         }
+        if (utente.isActive()){
+            ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
+            httpSession.setAttribute("utente", utente);
 
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
-        httpSession.setAttribute("utente", utente);
-
-        return User.withUsername(utente.getEmail()).password(utente.getPassword()).roles(utente.getRuolo().toString()).build();
+            return User.withUsername(utente.getEmail()).password(utente.getPassword()).roles(utente.getRuolo().toString()).build();
+        }
+        else throw new NotConfirmedAccountException();
     }
 }

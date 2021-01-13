@@ -2,47 +2,55 @@ package com.unidates.Unidates.UniDates.Controller;
 
 import com.unidates.Unidates.UniDates.Enum.Interessi;
 import com.unidates.Unidates.UniDates.Enum.Sesso;
+import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.WebRequest;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/api/UserManager")
 public class GestioneUtentiController {
 
     @Autowired
+    ApplicationEventPublisher applicationEventPublisher;
+
+    @Autowired
     UtenteService utenteService;
 
-
-
     @RequestMapping("/registrazioneStudente")
-    public void registrazioneStudente(Studente s, Profilo p) {
-        if(checkStudente(s) && checkProfilo(p))
-             utenteService.registrazioneStudente(s, p);
+    public void registrazioneStudente(Studente s, Profilo p, HttpServletRequest request) {
+        if(checkStudente(s)) {
+            if(utenteService.trovaStudente(s.getEmail()) == null){
+                utenteService.registrazioneStudente(s, p);
+                String appUrl = request.getContextPath();
+                applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(s, request.getLocale(), appUrl));
+            }
+            else throw new AlreadyExistUserException();
+        }
         else throw new InvalidRegistrationFormatException();
     }
 
     @RequestMapping("/registrazioneModeratore")
     public void registrazioneModeratore(Moderatore m, Studente s)  {
-        if(checkStudente(s))
-            utenteService.registrazioneModeratore(m, s);
-        else throw new InvalidRegistrationFormatException();
+            utenteService.registrazioneModeratore(m, s);;
     }
 
     @RequestMapping("/registrazioneCommunityManager")
-    public void registrazioneModeratore(CommunityManager cm, Studente s){
-        if(checkStudente(s)){
+    public void registrazioneCommunityManager(CommunityManager cm, Studente s){
             utenteService.registrazioneCommunityManager(cm, s);
-        }
-        else throw new InvalidRegistrationFormatException();
 
     }
 
@@ -59,8 +67,32 @@ public class GestioneUtentiController {
     @RequestMapping("/trovaUtente")
     public Utente trovaUtente(String email) {
         if(checkEmail(email))
-            return utenteService.findUtenteByEmail(email);
+            return utenteService.trovaUtente(email);
         else throw new InvalidRegistrationFormatException();
+    }
+
+
+    @GetMapping("/registrationConfirm")
+    public String confermaRegistrazione(WebRequest request, @RequestParam("token") String token) {
+        Locale locale = request.getLocale();
+
+        VerificationToken verificationToken = utenteService.getVerificationToken(token);
+        System.out.println(token);
+        if (verificationToken == null) {
+            return "Token non valido";
+        }
+
+        Utente utente = utenteService.getUtenteByVerificationToken(token);
+        Calendar cal = Calendar.getInstance();
+
+        if((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+            utenteService.deleteUtente(utente);
+            return "Token scaduto";
+        }
+        System.out.println("Utente attivato: " + utente);
+        utente.setActive(true);
+        utenteService.salvaUtenteRegistrato(utente);
+        return "Utente confermato";
     }
 
 

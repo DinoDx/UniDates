@@ -2,12 +2,15 @@ package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 
 
 import com.unidates.Unidates.UniDates.Enum.Ruolo;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,12 +18,13 @@ public class Studente extends Utente{
 
 
     private boolean isBanned;
-    private boolean isActive;
+
+    @OneToOne(mappedBy = "studente",cascade = CascadeType.REMOVE)
+    private Moderatore moderatore;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "profilo_id", referencedColumnName = "id")
     private Profilo profilo;
-
 
 
     @ManyToMany
@@ -41,11 +45,14 @@ public class Studente extends Utente{
     public Studente() {
     }
 
-    public Studente(String email, String password, Profilo profilo) {
+    public Studente(String email, String password) {
         super(email, password, Ruolo.STUDENTE);
-        this.isActive = false;
+        this.listaBloccati = new ArrayList<Studente>();
+        this.listSospensione = new ArrayList<Sospensione>();
+        this.listAmmonimento = new ArrayList<Ammonimento>();
+        this.listMatch = new ArrayList<Match>();
+        this.listMatchRicevuti = new ArrayList<Match>();
         this.isBanned = false;
-        this.profilo = profilo;
     }
 
     public boolean isBanned() {
@@ -126,13 +133,6 @@ public class Studente extends Utente{
         listMatchRicevuti.add(match);
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
 
     @Override
     public String toString() {

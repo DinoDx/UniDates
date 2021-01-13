@@ -10,12 +10,17 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Service.GestioneProfilo.ProfiloService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/api/ProfileManager")
 public class GestioneProfiloController {
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     ProfiloService profiloService;
@@ -35,9 +40,10 @@ public class GestioneProfiloController {
 
     @RequestMapping("/eliminaProfile")
     public void eliminaProfilo(Profilo p, String password){
-        if(password.equals(p.getStudente().getPassword()))
-        profiloService.eliminaProfilo(p, password);
-        else throw new PasswordMissmatchException();
+      //  String toEncrypt = passwordEncoder.encode(password); controllo della password non possibile, encoder presenta diversi risultati, da fixare
+      //  if (toEncrypt.equals(p.getStudente().getPassword()))
+            profiloService.eliminaProfilo(p, password);
+     //   else throw new PasswordMissmatchException();
     }
 
     @RequestMapping("/modificaProfile")

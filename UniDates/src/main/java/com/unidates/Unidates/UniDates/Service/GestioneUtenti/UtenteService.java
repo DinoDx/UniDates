@@ -1,27 +1,27 @@
 package com.unidates.Unidates.UniDates.Service.GestioneUtenti;
 
+import com.unidates.Unidates.UniDates.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.CommunityManagerRepository;
-import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.ModeratoreRepository;
-import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.StudenteRepository;
-import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.UtenteRepository;
+import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
 public class UtenteService {
+
+    @Autowired
+    private VerificationTokenRepository verificationTokenRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private UtenteRepository utenteRepository;
 
@@ -52,47 +52,56 @@ public class UtenteService {
         studenteRepository.save(s);
     }
 
-    public boolean registrazioneStudente(Studente studente, Profilo profilo){
-        try {
-            if (!isPresent(studente)) {
-                studente.setProfilo(profilo);
-                studente.setPassword(new BCryptPasswordEncoder().encode(studente.getPassword()));
-                studente.setListNotifica( new ArrayList<Notifica>());
-                studente.setMittente(new ArrayList<Chat>());
-                studente.setListaBloccati(new ArrayList<Studente>());
-                studenteRepository.save(studente);
-                return true;
-            }
-            else throw new AlreadyExistUserException();
-        }catch (AlreadyExistUserException alreadyExistUserException){
-            alreadyExistUserException.printStackTrace();
-            return false;
-        }
+    public void registrazioneStudente(Studente s, Profilo p) throws AlreadyExistUserException{
+                s.setProfilo(p);
+                s.setPassword(passwordEncoder.encode(s.getPassword()));
+                studenteRepository.save(s);
 
     }
 
-    public boolean registrazioneModeratore(Moderatore m,Studente s){
-        if(isPresent(m) && m.getEmail().equals(s.getEmail())){
+    public void registrazioneModeratore(Moderatore m,Studente s){
+        if(isPresent(s)){
+            m.setEmail(s.getEmail());
+            m.setPassword(s.getPassword());
+            m.setRuolo(Ruolo.MODERATORE);
             m.setStudente(s);
             moderatoreRepository.save(m);
-            return true;
         }
-        return false;
+        else throw new UserNotFoundException();
     }
 
-    public boolean registrazioneCommunityManager(CommunityManager cm, Studente s){
-        if(isPresent(cm) && cm.getEmail().equals(s.getEmail())){
+    public void registrazioneCommunityManager(CommunityManager cm, Studente s){
+       if(isPresent(s)){
             cm.setStudente(s);
+            cm.setPassword(s.getPassword());
+            cm.setRuolo(Ruolo.COMMUNITY_MANAGER);
+            cm.setEmail(s.getEmail());
             communityManagerRepository.save(cm);
-            return true;
         }
-        return false;
+       else throw new AlreadyExistUserException();
     }
 
-    public Utente findUtenteByEmail(String email) {
+    public Utente trovaUtente(String email) {
         try {
             Utente utente = utenteRepository.findByEmail(email);
             if(utente != null) return utente;
+            else throw new UserNotFoundException();
+        }catch (UserNotFoundException userNotFoundException){
+            userNotFoundException.printStackTrace();
+        }
+        return null;
+    }
+
+    public Studente trovaStudente(String email) {
+        Studente studente = studenteRepository.findByEmail(email);
+        if(studente != null) return studente;
+        else return null;
+    }
+
+    public Moderatore trovaModeratore(String email) {
+        try {
+            Moderatore moderatore = moderatoreRepository.findByEmail(email);
+            if(moderatore != null) return moderatore;
             else throw new UserNotFoundException();
         }catch (UserNotFoundException userNotFoundException){
             userNotFoundException.printStackTrace();
@@ -115,6 +124,7 @@ public class UtenteService {
 
 
 
+
 // PER TESTING
 
     public Collection<Studente> findAll(){
@@ -133,6 +143,30 @@ public class UtenteService {
     }
 
 
+    public Utente getUtenteByVerificationToken(String verificationToken) {
+        Utente utente = verificationTokenRepository.findByToken(verificationToken).getUtente();
 
+        return utente;
+    }
+
+
+    public VerificationToken getVerificationToken(String token) {
+        return verificationTokenRepository.findByToken(token);
+    }
+
+    public void createVerificationToken(Utente utente, String token) {
+        VerificationToken myToken = new VerificationToken();
+        myToken.setToken(token);
+        myToken.setUtente(utente);
+        verificationTokenRepository.save(myToken);
+    }
+
+    public void deleteUtente(Utente utente) {
+        utenteRepository.delete(utente);
+    }
+
+    public void salvaUtenteRegistrato(Utente utente) {
+        utenteRepository.save(utente);
+    }
 }
 

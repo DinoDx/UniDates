@@ -14,8 +14,8 @@ public class Moderatore extends Utente {
     @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
     private Collection<Ammonimento> ammonimentoInviati;
 
-    @OneToOne
-    @JoinColumn(name = "studente_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "id_studente")
     private Studente studente;
 
     @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)

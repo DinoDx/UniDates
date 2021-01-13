@@ -9,7 +9,6 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneModerazione.AmmonimentiRepository;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneModerazione.SegnalazioniRepository;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneModerazione.SospensioniRepository;
-import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.StudenteRepository;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.UtenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

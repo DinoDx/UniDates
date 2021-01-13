@@ -21,6 +21,7 @@ public abstract class Utente implements Serializable {
     private String password;
     private Ruolo ruolo;
 
+    private boolean isActive;
 
 
     @OneToMany(mappedBy = "utente", cascade = CascadeType.REMOVE)
@@ -40,6 +41,7 @@ public abstract class Utente implements Serializable {
         this.email = email;
         this.password = password;
         this.ruolo = ruolo;
+        this.setActive(false);
     }
 
     public Long getId() {
@@ -101,6 +103,14 @@ public abstract class Utente implements Serializable {
 
     public void setDestinatario(Collection<Chat> destinatario) {
         this.destinatario = destinatario;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override

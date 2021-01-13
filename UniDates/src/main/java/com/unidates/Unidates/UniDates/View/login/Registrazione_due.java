@@ -22,6 +22,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -201,7 +202,7 @@ public class Registrazione_due extends VerticalLayout implements BeforeEnterObse
             profilo.setHobbyList(hobby);
             //image
 
-            gestioneUtentiController.registrazioneStudente(da_registrare, profilo);
+            gestioneUtentiController.registrazioneStudente(da_registrare, profilo, VaadinServletRequest.getCurrent());
         });
 
         anchor = new Anchor("/login");
