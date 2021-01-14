@@ -1,5 +1,7 @@
 package com.unidates.Unidates.UniDates.View.main;
 
+import com.unidates.Unidates.UniDates.View.component.Ammonimento_Notifica;
+import com.unidates.Unidates.UniDates.View.component.Notifica;
 import com.unidates.Unidates.UniDates.View.component_home_page.Home;
 import com.unidates.Unidates.UniDates.View.component_home_page.Notifiche;
 import com.vaadin.flow.component.Component;
@@ -55,6 +57,21 @@ public class MainView extends AppLayout {
         profile.getSubMenu().addItem(new Anchor("/logout","Logout"));
         profile.getSubMenu().addItem(new Anchor("/profilo-personale","Profilo Personale"));
 
+        MenuBar notification = new MenuBar();
+        notification.getStyle().set("margin-right","1em");
+        MenuItem notifiche = notification.addItem("");
+        notifiche.addComponentAsFirst(new Icon(VaadinIcon.BELL));
+        notifiche.getSubMenu().addItem(new Notifica());
+        notifiche.getSubMenu().addItem(new Ammonimento_Notifica());
+        notifiche.getSubMenu().addItem(new Notifica());
+        notifiche.getSubMenu().addItem(new Notifica());
+        notifiche.getSubMenu().addItem(new Notifica());
+        notifiche.getSubMenu().addItem(new Ammonimento_Notifica());
+        notifiche.getSubMenu().addItem(new Notifica());
+        notifiche.getSubMenu().addItem(new Notifica());
+        notifiche.getSubMenu().addItem(new Ammonimento_Notifica());
+        notifiche.getSubMenu().addItem(new Notifica());
+        notifiche.getSubMenu().addItem(new Notifica());
 
         Button chats = new Button(new Icon(VaadinIcon.PAPERPLANE_O));
         Anchor anchor = new Anchor("/chat");
@@ -72,7 +89,7 @@ public class MainView extends AppLayout {
         viewTitle = new H1("UniDates");
         layout.add(viewTitle);
         layout.add(filter);
-        layout.add(menuBar);
+        layout.add(menuBar,notification);
         layout.add(anchor);
         return layout;
     }
