@@ -1,9 +1,12 @@
 package com.unidates.Unidates.UniDates.View.main;
 
+import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Enum.Tipo_Notifica;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.View.component.Ammonimento_Notifica;
-import com.unidates.Unidates.UniDates.View.component.Notifica;
+import com.unidates.Unidates.UniDates.View.component.Notifica_Component;
 import com.unidates.Unidates.UniDates.View.component_home_page.Home;
-import com.unidates.Unidates.UniDates.View.component_home_page.Notifiche;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -29,6 +32,12 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Optional;
 
 @JsModule("./styles/shared-styles.js")
@@ -40,12 +49,16 @@ public class MainView extends AppLayout {
     private H1 viewTitle;
     TextField filter = new TextField();
 
-    public MainView() {
+    public MainView(GestioneUtentiController gestioneUtentiController) {
+        this.gestioneUtentiController = gestioneUtentiController;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         menu = createMenu();
         addToDrawer(createDrawerContent(menu));
     }
+
+    @Autowired
+    GestioneUtentiController gestioneUtentiController;
 
     private Component createHeaderContent() {
         configureFilter();
@@ -61,17 +74,10 @@ public class MainView extends AppLayout {
         notification.getStyle().set("margin-right","1em");
         MenuItem notifiche = notification.addItem("");
         notifiche.addComponentAsFirst(new Icon(VaadinIcon.BELL));
-        notifiche.getSubMenu().addItem(new Notifica());
+
+        notifiche.getSubMenu().addItem(new Notifica_Component(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.MATCH,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg"))))));
         notifiche.getSubMenu().addItem(new Ammonimento_Notifica());
-        notifiche.getSubMenu().addItem(new Notifica());
-        notifiche.getSubMenu().addItem(new Notifica());
-        notifiche.getSubMenu().addItem(new Notifica());
-        notifiche.getSubMenu().addItem(new Ammonimento_Notifica());
-        notifiche.getSubMenu().addItem(new Notifica());
-        notifiche.getSubMenu().addItem(new Notifica());
-        notifiche.getSubMenu().addItem(new Ammonimento_Notifica());
-        notifiche.getSubMenu().addItem(new Notifica());
-        notifiche.getSubMenu().addItem(new Notifica());
+
 
         Button chats = new Button(new Icon(VaadinIcon.PAPERPLANE_O));
         Anchor anchor = new Anchor("/chat");
@@ -129,7 +135,7 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[]{/*createTab("Find Your Match", FindYourMatch.class),*/createTab("Home", Home.class),createTab("Notifiche", Notifiche.class)};
+        return new Tab[]{/*createTab("Find Your Match", FindYourMatch.class),*/createTab("Home", Home.class)};
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
@@ -153,5 +159,22 @@ public class MainView extends AppLayout {
 
     private String getCurrentPageTitle() {
         return getContent().getClass().getAnnotation(PageTitle.class).value();
+    }
+
+    private byte[] downloadUrl(String stringDownload) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            URL toDownload = new URL(stringDownload);
+            byte[] chunk = new byte[4096];
+            int bytesRead;
+            InputStream stream = toDownload.openStream();
+            while ((bytesRead = stream.read(chunk)) > 0) {
+                outputStream.write(chunk, 0, bytesRead);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return outputStream.toByteArray();
     }
 }

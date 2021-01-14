@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni;
 
 import com.unidates.Unidates.UniDates.Enum.Tipo_Notifica;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 
 import javax.persistence.*;
@@ -17,6 +18,9 @@ public class Notifica implements Serializable {
     @JoinColumn(name = "utente_id")
     private Utente utente;
 
+    @OneToOne
+    private Foto foto;
+
     private String text;
 
     private Tipo_Notifica tipo_notifica;
@@ -24,7 +28,8 @@ public class Notifica implements Serializable {
     public Notifica() {
     }
 
-    public Notifica( Utente utente, String text , Tipo_Notifica tipo_notifica) {
+    public Notifica(Utente utente, String text , Tipo_Notifica tipo_notifica, Foto foto) {
+        this.foto = foto;
         this.utente = utente;
         this.text = text;
         this.tipo_notifica = tipo_notifica;
@@ -33,6 +38,8 @@ public class Notifica implements Serializable {
     public Notifica(String text) {
         this.text = text;
     }
+
+    public Foto getFoto(){ return foto; }
 
     public String getText() {
         return text;

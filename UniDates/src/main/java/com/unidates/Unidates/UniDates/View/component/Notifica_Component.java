@@ -1,6 +1,8 @@
 package com.unidates.Unidates.UniDates.View.component;
 
 
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
@@ -11,13 +13,15 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.StreamResource;
 
-@CssImport("./styles/views/component/card-notifica.css")
-public class Notifica extends Div {
+import java.io.ByteArrayInputStream;
 
-    public Notifica(){
+public class Notifica_Component extends Div {
+
+    public Notifica_Component(Notifica notifica){
         VerticalLayout internal_card_due = new VerticalLayout();
-        H6 descrizione = new H6("Hai un match con ");
+        H6 descrizione = new H6("Hai un match con");
         Button avvia_chat = new Button("Avvia chat!",new Icon(VaadinIcon.FIRE));
         internal_card_due.add(descrizione,avvia_chat);
 
@@ -27,7 +31,8 @@ public class Notifica extends Div {
         internal_card.setWidth("300px");
         internal_card.setHeight("100px");
         internal_card.setAlignItems(FlexComponent.Alignment.CENTER);
-        Image image = new Image("https://randomuser.me/api/portraits/men/42.jpg","ciao");
+        StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(notifica.getFoto().getImg()));
+        Image image = new Image(resource,"");
         image.setWidth("80px");
         image.getStyle().set("margin-left","2em");
         image.setHeight("80px");
