@@ -79,7 +79,6 @@ public class homeTest extends VerticalLayout {
         }
         Button aggiungiUtente = new Button("Aggiungi utente", buttonClickEvent -> {
             Studente userTest = new Studente();
-            userTest.setRuolo(Ruolo.STUDENTE);
             userTest.setEmail(email.getValue());
             userTest.setPassword(password.getValue());
 
@@ -141,7 +140,12 @@ public class homeTest extends VerticalLayout {
 
        Button aggiungiModeratore = new Button("Aggiungi moderatore", buttonClickEvent -> {
             Moderatore moderatore = new Moderatore();
-            gestioneUtentiController.registrazioneModeratore(moderatore, utenteService.trovaStudente(email.getValue()));
+            moderatore.setEmail(email.getValue());
+            moderatore.setPassword(password.getValue());
+
+           Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new ArrayList<Hobby>());
+
+           gestioneUtentiController.registrazioneModeratore(moderatore, profilo);
           //  gestioneModerazioneController.inviaSegnalazione(new Foto("ciao"));
            
         });

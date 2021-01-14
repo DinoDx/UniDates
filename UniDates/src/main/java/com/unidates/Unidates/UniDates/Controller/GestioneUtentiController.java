@@ -44,8 +44,11 @@ public class GestioneUtentiController {
     }
 
     @RequestMapping("/registrazioneModeratore")
-    public void registrazioneModeratore(Moderatore m, Studente s)  {
-            utenteService.registrazioneModeratore(m, s);;
+    public void registrazioneModeratore(Moderatore m, Profilo p )  {
+        if(checkStudente(m)) {
+            if(!utenteService.isPresent(m))
+                utenteService.registrazioneModeratore(m, p);
+        }
     }
 
     @RequestMapping("/registrazioneCommunityManager")

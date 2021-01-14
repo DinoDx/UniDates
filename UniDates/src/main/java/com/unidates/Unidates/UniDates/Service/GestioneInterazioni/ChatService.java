@@ -6,8 +6,8 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Model.Repository.ChatRepository;
-import com.unidates.Unidates.UniDates.Model.Repository.MessageRepository;
+import com.unidates.Unidates.UniDates.Model.Repository.GestioneInterazioni.ChatRepository;
+import com.unidates.Unidates.UniDates.Model.Repository.GestioneInterazioni.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

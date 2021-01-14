@@ -9,14 +9,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
-public class Moderatore extends Utente {
+public class Moderatore extends Studente {
 
     @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
     private Collection<Ammonimento> ammonimentoInviati;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "id_studente")
-    private Studente studente;
 
     @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
     private Collection<Segnalazione> segnalazioneRicevute;
@@ -25,9 +22,11 @@ public class Moderatore extends Utente {
     }
 
     public Moderatore(String email, String password) {
-        super(email, password, Ruolo.MODERATORE);
+        super(email, password);
+        this.setRuolo(Ruolo.MODERATORE);
         ammonimentoInviati = new ArrayList<Ammonimento>();
         segnalazioneRicevute = new ArrayList<Segnalazione>();
+        this.setActive(true);
     }
 
     public Collection<Ammonimento> getAmmonimentiInviati() {
@@ -46,13 +45,6 @@ public class Moderatore extends Utente {
         this.segnalazioneRicevute = segnalazioneRicevute;
     }
 
-    public Studente getStudente() {
-        return studente;
-    }
-
-    public void setStudente(Studente studente) {
-        this.studente = studente;
-    }
 
     public void addSegnalazione(Segnalazione segnalazione){
         segnalazioneRicevute.add(segnalazione);

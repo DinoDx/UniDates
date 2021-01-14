@@ -1,11 +1,7 @@
 package com.unidates.Unidates.UniDates.Security;
 
-import com.unidates.Unidates.UniDates.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Exception.NotConfirmedAccountException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.CommunityManagerRepository;
-import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.ModeratoreRepository;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.StudenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;

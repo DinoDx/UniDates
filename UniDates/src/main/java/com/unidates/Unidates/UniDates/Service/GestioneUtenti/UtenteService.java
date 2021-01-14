@@ -28,11 +28,6 @@ public class UtenteService {
     @Autowired
     private StudenteRepository studenteRepository;
 
-    @Autowired
-    private ModeratoreRepository moderatoreRepository;
-
-    @Autowired
-    private CommunityManagerRepository communityManagerRepository;
 
 
     public boolean isPresent(Utente u){
@@ -53,21 +48,15 @@ public class UtenteService {
     }
 
     public void registrazioneStudente(Studente s, Profilo p) throws AlreadyExistUserException{
-                s.setProfilo(p);
-                s.setPassword(passwordEncoder.encode(s.getPassword()));
-                studenteRepository.save(s);
-
+        s.setProfilo(p);
+        s.setPassword(passwordEncoder.encode(s.getPassword()));
+        utenteRepository.save(s);
     }
 
-    public void registrazioneModeratore(Moderatore m,Studente s){
-        if(isPresent(s)){
-            m.setEmail(s.getEmail());
-            m.setPassword(s.getPassword());
-            m.setRuolo(Ruolo.MODERATORE);
-            m.setStudente(s);
-            moderatoreRepository.save(m);
-        }
-        else throw new UserNotFoundException();
+    public void registrazioneModeratore(Moderatore m, Profilo p){
+        m.setProfilo(p);
+        m.setPassword(passwordEncoder.encode(m.getPassword()));
+        utenteRepository.save(m);
     }
 
     public void registrazioneCommunityManager(CommunityManager cm, Studente s){
@@ -76,37 +65,19 @@ public class UtenteService {
             cm.setPassword(s.getPassword());
             cm.setRuolo(Ruolo.COMMUNITY_MANAGER);
             cm.setEmail(s.getEmail());
-            communityManagerRepository.save(cm);
+            utenteRepository.save(cm);
         }
        else throw new AlreadyExistUserException();
     }
 
     public Utente trovaUtente(String email) {
-        try {
-            Utente utente = utenteRepository.findByEmail(email);
-            if(utente != null) return utente;
-            else throw new UserNotFoundException();
-        }catch (UserNotFoundException userNotFoundException){
-            userNotFoundException.printStackTrace();
-        }
-        return null;
+        return utenteRepository.findByEmail(email);
     }
 
     public Studente trovaStudente(String email) {
         Studente studente = studenteRepository.findByEmail(email);
         if(studente != null) return studente;
         else return null;
-    }
-
-    public Moderatore trovaModeratore(String email) {
-        try {
-            Moderatore moderatore = moderatoreRepository.findByEmail(email);
-            if(moderatore != null) return moderatore;
-            else throw new UserNotFoundException();
-        }catch (UserNotFoundException userNotFoundException){
-            userNotFoundException.printStackTrace();
-        }
-        return null;
     }
 
 
