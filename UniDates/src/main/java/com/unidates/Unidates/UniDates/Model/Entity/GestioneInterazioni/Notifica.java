@@ -1,5 +1,6 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni;
 
+import com.unidates.Unidates.UniDates.Enum.Tipo_Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 
 import javax.persistence.*;
@@ -18,13 +19,15 @@ public class Notifica implements Serializable {
 
     private String text;
 
+    private Tipo_Notifica tipo_notifica;
 
     public Notifica() {
     }
 
-    public Notifica( Utente utente, String text) {
+    public Notifica( Utente utente, String text , Tipo_Notifica tipo_notifica) {
         this.utente = utente;
         this.text = text;
+        this.tipo_notifica = tipo_notifica;
     }
 
     public Notifica(String text) {
@@ -45,5 +48,13 @@ public class Notifica implements Serializable {
 
     public void setUtente(Utente utente) {
         this.utente = utente;
+    }
+
+    public Tipo_Notifica getTipo_notifica() {
+        return tipo_notifica;
+    }
+
+    public void setTipo_notifica(Tipo_Notifica tipo_notifica) {
+        this.tipo_notifica = tipo_notifica;
     }
 }
