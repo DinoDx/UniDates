@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.View.login;
+package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 
 

@@ -1,12 +1,13 @@
 package com.unidates.Unidates.UniDates.Controller;
 
+import com.unidates.Unidates.UniDates.Controller.ConfermaRegistrazione.OnRegistrationCompleteEvent;
 import com.unidates.Unidates.UniDates.Enum.Interessi;
 import com.unidates.Unidates.UniDates.Enum.Sesso;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
-import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -32,8 +33,8 @@ public class GestioneUtentiController {
 
     @RequestMapping("/registrazioneStudente")
     public void registrazioneStudente(Studente s, Profilo p, HttpServletRequest request) {
-        if(checkStudente(s)) {
-            if(utenteService.trovaStudente(s.getEmail()) == null){
+        if(checkStudente(s) && checkProfilo(p)) {
+            if(!utenteService.isPresent(s)){
                 utenteService.registrazioneStudente(s, p);
                 String appUrl = request.getContextPath();
                 applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(s, request.getLocale(), appUrl));
@@ -45,16 +46,22 @@ public class GestioneUtentiController {
 
     @RequestMapping("/registrazioneModeratore")
     public void registrazioneModeratore(Moderatore m, Profilo p )  {
-        if(checkStudente(m)) {
+        if(checkStudente(m) && checkProfilo(p)) {
             if(!utenteService.isPresent(m))
                 utenteService.registrazioneModeratore(m, p);
+            else throw new AlreadyExistUserException();
         }
+        else throw new InvalidRegistrationFormatException();
     }
 
     @RequestMapping("/registrazioneCommunityManager")
-    public void registrazioneCommunityManager(CommunityManager cm, Studente s){
-            utenteService.registrazioneCommunityManager(cm, s);
-
+    public void registrazioneCommunityManager(CommunityManager cm, Profilo p){
+        if(checkStudente(cm) && checkProfilo(p)){
+            if(!utenteService.isPresent(cm))
+                utenteService.registrazioneCommunityManager(cm, p);
+            else throw new AlreadyExistUserException();
+        }
+        else throw new InvalidRegistrationFormatException();
     }
 
     @RequestMapping("/bloccoStudente")
@@ -123,7 +130,7 @@ public class GestioneUtentiController {
 
 
     private boolean checkStudente(Studente s) {
-        if(s.getEmail() != null && s.getPassword() != null && s.getRuolo() != null){
+        if(s.getEmail() != null && s.getPassword() != null){
             if(checkEmail(s.getEmail())){
                 return s.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$");
             }

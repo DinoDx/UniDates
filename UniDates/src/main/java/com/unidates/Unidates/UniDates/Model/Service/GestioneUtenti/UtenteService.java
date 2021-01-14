@@ -1,18 +1,12 @@
-package com.unidates.Unidates.UniDates.Service.GestioneUtenti;
+package com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti;
 
-import com.unidates.Unidates.UniDates.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
-import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
 
 @Service
 public class UtenteService {
@@ -24,9 +18,6 @@ public class UtenteService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UtenteRepository utenteRepository;
-
-    @Autowired
-    private StudenteRepository studenteRepository;
 
 
 
@@ -42,12 +33,7 @@ public class UtenteService {
         return s.isActive();
     }
 
-    public void attivaStudente(Studente s){
-        s.setActive(true);
-        studenteRepository.save(s);
-    }
-
-    public void registrazioneStudente(Studente s, Profilo p) throws AlreadyExistUserException{
+    public void registrazioneStudente(Studente s, Profilo p){
         s.setProfilo(p);
         s.setPassword(passwordEncoder.encode(s.getPassword()));
         utenteRepository.save(s);
@@ -59,15 +45,10 @@ public class UtenteService {
         utenteRepository.save(m);
     }
 
-    public void registrazioneCommunityManager(CommunityManager cm, Studente s){
-       if(isPresent(s)){
-            cm.setStudente(s);
-            cm.setPassword(s.getPassword());
-            cm.setRuolo(Ruolo.COMMUNITY_MANAGER);
-            cm.setEmail(s.getEmail());
-            utenteRepository.save(cm);
-        }
-       else throw new AlreadyExistUserException();
+    public void registrazioneCommunityManager(CommunityManager cm, Profilo p){
+        cm.setProfilo(p);
+        cm.setPassword(passwordEncoder.encode(cm.getPassword()));
+        utenteRepository.save(cm);
     }
 
     public Utente trovaUtente(String email) {
@@ -75,7 +56,7 @@ public class UtenteService {
     }
 
     public Studente trovaStudente(String email) {
-        Studente studente = studenteRepository.findByEmail(email);
+        Studente studente = (Studente) utenteRepository.findByEmail(email);
         if(studente != null) return studente;
         else return null;
     }
@@ -83,36 +64,17 @@ public class UtenteService {
 
     public boolean bloccaStudente(Studente studenteBloccante, Studente studenteBloccato) {
         studenteBloccante.getListaBloccati().add(studenteBloccato);
-        studenteRepository.save(studenteBloccante);
+        utenteRepository.save(studenteBloccante);
         return true;
     }
 
     public boolean sbloccaStudente(Studente studenteBloccante, Studente studenteBloccato) {
         studenteBloccante.getListaBloccati().remove(studenteBloccato);
-        studenteRepository.save(studenteBloccante);
+        utenteRepository.save(studenteBloccante);
         return true;
     }
 
-
-
-
-// PER TESTING
-
-    public Collection<Studente> findAll(){
-        return studenteRepository.findAll();
-    }
-
-
-    public boolean modificaStudente(Studente studente, Profilo profilo) {
-        studente.setProfilo(profilo);
-        studenteRepository.save(studente);
-        return true;
-    }
-
-    public void updatestudente(Studente studente) {
-        studenteRepository.save(studente);
-    }
-
+    //Da inserire nell'SDD
 
     public Utente getUtenteByVerificationToken(String verificationToken) {
         Utente utente = verificationTokenRepository.findByToken(verificationToken).getUtente();

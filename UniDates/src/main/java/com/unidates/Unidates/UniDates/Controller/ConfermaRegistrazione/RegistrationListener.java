@@ -1,10 +1,9 @@
-package com.unidates.Unidates.UniDates.Controller;
+package com.unidates.Unidates.UniDates.Controller.ConfermaRegistrazione;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,8 +18,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     @Autowired
     private UtenteService service;
 
-    @Autowired
-    private MessageSource messageSource;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -35,16 +32,15 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         String token = UUID.randomUUID().toString();
         service.createVerificationToken(utente, token);
 
-        String emailDestinatario = utente.getEmail();
+        String destinatario = utente.getEmail();
         String oggetto = "Conferma la registrazione";
-        String linkDiConferma = event.getAppUrl() + "/api/UserManager/registrationConfirm?token=" + token;
-        //String messaggio = messageSource.getMessage("message.regSuc", null, event.getLocale());
+        String link = event.getAppUrl() + "/api/UserManager/registrationConfirm?token=" + token;
 
         SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(emailDestinatario);
+        email.setTo(destinatario);
         email.setSubject(oggetto);
-        email.setText("http://localhost:8080" + linkDiConferma);
-        System.out.println("http://localhost:8080" + linkDiConferma);
+        email.setText("http://localhost:8080" + link);
+        System.out.println("http://localhost:8080" + link);
         mailSender.send(email);
     }
 

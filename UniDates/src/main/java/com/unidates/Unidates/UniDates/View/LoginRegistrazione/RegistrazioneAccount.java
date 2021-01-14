@@ -1,7 +1,6 @@
-package com.unidates.Unidates.UniDates.View.login;
+package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.Text;
@@ -26,7 +25,7 @@ import javax.servlet.http.HttpSession;
 @Route(value = "registrazione", layout = MainViewLogin.class)
 @PageTitle("Registrazione")
 @CssImport("./styles/views/registrazione/registrazione.css")
-public class Registrazione extends VerticalLayout {
+public class RegistrazioneAccount extends VerticalLayout {
 
     ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
     HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
@@ -109,7 +108,7 @@ public class Registrazione extends VerticalLayout {
     private PasswordField password;
     private PasswordField conferma_password;
 
-    private Registrazione(){
+    private RegistrazioneAccount(){
         setId("Layout-registazione");
         Div principale = new Div(form());
         principale.setId("Div-principale");

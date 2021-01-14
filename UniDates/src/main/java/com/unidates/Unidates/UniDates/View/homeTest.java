@@ -5,33 +5,27 @@ import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.*;
-import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
-import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
+import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.ErrorParameter;
-import com.vaadin.flow.router.HasErrorParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,8 +33,6 @@ import java.util.ArrayList;
 
 @Route("")
 public class homeTest extends VerticalLayout {
-
-
 
     @Autowired
     UtenteService utenteService;
@@ -58,33 +50,18 @@ public class homeTest extends VerticalLayout {
     GestioneModerazioneController gestioneModerazioneController;
 
     public homeTest() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Da qui possiamo accedere al ruolo dell'utente autenticato
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
-        Utente utente =(Utente) httpSession.getAttribute("utente");
+        Utente utente = SecurityUtils.getLoggedIn(); // Come prendere l'utente attualmente loggato
 
         TextField email = new TextField("Email");
         TextField email2 = new TextField("Email2");
         TextField password = new TextField("Password");
-        Text text;
-
+        Text emailRuolo = new Text(utente.getRuolo() +" "+utente.getEmail());
+        add(emailRuolo);
         TextField messaggio = new TextField("Messaggio");
 
-        add(new Text(authentication.getAuthorities().toString())); // Stampa il ruolo dell'utente autenticato
-        if(utente != null) {
-            text = new Text(utente.getEmail());
-            add(text);
-        }
         Button aggiungiUtente = new Button("Aggiungi utente", buttonClickEvent -> {
-            Studente userTest = new Studente();
-            userTest.setEmail(email.getValue());
-            userTest.setPassword(password.getValue());
-
+            Studente userTest = new Studente(email.getValue(), password.getValue());
             Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new ArrayList<Hobby>());
-
-
             gestioneUtentiController.registrazioneStudente(userTest, profilo, VaadinServletRequest.getCurrent());
         });
 
@@ -139,9 +116,7 @@ public class homeTest extends VerticalLayout {
 
 
        Button aggiungiModeratore = new Button("Aggiungi moderatore", buttonClickEvent -> {
-            Moderatore moderatore = new Moderatore();
-            moderatore.setEmail(email.getValue());
-            moderatore.setPassword(password.getValue());
+            Moderatore moderatore = new Moderatore(email.getValue(), password.getValue());
 
            Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new ArrayList<Hobby>());
 
@@ -151,8 +126,11 @@ public class homeTest extends VerticalLayout {
         });
 
         Button aggiungiCM = new Button("aggiungiCM", buttonClickEvent -> {
-            CommunityManager cm = new CommunityManager();
-            gestioneUtentiController.registrazioneCommunityManager(cm, utenteService.trovaStudente(email.getValue()));
+            CommunityManager cm = new CommunityManager(email.getValue(), password.getValue());
+
+            Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new ArrayList<Hobby>());
+
+            gestioneUtentiController.registrazioneCommunityManager(cm, profilo);
             //  gestioneModerazioneController.inviaSegnalazione(new Foto("ciao"));
 
         });

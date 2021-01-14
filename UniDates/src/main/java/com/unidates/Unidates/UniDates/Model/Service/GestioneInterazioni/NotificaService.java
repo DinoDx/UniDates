@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Service.GestioneInterazioni;
+package com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;

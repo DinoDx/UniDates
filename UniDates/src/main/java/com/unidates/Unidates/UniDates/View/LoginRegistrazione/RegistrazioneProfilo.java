@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.View.login;
+package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.*;
@@ -38,7 +38,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.vaadin.gatanaso.MultiselectComboBox;
 
-import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
@@ -54,7 +53,7 @@ import java.util.List;
 @Route(value = "registrazione_due", layout = MainViewLogin.class)
 @PageTitle("Registrazione_2")
 @CssImport("./styles/views/registrazione/registrazione_due.css")
-public class Registrazione_due extends VerticalLayout implements BeforeEnterObserver {
+public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterObserver {
 
     @Autowired
     GestioneUtentiController gestioneUtentiController;
@@ -192,7 +191,7 @@ public class Registrazione_due extends VerticalLayout implements BeforeEnterObse
     private ArrayList<Foto> foto = new ArrayList<Foto>();
 
 
-    public Registrazione_due(){
+    public RegistrazioneProfilo(){
         httpSession.removeAttribute("utente_reg");
         setSizeFull();
 
@@ -361,7 +360,7 @@ public class Registrazione_due extends VerticalLayout implements BeforeEnterObse
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         if(da_registrare == null){
-            beforeEnterEvent.rerouteTo(Registrazione.class);
+            beforeEnterEvent.rerouteTo(RegistrazioneAccount.class);
         }
     }
 

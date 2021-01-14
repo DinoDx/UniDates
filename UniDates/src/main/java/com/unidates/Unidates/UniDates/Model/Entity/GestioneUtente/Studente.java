@@ -15,12 +15,7 @@ import java.util.List;
 
 @Entity
 public class Studente extends Utente{
-
-
     private boolean isBanned;
-
-    @OneToOne(mappedBy = "studente",cascade = CascadeType.REMOVE)
-    private Moderatore moderatore;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "profilo_id", referencedColumnName = "id")

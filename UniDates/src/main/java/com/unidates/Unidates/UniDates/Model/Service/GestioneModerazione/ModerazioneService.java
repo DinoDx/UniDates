@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Service.GestioneModerazione;
+package com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;

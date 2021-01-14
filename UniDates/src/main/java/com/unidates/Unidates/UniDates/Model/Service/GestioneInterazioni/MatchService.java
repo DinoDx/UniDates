@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Service.GestioneInterazioni;
+package com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;

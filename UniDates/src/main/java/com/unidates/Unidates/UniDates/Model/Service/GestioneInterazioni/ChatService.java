@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Service.GestioneInterazioni;
+package com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni;
 
 import com.unidates.Unidates.UniDates.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Exception.MatchNotFoundException;

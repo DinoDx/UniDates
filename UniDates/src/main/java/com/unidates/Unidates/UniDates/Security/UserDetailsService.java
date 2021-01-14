@@ -2,7 +2,8 @@ package com.unidates.Unidates.UniDates.Security;
 
 import com.unidates.Unidates.UniDates.Exception.NotConfirmedAccountException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.StudenteRepository;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
+import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.UtenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,22 +18,17 @@ import javax.servlet.http.HttpSession;
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     @Autowired
-    private StudenteRepository studenteRepository;
+    private UtenteRepository utenteRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Studente utente = studenteRepository.findByEmail(email);
+        Utente utente = utenteRepository.findByEmail(email);
 
-        if(utente == null){
+        if(utente == null)
             throw new UsernameNotFoundException(email);
-        }
-        if (utente.isActive()){
-            ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-            HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
-            httpSession.setAttribute("utente", utente);
 
-            return User.withUsername(utente.getEmail()).password(utente.getPassword()).roles(utente.getRuolo().toString()).build();
-        }
+        else if (utente.isActive()) return User.withUsername(utente.getEmail()).password(utente.getPassword()).roles(utente.getRuolo().toString()).build();
+
         else throw new NotConfirmedAccountException();
     }
 }

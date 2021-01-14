@@ -11,9 +11,6 @@ import javax.persistence.OneToOne;
 @Entity
 public class CommunityManager extends Moderatore {
 
-    @OneToOne
-    @JoinColumn(name = "studente_id", referencedColumnName = "id")
-    private Studente studente;
 
     public CommunityManager(){
     }
@@ -23,11 +20,4 @@ public class CommunityManager extends Moderatore {
         setRuolo(Ruolo.COMMUNITY_MANAGER);
     }
 
-    public Studente getStudente() {
-        return studente;
-    }
-
-    public void setStudente(Studente studente) {
-        this.studente = studente;
-    }
 }

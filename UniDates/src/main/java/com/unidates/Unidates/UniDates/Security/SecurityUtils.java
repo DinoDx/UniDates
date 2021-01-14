@@ -1,23 +1,29 @@
 package com.unidates.Unidates.UniDates.Security;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
 import com.vaadin.flow.server.ServletHelper;
 import com.vaadin.flow.shared.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Stream;
 
-public final class SecurityUtils {
+@Component
+public class SecurityUtils {
+
+
     @Autowired
     private static UtenteService utenteService;
 
-    public SecurityUtils() {
+    public SecurityUtils(UtenteService utenteService) {
+        this.utenteService = utenteService;
     }
 
     static boolean isFrameworkInternalRequest(HttpServletRequest request){
@@ -35,13 +41,13 @@ public final class SecurityUtils {
     }
 
     public static Utente getLoggedIn() {
-        Object p = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(p instanceof UserDetails) {
-            Utente utente =  utenteService.trovaUtente(((UserDetails) p).getUsername());
-            return utente;
+        Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Utente utente;
+        if(o instanceof UserDetails) {
+            utente = utenteService.trovaUtente(((UserDetails) o).getUsername());
         } else {
-            Utente utente =  utenteService.trovaUtente(p.toString());
-            return utente;
+            utente = utenteService.trovaUtente(o.toString());
         }
+        return utente;
     }
 }

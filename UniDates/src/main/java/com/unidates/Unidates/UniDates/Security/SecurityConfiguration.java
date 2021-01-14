@@ -27,11 +27,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .requestCache().requestCache(new CustomRequestCache())
-                .and().authorizeRequests()
-                .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
-                .anyRequest().authenticated()
-                .and().formLogin()
-                .loginPage(LOGIN_URL).permitAll()
+                .and().authorizeRequests().requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
+
+                .antMatchers("/api/**").authenticated()
+                .anyRequest().permitAll()
+
+                .and().formLogin().loginPage(LOGIN_URL).permitAll()
                 .loginProcessingUrl(LOGIN_PROCESSING_URL)
                 .failureUrl(LOGIN_FAILURE_URL)
                 .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL);
@@ -51,8 +52,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(
                 "/api/UserManager/registrationConfirm",
                 "/VAADIN/**",
-                "/registrazione",
-                "/registrazione_due",
                 "/favicon.ico",
                 "/robots.txt",
                 "/manifest.webmanifest",

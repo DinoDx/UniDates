@@ -14,7 +14,6 @@ public class Moderatore extends Studente {
     @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
     private Collection<Ammonimento> ammonimentoInviati;
 
-
     @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
     private Collection<Segnalazione> segnalazioneRicevute;
 
@@ -23,10 +22,10 @@ public class Moderatore extends Studente {
 
     public Moderatore(String email, String password) {
         super(email, password);
-        this.setRuolo(Ruolo.MODERATORE);
+        setRuolo(Ruolo.MODERATORE);
+        setActive(true);
         ammonimentoInviati = new ArrayList<Ammonimento>();
         segnalazioneRicevute = new ArrayList<Segnalazione>();
-        this.setActive(true);
     }
 
     public Collection<Ammonimento> getAmmonimentiInviati() {
