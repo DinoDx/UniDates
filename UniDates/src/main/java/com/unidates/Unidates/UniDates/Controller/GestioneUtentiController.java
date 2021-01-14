@@ -119,7 +119,8 @@ public class GestioneUtentiController {
                 if(p.getSesso() == Sesso.UOMO || p.getSesso() == Sesso.DONNA || p.getSesso() == Sesso.ALTRO){
                     if(p.getInteressi() == Interessi.UOMINI || p.getInteressi() == Interessi.DONNE || p.getInteressi() == Interessi.ENTRAMBI || p.getInteressi() == Interessi.ALTRO){
                         // Controlli su colore occhi e capelli
-                        if(!p.getHobbyList().contains(null)) return true;
+                        //if(!p.getHobbyList().contains(null))
+                        return true;
                     }
                 }
             }

@@ -11,10 +11,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -63,117 +61,6 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
 
     Studente da_registrare = (Studente) httpSession.getAttribute("utente_reg");
 
-/*
-    public Registrazione_due() {
-
-        httpSession.removeAttribute("utente_reg");
-
-        setId("registrazione_2");
-
-        HorizontalLayout buttons = new HorizontalLayout();
-
-        layout = new FormLayout();
-        layout.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("15em",1),
-                new FormLayout.ResponsiveStep("30em",2),
-                new FormLayout.ResponsiveStep("40em",3)
-        );
-
-        città = new TextField("Città");
-        città.setPlaceholder("Città dove vivi");
-
-        luogo = new TextField("Luogo di nascita");
-        luogo.setPlaceholder("Città di nascita");
-
-        capelli.setLabel("Capelli");
-        capelli.setPlaceholder("Colore capelli");
-        Colori_Capelli [] colore_cap = Colori_Capelli.values();
-        capelli.setItems(colore_cap[0].toString(),colore_cap[1].toString(),colore_cap[2].toString(),colore_cap[3].toString(),colore_cap[4].toString(),colore_cap[5].toString(),colore_cap[6].toString());
-
-        occhi.setLabel("Occhi");
-        occhi.setPlaceholder("Colore occhi");
-        Colore_Occhi [] colore_occhi = Colore_Occhi.values();
-        occhi.setItems(colore_occhi[0].toString(),colore_occhi[1].toString(),colore_occhi[2].toString(),colore_occhi[3].toString(),colore_occhi[4].toString(),colore_occhi[5].toString(),colore_occhi[6].toString());
-
-        MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
-        multiselectComboBox.setWidth("100%");
-        multiselectComboBox.setLabel("Seleziona Topic");
-        multiselectComboBox.setPlaceholder("Scelti...");
-        Hobby [] topic = Hobby.values();
-        List<String> topiclist = new ArrayList<String>();
-        for(Hobby h : topic) topiclist.add(h.toString());
-        multiselectComboBox.setItems(topiclist);
-
-        altezza = new NumberField("Altezza (cm)");
-        altezza.setHasControls(true);
-        altezza.setStep(1);
-        altezza.setMin(150.00);
-
-        interessi.setLabel("Interessi");
-        Interessi [] interess = Interessi.values();
-        interessi.setItems(interess[0].toString(),interess[1].toString(),interess[2].toString(),interess[3].toString());
-        Div value = new Div();
-        value.setText("Selezione un opzione");
-        interessi.addValueChangeListener(event -> value.setText("Hai selezionato: "+interessi.getValue()));
-
-
-        image = new MemoryBuffer();
-        Upload upload = new Upload(image);
-        upload.setMaxFiles(1);
-        upload.setDropLabel(new Label("Caricare un immagine che non supera la dimensione 512x384 pixel "));
-        upload.setAcceptedFileTypes("image/jpg");
-        upload.setMaxFiles(600000);
-        Div output = new Div();
-        upload.addSucceededListener(event -> {
-            vedere il metodo per far visualzzare l'immagine caricata
-        });
-
-
-        confirm = new Button("Conferma",buttonClickEvent -> {
-            //Sessione
-            Profilo profilo = da_registrare.getProfilo();
-            profilo.setResidenza(città.getValue());
-            profilo.setLuogoNascita(luogo.getValue());
-            profilo.setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
-            profilo.setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
-            profilo.setAltezza(altezza.getValue());
-            profilo.setInteressi(Interessi.valueOf(interessi.getValue()));
-            //hobby
-            ArrayList<Hobby> hobby = new ArrayList<Hobby>();
-            for(String s : multiselectComboBox.getValue()) hobby.add(Hobby.valueOf(s));
-            profilo.setHobbyList(hobby);
-            //image
-
-            gestioneUtentiController.registrazioneStudente(da_registrare, profilo);
-        });
-        anchor = new Anchor("/login");
-        anchor.add(confirm);
-
-        Button reset = new Button("Reset",buttonClickEvent -> {
-            città.setValue("");
-            luogo.setValue("");
-            capelli.setValue("");
-            occhi.setValue("");
-            altezza.setValue(null);
-            interessi.setValue(null);
-            multiselectComboBox.setValue(null);
-            //reset image
-        });
-
-        confirm.setId("conferma");
-        reset.setId("reset");
-        buttons.setId("bottoni");
-        buttons.add(anchor,reset);
-
-        layout.add(città,luogo,capelli,occhi,altezza,multiselectComboBox,interessi,value,upload);
-        layout.setColspan(multiselectComboBox,3);
-
-        add(layout,buttons);
-
-    }
-*/
-
-
     private Select<String> interessi = new Select<>();
     private TextField nome;
     private TextField residenza;
@@ -204,6 +91,16 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
         verticals.setId("layouts-vertical");
         VerticalLayout sinistra = new VerticalLayout(primo());
         VerticalLayout destra = new VerticalLayout(secondo());
+
+        HorizontalLayout topics = new HorizontalLayout();
+        multiselectComboBox.setLabel("Seleziona Topic");
+        multiselectComboBox.setPlaceholder("Scelti...");
+        Hobby [] topic = Hobby.values();
+        List<String> topiclist = new ArrayList<String>();
+        for(Hobby h : topic) topiclist.add(h.toString());
+        multiselectComboBox.setItems(topiclist);
+
+        topics.add(multiselectComboBox);
 
         verticals.add(sinistra,destra);
 
@@ -265,24 +162,42 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
                             Profilo profilo = new Profilo();
                             profilo.setListaFoto(foto);
                             profilo.setResidenza(residenza.getValue());
+                            profilo.setNome(nome.getValue());
+                            profilo.setCognome(cognome.getValue());
                             profilo.setLuogoNascita(luogo_di_nascita.getValue());
                             profilo.setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
                             profilo.setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
                             profilo.setAltezza(altezza.getValue());
+                            profilo.setDataDiNascita(picker.getValue());
+                            profilo.setSesso(Sesso.valueOf(sessi.getValue()));
                             profilo.setInteressi(Interessi.valueOf(interessi.getValue()));
                             //hobby
                             ArrayList<Hobby> hobby = new ArrayList<Hobby>();
                             for (String s : multiselectComboBox.getValue()) hobby.add(Hobby.valueOf(s));
                             profilo.setHobbyList(hobby);
                             gestioneUtentiController.registrazioneStudente(da_registrare, profilo, VaadinServletRequest.getCurrent());
-                            UI.getCurrent().navigate("login");
+
+                             //NOTIFICA DI SUCCESSO REGISTRAZIONE
+                            Notification successo_registrazione = new Notification();
+                            successo_registrazione.setPosition(Notification.Position.MIDDLE);
+                            H5 notifica = new H5("La registrazione è andata a buon fine. Confermare l'email di validazione prima di accedere al sistama");
+                            Button ricevuto = new Button("OK");
+                            ricevuto.addClickListener(buttonClickEvent1 -> {
+                                UI.getCurrent().navigate("login");
+                                successo_registrazione.close();
+                            });
+                            VerticalLayout successo_registrazione_layout = new VerticalLayout();
+                            successo_registrazione_layout.setAlignItems(Alignment.CENTER);
+                            successo_registrazione_layout.add(notifica,ricevuto);
+                            successo_registrazione.add(successo_registrazione_layout);
+                            successo_registrazione.open();
                         }
         });
 
         H2 titolo = new H2("Inserisci i dati del profilo!");
         titolo.setId("titolo-registrazione");
 
-        padre.add(titolo,verticals,checkbox,conferma);
+        padre.add(titolo,verticals,topics,checkbox,conferma);
         add(padre);
     }
 
@@ -309,13 +224,6 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
     public VerticalLayout secondo(){
         VerticalLayout destra = new VerticalLayout();
         destra.setId("layout-destra");
-
-        multiselectComboBox.setLabel("Seleziona Topic");
-        multiselectComboBox.setPlaceholder("Scelti...");
-        Hobby [] topic = Hobby.values();
-        List<String> topiclist = new ArrayList<String>();
-        for(Hobby h : topic) topiclist.add(h.toString());
-        multiselectComboBox.setItems(topiclist);
 
         interessi.setLabel("Interessi");
         Interessi [] interess = Interessi.values();
@@ -353,7 +261,7 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
             }
         });
 
-        destra.add(interessi,capelli,occhi,altezza,multiselectComboBox,upload,output);
+        destra.add(interessi,capelli,occhi,altezza,upload,output);
         return destra;
     }
 
