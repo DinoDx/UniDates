@@ -50,8 +50,7 @@ public class homeTest extends VerticalLayout {
     GestioneModerazioneController gestioneModerazioneController;
 
     public homeTest() {
-        Utente utente = SecurityUtils.getLoggedIn(); // Come prendere l'utente attualmente loggato
-
+        Utente utente = SecurityUtils.getLoggedIn();  // Come prendere l'utente attualmente loggato
         TextField email = new TextField("Email");
         TextField email2 = new TextField("Email2");
         TextField password = new TextField("Password");

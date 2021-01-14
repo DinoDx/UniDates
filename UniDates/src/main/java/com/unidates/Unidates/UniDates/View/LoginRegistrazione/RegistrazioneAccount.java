@@ -8,7 +8,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
@@ -36,35 +35,30 @@ public class RegistrazioneAccount extends VerticalLayout {
     private PasswordField conferma_password;
 
     private RegistrazioneAccount(){
+        setSizeFull();
         setId("Layout-registazione");
-        Div principale = new Div(form());
-        principale.setId("Div-principale");
+        Div formRegistraizioneAccount = createFormRegistrazioneAccount();
+        formRegistraizioneAccount.setId("Div-principale");
         setAlignItems(Alignment.CENTER);
-        add(principale);
+        add(formRegistraizioneAccount);
     }
 
-    public Div form(){
-        Div registazione = new Div();
-        VerticalLayout campi = new VerticalLayout();
-        campi.setAlignItems(Alignment.CENTER);
+    public Div createFormRegistrazioneAccount(){
+        Div formRegistrazione = new Div();
 
-        //Vertical fields
-        email = new EmailField();
-        email.setPlaceholder("Inserisci email universitaria");
-        email.setLabel("E-mail Universitaria");
+        VerticalLayout formFields = createFormFields();
+        HorizontalLayout buttons = createFormButtons();
+        formFields.add(buttons);
 
-        password = new PasswordField();
-        password.setLabel("Password");
-        password.setPlaceholder("Inserisci la password");
+        H2 titolo = new H2("Inserisci i dati del tuo account!");
+        titolo.setId("titolo-registrazione");
+        formRegistrazione.add(titolo,formFields);
+        return formRegistrazione;
+    }
 
-
-
-        conferma_password = new PasswordField();
-        conferma_password.setLabel("Conferma Password");
-        conferma_password.setPlaceholder("Conferma password inserita");
-
-        //Horizontal Buttons
+    private HorizontalLayout createFormButtons() {
         HorizontalLayout buttons = new HorizontalLayout();
+
         Button reset = new Button("Reset",buttonClickEvent -> {
             email.setValue("");
             password.setValue("");
@@ -72,39 +66,54 @@ public class RegistrazioneAccount extends VerticalLayout {
         });
 
         //MESSAGGIO DI ERRORE
-        Dialog dialog = new Dialog();
-        dialog.add(new Text("Le password non corrispondono, riprova!"));
-        dialog.setWidth("200px");
-        dialog.setHeight("150px");
+        Dialog passwordNotMatchDialog = new Dialog();
+        passwordNotMatchDialog.setCloseOnOutsideClick(false);
+        passwordNotMatchDialog.add(new Text("Le password non corrispondono, riprova!"));
+        passwordNotMatchDialog.setWidth("200px");
+        passwordNotMatchDialog.setHeight("150px");
 
         Button prosegui = new Button("Continua con la registrazione",buttonClickEvent -> {
-            //Sessione
-            String prima_password = password.getValue();
-            String seconda_password = conferma_password.getValue();
 
-            if(email.isEmpty()){
-                Notification errore_email = new Notification("Inserire una email valida!",1000, Notification.Position.MIDDLE);
-                errore_email.open();
+            if(email.isEmpty() || !email.getValue().matches("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"))
+                new Notification("Inserire una email valida!",1000, Notification.Position.MIDDLE).open();
+            else if( password.isEmpty() || conferma_password.isEmpty() || !password.getValue().equals(conferma_password.getValue()) || !password.getValue().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")){
+                passwordNotMatchDialog.open();
             }
-            else if(prima_password.equals(seconda_password) && (!prima_password.isEmpty() || !seconda_password.isEmpty())) {
+            else {
                 Studente studente = new Studente(email.getValue(), password.getValue());
                 httpSession.setAttribute("utente_reg", studente);
                 UI.getCurrent().navigate("registrazione_due");
             }
-                else if((prima_password.isEmpty() && seconda_password.isEmpty()) || !prima_password.equals(seconda_password)){
-                    dialog.open();
-                }
-                    else{
-                        dialog.open();
-                    }
-
         });
-        buttons.add(prosegui,reset);
-        campi.add(email,password,conferma_password,buttons);
 
-        H2 titolo = new H2("Inserisci i dati del tuo account!");
-        titolo.setId("titolo-registrazione");
-        registazione.add(titolo,campi);
-        return registazione;
+        buttons.add(prosegui,reset);
+        return buttons;
+    }
+
+    private VerticalLayout createFormFields() {
+        VerticalLayout formFields = new VerticalLayout();
+        email = new EmailField();
+        email.setPlaceholder("Inserisci email universitaria");
+        email.setLabel("E-mail Universitaria");
+
+        password = new PasswordField();
+        password.setLabel("Password(*):");
+        password.addFocusListener(event -> {
+            Dialog passwordInfoDialog = new Dialog();
+            passwordInfoDialog.setCloseOnOutsideClick(true);
+            passwordInfoDialog.add(new Text("(*)La password deve avere un minimo di 8 caratteri, un numero ed un carattere speciale"));
+            passwordInfoDialog.setWidth("200px");
+            passwordInfoDialog.setHeight("200px");
+            passwordInfoDialog.open();
+            event.unregisterListener();
+        });
+        password.setPlaceholder("Inserisci una password");
+
+        conferma_password = new PasswordField();
+        conferma_password.setLabel("Conferma Password:");
+        conferma_password.setPlaceholder("Conferma password inserita");
+
+        formFields.add(email,password,conferma_password);
+        return formFields;
     }
 }

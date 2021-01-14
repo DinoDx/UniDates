@@ -17,10 +17,7 @@ import java.util.logging.Logger;
 
 @Component
 
-public class ConfigureUIServiceInitListener implements VaadinServiceInitListener {
-
-
-    Logger logger = Logger.getLogger("global");
+public class ConfigureUIServiceInitListener implements VaadinServiceInitListener{
     @Override
     public void serviceInit(ServiceInitEvent event) {
         event.getSource().addUIInitListener(uiEvent -> {

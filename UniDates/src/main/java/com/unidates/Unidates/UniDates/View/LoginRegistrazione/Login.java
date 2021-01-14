@@ -2,6 +2,7 @@ package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 
 
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -23,48 +24,53 @@ import com.vaadin.flow.router.*;
 @CssImport("./styles/views/registrazione/login.css")
 public class Login extends VerticalLayout implements BeforeEnterListener {
 
-    private Anchor link;
-    private LoginForm login = new LoginForm();
+
+    private LoginForm loginForm = new LoginForm();
 
     public Login() {
-
-        //NOTIFICA RECUPERO PASSWORD
-        Notification recupero = new Notification();
-        recupero.setPosition(Notification.Position.MIDDLE);
-
-        EmailField emailField = new EmailField("Email");
-        emailField.getStyle().set("margin-left","2em");
-
-        Button recupero_password = new Button("Recupera password");
-        recupero_password.getStyle().set("margin-top","1em");
-        recupero_password.getStyle().set("margin-left","2.7em");
-
-        Button annulla_recupero = new Button("Annulla");
-        annulla_recupero.addClickListener(buttonClickEvent -> {recupero.close();});
-        annulla_recupero.getStyle().set("margin-left","5em");
-
-        recupero.add(new H3("Recupera la tua password!"),emailField,recupero_password,annulla_recupero);
-
-        //DIV DI LOGIN
         addClassName("login-view");
         setId("login-view");
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
-        login.setI18n(createLoginI18n());
-        login.setId("login");
-        login.setAction("login");
-        login.addForgotPasswordListener(event -> recupero.open());
-        //login.addForgotPasswordListener();
-        link = new Anchor("/registrazione" );
+        loginForm.setI18n(createLoginI18n());
+        loginForm.setId("login");
+        loginForm.setAction("login");
+        loginForm.addForgotPasswordListener(event ->createRecuperoPassword().open());
+
+        add(new H1("Accedi a Unidates"), loginForm,createLinkToRegister());
+    }
+
+    private Anchor createLinkToRegister() {
+        Anchor link = new Anchor("/registrazione" );
         Button registrati = new Button("Clicca qui per registrarti !");
         registrati.setId("pulsante-registrati");
         link.add(registrati);
         link.setId("link");
-        add(new H1("Accedi a Unidates"), login,link);
+
+        return link;
     }
 
+    private Notification createRecuperoPassword(){
+        Notification notificaRecuperoPassword = new Notification();
+        notificaRecuperoPassword.setPosition(Notification.Position.MIDDLE);
 
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setAlignItems(Alignment.CENTER);
+
+        Button recupero_password = new Button("Recupera password");
+        recupero_password.addClickListener(buttonClickEvent -> {
+
+        } );
+
+        Button annulla_recupero = new Button("Annulla");
+        annulla_recupero.addClickListener(buttonClickEvent -> notificaRecuperoPassword.close());
+
+        verticalLayout.add(new H3("Recupera la tua password!"),new EmailField("Email"),recupero_password,annulla_recupero);
+        notificaRecuperoPassword.add(verticalLayout);
+
+        return notificaRecuperoPassword;
+    }
     private LoginI18n createLoginI18n(){
         LoginI18n i18n = LoginI18n.createDefault();
         i18n.getForm().setUsername("Email");
@@ -85,7 +91,7 @@ public class Login extends VerticalLayout implements BeforeEnterListener {
             .getQueryParameters()
             .getParameters()
             .containsKey("error")){
-            login.setError(true);
+            loginForm.setError(true);
         }
     }
 }
