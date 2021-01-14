@@ -23,6 +23,8 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
+import com.vaadin.flow.dom.DomEvent;
+import com.vaadin.flow.dom.DomEventListener;
 import com.vaadin.flow.internal.MessageDigestUtil;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -44,6 +46,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -117,8 +121,8 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
                         Notification cognome_errore = new Notification("Inserisci il campo Cognome",3000, Notification.Position.MIDDLE);
                         cognome_errore.open();
                     }
-                    else if(picker.isEmpty()){
-                        Notification picker_errore = new Notification("Inserisci il campo Data di nascita",3000, Notification.Position.MIDDLE);
+                    else if(picker.isEmpty() || !checkMaggiorenne(picker.getValue())){
+                        Notification picker_errore = new Notification("Devi essere maggiorenne per registrarti",3000, Notification.Position.MIDDLE);
                         picker_errore.open();
                     }
                     else if(luogo_di_nascita.isEmpty()){
@@ -201,6 +205,10 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
         add(padre);
     }
 
+    private boolean checkMaggiorenne(LocalDate value) {
+       return Period.between(value,LocalDate.now()).getYears() >= 18;
+    }
+
     public VerticalLayout primo(){
         VerticalLayout sinistra = new VerticalLayout();
         sinistra.setId("layout-sinistra");
@@ -245,17 +253,34 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
         altezza.setMin(150.00);
 
         image = new MemoryBuffer();
+        Span dropIcon = new Span("Inserisci una foto profilo!");
         Upload upload = new Upload(image);
+        upload.setDropLabel(dropIcon);
         upload.setMaxFiles(1);
         Div output = new Div();
         output.getStyle().set("max-width","20px");
         output.getStyle().set("max-heght","20px");
         upload.addSucceededListener(event -> {
             try{
-                foto.add(new Foto(image.getInputStream().readAllBytes()));
+                Foto toadd = new Foto(image.getInputStream().readAllBytes());
+                foto.add(toadd);
                 Component component = createComponent(event.getMIMEType(),event.getFileName(),image.getInputStream());
+                HtmlComponent p = new HtmlComponent(Tag.P);
+                p.getElement().setText(event.getFileName());
+                upload.getElement().addEventListener("file-remove", new DomEventListener() {
+                    @Override
+                    public void handleEvent(DomEvent domEvent) {
+                        component.setVisible(false);
+                        p.setVisible(false);
+                        foto.remove(toadd);
+                        System.out.println(foto.size());
+
+                    }
+                });
                 component.setId("component");
-                showOutput(event.getFileName(), component, output); ///where is this defined???
+                output.add(p);
+                output.add(component);
+                //showOutput(event.getFileName(), component, output); ///where is this defined???
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -279,12 +304,9 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
             Image image = new Image();
             try {
                 byte[] bytes = IOUtils.toByteArray(stream);
-                image.getElement().setAttribute("src", new StreamResource(
-                        fileName, () -> new ByteArrayInputStream(bytes)));
-                try (ImageInputStream in = ImageIO.createImageInputStream(
-                        new ByteArrayInputStream(bytes))) {
-                    final Iterator<ImageReader> readers = ImageIO
-                            .getImageReaders(in);
+                image.getElement().setAttribute("src", new StreamResource(fileName, () -> new ByteArrayInputStream(bytes)));
+                try (ImageInputStream in = ImageIO.createImageInputStream(new ByteArrayInputStream(bytes))) {
+                    final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
                     if (readers.hasNext()) {
                         ImageReader reader = readers.next();
                         try {
@@ -303,8 +325,7 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
             return image;
         }
         Div content = new Div();
-        String text = String.format("Mime type: '%s'\nSHA-256 hash: '%s'",
-                mimeType, MessageDigestUtil.sha256(stream.toString()));
+        String text = String.format("Mime type: '%s'\nSHA-256 hash: '%s'", mimeType, MessageDigestUtil.sha256(stream.toString()));
         content.setText(text);
         return content;
 

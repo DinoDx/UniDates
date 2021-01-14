@@ -30,7 +30,7 @@ public class RegistrazioneAccount extends VerticalLayout {
 
     ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
     HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
-    
+
     private EmailField email;
     private PasswordField password;
     private PasswordField conferma_password;
