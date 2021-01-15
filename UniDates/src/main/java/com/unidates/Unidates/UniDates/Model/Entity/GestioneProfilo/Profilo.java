@@ -25,7 +25,8 @@ public class Profilo implements Serializable {
     private Studente studente;
 
     @OneToMany(mappedBy = "profilo", cascade = {CascadeType.MERGE, CascadeType.REMOVE,CascadeType.PERSIST})
-    private Collection<Foto> listaFoto;
+    private List<Foto> listaFoto;
+
 
     private String nome, cognome, luogoNascita, residenza;
     private LocalDate dataDiNascita;
@@ -36,7 +37,7 @@ public class Profilo implements Serializable {
     private Colore_Occhi colore_occhi;
 
     @ElementCollection
-    private Collection<Hobby> hobbyList;
+    private List<Hobby> hobbyList;
 
 
     public Profilo() {
@@ -44,7 +45,7 @@ public class Profilo implements Serializable {
     }
 
 
-    public Profilo(String nome, String cognome, String luogoNascita, String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso, Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi, Collection<Hobby> hobbyList) {
+    public Profilo(String nome, String cognome, String luogoNascita, String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso, Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi, List<Hobby> hobbyList) {
 
 
         this.nome = nome;
@@ -142,13 +143,6 @@ public class Profilo implements Serializable {
         this.colore_occhi = colore_occhi;
     }
 
-    public Collection<Hobby> getHobbyList() {
-        return hobbyList;
-    }
-
-    public void setHobbyList(Collection<Hobby> hobbyList) {
-        this.hobbyList = hobbyList;
-    }
 
     public void setId(Long id) { this.id = id; }
 
@@ -156,9 +150,22 @@ public class Profilo implements Serializable {
 
     public void setStudente(Studente studente) { this.studente = studente; }
 
-    public Collection<Foto> getListaFoto() { return listaFoto; }
-
-    public void setListaFoto(Collection<Foto> listaFoto) { this.listaFoto = listaFoto; }
-
     public void addFoto(Foto foto) { listaFoto.add(foto); }
+
+    public List<Foto> getListaFoto() {
+        return listaFoto;
+    }
+
+    public void setListaFoto(List<Foto> listaFoto) {
+        this.listaFoto = listaFoto;
+    }
+
+    public List<Hobby> getHobbyList() {
+        return hobbyList;
+    }
+
+    public void setHobbyList(List<Hobby> hobbyList) {
+        this.hobbyList = hobbyList;
+    }
+
 }

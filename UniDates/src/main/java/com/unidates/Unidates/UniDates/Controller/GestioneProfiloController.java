@@ -4,6 +4,7 @@ import com.unidates.Unidates.UniDates.Enum.Interessi;
 import com.unidates.Unidates.UniDates.Enum.Sesso;
 import com.unidates.Unidates.UniDates.Exception.InvalidModifyFormatException;
 import com.unidates.Unidates.UniDates.Exception.InvalidPhotoException;
+import com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
@@ -35,13 +36,13 @@ public class GestioneProfiloController {
     public void eliminaFoto(Foto f){
         profiloService.eliminaFoto(f);
     }
+    
 
     @RequestMapping("/eliminaProfile")
     public void eliminaProfilo(Profilo p, String password){
-      //  String toEncrypt = passwordEncoder.encode(password); controllo della password non possibile, encoder presenta diversi risultati, da fixare
-      //  if (toEncrypt.equals(p.getStudente().getPassword()))
+        if (passwordEncoder.matches(password, p.getStudente().getPassword()))
             profiloService.eliminaProfilo(p, password);
-     //   else throw new PasswordMissmatchException();
+        else throw new PasswordMissmatchException();
     }
 
     @RequestMapping("/modificaProfile")

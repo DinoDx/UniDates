@@ -93,6 +93,7 @@ public class homeTest extends VerticalLayout {
         });
 
         Button trovaUtente = new Button("Trova utente", buttonClickEvent -> System.out.println(gestioneUtentiController.trovaUtente(email.getValue()).getEmail()));
+
         Button removeUtente = new Button("Rimuovi utente", buttonClickEvent -> {
            gestioneProfiloController.eliminaProfilo(trovaStudente(email.getValue()).getProfilo(), password.getValue());
         });

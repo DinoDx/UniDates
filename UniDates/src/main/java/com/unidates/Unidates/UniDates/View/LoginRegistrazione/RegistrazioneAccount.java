@@ -49,7 +49,8 @@ public class RegistrazioneAccount extends VerticalLayout {
         VerticalLayout formFields = createFormFields();
         HorizontalLayout buttons = createFormButtons();
         formFields.add(buttons);
-
+        buttons.setAlignItems(Alignment.CENTER);
+        formFields.setAlignItems(Alignment.CENTER);
         H2 titolo = new H2("Inserisci i dati del tuo account!");
         titolo.setId("titolo-registrazione");
         formRegistrazione.add(titolo,formFields);
@@ -58,7 +59,6 @@ public class RegistrazioneAccount extends VerticalLayout {
 
     private HorizontalLayout createFormButtons() {
         HorizontalLayout buttons = new HorizontalLayout();
-
         Button reset = new Button("Reset",buttonClickEvent -> {
             email.setValue("");
             password.setValue("");
@@ -66,18 +66,20 @@ public class RegistrazioneAccount extends VerticalLayout {
         });
 
         //MESSAGGIO DI ERRORE
-        Dialog passwordNotMatchDialog = new Dialog();
-        passwordNotMatchDialog.setCloseOnOutsideClick(false);
-        passwordNotMatchDialog.add(new Text("Le password non corrispondono, riprova!"));
-        passwordNotMatchDialog.setWidth("200px");
-        passwordNotMatchDialog.setHeight("150px");
 
         Button prosegui = new Button("Continua con la registrazione",buttonClickEvent -> {
 
             if(email.isEmpty() || !email.getValue().matches("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"))
                 new Notification("Inserire una email valida!",1000, Notification.Position.MIDDLE).open();
-            else if( password.isEmpty() || conferma_password.isEmpty() || !password.getValue().equals(conferma_password.getValue()) || !password.getValue().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")){
-                passwordNotMatchDialog.open();
+
+            else if(password.isEmpty() || conferma_password.isEmpty()){
+                new Notification("Inserire una password!",1000, Notification.Position.MIDDLE).open();
+            }
+            else if(!password.getValue().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")){
+                new Notification("La password inserita non rispetta il formato. \n Inserire una password con un minimo di 8 caratteri, una lettera e un numero!",5000, Notification.Position.MIDDLE).open();
+            }
+            else if(!password.getValue().equals(conferma_password.getValue())){
+                new Notification("Le password non corrispondono!",2000, Notification.Position.MIDDLE).open();
             }
             else {
                 Studente studente = new Studente(email.getValue(), password.getValue());
@@ -99,12 +101,7 @@ public class RegistrazioneAccount extends VerticalLayout {
         password = new PasswordField();
         password.setLabel("Password(*):");
         password.addFocusListener(event -> {
-            Dialog passwordInfoDialog = new Dialog();
-            passwordInfoDialog.setCloseOnOutsideClick(true);
-            passwordInfoDialog.add(new Text("(*)La password deve avere un minimo di 8 caratteri, un numero ed un carattere speciale"));
-            passwordInfoDialog.setWidth("200px");
-            passwordInfoDialog.setHeight("200px");
-            passwordInfoDialog.open();
+            new Notification("Inserire una password con un minimo di 8 caratteri, una lettera e un numero.",5000, Notification.Position.MIDDLE).open();
             event.unregisterListener();
         });
         password.setPlaceholder("Inserisci una password");

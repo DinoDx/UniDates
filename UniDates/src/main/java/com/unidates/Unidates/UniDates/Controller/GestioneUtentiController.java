@@ -46,7 +46,7 @@ public class GestioneUtentiController {
 
     @RequestMapping("/registrazioneModeratore")
     public void registrazioneModeratore(Moderatore m, Profilo p )  {
-        if(checkStudente(m) && checkProfilo(p)) {
+        if(checkStudente(m) && checkProfilo(p)) { // per il moderatore e il cm non viene inviata alcuna mail di registrazione
             if(!utenteService.isPresent(m))
                 utenteService.registrazioneModeratore(m, p);
             else throw new AlreadyExistUserException();
@@ -83,8 +83,7 @@ public class GestioneUtentiController {
 
 
     @GetMapping("/registrationConfirm")
-    public String confermaRegistrazione(WebRequest request, @RequestParam("token") String token) {
-        Locale locale = request.getLocale();
+    public String confermaRegistrazione(@RequestParam("token") String token) {
 
         VerificationToken verificationToken = utenteService.getVerificationToken(token);
         System.out.println(token);
