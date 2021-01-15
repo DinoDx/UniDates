@@ -1,5 +1,6 @@
 package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
+import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
@@ -60,6 +61,9 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
     @Autowired
     GestioneUtentiController gestioneUtentiController;
 
+    @Autowired
+    GestioneProfiloController gestioneProfiloController;
+
     ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
     HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
 
@@ -80,7 +84,7 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
     private Checkbox checkbox;
     private MemoryBuffer image;
     private ArrayList<Foto> foto = new ArrayList<Foto>();
-
+    private Foto toadd;
 
     public RegistrazioneProfilo(){
         httpSession.removeAttribute("utente_reg");
@@ -163,22 +167,11 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
                         dati_errore.open();
                     }
                         else {
-                            Profilo profilo = new Profilo();
-                            profilo.setListaFoto(foto);
-                            profilo.setResidenza(residenza.getValue());
-                            profilo.setNome(nome.getValue());
-                            profilo.setCognome(cognome.getValue());
-                            profilo.setLuogoNascita(luogo_di_nascita.getValue());
-                            profilo.setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
-                            profilo.setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
-                            profilo.setAltezza(altezza.getValue());
-                            profilo.setDataDiNascita(picker.getValue());
-                            profilo.setSesso(Sesso.valueOf(sessi.getValue()));
-                            profilo.setInteressi(Interessi.valueOf(interessi.getValue()));
-                            //hobby
-                            ArrayList<Hobby> hobby = new ArrayList<Hobby>();
-                            for (String s : multiselectComboBox.getValue()) hobby.add(Hobby.valueOf(s));
-                            profilo.setHobbyList(hobby);
+                        ArrayList<Hobby> hobby = new ArrayList<Hobby>();
+                        for (String s : multiselectComboBox.getValue()) hobby.add(Hobby.valueOf(s));
+                            Profilo profilo = new Profilo(nome.getValue(),cognome.getValue(),luogo_di_nascita.getValue(),residenza.getValue(),picker.getValue(), altezza.getValue(),Sesso.valueOf(sessi.getValue()),Interessi.valueOf(interessi.getValue()),Colori_Capelli.valueOf(capelli.getValue()),Colore_Occhi.valueOf(occhi.getValue()),hobby);
+                            profilo.addFoto(toadd);
+
                             gestioneUtentiController.registrazioneStudente(da_registrare, profilo, VaadinServletRequest.getCurrent());
 
                              //NOTIFICA DI SUCCESSO REGISTRAZIONE
@@ -262,8 +255,8 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
         output.getStyle().set("max-heght","20px");
         upload.addSucceededListener(event -> {
             try{
-                Foto toadd = new Foto(image.getInputStream().readAllBytes());
-                foto.add(toadd);
+                toadd = new Foto(image.getInputStream().readAllBytes());
+
                 Component component = createComponent(event.getMIMEType(),event.getFileName(),image.getInputStream());
                 HtmlComponent p = new HtmlComponent(Tag.P);
                 p.getElement().setText(event.getFileName());
@@ -272,8 +265,7 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
                     public void handleEvent(DomEvent domEvent) {
                         component.setVisible(false);
                         p.setVisible(false);
-                        foto.remove(toadd);
-                        System.out.println(foto.size());
+                        toadd = null;
 
                     }
                 });

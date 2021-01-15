@@ -10,7 +10,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class Ammonimento_Notifica extends Div {
 
-    public Ammonimento_Notifica(){
+    public Ammonimento_Notifica(Notifica notifica){
         HorizontalLayout internal_layout = new HorizontalLayout();
         internal_layout.setAlignItems(FlexComponent.Alignment.CENTER);
         internal_layout.setWidth("300px");

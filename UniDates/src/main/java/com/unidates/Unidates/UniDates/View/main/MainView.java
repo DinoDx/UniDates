@@ -4,6 +4,9 @@ import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.Tipo_Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
+import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.View.component.Ammonimento_Notifica;
 import com.unidates.Unidates.UniDates.View.component.Notifica_Component;
 import com.unidates.Unidates.UniDates.View.component_home_page.Home;
@@ -32,12 +35,15 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.server.StreamResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @JsModule("./styles/shared-styles.js")
@@ -45,7 +51,6 @@ import java.util.Optional;
 @PWA(name = "My Project", shortName = "My Project", enableInstallPrompt = false)
 public class MainView extends AppLayout {
 
-    private final Tabs menu;
     private H1 viewTitle;
     TextField filter = new TextField();
 
@@ -53,8 +58,6 @@ public class MainView extends AppLayout {
         this.gestioneUtentiController = gestioneUtentiController;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
-        menu = createMenu();
-        addToDrawer(createDrawerContent(menu));
     }
 
     @Autowired
@@ -63,10 +66,25 @@ public class MainView extends AppLayout {
     private Component createHeaderContent() {
         configureFilter();
 
+        Utente utente = SecurityUtils.getLoggedIn();
+        Studente studente = (Studente) utente;
+        utente.getListNotifica().add(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.MATCH,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg")))));
+        utente.getListNotifica().add(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.AMMONIMENTO,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg")))));
+        utente.getListNotifica().add(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.MATCH,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg")))));
+
         MenuBar menuBar = new MenuBar();
         menuBar.setId("profile-img");
-        MenuItem profile = menuBar.addItem("");
-        profile.addComponentAsFirst(new Image("images/user.svg",""));
+        StreamResource resource = new StreamResource("fotoprofilo",()-> new ByteArrayInputStream(studente.getProfilo().getListaFoto().get(0).getImg()));
+        Image image = new Image(resource,"");
+        image.setHeight("90px");
+        image.setWidth("90px");
+
+        menuBar.setHeight("90px");
+        menuBar.setWidth("90px");
+        MenuItem profile = menuBar.addItem(image);
+
+        //profile.addComponentAsFirst(image);
+
         profile.getSubMenu().addItem(new Anchor("/logout","Logout"));
         profile.getSubMenu().addItem(new Anchor("/profilo-personale","Profilo Personale"));
 
@@ -75,8 +93,15 @@ public class MainView extends AppLayout {
         MenuItem notifiche = notification.addItem("");
         notifiche.addComponentAsFirst(new Icon(VaadinIcon.BELL));
 
-        notifiche.getSubMenu().addItem(new Notifica_Component(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.MATCH,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg"))))));
-        notifiche.getSubMenu().addItem(new Ammonimento_Notifica());
+        for(Notifica n : utente.getListNotifica()){
+            if(n.getTipo_notifica().equals(Tipo_Notifica.MATCH))
+                notifiche.getSubMenu().addItem(new Notifica_Component(n));
+            else
+                notifiche.getSubMenu().addItem(new Ammonimento_Notifica(n));
+        }
+
+        //notifiche.getSubMenu().addItem(new Notifica_Component(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.MATCH,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg"))))));
+        //notifiche.getSubMenu().addItem(new Ammonimento_Notifica());
 
 
         Button chats = new Button(new Icon(VaadinIcon.PAPERPLANE_O));
@@ -84,14 +109,15 @@ public class MainView extends AppLayout {
         anchor.add(chats);
         anchor.setId("aereo");
 
-        DrawerToggle toggle = new DrawerToggle();
+
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
         layout.getThemeList().set("dark", true);
         layout.setWidthFull();
+        layout.setHeight("100px");
         layout.setSpacing(false);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
-        layout.add(toggle);
+
         viewTitle = new H1("UniDates");
         layout.add(viewTitle);
         layout.add(filter);
@@ -145,7 +171,7 @@ public class MainView extends AppLayout {
         return tab;
     }
 
-    @Override
+/*    @Override
     protected void afterNavigation() {
         super.afterNavigation();
         getTabForComponent(getContent()).ifPresent(menu::setSelectedTab);
@@ -159,7 +185,7 @@ public class MainView extends AppLayout {
 
     private String getCurrentPageTitle() {
         return getContent().getClass().getAnnotation(PageTitle.class).value();
-    }
+  } */
 
     private byte[] downloadUrl(String stringDownload) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
