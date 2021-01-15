@@ -41,13 +41,10 @@ public class Profilo implements Serializable {
 
 
     public Profilo() {
-
     }
 
 
     public Profilo(String nome, String cognome, String luogoNascita, String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso, Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi, List<Hobby> hobbyList) {
-
-
         this.nome = nome;
         this.cognome = cognome;
         this.luogoNascita = luogoNascita;
@@ -59,6 +56,7 @@ public class Profilo implements Serializable {
         this.colori_capelli = colori_capelli;
         this.colore_occhi = colore_occhi;
         this.hobbyList = hobbyList;
+        this.listaFoto = new ArrayList<Foto>();
     }
 
     public Long getId() { return id; }
@@ -150,7 +148,10 @@ public class Profilo implements Serializable {
 
     public void setStudente(Studente studente) { this.studente = studente; }
 
-    public void addFoto(Foto foto) { listaFoto.add(foto); }
+    public void addFoto(Foto foto) {
+        foto.setProfilo(this);
+        listaFoto.add(foto);
+    }
 
     public List<Foto> getListaFoto() {
         return listaFoto;

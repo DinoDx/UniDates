@@ -8,6 +8,8 @@ import com.unidates.Unidates.UniDates.Model.Repository.GestioneProfilo.ProfiloRe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProfiloService {
 
@@ -25,10 +27,13 @@ public class ProfiloService {
         profiloRepository.save(profilo);
     }
 
+    public void aggiungiFotoProfilo(Profilo profilo, Foto foto){
+        profilo.getListaFoto().add(0, foto);
+        profiloRepository.save(profilo);
+    }
     public void aggiungiFoto(Profilo profilo, Foto foto){
-
-        foto.setProfilo(profilo);
-        fotoRepository.save(foto);
+        profilo.addFoto(foto);
+        profiloRepository.save(profilo);
     }
 
     public void eliminaFoto(Foto foto){

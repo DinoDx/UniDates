@@ -41,11 +41,11 @@ public class Foto  {
 
     public Profilo getProfilo() {
         return profilo;
-    }
+         }
 
     public void setProfilo(Profilo profilo) {
-        this.profilo = profilo;
-    }
+       this.profilo = profilo;
+        }
 
     public byte[] getImg() {
         return img;

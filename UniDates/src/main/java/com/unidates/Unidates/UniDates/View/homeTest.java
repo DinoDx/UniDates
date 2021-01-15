@@ -6,6 +6,7 @@ import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
@@ -29,6 +30,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 @Route("")
@@ -60,7 +62,9 @@ public class homeTest extends VerticalLayout {
 
         Button aggiungiUtente = new Button("Aggiungi utente", buttonClickEvent -> {
             Studente userTest = new Studente(email.getValue(), password.getValue());
+
             Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new ArrayList<Hobby>());
+            profilo.addFoto(new Foto(new byte[]{(byte)0xe0}));
             gestioneUtentiController.registrazioneStudente(userTest, profilo, VaadinServletRequest.getCurrent());
         });
 
@@ -107,9 +111,10 @@ public class homeTest extends VerticalLayout {
         });*/
 
         Button aggiungiFoto = new Button("Aggiungi Foto", buttonClickEvent -> {
-          //  gestioneProfiloController.aggiungiFoto(trovaStudente(email.getValue()).getProfilo(),new Foto("Url prova " ));
-           // for(Foto f : gestioneProfiloController.visualizzaProfilo(trovaStudente(email.getValue())).getListaFoto())
-              //  System.out.println(f.getUrl());
+            byte[] img = new byte[] {(byte)0xe0};
+           gestioneProfiloController.aggiungiFoto(trovaStudente(email.getValue()).getProfilo(),new Foto(img));
+            for(Foto f : gestioneProfiloController.visualizzaProfilo(trovaStudente(email.getValue())).getListaFoto())
+                System.out.println(f.toString());
         });
 
 
@@ -117,7 +122,8 @@ public class homeTest extends VerticalLayout {
 
        Button aggiungiModeratore = new Button("Aggiungi moderatore", buttonClickEvent -> {
             Moderatore moderatore = new Moderatore(email.getValue(), password.getValue());
-
+           ArrayList<Foto> fotoArrayList = new ArrayList<Foto>();
+           fotoArrayList.add(new Foto(new byte[]{(byte)0xe0}));
            Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new ArrayList<Hobby>());
 
            gestioneUtentiController.registrazioneModeratore(moderatore, profilo);
@@ -127,7 +133,8 @@ public class homeTest extends VerticalLayout {
 
         Button aggiungiCM = new Button("aggiungiCM", buttonClickEvent -> {
             CommunityManager cm = new CommunityManager(email.getValue(), password.getValue());
-
+            ArrayList<Foto> fotoArrayList = new ArrayList<Foto>();
+            fotoArrayList.add(new Foto(new byte[]{(byte)0xe0}));
             Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new ArrayList<Hobby>());
 
             gestioneUtentiController.registrazioneCommunityManager(cm, profilo);

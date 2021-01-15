@@ -36,7 +36,13 @@ public class GestioneProfiloController {
     public void eliminaFoto(Foto f){
         profiloService.eliminaFoto(f);
     }
-    
+
+    @RequestMapping("/aggiungifotoProfilo")
+    public void aggiungiFotoProfilo(Profilo p, Foto f){
+        if(checkFoto(f))
+            profiloService.aggiungiFotoProfilo(p,f);
+        else throw new InvalidPhotoException();
+    }
 
     @RequestMapping("/eliminaProfile")
     public void eliminaProfilo(Profilo p, String password){
