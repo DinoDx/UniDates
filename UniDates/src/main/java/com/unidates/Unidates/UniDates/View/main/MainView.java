@@ -6,12 +6,14 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.View.component.Ammonimento_Notifica;
 import com.unidates.Unidates.UniDates.View.component.Notifica_Component;
 import com.unidates.Unidates.UniDates.View.component_home_page.Home;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -24,6 +26,7 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -36,7 +39,10 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.server.VaadinServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.addons.searchbox.SearchBox;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -63,6 +69,9 @@ public class MainView extends AppLayout {
     @Autowired
     GestioneUtentiController gestioneUtentiController;
 
+    @Autowired
+    UtenteService utenteService;
+
     private Component createHeaderContent() {
         configureFilter();
 
@@ -72,19 +81,24 @@ public class MainView extends AppLayout {
         utente.getListNotifica().add(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.AMMONIMENTO,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg")))));
         utente.getListNotifica().add(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.MATCH,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg")))));
 
+
+
         MenuBar menuBar = new MenuBar();
         menuBar.setId("profile-img");
         StreamResource resource = new StreamResource("fotoprofilo",()-> new ByteArrayInputStream(studente.getProfilo().getListaFoto().get(0).getImg()));
         Image image = new Image(resource,"");
-        image.setHeight("90px");
-        image.setWidth("90px");
+        image.setWidth("30px");
+        image.setHeight("30px");
 
-        menuBar.setHeight("90px");
-        menuBar.setWidth("90px");
-        MenuItem profile = menuBar.addItem(image);
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.add(image);
+        horizontalLayout.add("  ciao " + studente.getProfilo().getNome());
 
-        //profile.addComponentAsFirst(image);
 
+        MenuItem profile = menuBar.addItem("");
+        profile.addComponentAsFirst(new Icon(VaadinIcon.USER));
+
+        profile.getSubMenu().addItem(horizontalLayout);
         profile.getSubMenu().addItem(new Anchor("/logout","Logout"));
         profile.getSubMenu().addItem(new Anchor("/profilo-personale","Profilo Personale"));
 
@@ -100,9 +114,9 @@ public class MainView extends AppLayout {
                 notifiche.getSubMenu().addItem(new Ammonimento_Notifica(n));
         }
 
-        //notifiche.getSubMenu().addItem(new Notifica_Component(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.MATCH,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg"))))));
-        //notifiche.getSubMenu().addItem(new Ammonimento_Notifica());
 
+        SearchBox searchBox = new SearchBox("Ricerca", SearchBox.ButtonPosition.RIGHT);
+        searchBox.addSearchListener(e -> Notification.show(e.getSearchTerm()));
 
         Button chats = new Button(new Icon(VaadinIcon.PAPERPLANE_O));
         Anchor anchor = new Anchor("/chat");
@@ -132,7 +146,14 @@ public class MainView extends AppLayout {
         filter.setClearButtonVisible(true);
         filter.setAutofocus(true);
         filter.setValueChangeMode(ValueChangeMode.LAZY);
-        //addValueChanegeLinstner (e->updateList()
+        filter.addKeyPressListener(Key.ENTER, e -> {
+            if(utenteService.isPresent(gestioneUtentiController.trovaUtente(filter.getValue()))){
+                UI.getCurrent().navigate("/ricercaprofilo?email=filter.getValue()");
+            }
+
+            //VaadinServletRequest.getCurrent().getHttpServletRequest().getParameter("");
+        });
+
     }
 
     private Component createDrawerContent(Tabs menu) {

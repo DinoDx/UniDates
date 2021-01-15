@@ -50,13 +50,12 @@ vaadin-tab[selected] {
   color: var(--lumo-primary-text-color);
 }
 #profile-img{
-  border-radius: 100%;
-  height: 2.5em;
+  height: auto;
   width: auto;
   margin-left: auto;
   margin-right: var(--lumo-space-m);
   overflow: hidden;
-  background-color: var(--lumo-contrast);
+  align-items: center;
 }
 
 #ricerca{
