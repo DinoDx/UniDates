@@ -15,7 +15,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -26,7 +25,6 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -35,30 +33,23 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.server.VaadinServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.addons.searchbox.SearchBox;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Optional;
-
 @JsModule("./styles/shared-styles.js")
 @CssImport("./styles/views/main/main-view.css")
 @PWA(name = "My Project", shortName = "My Project", enableInstallPrompt = false)
 public class MainView extends AppLayout {
 
     private H1 viewTitle;
-    TextField filter = new TextField();
 
     public MainView(GestioneUtentiController gestioneUtentiController) {
         this.gestioneUtentiController = gestioneUtentiController;
@@ -73,7 +64,6 @@ public class MainView extends AppLayout {
     UtenteService utenteService;
 
     private Component createHeaderContent() {
-        configureFilter();
 
         Utente utente = SecurityUtils.getLoggedIn();
         Studente studente = (Studente) utente;
@@ -114,10 +104,6 @@ public class MainView extends AppLayout {
                 notifiche.getSubMenu().addItem(new Ammonimento_Notifica(n));
         }
 
-
-        SearchBox searchBox = new SearchBox("Ricerca", SearchBox.ButtonPosition.RIGHT);
-        searchBox.addSearchListener(e -> Notification.show(e.getSearchTerm()));
-
         Button chats = new Button(new Icon(VaadinIcon.PAPERPLANE_O));
         Anchor anchor = new Anchor("/chat");
         anchor.add(chats);
@@ -125,6 +111,7 @@ public class MainView extends AppLayout {
 
 
         HorizontalLayout layout = new HorizontalLayout();
+        layout.setSpacing(false);
         layout.setId("header");
         layout.getThemeList().set("dark", true);
         layout.setWidthFull();
@@ -134,25 +121,31 @@ public class MainView extends AppLayout {
 
         viewTitle = new H1("UniDates");
         layout.add(viewTitle);
-        layout.add(filter);
+        layout.add(SearchFilter());
         layout.add(menuBar,notification);
         layout.add(anchor);
         return layout;
     }
 
-    private void configureFilter() {
-        filter.setId("ricerca");
-        filter.setPlaceholder("Ricerca Studente...");
-        filter.setClearButtonVisible(true);
-        filter.setAutofocus(true);
-        filter.setValueChangeMode(ValueChangeMode.LAZY);
-        filter.addKeyPressListener(Key.ENTER, e -> {
-            if(utenteService.isPresent(gestioneUtentiController.trovaUtente(filter.getValue()))){
+    private HorizontalLayout SearchFilter() {
+       HorizontalLayout SearchBox = new HorizontalLayout();
+       SearchBox.setAlignItems(FlexComponent.Alignment.CENTER);
+       SearchBox.setSpacing(false);
+
+       //componenti ricerca
+       TextField searchField = new TextField();
+       searchField.setPlaceholder("Inserisci email dell'utente da cercare");
+       Button searchIcon = new Button(new Icon(VaadinIcon.SEARCH));
+       //searchIcon.addClickListener();
+       SearchBox.add(searchField,searchIcon);
+       return SearchBox;
+        /*filter.addKeyPressListener(Key.ENTER, e -> {
+           if(utenteService.isPresent(gestioneUtentiController.trovaUtente(filter.getValue()))){
                 UI.getCurrent().navigate("/ricercaprofilo?email=filter.getValue()");
             }
 
             //VaadinServletRequest.getCurrent().getHttpServletRequest().getParameter("");
-        });
+        });*/
 
     }
 
