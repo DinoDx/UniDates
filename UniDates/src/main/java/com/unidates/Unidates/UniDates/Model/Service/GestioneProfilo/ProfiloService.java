@@ -22,20 +22,20 @@ public class ProfiloService {
     public void eliminaProfilo(Profilo profilo, String password){
         profiloRepository.deleteById(profilo.getId());
     }
-
     public void modificaProfilo(Profilo profilo, String password){
         profiloRepository.save(profilo);
     }
 
-    public void aggiungiFotoProfilo(Profilo profilo, Foto foto){
+    public void setFotoProfilo(Profilo profilo, Foto foto){ //non si sa se funziona
+        profilo.getListaFoto().remove(foto);
         profilo.getListaFoto().add(0, foto);
         profiloRepository.save(profilo);
     }
-    public void aggiungiFoto(Profilo profilo, Foto foto){
-        profilo.addFoto(foto);
-        profiloRepository.save(profilo);
-    }
 
+    public void aggiungiFoto(Profilo profilo, Foto foto){
+       foto.setProfilo(profilo);
+       fotoRepository.save(foto);
+    }
     public void eliminaFoto(Foto foto){
         fotoRepository.delete(foto);
     }

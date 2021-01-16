@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class ModerazioneService {
@@ -44,26 +45,26 @@ public class ModerazioneService {
         ammonimentiRepository.save(a);
     }
 
-    public void inviaSospensione(Sospensione sospensione,Studente studente){
-        sospensione.setStudente(studente);
-        sospendiStudente(studente);
-        sospensioniRepository.save(sospensione);
+    public void inviaSospensione(Sospensione sp,Studente s){
+        sp.setStudente(s);
+        sospendiStudente(s);
+        sospensioniRepository.save(sp);
     }
 
-    public Collection<Segnalazione> visualizzaSegnalazioniRicevute(Moderatore moderatore) {
-        return moderatore.getSegnalazioniRicevute();
+    public List<Segnalazione> visualizzaSegnalazioniRicevute(Moderatore moderatore) {
+        return moderatore.getSegnalazioneRicevute();
     }
 
-    public Collection<Ammonimento> visualizzaAmmonimentiInviati(Moderatore moderatore) {
-        return moderatore.getAmmonimentiInviati();
+    public List<Ammonimento> visualizzaAmmonimentiInviati(Moderatore moderatore) {
+        return moderatore.getAmmonimentoInviati();
     }
 
 
-    public Collection<Ammonimento> visualizzaAmmonimentiRicevuti(Studente studente) {
+    public List<Ammonimento> visualizzaAmmonimentiRicevuti(Studente studente) {
         return studente.getListAmmonimenti();
     }
 
-    public Collection<Sospensione> visualizzaSospensioni(Studente studente) {
+    public List<Sospensione> visualizzaSospensioni(Studente studente) {
         return studente.getListSospensioni();
     }
 

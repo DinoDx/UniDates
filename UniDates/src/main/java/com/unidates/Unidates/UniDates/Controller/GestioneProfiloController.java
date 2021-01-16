@@ -39,9 +39,7 @@ public class GestioneProfiloController {
 
     @RequestMapping("/aggiungifotoProfilo")
     public void aggiungiFotoProfilo(Profilo p, Foto f){
-        if(checkFoto(f))
-            profiloService.aggiungiFotoProfilo(p,f);
-        else throw new InvalidPhotoException();
+        profiloService.setFotoProfilo(p, f);
     }
 
     @RequestMapping("/eliminaProfile")

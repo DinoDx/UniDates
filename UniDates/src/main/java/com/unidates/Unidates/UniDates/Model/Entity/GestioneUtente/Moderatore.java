@@ -7,15 +7,16 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazi
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class Moderatore extends Studente {
 
     @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
-    private Collection<Ammonimento> ammonimentoInviati;
+    private List<Ammonimento> ammonimentoInviati;
 
     @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
-    private Collection<Segnalazione> segnalazioneRicevute;
+    private List<Segnalazione> segnalazioneRicevute;
 
     public Moderatore(){
     }
@@ -28,22 +29,21 @@ public class Moderatore extends Studente {
         segnalazioneRicevute = new ArrayList<Segnalazione>();
     }
 
-    public Collection<Ammonimento> getAmmonimentiInviati() {
+    public List<Ammonimento> getAmmonimentoInviati() {
         return ammonimentoInviati;
     }
 
-    public void setAmmonimentiInviati(Collection<Ammonimento> ammonimentoInviati) {
+    public void setAmmonimentoInviati(List<Ammonimento> ammonimentoInviati) {
         this.ammonimentoInviati = ammonimentoInviati;
     }
 
-    public Collection<Segnalazione> getSegnalazioniRicevute() {
+    public List<Segnalazione> getSegnalazioneRicevute() {
         return segnalazioneRicevute;
     }
 
-    public void setSegnalazioniRicevute(Collection<Segnalazione> segnalazioneRicevute) {
+    public void setSegnalazioneRicevute(List<Segnalazione> segnalazioneRicevute) {
         this.segnalazioneRicevute = segnalazioneRicevute;
     }
-
 
     public void addSegnalazione(Segnalazione segnalazione){
         segnalazioneRicevute.add(segnalazione);

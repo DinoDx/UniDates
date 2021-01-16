@@ -19,6 +19,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -104,6 +105,10 @@ public class GestioneUtentiController {
         return "Utente confermato";
     }
 
+    @RequestMapping("/findAll")
+    public List<Utente> findAll(){
+        return utenteService.findAll();
+    }
 
     public boolean checkEmail(String email){
         if (email != null && email.matches("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"))

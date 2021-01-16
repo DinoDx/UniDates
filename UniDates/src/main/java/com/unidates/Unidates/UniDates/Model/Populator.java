@@ -6,6 +6,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni.MatchService;
 import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
 import com.unidates.Unidates.UniDates.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class Populator implements ApplicationRunner {
      */
     @Autowired
     private UtenteService utenteService;
+
+    @Autowired
+    private MatchService matchService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -62,6 +66,11 @@ public class Populator implements ApplicationRunner {
         utenteService.registrazioneStudente(s1, p1);
         utenteService.registrazioneStudente(s2, p2);
         utenteService.registrazioneStudente(s3, p3);
+
+        matchService.aggiungiMatch(s1, s2);
+        matchService.aggiungiMatch(s2, s1);
+        matchService.aggiungiMatch(s1, s3);
+        matchService.aggiungiMatch(s3, s1);
 
         //Aggiungo un moderatore
         Moderatore m1 = new Moderatore("moderatore@gmail.com", "moderatore");

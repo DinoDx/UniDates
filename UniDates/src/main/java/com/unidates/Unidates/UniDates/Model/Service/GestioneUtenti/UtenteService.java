@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UtenteService {
 
@@ -100,6 +102,10 @@ public class UtenteService {
 
     public void salvaUtenteRegistrato(Utente utente) {
         utenteRepository.save(utente);
+    }
+
+    public List<Utente> findAll() {
+        return utenteRepository.findAll();
     }
 }
 

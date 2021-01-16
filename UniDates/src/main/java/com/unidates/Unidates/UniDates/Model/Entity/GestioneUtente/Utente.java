@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "Utente")
@@ -25,13 +26,13 @@ public abstract class Utente implements Serializable {
 
 
     @OneToMany(mappedBy = "utente", cascade = CascadeType.REMOVE)
-    private Collection<Notifica> listNotifica;
+    private List<Notifica> listNotifica;
 
     @OneToMany(mappedBy = "mittente",cascade = CascadeType.REMOVE)
-    private Collection<Chat> mittente;
+    private List<Chat> mittente;
 
     @OneToMany(mappedBy = "destinatario", cascade = CascadeType.REMOVE)
-    private Collection<Chat> destinatario;
+    private List<Chat> destinatario;
 
 
     public Utente() {
@@ -76,33 +77,12 @@ public abstract class Utente implements Serializable {
         this.ruolo = ruolo;
     }
 
-
-    public Collection<Notifica> getListNotifica() {
+    public List<Notifica> getListNotifica() {
         return listNotifica;
     }
 
-    public void setListNotifica(Collection<Notifica> listNotifica) {
+    public void setListNotifica(List<Notifica> listNotifica) {
         this.listNotifica = listNotifica;
-    }
-
-    public void setMittente(ArrayList<Chat> chats) {
-        this.mittente = chats;
-    }
-
-    public Collection<Chat> getMittente() {
-        return mittente;
-    }
-
-    public void setMittente(Collection<Chat> mittente) {
-        this.mittente = mittente;
-    }
-
-    public Collection<Chat> getDestinatario() {
-        return destinatario;
-    }
-
-    public void setDestinatario(Collection<Chat> destinatario) {
-        this.destinatario = destinatario;
     }
 
     public boolean isActive() {
@@ -111,6 +91,22 @@ public abstract class Utente implements Serializable {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public List<Chat> getMittente() {
+        return mittente;
+    }
+
+    public void setMittente(List<Chat> mittente) {
+        this.mittente = mittente;
+    }
+
+    public List<Chat> getDestinatario() {
+        return destinatario;
+    }
+
+    public void setDestinatario(List<Chat> destinatario) {
+        this.destinatario = destinatario;
     }
 
     @Override

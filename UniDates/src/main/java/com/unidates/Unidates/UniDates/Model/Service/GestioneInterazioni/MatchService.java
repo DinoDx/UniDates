@@ -3,13 +3,17 @@ package com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneInterazioni.MatchRepository;
+import com.unidates.Unidates.UniDates.Model.Service.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class  MatchService {
-    @Autowired
 
+    @Autowired
+    private Publisher publisher;
+
+    @Autowired
     private MatchRepository matchRepository;
 
     public void aggiungiMatch(Studente invia, Studente riceve){
@@ -24,6 +28,7 @@ public class  MatchService {
             }
             else{
                 reverse.setLikeByStudent2(true);
+                publisher.publishMatch(riceve, invia);
                 matchRepository.save(reverse);
             }
         }

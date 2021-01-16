@@ -4,11 +4,13 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazi
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 
 @Entity
 @Table(name="Foto")
-public class Foto  {
+public class Foto implements Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -66,5 +68,24 @@ public class Foto  {
     public void addSegnalazione(Segnalazione segnalazione){
         segnalazioneRicevute.add(segnalazione);
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Foto)) {
+            return false;
+        }
+        // typecast o to Complex so that we can compare data members
+        Foto f = (Foto) o;
+        // Compare the data members and return accordingly
+        return this.getId().equals(f.getId()); // in questo caso controlliamo solo l'array di byte
+    }
+
 
 }

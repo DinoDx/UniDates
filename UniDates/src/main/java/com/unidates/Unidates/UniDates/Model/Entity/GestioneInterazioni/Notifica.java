@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "Notifica")
-public class Notifica implements Serializable {
+public class Notifica implements Serializable, Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -18,35 +18,34 @@ public class Notifica implements Serializable {
     @JoinColumn(name = "utente_id")
     private Utente utente;
 
+
+    private String emailToMatchWith;
+
+
     @OneToOne
     private Foto foto;
 
-    private String text;
+    private String testoNotifica;
 
     private Tipo_Notifica tipo_notifica;
 
     public Notifica() {
     }
 
-    public Notifica(Utente utente, String text , Tipo_Notifica tipo_notifica, Foto foto) {
+    public Notifica(Utente utente, String testoNotifica, Tipo_Notifica tipo_notifica, Foto foto) {
         this.foto = foto;
         this.utente = utente;
-        this.text = text;
+        this.testoNotifica = testoNotifica;
         this.tipo_notifica = tipo_notifica;
     }
 
-    public Notifica(String text) {
-        this.text = text;
+
+    public Long getId() {
+        return id;
     }
 
-    public Foto getFoto(){ return foto; }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Utente getUtente() {
@@ -55,6 +54,30 @@ public class Notifica implements Serializable {
 
     public void setUtente(Utente utente) {
         this.utente = utente;
+    }
+
+    public String getEmailToMatchWith() {
+        return emailToMatchWith;
+    }
+
+    public void setEmailToMatchWith(String toMatchWith) {
+        this.emailToMatchWith = toMatchWith;
+    }
+
+    public Foto getFoto() {
+        return foto;
+    }
+
+    public void setFoto(Foto foto) {
+        this.foto = foto;
+    }
+
+    public String getTestoNotifica() {
+        return testoNotifica;
+    }
+
+    public void setTestoNotifica(String testoNotifica) {
+        this.testoNotifica = testoNotifica;
     }
 
     public Tipo_Notifica getTipo_notifica() {

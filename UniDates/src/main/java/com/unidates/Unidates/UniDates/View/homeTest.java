@@ -14,6 +14,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
+import com.unidates.Unidates.UniDates.Model.Service.Publisher;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -30,11 +31,15 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 
 @Route("")
 public class homeTest extends VerticalLayout {
+
+    @Autowired
+    Publisher publisher;
 
     @Autowired
     UtenteService utenteService;
@@ -77,7 +82,7 @@ public class homeTest extends VerticalLayout {
         Button stampaListaBloccati = new Button("Stampa lista bloccati 1", buttonClickEvent -> {
             Studente trovato = (Studente) gestioneUtentiController.trovaUtente(email.getValue());
            for (Studente s: trovato.getListaBloccati())
-              System.out.println(s.toString());
+              System.out.println(s.getEmail());
         });
 
        /* Button aggiungiNotifica = new Button("Aggiungi notifica", buttonClickEvent -> {
@@ -114,9 +119,13 @@ public class homeTest extends VerticalLayout {
             byte[] img = new byte[] {(byte)0xe0};
            gestioneProfiloController.aggiungiFoto(trovaStudente(email.getValue()).getProfilo(),new Foto(img));
             for(Foto f : gestioneProfiloController.visualizzaProfilo(trovaStudente(email.getValue())).getListaFoto())
-                System.out.println(f.toString());
+                System.out.println(Arrays.toString(f.getImg()) + " " + gestioneProfiloController.visualizzaProfilo(trovaStudente(email.getValue())).getListaFoto().indexOf(f));
         });
-
+        Button aggiungiFotoProfilo = new Button("Aggiungi Foto Profilo", buttonClickEvent -> {
+            gestioneProfiloController.aggiungiFotoProfilo(gestioneProfiloController.visualizzaProfilo(trovaStudente(email.getValue())), gestioneProfiloController.visualizzaProfilo(trovaStudente(email.getValue())).getListaFoto().get(1));
+            for(Foto f : gestioneProfiloController.visualizzaProfilo(trovaStudente(email.getValue())).getListaFoto())
+                System.out.println(Arrays.toString(f.getImg()) + " " + gestioneProfiloController.visualizzaProfilo(trovaStudente(email.getValue())).getListaFoto().indexOf(f));
+        });
 
 
 
@@ -157,13 +166,7 @@ public class homeTest extends VerticalLayout {
         */
 
         Button aggiungiMatch1 = new Button("Aggiungi Match 1", buttonClickEvent ->{
-            gestioneInterazioniController.aggiungiMatch(trovaStudente(email.getValue()),trovaStudente(email.getValue()));
-
-            for (Match m : trovaStudente(email.getValue()).getListMatch())
-                System.out.println(m.toString());
-
-            for (Match m : trovaStudente(email2.getValue()).getListMatchRicevuti())
-                System.out.println(m.toString());
+            gestioneInterazioniController.aggiungiMatch(trovaStudente(email.getValue()),trovaStudente(email2.getValue()));
         });
 
 
@@ -179,6 +182,7 @@ public class homeTest extends VerticalLayout {
             });          // in questo caso la funzione stampa tutti i messaggi di tutte le chat che l'utente nel campo email, ha INIZIATO
 
         });
+
 
 
         add(email);
@@ -197,6 +201,7 @@ public class homeTest extends VerticalLayout {
         add(aggiungiModeratore);
         add(aggiungiCM);
         add(sendMessage);
+        add(aggiungiFotoProfilo);
         /*
         add(aggiungiNotifica);
         add(mostraNotifica);
