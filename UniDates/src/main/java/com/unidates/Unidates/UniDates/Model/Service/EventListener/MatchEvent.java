@@ -1,9 +1,7 @@
-package com.unidates.Unidates.UniDates.Model.Service;
+package com.unidates.Unidates.UniDates.Model.Service.EventListener;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import org.springframework.context.ApplicationEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 
 import java.util.logging.Logger;
 

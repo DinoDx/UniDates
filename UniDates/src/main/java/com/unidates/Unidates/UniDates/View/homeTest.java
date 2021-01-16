@@ -174,13 +174,14 @@ public class homeTest extends VerticalLayout {
             Messaggio toSend = new Messaggio();
             toSend.setTestoMessaggio(messaggio.getValue());
             gestioneInterazioniController.inviaMessaggio(trovaStudente(email.getValue()),trovaStudente(email2.getValue()),toSend);
-            Utente mittente = gestioneUtentiController.trovaUtente(email.getValue());
+
+            /* Utente mittente = gestioneUtentiController.trovaUtente(email.getValue());
             Utente destinatario = gestioneUtentiController.trovaUtente(email2.getValue());
 
             gestioneUtentiController.trovaUtente(email.getValue()).getMittente().forEach(chat -> { //.getMittente() tutte le chat che l'utente ha iniziato -- .getDestinatario() // tutte le chat che l'utente ha ricevuto
                 chat.getMessaggi().forEach(messaggio1 -> System.out.println(messaggio1.getTestoMessaggio()));
             });          // in questo caso la funzione stampa tutti i messaggi di tutte le chat che l'utente nel campo email, ha INIZIATO
-
+            */
         });
 
 

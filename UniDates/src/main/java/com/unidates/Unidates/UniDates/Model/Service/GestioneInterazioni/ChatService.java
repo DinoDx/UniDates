@@ -8,6 +8,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneInterazioni.ChatRepository;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneInterazioni.MessageRepository;
+import com.unidates.Unidates.UniDates.Model.Service.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,30 +18,46 @@ import java.util.List;
 @Service
 public class ChatService {
     @Autowired
+    Publisher publisher;
+    @Autowired
     private ChatRepository chatRepository;
     @Autowired
     private MessageRepository messageRepository;
     @Autowired
     private MatchService matchService;
 
-    public void inviaMessaggio(Utente mittente, Utente destinatario, Messaggio messaggio) throws MatchNotFoundException {
-        if (mittente.getRuolo() == Ruolo.STUDENTE && destinatario.getRuolo() == Ruolo.STUDENTE) {
+    public void creaMessaggio(Utente mittente, Utente destinatario, Messaggio messaggio) throws MatchNotFoundException {
+
+        messaggio.setEmailMittente(mittente.getEmail());
+        messaggio.setEmailDestinatario(destinatario.getEmail());
+
+        if (mittente.getRuolo() == Ruolo.STUDENTE && destinatario.getRuolo() == Ruolo.STUDENTE) { // se due studenti si contatano a vicenda
             if (matchService.isValidMatch((Studente) mittente, (Studente) destinatario)) {
-                if (!isPresent(mittente, destinatario)) {
-                    aggiungiChat(messaggio, mittente, destinatario);
-                } else {
-                    Chat founded = trovaChat(mittente, destinatario);
-                    messaggio.setChat(founded);
-                    messageRepository.save(messaggio);
-                }
+                inviaMessaggio(mittente, destinatario, messaggio);
             } else throw new MatchNotFoundException();
+        }
+        else  { // se un moderatore contatta uno studente o viceversa o due moderatori si contattano tra di loro
+            inviaMessaggio(mittente, destinatario, messaggio);
+        }
+    }
+
+    private void inviaMessaggio(Utente mittente, Utente destinatario, Messaggio messaggio) {
+        if (!isPresent(mittente, destinatario)) {
+            Chat created = creaChat(messaggio, mittente, destinatario);
+            messaggio.setChat(created);
+            messageRepository.save(messaggio);
+            publisher.publishMessage(messaggio);
+        } else {
+            Chat founded = trovaChat(mittente, destinatario);
+            messaggio.setChat(founded);
+            messageRepository.save(messaggio);
+            publisher.publishMessage(messaggio);
         }
     }
 
     public List<Chat> visualizzaArchivioChat(Utente u) {
-        List<Chat> archivio = (List<Chat>) u.getMittente();
+        List<Chat> archivio = u.getMittente();
         archivio.addAll(u.getDestinatario());
-
         return archivio;
     }
 
@@ -61,11 +78,10 @@ public class ChatService {
     }
 
 
-    private void aggiungiChat(Messaggio messaggio, Utente mittente, Utente destinatario) {
+    private Chat creaChat(Messaggio messaggio, Utente mittente, Utente destinatario) {
         Chat created = new Chat(mittente, destinatario, new ArrayList<Messaggio>());
         chatRepository.save(created);
-        messaggio.setChat(created);
-        messageRepository.save(messaggio);
+        return  created;
     }
 }
 

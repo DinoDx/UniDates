@@ -36,7 +36,7 @@ public class GestioneInterazioniController {
     @RequestMapping("/inviaMessaggio")
     public void inviaMessaggio(Utente mittente, Utente destinatario, Messaggio m){
         if(checkMessaggio(m))
-            chatService.inviaMessaggio(mittente, destinatario, m);
+            chatService.creaMessaggio(mittente, destinatario, m);
         else throw new InvalidMessageFormatException();
     }
 

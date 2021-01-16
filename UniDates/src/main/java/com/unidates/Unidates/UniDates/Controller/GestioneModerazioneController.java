@@ -31,7 +31,7 @@ public class GestioneModerazioneController {
         else throw new InvalidReportFormatException();
     }
 
-    @RequestMapping("/inviaAmmonimento")
+    @RequestMapping("/inviaAmmonimento") // non propriamente necessario
     public void inviaAmmonimento(Ammonimento a,Moderatore m, Studente s){
         if(checkAmmonimento(a))
             moderazioneService.inviaAmmonimento(a, s, m);
@@ -47,22 +47,22 @@ public class GestioneModerazioneController {
 
     @RequestMapping("/visualizzaAmmonimentiInviati")
     public List<Ammonimento> showAmmonimentiInviati(Moderatore m){
-        return (List<Ammonimento>) moderazioneService.visualizzaAmmonimentiInviati(m);
+        return  moderazioneService.visualizzaAmmonimentiInviati(m);
     }
 
     @RequestMapping("/visualizzaAmmonimentiRicevuti")
     public List<Ammonimento> showAmmonimentiRicevuti(Studente s){
-        return (List<Ammonimento>) moderazioneService.visualizzaAmmonimentiRicevuti(s);
+        return  moderazioneService.visualizzaAmmonimentiRicevuti(s);
     }
 
     @RequestMapping("/sospensioniUtente")
     public List<Sospensione> visualizzaSospensioni(Studente s){
-        return (List<Sospensione>) moderazioneService.visualizzaSospensioni(s);
+        return  moderazioneService.visualizzaSospensioni(s);
     }
 
     @RequestMapping("/visualizzaSegnalazioniRicevute")
     public List<Segnalazione> visualizzaSegnazioniRicevute(Moderatore m){
-        return (List<Segnalazione>) moderazioneService.visualizzaSegnalazioniRicevute(m);
+        return  moderazioneService.visualizzaSegnalazioniRicevute(m);
 
     }
 

@@ -51,25 +51,27 @@ public class MainView extends AppLayout {
 
     private H1 viewTitle;
 
-    public MainView(GestioneUtentiController gestioneUtentiController) {
-        this.gestioneUtentiController = gestioneUtentiController;
-        setPrimarySection(Section.DRAWER);
-        addToNavbar(true, createHeaderContent());
-    }
-
     @Autowired
     GestioneUtentiController gestioneUtentiController;
 
     @Autowired
     UtenteService utenteService;
 
+    public MainView(GestioneUtentiController gestioneUtentiController) {
+        this.gestioneUtentiController = gestioneUtentiController;
+        setPrimarySection(Section.DRAWER);
+        addToNavbar(true, createHeaderContent());
+    }
+
+
+
     private Component createHeaderContent() {
 
         Utente utente = SecurityUtils.getLoggedIn();
         Studente studente = (Studente) utente;
-        utente.getListNotifica().add(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.MATCH,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg")))));
-        utente.getListNotifica().add(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.AMMONIMENTO,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg")))));
-        utente.getListNotifica().add(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.MATCH,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg")))));
+        //utente.getListNotifica().add(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.MATCH,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg")))));
+        //utente.getListNotifica().add(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.AMMONIMENTO,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg")))));
+        //utente.getListNotifica().add(new Notifica(gestioneUtentiController.trovaUtente("studenteprova1@gmail.com"),"", Tipo_Notifica.MATCH,new Foto(downloadUrl(("https://randomuser.me/api/portraits/women/42.jpg")))));
 
 
 

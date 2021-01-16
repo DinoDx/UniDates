@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.View.component;
 
 
+import com.unidates.Unidates.UniDates.Enum.Tipo_Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.vaadin.flow.component.button.Button;
@@ -21,13 +22,19 @@ public class Notifica_Component extends Div {
 
     public Notifica_Component(Notifica notifica){
         VerticalLayout internal_card_due = new VerticalLayout();
-        H6 descrizione = new H6("Hai un match con");
-        Button avvia_chat = new Button("Avvia chat!",new Icon(VaadinIcon.FIRE));
-        internal_card_due.add(descrizione,avvia_chat);
+        H6 descrizione = new H6(notifica.getTestoNotifica());
+        internal_card_due.add(descrizione);
+        if(notifica.getTipo_notifica() == Tipo_Notifica.MATCH){
+            Button avvia_chat = new Button("Avvia chat!",new Icon(VaadinIcon.FIRE));
+            internal_card_due.add(avvia_chat);
+        }
+
+
 
         setSizeFull();
         setId("card-notifica");
         HorizontalLayout internal_card = new HorizontalLayout();
+
         internal_card.setWidth("300px");
         internal_card.setHeight("100px");
         internal_card.setAlignItems(FlexComponent.Alignment.CENTER);

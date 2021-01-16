@@ -15,12 +15,18 @@ public class Messaggio {
 
     private String testoMessaggio;
 
+    private String emailMittente;
+    private String emailDestinatario;
+
+
     public Messaggio() {
     }
 
-    public Messaggio(Chat chat, String testoMessaggio) {
+    public Messaggio(Chat chat, String testoMessaggio, String emailMittente, String emailDestinatario) {
         this.chat = chat;
         this.testoMessaggio = testoMessaggio;
+        this.emailMittente = emailMittente;
+        this.emailDestinatario = emailDestinatario;
     }
 
     public Long getId() {
@@ -46,4 +52,21 @@ public class Messaggio {
     public void setTestoMessaggio(String testoMessaggio) {
         this.testoMessaggio = testoMessaggio;
     }
+
+    public String getEmailMittente() {
+        return emailMittente;
+    }
+
+    public void setEmailMittente(String emailMittente) {
+        this.emailMittente = emailMittente;
+    }
+
+    public String getEmailDestinatario() {
+        return emailDestinatario;
+    }
+
+    public void setEmailDestinatario(String emailDestinatario) {
+        this.emailDestinatario = emailDestinatario;
+    }
+
 }

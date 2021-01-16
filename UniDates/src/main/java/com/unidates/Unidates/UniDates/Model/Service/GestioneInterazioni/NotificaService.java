@@ -2,6 +2,7 @@ package com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni;
 
 import com.unidates.Unidates.UniDates.Enum.Tipo_Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneInterazioni.NotificaRepository;
@@ -26,6 +27,7 @@ public class NotificaService {
                 studente1.getProfilo().getNome() + " hai un match con " + studente2.getProfilo().getNome() + "!",
                 Tipo_Notifica.MATCH,
                 studente2.getProfilo().getFotoProfilo()
+                //Data inserita nel costruttore
         );
         matchNotificaStudente1.setEmailToMatchWith(studente2.getEmail());
 
@@ -34,6 +36,7 @@ public class NotificaService {
                 studente2.getProfilo().getNome() + " hai un match con " + studente1.getProfilo().getNome() + "!",
                 Tipo_Notifica.MATCH,
                 studente1.getProfilo().getFotoProfilo()
+                //Data inserita nel costruttore
         );
         matchNotificaStudente2.setEmailToMatchWith(studente1.getEmail());
 
@@ -43,6 +46,23 @@ public class NotificaService {
         notificaRepository.save(matchNotificaStudente2);
 
         logger.info("Notifica di match pubblicata!");
+    }
+
+    public void genereateNotificaWarning(Studente studente1, Foto removedfoto){ //DA RICONTROLLARE PER MODERAZIONE
+        Notifica notificaWarning = new Notifica(
+                studente1,
+                studente1.getProfilo().getNome() + " la tua foto é stata rimossa per violazione dei termini di servizio. Hai ricevuto un ammonimento!",
+                Tipo_Notifica.AMMONIMENTO,
+                removedfoto
+        );
+
+
+        //logica di notifica ammonimento
+
+
+        notificaRepository.save(notificaWarning);
+        logger.info("Notifica di warning pubblicata!");
+
     }
 
     public List<Notifica> visualizzaNotifiche(Utente u){

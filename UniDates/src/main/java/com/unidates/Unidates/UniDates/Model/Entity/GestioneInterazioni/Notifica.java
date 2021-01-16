@@ -3,9 +3,11 @@ package com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni;
 import com.unidates.Unidates.UniDates.Enum.Tipo_Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
+import javassist.LoaderClassPath;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "Notifica")
@@ -29,6 +31,8 @@ public class Notifica implements Serializable, Cloneable {
 
     private Tipo_Notifica tipo_notifica;
 
+    private LocalDate creationTime;
+
     public Notifica() {
     }
 
@@ -37,7 +41,8 @@ public class Notifica implements Serializable, Cloneable {
         this.utente = utente;
         this.testoNotifica = testoNotifica;
         this.tipo_notifica = tipo_notifica;
-    }
+        this.creationTime = LocalDate.now();
+  }
 
 
     public Long getId() {
@@ -86,5 +91,13 @@ public class Notifica implements Serializable, Cloneable {
 
     public void setTipo_notifica(Tipo_Notifica tipo_notifica) {
         this.tipo_notifica = tipo_notifica;
+    }
+
+    public LocalDate getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(LocalDate creationTime) {
+        this.creationTime = creationTime;
     }
 }

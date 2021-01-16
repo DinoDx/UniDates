@@ -109,6 +109,7 @@ public abstract class Utente implements Serializable {
         this.destinatario = destinatario;
     }
 
+
     @Override
     public String toString() {
         return "Utente{" +
@@ -116,6 +117,7 @@ public abstract class Utente implements Serializable {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", ruolo=" + ruolo +
+                ", isActive=" + isActive +
                 ", listNotifica=" + listNotifica +
                 ", mittente=" + mittente +
                 ", destinatario=" + destinatario +
