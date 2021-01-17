@@ -78,7 +78,6 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
     private Select<String> capelli = new Select<>();
     private Select<String> occhi = new Select<>();
     private NumberField altezza;
-    private Anchor anchor;
     private RadioButtonGroup<String> sessi = new RadioButtonGroup<>();
     private MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
     private Checkbox checkbox;

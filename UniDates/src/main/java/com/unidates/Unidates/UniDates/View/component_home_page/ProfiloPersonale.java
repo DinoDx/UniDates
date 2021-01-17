@@ -42,6 +42,8 @@ import org.vaadin.gatanaso.MultiselectComboBox;
 
 import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 
 
@@ -56,19 +58,21 @@ public class ProfiloPersonale extends VerticalLayout {
     @Autowired
     GestioneProfiloController controller;
 
-    private Select<String> interessi = new Select<>();
-
     public ProfiloPersonale(GestioneProfiloController controller){
         this.controller = controller;
         VerticalLayout padre = new VerticalLayout();
 
         HorizontalLayout sotto_padre = new HorizontalLayout();
         VerticalLayout totale_info = new VerticalLayout();
-        totale_info.add(Info1());
+        totale_info.add(Info1(),Info2(),Info3(),Info4());
 
+        HorizontalLayout pulsanti = new HorizontalLayout();
+        pulsanti.add(Modifica(),Conferma(),CambiaPassword());
+        pulsanti.add(Pulsanti());
 
         sotto_padre.add(ImageUtente(),totale_info);
-        padre.add(NomeUtente(),sotto_padre);
+        padre.add(NomeUtente(),sotto_padre,pulsanti);
+        add(padre);
     }
 
     public HorizontalLayout NomeUtente(){
@@ -83,15 +87,18 @@ public class ProfiloPersonale extends VerticalLayout {
         VerticalLayout image = new VerticalLayout();
         StreamResource resource = new StreamResource("fotoprofilo",()-> new ByteArrayInputStream(studente.getProfilo().getListaFoto().get(0).getImg()));
         Image img = new Image(resource,"");
+        img.getStyle().set("width","100px");
+        img.getStyle().set("height","100px");
         image.add(img);
         return image;
     }
+
+
 
     public TextField nome = new TextField("Nome");
     public TextField cognome = new TextField("Cognome");
     public DatePicker compleanno = new DatePicker("Data di nascita");
     public EmailField email = new EmailField("Email");
-
     public HorizontalLayout Info1(){
         HorizontalLayout info1 = new HorizontalLayout();
         nome.setValue(profilo.getNome());
@@ -106,6 +113,149 @@ public class ProfiloPersonale extends VerticalLayout {
         return info1;
     }
 
+    public NumberField altezza = new NumberField("Altezza (cm)");
+    public TextField città = new TextField("Città");
+    private Select<String> interessi = new Select<>();
+    public TextField luogo_di_nascita = new TextField("Luogo di nascita");
+    public HorizontalLayout Info2 (){
+        HorizontalLayout info2 = new HorizontalLayout();
+        altezza.setValue(profilo.getAltezza());
+        altezza.setEnabled(false);
+        città.setValue(profilo.getResidenza());
+        città.setEnabled(false);
+        luogo_di_nascita.setValue(profilo.getLuogoNascita());
+        luogo_di_nascita.setEnabled(false);
+        interessi.setLabel("Interessi");
+        interessi.setValue(studente.getProfilo().getInteressi().toString());
+        Interessi [] interess = Interessi.values();
+        interessi.setItems(interess[0].toString(),interess[1].toString(),interess[2].toString(),interess[3].toString());
+        interessi.setEnabled(false);
+        info2.add(altezza,città,luogo_di_nascita,interessi);
+
+        return info2;
+    }
+
+
+    private Select<String> capelli = new Select<>();
+    private Select<String> occhi = new Select<>();
+    private MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
+    public HorizontalLayout Info3(){
+        HorizontalLayout info3 = new HorizontalLayout();
+
+        capelli.setLabel("Capelli");
+        capelli.setPlaceholder("Colore capelli");
+        Colori_Capelli [] colore_cap = Colori_Capelli.values();
+        capelli.setItems(colore_cap[0].toString(),colore_cap[1].toString(),colore_cap[2].toString(),colore_cap[3].toString(),colore_cap[4].toString(),colore_cap[5].toString(),colore_cap[6].toString());
+
+        occhi.setLabel("Occhi");
+        occhi.setPlaceholder("Colore occhi");
+        Colore_Occhi [] colore_occhi = Colore_Occhi.values();
+        occhi.setItems(colore_occhi[0].toString(),colore_occhi[1].toString(),colore_occhi[2].toString(),colore_occhi[3].toString(),colore_occhi[4].toString(),colore_occhi[5].toString(),colore_occhi[6].toString());
+
+        multiselectComboBox.setLabel("Seleziona Topic");
+        multiselectComboBox.setPlaceholder("Scelti...");
+        Hobby [] topic = Hobby.values();
+        List<String> topiclist = new ArrayList<String>();
+        for(Hobby h : topic) topiclist.add(h.toString());
+        multiselectComboBox.setItems(topiclist);
+
+        info3.add(capelli,occhi,multiselectComboBox);
+        return info3;
+    }
+
+    public HorizontalLayout Info4(){
+        HorizontalLayout info4 = new HorizontalLayout();
+        //Image
+        return info4;
+    }
+
+    public HorizontalLayout Pulsanti(){
+        HorizontalLayout pulsanti = new HorizontalLayout();
+
+
+
+        return pulsanti;
+    }
+
+
+    public Button Modifica(){
+        Button modifica = new Button("Modifica",buttonClickEvent -> {
+            nome.setEnabled(true);
+            cognome.setEnabled(true);
+            compleanno.setEnabled(true);
+            email.setEnabled(true);
+            città.setEnabled(true);
+            luogo_di_nascita.setEnabled(true);
+            occhi.setEnabled(true);
+            capelli.setEnabled(true);
+            multiselectComboBox.setEnabled(true);
+            altezza.setEnabled(true);
+            interessi.setEnabled(true);
+            multiselectComboBox.setEnabled(true);
+        });
+        return modifica;
+    }
+
+    public Button Conferma(){
+        Button conferma = new Button("Conferma", buttonClickEvent -> {
+            studente.getProfilo().setAltezza(altezza.getValue());
+            studente.getProfilo().setNome(nome.getValue());
+            studente.getProfilo().setCognome(cognome.getValue());
+            studente.getProfilo().setDataDiNascita(compleanno.getValue());
+            studente.setEmail(email.getValue());
+            studente.getProfilo().setResidenza(città.getValue());
+            studente.getProfilo().setLuogoNascita(luogo_di_nascita.getValue());
+            studente.getProfilo().setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
+            studente.getProfilo().setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
+            studente.getProfilo().setInteressi(Interessi.valueOf(interessi.getValue()));
+            //hobby
+            ArrayList<Hobby> hob = new ArrayList<Hobby>();
+            for(String s : multiselectComboBox.getValue()) hob.add(Hobby.valueOf(s));
+            studente.getProfilo().setHobbyList(hob);
+
+            controller.modificaProfilo(studente.getProfilo(),studente.getPassword());
+
+            nome.setEnabled(false);
+            cognome.setEnabled(false);
+            compleanno.setEnabled(false);
+            email.setEnabled(false);
+            città.setEnabled(false);
+            luogo_di_nascita.setEnabled(false);
+            occhi.setEnabled(false);
+            capelli.setEnabled(false);
+            multiselectComboBox.setEnabled(false);
+            altezza.setEnabled(false);
+            interessi.setEnabled(false);
+            //VEDERE IMMAGINE
+        });
+        return conferma;
+    }
+
+    public Button CambiaPassword(){
+        Notification change = new Notification();
+        VerticalLayout notifica_chaneg = new VerticalLayout();
+        Span testo = new Span("Inserisci password corrente");
+        TextField password_corrente = new TextField("Password corrente");
+        Button conferma_corrente = new Button("Conferma");
+        notifica_chaneg.add(testo,password_corrente,conferma_corrente);
+
+        Button cambia_password = new Button("Cambia Password");
+        cambia_password.addClickListener(buttonClickEvent -> {
+           change.open();
+                if(password_corrente.getValue().equals(utente.getPassword())){
+                    Notification change_due = new Notification();
+                    //continuo domani
+                }else{
+
+                }
+        });
+        return cambia_password;
+    }
+
+
+    private boolean checkMaggiorenne(LocalDate value) {
+        return Period.between(value,LocalDate.now()).getYears() >= 18;
+    }
 
 /*
     public ProfiloPersonale(GestioneProfiloController controller){
