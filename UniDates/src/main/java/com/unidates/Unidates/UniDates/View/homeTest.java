@@ -69,8 +69,7 @@ public class homeTest extends VerticalLayout {
         Button aggiungiUtente = new Button("Aggiungi utente", buttonClickEvent -> {
             Studente userTest = new Studente(email.getValue(), password.getValue());
 
-            Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new ArrayList<Hobby>());
-            profilo.addFoto(new Foto(new byte[]{(byte)0xe0}));
+            Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto(new byte[]{(byte)0xe0}), new ArrayList<Hobby>());
             gestioneUtentiController.registrazioneStudente(userTest, profilo, VaadinServletRequest.getCurrent());
         });
 
@@ -131,10 +130,8 @@ public class homeTest extends VerticalLayout {
 
 
        Button aggiungiModeratore = new Button("Aggiungi moderatore", buttonClickEvent -> {
-            Moderatore moderatore = new Moderatore(email.getValue(), password.getValue());
-           ArrayList<Foto> fotoArrayList = new ArrayList<Foto>();
-           fotoArrayList.add(new Foto(new byte[]{(byte)0xe0}));
-           Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new ArrayList<Hobby>());
+           Moderatore moderatore = new Moderatore(email.getValue(), password.getValue());
+           Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new Foto(new byte[]{(byte)0xe0}),new ArrayList<Hobby>());
 
            gestioneUtentiController.registrazioneModeratore(moderatore, profilo);
           //  gestioneModerazioneController.inviaSegnalazione(new Foto("ciao"));
@@ -143,9 +140,7 @@ public class homeTest extends VerticalLayout {
 
         Button aggiungiCM = new Button("aggiungiCM", buttonClickEvent -> {
             CommunityManager cm = new CommunityManager(email.getValue(), password.getValue());
-            ArrayList<Foto> fotoArrayList = new ArrayList<Foto>();
-            fotoArrayList.add(new Foto(new byte[]{(byte)0xe0}));
-            Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new ArrayList<Hobby>());
+            Profilo profilo = new Profilo("Prova", "Prova", "Prova", "ResidenzaProva", LocalDate.now(), 160, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto(new byte[]{(byte)0xe0}), new ArrayList<Hobby>());
 
             gestioneUtentiController.registrazioneCommunityManager(cm, profilo);
             //  gestioneModerazioneController.inviaSegnalazione(new Foto("ciao"));

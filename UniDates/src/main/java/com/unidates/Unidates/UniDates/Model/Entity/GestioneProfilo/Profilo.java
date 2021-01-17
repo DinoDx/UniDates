@@ -24,6 +24,10 @@ public class Profilo implements Serializable {
     @OneToOne(mappedBy = "profilo", cascade = CascadeType.REMOVE)
     private Studente studente;
 
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private Foto fotoProfilo;
+
+
     @OneToMany(mappedBy = "profilo", cascade = {CascadeType.MERGE, CascadeType.REMOVE,CascadeType.PERSIST})
     private List<Foto> listaFoto;
 
@@ -44,7 +48,7 @@ public class Profilo implements Serializable {
     }
 
 
-    public Profilo(String nome, String cognome, String luogoNascita, String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso, Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi, List<Hobby> hobbyList) {
+    public Profilo(String nome, String cognome, String luogoNascita, String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso, Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi,Foto fotoProfilo, List<Hobby> hobbyList) {
         this.nome = nome;
         this.cognome = cognome;
         this.luogoNascita = luogoNascita;
@@ -56,8 +60,8 @@ public class Profilo implements Serializable {
         this.colori_capelli = colori_capelli;
         this.colore_occhi = colore_occhi;
         this.hobbyList = hobbyList;
+        this.fotoProfilo = fotoProfilo;
         this.listaFoto = new ArrayList<Foto>(){
-
         };
     }
 
@@ -151,6 +155,13 @@ public class Profilo implements Serializable {
     public void setStudente(Studente studente) { this.studente = studente; }
 
 
+    public void setFotoProfilo(Foto fotoProfilo) {
+        this.fotoProfilo = fotoProfilo;
+    }
+
+    public Foto getFotoProfilo() {
+        return fotoProfilo;
+    }
 
     public List<Foto> getListaFoto() {
         return listaFoto;
@@ -173,8 +184,6 @@ public class Profilo implements Serializable {
         listaFoto.add(foto);
     }
 
-    public Foto getFotoProfilo() {
-        return listaFoto.get(0);
-    }
+
 
 }

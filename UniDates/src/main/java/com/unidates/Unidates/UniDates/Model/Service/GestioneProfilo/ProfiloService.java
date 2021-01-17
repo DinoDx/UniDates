@@ -22,13 +22,13 @@ public class ProfiloService {
     public void eliminaProfilo(Profilo profilo, String password){
         profiloRepository.deleteById(profilo.getId());
     }
+    
     public void modificaProfilo(Profilo profilo, String password){
         profiloRepository.save(profilo);
     }
 
     public void setFotoProfilo(Profilo profilo, Foto foto){ //non si sa se funziona
-        profilo.getListaFoto().remove(foto);
-        profilo.getListaFoto().add(0, foto);
+        profilo.setFotoProfilo(foto);
         profiloRepository.save(profilo);
     }
 
