@@ -1,7 +1,9 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione;
 
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione.ModerazioneService;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,7 +25,8 @@ public class Ammonimento {
     @JoinColumn(name = "moderatore_id")
     private Moderatore moderatore;
 
-    private String usernameStudente;
+    @OneToOne
+    private Foto foto;
 
     @NotNull
     private String motivazione;
@@ -35,8 +38,10 @@ public class Ammonimento {
     public Ammonimento(){
     }
 
-    public Ammonimento(String motivazione, String dettagli){
-
+    public Ammonimento(String motivazione, String dettagli, Foto foto, Studente studente,Moderatore moderatore){
+        this.moderatore = moderatore;
+        this.studente = studente;
+        this.foto = foto;
         this.motivazione = motivazione;
         this.dettagli = dettagli;
     }
@@ -81,11 +86,11 @@ public class Ammonimento {
         this.dettagli = dettagli;
     }
 
-    public String getUsernameStudente() {
-        return usernameStudente;
+    public Foto getFoto() {
+        return foto;
     }
 
-    public void setUsernameStudente(String usernameStudente) {
-        this.usernameStudente = usernameStudente;
+    public void setFoto(Foto foto) {
+        this.foto = foto;
     }
 }

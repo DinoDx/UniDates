@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Controller.ConfermaRegistrazione;
+package com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.ConfermaRegistrazione;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;

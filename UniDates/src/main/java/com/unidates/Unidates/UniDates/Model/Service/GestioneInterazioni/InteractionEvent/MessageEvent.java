@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Model.Service.EventListener;
+package com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni.InteractionEvent;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
 import org.springframework.context.ApplicationEvent;

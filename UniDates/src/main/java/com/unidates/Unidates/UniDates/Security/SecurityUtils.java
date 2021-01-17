@@ -50,4 +50,5 @@ public class SecurityUtils {
         }
         return utente;
     }
+
 }

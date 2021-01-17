@@ -12,14 +12,9 @@ import com.unidates.Unidates.UniDates.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -39,6 +34,7 @@ public class Populator implements ApplicationRunner {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         //Aggiungo 3 utenti
@@ -53,10 +49,13 @@ public class Populator implements ApplicationRunner {
         hobbyArrayList.add(Hobby.ARTE);
         hobbyArrayList.add(Hobby.ANIME);
         hobbyArrayList.add(Hobby.CALCIO);
-
+        ;
 
 
         Profilo p1 = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, hobbyArrayList);
+        p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
+        p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
+        p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         Profilo p2 = new Profilo("Paolo", "Prova2", "Napoli", "Napoli", LocalDate.of(1995,7,15), 185, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.ROSSI, Colore_Occhi.VERDI, hobbyArrayList);
         p2.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));

@@ -1,6 +1,6 @@
 package com.unidates.Unidates.UniDates.Controller;
 
-import com.unidates.Unidates.UniDates.Controller.ConfermaRegistrazione.OnRegistrationCompleteEvent;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.ConfermaRegistrazione.OnRegistrationCompleteEvent;
 import com.unidates.Unidates.UniDates.Enum.Interessi;
 import com.unidates.Unidates.UniDates.Enum.Sesso;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
@@ -15,12 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/api/UserManager")

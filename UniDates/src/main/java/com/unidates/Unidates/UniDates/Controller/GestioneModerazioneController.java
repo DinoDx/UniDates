@@ -32,9 +32,9 @@ public class GestioneModerazioneController {
     }
 
     @RequestMapping("/inviaAmmonimento") // non propriamente necessario
-    public void inviaAmmonimento(Ammonimento a,Moderatore m, Studente s){
+    public void inviaAmmonimento(Ammonimento a,Moderatore m, Studente s, Foto f){
         if(checkAmmonimento(a))
-            moderazioneService.inviaAmmonimento(a, s, m);
+            moderazioneService.inviaAmmonimento(a, s, m, f);
         else throw new InvalidWarningFormatException();
     }
 

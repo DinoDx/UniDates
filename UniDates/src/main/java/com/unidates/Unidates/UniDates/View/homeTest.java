@@ -6,6 +6,7 @@ import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
@@ -184,6 +185,14 @@ public class homeTest extends VerticalLayout {
             */
         });
 
+        Button inviaAmmonimento = new Button("inviaAmmonimento", e ->{
+            Ammonimento a = new Ammonimento();
+            a.setMotivazione(messaggio.getValue());
+            a.setDettagli(messaggio.getValue());
+            Studente studente = (Studente) gestioneUtentiController.trovaUtente(email2.getValue());
+            gestioneModerazioneController.inviaAmmonimento(a, (Moderatore) gestioneUtentiController.trovaUtente(email.getValue()), studente , studente.getProfilo().getListaFoto().get(0));
+        });
+
 
 
         add(email);
@@ -197,6 +206,7 @@ public class homeTest extends VerticalLayout {
         add(mostraUtenti);
         add(trovaUtente);
         add(removeUtente);
+        add(inviaAmmonimento);
         add(aggiungiFoto);
         //add(modificaProfilo);
         add(aggiungiModeratore);

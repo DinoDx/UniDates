@@ -15,6 +15,7 @@ import java.util.List;
 
 @Entity
 public class Studente extends Utente{
+
     private boolean isBanned;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
@@ -37,6 +38,8 @@ public class Studente extends Utente{
     @OneToMany(mappedBy = "studente2", cascade = CascadeType.REMOVE)
     private List<Match> listMatchRicevuti;
 
+    private int ammonimentiAttivi;
+
     public Studente() {
     }
 
@@ -47,6 +50,7 @@ public class Studente extends Utente{
         this.listAmmonimento = new ArrayList<Ammonimento>();
         this.listMatch = new ArrayList<Match>();
         this.listMatchRicevuti = new ArrayList<Match>();
+        this.ammonimentiAttivi = 0;
         this.isBanned = false;
     }
 
@@ -126,6 +130,22 @@ public class Studente extends Utente{
 
     public void addMatchRicevuto(Match match){
         listMatchRicevuti.add(match);
+    }
+
+    public void addAmmonimentoattivo(){
+        this.ammonimentiAttivi++;
+    }
+
+    public void removeAmmonimentoattivo(){
+        this.ammonimentiAttivi--;
+    }
+
+    public void resetAmmonimentiattivi(){
+        this.ammonimentiAttivi = 0;
+    }
+
+    public int getAmmonimentiAttivi(){
+        return this.ammonimentiAttivi;
     }
 
 

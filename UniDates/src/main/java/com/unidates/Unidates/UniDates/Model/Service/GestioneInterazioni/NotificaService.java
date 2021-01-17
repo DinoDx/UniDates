@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 public class NotificaService {
 
     private Logger logger = Logger.getLogger("global");
+
     @Autowired
     private NotificaRepository notificaRepository;
 
@@ -51,7 +52,7 @@ public class NotificaService {
     public void genereateNotificaWarning(Studente studente1, Foto removedfoto){ //DA RICONTROLLARE PER MODERAZIONE
         Notifica notificaWarning = new Notifica(
                 studente1,
-                studente1.getProfilo().getNome() + " la tua foto é stata rimossa per violazione dei termini di servizio. Hai ricevuto un ammonimento!",
+                studente1.getProfilo().getNome() + " la tua foto é stata nascosta per violazione dei termini di servizio. Hai ricevuto un ammonimento!",
                 Tipo_Notifica.AMMONIMENTO,
                 removedfoto
         );

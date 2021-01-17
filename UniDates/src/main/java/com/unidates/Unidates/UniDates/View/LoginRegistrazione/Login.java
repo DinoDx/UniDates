@@ -2,6 +2,7 @@ package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 
 
+import com.unidates.Unidates.UniDates.Exception.BannedUserException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.button.Button;
@@ -15,7 +16,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.router.*;
-
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 
 
 @Route(value = "login", layout = MainViewLogin.class)
@@ -28,17 +29,17 @@ public class Login extends VerticalLayout implements BeforeEnterListener {
     private LoginForm loginForm = new LoginForm();
 
     public Login() {
-        addClassName("login-view");
-        setId("login-view");
-        setSizeFull();
-        setAlignItems(Alignment.CENTER);
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        loginForm.setI18n(createLoginI18n());
-        loginForm.setId("login");
-        loginForm.setAction("login");
-        loginForm.addForgotPasswordListener(event ->createRecuperoPassword().open());
+            addClassName("login-view");
+            setId("login-view");
+            setSizeFull();
+            setAlignItems(Alignment.CENTER);
+            setJustifyContentMode(JustifyContentMode.CENTER);
+            loginForm.setI18n(createLoginI18n());
+            loginForm.setId("login");
+            loginForm.setAction("login");
+            loginForm.addForgotPasswordListener(event -> createRecuperoPassword().open());
+            add(new H1("Accedi a Unidates"), loginForm, createLinkToRegister());
 
-        add(new H1("Accedi a Unidates"), loginForm,createLinkToRegister());
     }
 
     private Anchor createLinkToRegister() {

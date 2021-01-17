@@ -26,11 +26,14 @@ public class Foto implements Cloneable {
     @Column(length = 10000000)
     private byte[] img;
 
+    private boolean isVisible;
+
     public Foto(){ }
 
     public Foto(byte[] img){
         this.img = img;
         this.segnalazioneRicevute = new ArrayList<Segnalazione>();
+        isVisible = true;
     }
 
     public Long getId() {
@@ -69,6 +72,21 @@ public class Foto implements Cloneable {
         segnalazioneRicevute.add(segnalazione);
     }
 
+    public Collection<Segnalazione> getSegnalazioneRicevute() {
+        return segnalazioneRicevute;
+    }
+
+    public void setSegnalazioneRicevute(Collection<Segnalazione> segnalazioneRicevute) {
+        this.segnalazioneRicevute = segnalazioneRicevute;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+    }
 
     @Override
     public boolean equals(Object o) {
