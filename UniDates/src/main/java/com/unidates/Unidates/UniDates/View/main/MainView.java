@@ -14,6 +14,7 @@ import com.unidates.Unidates.UniDates.View.component_home_page.Home;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
@@ -36,10 +37,14 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.VaadinServletResponse;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -138,8 +143,16 @@ public class MainView extends AppLayout {
        searchField.setPlaceholder("Inserisci email dell'utente da cercare");
        Button searchIcon = new Button(new Icon(VaadinIcon.SEARCH));
        searchIcon.addClickListener(buttonClickEvent -> {
-           if (utenteService.isPresent(gestioneUtentiController.trovaUtente(searchField.getValue()))) {
-               UI.getCurrent().getNavigator().navigateTo("ricercaprofilo?email=" + searchField.getValue());
+
+           if (gestioneUtentiController.trovaUtente(searchField.getValue())!= null) {
+
+                   /*(try)VaadinServletResponse.getCurrent().getHttpServletResponse().sendRedirect("ricercaprofilo?email="+searchField.getValue());
+                   UI.getCurrent().navigate("ricercaprofilo/"+searchField.getValue());*/
+
+                   ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+                   HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
+                   httpSession.setAttribute("studente",gestioneUtentiController.trovaUtente(searchField.getValue()));
+                    UI.getCurrent().navigate("ricercaprofilo");
            }
            else{
                Notification.show("Utente non trovato");
@@ -147,8 +160,6 @@ public class MainView extends AppLayout {
        });
        SearchBox.add(searchField,searchIcon);
        return SearchBox;
-
-            //
     }
 
     private Component createDrawerContent(Tabs menu) {

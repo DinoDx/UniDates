@@ -2,6 +2,7 @@ package com.unidates.Unidates.UniDates.View.component_home_page;
 
 
 import com.example.application.views.Person;
+import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.UtenteRepository;
@@ -40,9 +41,13 @@ import java.util.List;
 public class Home extends VerticalLayout{
 
     @Autowired
+    GestioneInterazioniController gestioneInterazioniController;
+
+    @Autowired
     GestioneUtentiController gestioneUtentiController;
 
-    public Home(GestioneUtentiController gestioneUtentiController){
+    public Home(GestioneUtentiController gestioneUtentiController,GestioneInterazioniController gestioneInterazioniController){
+        this.gestioneInterazioniController = gestioneInterazioniController;
         this.gestioneUtentiController = gestioneUtentiController;
         setAlignItems(Alignment.CENTER);
         VerticalLayout utenti = new VerticalLayout();
@@ -51,7 +56,7 @@ public class Home extends VerticalLayout{
         Utente utente = SecurityUtils.getLoggedIn();
         for(Utente u : gestioneUtentiController.findAll()){
                 if(!(u.getEmail().equals(utente.getEmail()))) {
-                    utenti.add(new Card_Utente_Home_Component(u));
+                    utenti.add(new Card_Utente_Home_Component(gestioneInterazioniController,u));
                 }
         }
         add(utenti);

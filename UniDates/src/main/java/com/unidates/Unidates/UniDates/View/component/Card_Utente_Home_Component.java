@@ -1,7 +1,10 @@
 package com.unidates.Unidates.UniDates.View.component;
 
+import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
+import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
+import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -9,16 +12,23 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.server.StreamResource;
+import org.hibernate.internal.build.AllowPrintStacktrace;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.io.ByteArrayInputStream;
 
 public class Card_Utente_Home_Component extends Div {
 
-    public Card_Utente_Home_Component(Utente utente){
+    GestioneInterazioniController gestioneInterazioniController;
+
+    public Card_Utente_Home_Component(GestioneInterazioniController gestioneInterazioniController, Utente utente){
+        this.gestioneInterazioniController = gestioneInterazioniController;
         HorizontalLayout tot = Card(utente);
         add(tot);
     }
@@ -34,7 +44,9 @@ public class Card_Utente_Home_Component extends Div {
         HorizontalLayout pulsanti = new HorizontalLayout();
         StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(studente.getProfilo().getListaFoto().get(0).getImg()));
         Image image_profilo = new Image(resource,"");
-        Button like = getLikeButton();
+        image_profilo.getStyle().set("width","250px");
+        image_profilo.getStyle().set("height","250px");
+        Button like = getLikeButton(utente);
         Button report = reportButton();
         pulsanti.add(like,report);
         layout_foto.add(image_profilo,pulsanti);
@@ -55,13 +67,14 @@ public class Card_Utente_Home_Component extends Div {
     }
 
 
-    private Button getLikeButton() {
+    private Button getLikeButton(Utente utente) {
         Button like = new Button(new Icon(VaadinIcon.HEART));
         like.getStyle().set("color","white");
         like.addClickListener((buttonClickEvent)->{
             Style style = buttonClickEvent.getSource().getStyle();
             if(style.get("color").equals("white")) {
                 buttonClickEvent.getSource().getStyle().set("color", "red");
+                gestioneInterazioniController.aggiungiMatch((Studente)SecurityUtils.getLoggedIn(),(Studente)utente);
             }else {
                 style.set("color","white");
             }
@@ -72,6 +85,7 @@ public class Card_Utente_Home_Component extends Div {
     private Button reportButton(){
         //Notifica Segnalazione
         Notification notifica = new Notification();
+        VerticalLayout layout_report = new VerticalLayout();
         TextArea reporting = new TextArea("Inserisci moticazione segnalazione:");
         Button invio = new Button("Invia report",buttonClickEvent -> {
             //implmentare invio segnalazione
@@ -79,9 +93,9 @@ public class Card_Utente_Home_Component extends Div {
         Button annulla = new Button("Annulla",buttonClickEvent -> {
             notifica.close();
         });
-        invio.getStyle().set("margin-left","2em");
-        annulla.getStyle().set("margin-left","3em");
-
+        layout_report.setAlignItems(FlexComponent.Alignment.CENTER);
+        layout_report.add(reporting,invio,annulla);
+        notifica.add(layout_report);
         //Pulsante Report
         Button report = new Button("Report",new Icon(VaadinIcon.PENCIL),buttonClickEvent->{
             notifica.open();
