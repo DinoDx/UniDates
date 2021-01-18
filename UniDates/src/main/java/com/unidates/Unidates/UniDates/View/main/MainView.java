@@ -36,7 +36,8 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.component.UI;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayInputStream;
@@ -138,17 +139,18 @@ public class MainView extends AppLayout {
        TextField searchField = new TextField();
        searchField.setPlaceholder("Inserisci email dell'utente da cercare");
        Button searchIcon = new Button(new Icon(VaadinIcon.SEARCH));
-       //searchIcon.addClickListener();
+       searchIcon.addClickListener(buttonClickEvent -> {
+           if (utenteService.isPresent(gestioneUtentiController.trovaUtente(searchField.getValue()))) {
+               UI.getCurrent().getNavigator().navigateTo("ricercaprofilo?email=" + searchField.getValue());
+           }
+           else{
+               Notification.show("Utente non trovato");
+           }
+       });
        SearchBox.add(searchField,searchIcon);
        return SearchBox;
-        /*filter.addKeyPressListener(Key.ENTER, e -> {
-           if(utenteService.isPresent(gestioneUtentiController.trovaUtente(filter.getValue()))){
-                UI.getCurrent().navigate("/ricercaprofilo?email=filter.getValue()");
-            }
 
-            //VaadinServletRequest.getCurrent().getHttpServletRequest().getParameter("");
-        });*/
-
+            //
     }
 
     private Component createDrawerContent(Tabs menu) {
