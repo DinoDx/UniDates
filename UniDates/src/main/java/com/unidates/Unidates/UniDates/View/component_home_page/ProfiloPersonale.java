@@ -36,6 +36,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.vaadin.gatanaso.MultiselectComboBox;
@@ -54,6 +55,12 @@ public class ProfiloPersonale extends VerticalLayout {
     Utente utente = SecurityUtils.getLoggedIn();
     Studente studente = (Studente) utente;
     Profilo profilo = studente.getProfilo();
+
+    @Autowired
+    PasswordEncoder encoder;
+
+    @Autowired
+    GestioneUtentiController utente_controller;
 
     @Autowired
     GestioneProfiloController controller;
@@ -231,24 +238,47 @@ public class ProfiloPersonale extends VerticalLayout {
         return conferma;
     }
 
+
+
     public Button CambiaPassword(){
-        Notification change = new Notification();
-        VerticalLayout notifica_chaneg = new VerticalLayout();
-        Span testo = new Span("Inserisci password corrente");
-        TextField password_corrente = new TextField("Password corrente");
-        Button conferma_corrente = new Button("Conferma");
-        notifica_chaneg.add(testo,password_corrente,conferma_corrente);
+        Button cambia_password = new Button("Cambia password");
 
-        Button cambia_password = new Button("Cambia Password");
-        cambia_password.addClickListener(buttonClickEvent -> {
-           change.open();
-                if(password_corrente.getValue().equals(utente.getPassword())){
-                    Notification change_due = new Notification();
-                    //continuo domani
-                }else{
+        Notification cambio = new Notification();
+        cambio.setPosition(Notification.Position.MIDDLE);
 
-                }
+        VerticalLayout corpo_notifica = new VerticalLayout();
+        corpo_notifica.setAlignItems(Alignment.CENTER);
+
+        Span testo = new Span("Cambia la tua password!");
+        PasswordField password_attuale = new PasswordField("Password corrente");
+        PasswordField prima_password = new PasswordField("Nuova password");
+        PasswordField seconda_password = new PasswordField("Conferma password");
+        Button conferma = new Button("Conferma");
+        conferma.addClickListener(buttonClickEvent -> {
+           if(encoder.matches(utente.getPassword(),password_attuale.getValue())){
+
+               if(prima_password.getValue().equals(seconda_password.getValue())){
+                   utente_controller.cambiaPassword(utente,prima_password.getValue());
+               }else{
+                   Notification errore_password_attuale = new Notification("La password attuale non corrisponde",3000, Notification.Position.MIDDLE);
+               }
+           }else {
+               Notification errore_password = new Notification("Le password nuove non corrispondono",3000,Notification.Position.MIDDLE);
+           }
         });
+        Button annulla = new Button("Annulla");
+        annulla.addClickListener(buttonClickEvent -> {
+           cambio.close();
+        });
+
+
+        corpo_notifica.add(testo,password_attuale,prima_password,seconda_password,conferma,annulla);
+        cambio.add(corpo_notifica);
+
+        cambia_password.addClickListener(buttonClickEvent -> {
+            cambio.open();
+        });
+
         return cambia_password;
     }
 

@@ -140,4 +140,7 @@ public class GestioneUtentiController {
         }
          return false;
     }
+
+    public void cambiaPassword(Utente utente, String value) {
+    }
 }
