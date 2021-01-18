@@ -27,7 +27,7 @@ public class ProfiloService {
         profiloRepository.save(profilo);
     }
 
-    public void setFotoProfilo(Profilo profilo, Foto foto){ //non si sa se funziona
+    public void setFotoProfilo(Profilo profilo, Foto foto){
         profilo.setFotoProfilo(foto);
         profiloRepository.save(profilo);
     }

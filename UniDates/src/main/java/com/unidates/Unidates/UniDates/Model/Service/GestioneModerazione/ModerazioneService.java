@@ -1,11 +1,13 @@
 package com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione;
 
+import com.unidates.Unidates.UniDates.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneModerazione.AmmonimentiRepository;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneModerazione.SegnalazioniRepository;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneModerazione.SospensioniRepository;
@@ -16,9 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class ModerazioneService {
+    @Autowired
+    UtenteRepository utenteRepository;
 
     @Autowired
     SegnalazioniRepository segnalazioniRepository;
@@ -30,11 +35,7 @@ public class ModerazioneService {
     SospensioniRepository sospensioniRepository;
 
     @Autowired
-    UtenteRepository utenteRepository;
-
-    @Autowired
     FotoRepository fotoRepository;
-
 
     @Autowired
     Publisher publisher;
@@ -42,7 +43,8 @@ public class ModerazioneService {
 
     public void inviaSegnalazione(Segnalazione s ,Foto f){
         s.setFoto(f);
-        // s.setModeratore(moderatore); moderatore scelto in automatico dal Service
+        List<Utente> moderatores = utenteRepository.findAllByRuolo(Ruolo.MODERATORE);
+        s.setModeratore( (Moderatore) moderatores.get(new Random().nextInt(moderatores.size() - 1))); //Moderatore scelto casualmente tra tutti i moderatori
         segnalazioniRepository.save(s);
     }
 

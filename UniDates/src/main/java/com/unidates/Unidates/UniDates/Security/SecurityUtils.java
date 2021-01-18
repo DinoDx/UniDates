@@ -9,10 +9,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Component
@@ -21,6 +25,7 @@ public class SecurityUtils {
 
     @Autowired
     private static UtenteService utenteService;
+
 
     public SecurityUtils(UtenteService utenteService) {
         this.utenteService = utenteService;
@@ -51,4 +56,17 @@ public class SecurityUtils {
         return utente;
     }
 
+    public static List<SessionInformation> getListActiveSession(Utente utente, SessionRegistry sessionRegistry){
+        List<Object> userDetails =  sessionRegistry.getAllPrincipals();
+        for (Object o : userDetails){
+            if( o instanceof User){
+                User user = (User) o;
+                if(user.getUsername().equals(utente.getEmail())){
+                    return sessionRegistry.getAllSessions(user, false);
+                }
+
+            }
+        }
+        return null;
+    }
 }

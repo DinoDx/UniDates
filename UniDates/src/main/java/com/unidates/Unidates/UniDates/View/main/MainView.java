@@ -54,8 +54,6 @@ public class MainView extends AppLayout {
     @Autowired
     GestioneUtentiController gestioneUtentiController;
 
-    @Autowired
-    UtenteService utenteService;
 
     public MainView(GestioneUtentiController gestioneUtentiController) {
         this.gestioneUtentiController = gestioneUtentiController;
@@ -203,20 +201,4 @@ public class MainView extends AppLayout {
         return getContent().getClass().getAnnotation(PageTitle.class).value();
   } */
 
-    private byte[] downloadUrl(String stringDownload) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            URL toDownload = new URL(stringDownload);
-            byte[] chunk = new byte[4096];
-            int bytesRead;
-            InputStream stream = toDownload.openStream();
-            while ((bytesRead = stream.read(chunk)) > 0) {
-                outputStream.write(chunk, 0, bytesRead);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return outputStream.toByteArray();
-    }
 }

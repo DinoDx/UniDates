@@ -1,7 +1,6 @@
-package com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione.ModerationEvent;
+package com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneModerazioni;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
-import com.unidates.Unidates.UniDates.Model.Service.Publisher;
 import org.springframework.context.ApplicationEvent;
 
 import java.util.logging.Logger;

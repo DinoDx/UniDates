@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni.InteractionEvent;
+package com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneInterazioni;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import org.springframework.context.ApplicationEvent;

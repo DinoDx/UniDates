@@ -1,19 +1,19 @@
-package com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione.ModerationEvent;
+package com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneModerazioni;
 
 import com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni.NotificaService;
 import com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione.ModerazioneService;
 import com.unidates.Unidates.UniDates.Model.Service.Publisher;
-import com.unidates.Unidates.UniDates.Security.ForcedLogoutEvent;
-import com.vaadin.flow.server.VaadinServletRequest;
-import com.vaadin.flow.server.VaadinServletResponse;
+import com.unidates.Unidates.UniDates.Security.SecurityUtils;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 @Component
@@ -28,6 +28,9 @@ public class ModerationListener {
 
     @Autowired
     private Publisher publisher;
+
+    @Autowired
+    SessionRegistry sessionRegistry;
 
     @EventListener
     public void warningHandler(WarningEvent warningEvent){
@@ -44,9 +47,16 @@ public class ModerationListener {
     @EventListener
     public void banHandler(BannedEvent bannedEvent){
         Logger logger = Logger.getLogger("BannedLogger");
+        logger.info("BannedLogger in azione");
         logger.info(bannedEvent.getSospensione().getStudente().getEmail() + " ha ricevuto una sospensione di " + bannedEvent.getSospensione().getDurata() + " giorni!");
-        publisher.publishForcedLogout(bannedEvent.getSospensione().getStudente());
         //new PersistentTokenBasedRememberMeServices().logout(request, response, auth);
+        logger.info("Sospensione allo studente inviata");
+        List<SessionInformation> sessionInformations = SecurityUtils.getListActiveSession(bannedEvent.getSospensione().getStudente(), sessionRegistry);
+        if( sessionInformations != null){
+            sessionInformations.forEach(SessionInformation::expireNow); // slogga lo studente
+        };
+        logger.info("Utente sloggato!");
+       // sessionRegistry.getSessionInformation(sessionId).expireNow();
 
     }
 }

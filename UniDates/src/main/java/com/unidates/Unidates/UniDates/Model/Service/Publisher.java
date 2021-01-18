@@ -4,11 +4,10 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni.InteractionEvent.MatchEvent;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni.InteractionEvent.MessageEvent;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione.ModerationEvent.BannedEvent;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione.ModerationEvent.WarningEvent;
-import com.unidates.Unidates.UniDates.Security.ForcedLogoutEvent;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneInterazioni.MatchEvent;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneInterazioni.MessageEvent;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneModerazioni.BannedEvent;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneModerazioni.WarningEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -34,8 +33,5 @@ public class Publisher {
         publisher.publishEvent(new BannedEvent(this, sospensione));
     }
 
-    public void publishForcedLogout(Studente studente){
-        publisher.publishEvent(new ForcedLogoutEvent(this, studente));
-    }
 }
 

@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni.InteractionEvent;
+package com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneInterazioni;
 
 import com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni.NotificaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 public class InteractionListener {
     @Autowired
     NotificaService notificaService;
+
     Logger matchLogger = Logger.getLogger("MatchLogger");
 
     Logger messageLogger = Logger.getLogger("MessageLogger");

@@ -15,11 +15,5 @@ import java.util.logging.Logger;
 @Component
 public class SecurityListener {
 
-    @EventListener
-    public void handleForcedLogout(ForcedLogoutEvent forcedLogoutEvent){
-        Logger logger = Logger.getLogger("ForcedLogoutListener");
-        logger.info("Forzare il logount qui");
 
-        //
-    }
 }

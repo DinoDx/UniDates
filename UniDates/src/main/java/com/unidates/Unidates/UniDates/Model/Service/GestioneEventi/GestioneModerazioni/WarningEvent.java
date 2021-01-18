@@ -1,7 +1,6 @@
-package com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione.ModerationEvent;
+package com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneModerazioni;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
 import org.springframework.context.ApplicationEvent;
 
 import java.util.logging.Logger;

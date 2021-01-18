@@ -26,6 +26,9 @@ import com.vaadin.flow.server.VaadinServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -33,6 +36,7 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 
@@ -57,6 +61,8 @@ public class homeTest extends VerticalLayout {
     @Autowired
     GestioneModerazioneController gestioneModerazioneController;
 
+    @Autowired
+    SessionRegistry sessionRegistry;
     public homeTest() {
         Utente utente = SecurityUtils.getLoggedIn();  // Come prendere l'utente attualmente loggato
         TextField email = new TextField("Email");
@@ -65,6 +71,8 @@ public class homeTest extends VerticalLayout {
         Text emailRuolo = new Text(utente.getRuolo() +" "+utente.getEmail());
         add(emailRuolo);
         TextField messaggio = new TextField("Messaggio");
+
+
 
         Button aggiungiUtente = new Button("Aggiungi utente", buttonClickEvent -> {
             Studente userTest = new Studente(email.getValue(), password.getValue());
@@ -163,6 +171,7 @@ public class homeTest extends VerticalLayout {
 
         Button aggiungiMatch1 = new Button("Aggiungi Match 1", buttonClickEvent ->{
             gestioneInterazioniController.aggiungiMatch(trovaStudente(email.getValue()),trovaStudente(email2.getValue()));
+            System.out.println(trovaStudente(email.getValue()).getListMatch().size());
         });
 
 
