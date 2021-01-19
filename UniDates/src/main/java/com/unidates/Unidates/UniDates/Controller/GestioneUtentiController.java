@@ -1,5 +1,6 @@
 package com.unidates.Unidates.UniDates.Controller;
 
+import com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException;
 import com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneUtenti.OnRegistrationCompleteEvent;
 import com.unidates.Unidates.UniDates.Enum.Interessi;
 import com.unidates.Unidates.UniDates.Enum.Sesso;
@@ -11,6 +12,7 @@ import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,9 @@ public class GestioneUtentiController {
 
     @Autowired
     UtenteService utenteService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @RequestMapping("/registrazioneStudente")
     public void registrazioneStudente(Studente s, Profilo p, HttpServletRequest request) {
@@ -141,6 +146,11 @@ public class GestioneUtentiController {
          return false;
     }
 
-    public void cambiaPassword(Utente utente, String value) {
+    public void cambiaPassword(Utente utente, String nuovaPassword, String vecchiaPassword) {
+        if(checkStudente(new Studente(utente.getEmail(),nuovaPassword))){
+            if (passwordEncoder.matches(vecchiaPassword, utente.getPassword())) {
+                utenteService.cambiaPassword(utente, nuovaPassword);
+            } else throw new PasswordMissmatchException();
+        }else throw new InvalidRegistrationFormatException();
     }
 }

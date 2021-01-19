@@ -107,5 +107,10 @@ public class UtenteService {
     public List<Utente> findAll() {
         return utenteRepository.findAll();
     }
+
+    public void cambiaPassword(Utente utente, String nuovaPassword) {
+        utente.setPassword(passwordEncoder.encode(nuovaPassword));
+        utenteRepository.save(utente);
+    }
 }
 

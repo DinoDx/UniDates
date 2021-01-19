@@ -197,6 +197,10 @@ public class homeTest extends VerticalLayout {
             gestioneModerazioneController.inviaAmmonimento(a, (Moderatore) gestioneUtentiController.trovaUtente(email.getValue()), studente , studente.getProfilo().getListaFoto().get(0));
         });
 
+        Button cambiapassowrd = new Button("cambiapassword", e ->{
+            gestioneUtentiController.cambiaPassword(trovaStudente(email.getValue()), password.getValue(), messaggio.getValue());
+        });
+
 
 
         add(email);
@@ -217,6 +221,7 @@ public class homeTest extends VerticalLayout {
         add(aggiungiCM);
         add(sendMessage);
         add(aggiungiFotoProfilo);
+        add(cambiapassowrd);
         /*
         add(aggiungiNotifica);
         add(mostraNotifica);

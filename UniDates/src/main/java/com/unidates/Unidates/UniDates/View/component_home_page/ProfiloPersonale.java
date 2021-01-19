@@ -258,12 +258,14 @@ public class ProfiloPersonale extends VerticalLayout {
            if(encoder.matches(utente.getPassword(),password_attuale.getValue())){
 
                if(prima_password.getValue().equals(seconda_password.getValue())){
-                   utente_controller.cambiaPassword(utente,prima_password.getValue());
+                   utente_controller.cambiaPassword(utente,prima_password.getValue(), password_attuale.getValue());
                }else{
                    Notification errore_password_attuale = new Notification("La password attuale non corrisponde",3000, Notification.Position.MIDDLE);
+                   errore_password_attuale.open();
                }
            }else {
                Notification errore_password = new Notification("Le password nuove non corrispondono",3000,Notification.Position.MIDDLE);
+               errore_password.open();
            }
         });
         Button annulla = new Button("Annulla");
