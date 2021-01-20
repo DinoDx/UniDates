@@ -79,6 +79,7 @@ public class MainView extends AppLayout {
 
 
 
+        //MenuBar Profilo Personale
         MenuBar menuBar = new MenuBar();
         menuBar.setId("profile-img");
         StreamResource resource = new StreamResource("fotoprofilo",()-> new ByteArrayInputStream(studente.getProfilo().getListaFoto().get(0).getImg()));
@@ -88,7 +89,7 @@ public class MainView extends AppLayout {
 
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.add(image);
-        horizontalLayout.add("  ciao " + studente.getProfilo().getNome());
+        horizontalLayout.add("  Ciao " + studente.getProfilo().getNome());
 
 
         MenuItem profile = menuBar.addItem("");
@@ -98,6 +99,7 @@ public class MainView extends AppLayout {
         profile.getSubMenu().addItem(new Anchor("/logout","Logout"));
         profile.getSubMenu().addItem(new Anchor("/profilo-personale","Profilo Personale"));
 
+        //MenuBar Notifiche
         MenuBar notification = new MenuBar();
         notification.getStyle().set("margin-right","1em");
         MenuItem notifiche = notification.addItem("");
@@ -110,25 +112,29 @@ public class MainView extends AppLayout {
                 notifiche.getSubMenu().addItem(new Ammonimento_Notifica(n));
         }
 
+        //Button Chat
         Button chats = new Button(new Icon(VaadinIcon.PAPERPLANE_O));
         Anchor anchor = new Anchor("/chat");
         anchor.add(chats);
         anchor.setId("aereo");
 
-
+        //Layout Principale
         HorizontalLayout layout = new HorizontalLayout();
-        layout.setSpacing(false);
         layout.setId("header");
-        layout.getThemeList().set("dark", true);
         layout.setWidthFull();
         layout.setHeight("100px");
-        layout.setSpacing(false);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
 
         viewTitle = new H1("UniDates");
+        viewTitle.getStyle().set("margin-left","30px");
+        viewTitle.getStyle().set("font-size","30px");
+
+        //Ricerca
+        HorizontalLayout filter = SearchFilter();
+        filter.setAlignItems(FlexComponent.Alignment.CENTER);
+
         layout.add(viewTitle);
-        layout.add(SearchFilter());
-        layout.add(menuBar,notification);
+        layout.add(SearchFilter(),menuBar,notification);
         layout.add(anchor);
         return layout;
     }
@@ -161,57 +167,4 @@ public class MainView extends AppLayout {
        SearchBox.add(searchField,searchIcon);
        return SearchBox;
     }
-
-    private Component createDrawerContent(Tabs menu) {
-        VerticalLayout layout = new VerticalLayout();
-        layout.setSizeFull();
-        layout.setPadding(false);
-        layout.setSpacing(false);
-        layout.getThemeList().set("spacing-s", true);
-        layout.setAlignItems(FlexComponent.Alignment.STRETCH);
-        HorizontalLayout logoLayout = new HorizontalLayout();
-        logoLayout.setId("logo");
-        logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new Image("images/logo.png", "My Project logo"));
-        logoLayout.add(new H1("UniDates"));
-        layout.add(logoLayout, menu);
-        return layout;
-    }
-
-    private Tabs createMenu() {
-        final Tabs tabs = new Tabs();
-        tabs.setOrientation(Tabs.Orientation.VERTICAL);
-        tabs.addThemeVariants(TabsVariant.LUMO_MINIMAL);
-        tabs.setId("tabs");
-        tabs.add(createMenuItems());
-        return tabs;
-    }
-
-    private Component[] createMenuItems() {
-        return new Tab[]{/*createTab("Find Your Match", FindYourMatch.class),*/createTab("Home", Home.class)};
-    }
-
-    private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
-        final Tab tab = new Tab();
-        tab.add(new RouterLink(text, navigationTarget));
-        ComponentUtil.setData(tab, Class.class, navigationTarget);
-        return tab;
-    }
-
-/*    @Override
-    protected void afterNavigation() {
-        super.afterNavigation();
-        getTabForComponent(getContent()).ifPresent(menu::setSelectedTab);
-        viewTitle.setText(getCurrentPageTitle());
-    }
-
-    private Optional<Tab> getTabForComponent(Component component) {
-        return menu.getChildren().filter(tab -> ComponentUtil.getData(tab, Class.class).equals(component.getClass()))
-                .findFirst().map(Tab.class::cast);
-    }
-
-    private String getCurrentPageTitle() {
-        return getContent().getClass().getAnnotation(PageTitle.class).value();
-  } */
-
 }
