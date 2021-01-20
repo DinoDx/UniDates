@@ -168,6 +168,7 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
                         else {
                         ArrayList<Hobby> hobby = new ArrayList<Hobby>();
                         for (String s : multiselectComboBox.getValue()) hobby.add(Hobby.valueOf(s));
+
                             Profilo profilo = new Profilo(nome.getValue(),cognome.getValue(),luogo_di_nascita.getValue(),residenza.getValue(),picker.getValue(), altezza.getValue(),Sesso.valueOf(sessi.getValue()),Interessi.valueOf(interessi.getValue()),Colori_Capelli.valueOf(capelli.getValue()),Colore_Occhi.valueOf(occhi.getValue()),toadd,hobby);
 
 

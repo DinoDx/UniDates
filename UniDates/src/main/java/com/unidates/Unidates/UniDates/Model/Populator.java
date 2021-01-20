@@ -57,13 +57,17 @@ public class Populator implements ApplicationRunner {
         ;
 
 
-        Profilo p1 = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI, new Foto(Utils.downloadUrl("https://source.unsplash.com/random")) ,hobbyArrayList);
+        Profilo p1 = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto(Utils.downloadUrl("https://source.unsplash.com/random")) ,hobbyArrayList);
         p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         Profilo p2 = new Profilo("Paolo", "Prova2", "Napoli", "Napoli", LocalDate.of(1995,7,15), 185, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.ROSSI, Colore_Occhi.VERDI,new Foto(Utils.downloadUrl("https://source.unsplash.com/random")), hobbyArrayList);
         p2.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
+        p2.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
+        p2.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));;
         Profilo p3 = new Profilo("Lucia", "Prova3", "Napoli", "Napoli", LocalDate.of(1991,1,25), 164, Sesso.DONNA, Interessi.ENTRAMBI, Colori_Capelli.CASTANI, Colore_Occhi.CASTANI,new Foto(Utils.downloadUrl("https://source.unsplash.com/random")), hobbyArrayList);
+        p3.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
+        p3.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p3.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
 
         utenteService.registrazioneStudente(s1, p1);
@@ -79,6 +83,8 @@ public class Populator implements ApplicationRunner {
         Moderatore m1 = new Moderatore("moderatore@gmail.com", "moderatore");
         Profilo p4 = new Profilo("Marcello", "Moderatore", "Napoli", "Napoli", LocalDate.of(1999,6,12), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.GRIGI, Colore_Occhi.AZZURRI,new Foto(Utils.downloadUrl("https://source.unsplash.com/random")),hobbyArrayList );
         p4.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
+        p4.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
+        p4.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
 
         utenteService.registrazioneModeratore(m1, p4);
 
@@ -86,6 +92,8 @@ public class Populator implements ApplicationRunner {
 
         CommunityManager cm1 = new CommunityManager("communitymanager@gmail.com","communitymanager");
         Profilo p5 = new Profilo("Francesca", "CM", "Napoli", "Napoli", LocalDate.of(1980,7,12), 170, Sesso.DONNA, Interessi.UOMINI, Colori_Capelli.CASTANI, Colore_Occhi.AZZURRI, new Foto(Utils.downloadUrl("https://source.unsplash.com/random")),hobbyArrayList);
+        p5.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
+        p5.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p5.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
 
         utenteService.registrazioneCommunityManager(cm1, p5);
