@@ -23,13 +23,9 @@ import java.io.ByteArrayInputStream;
 
 public class ListaSegnalazioni extends VerticalLayout{
 
-    TextField motivazione;
-    TextField dettagli;
-
 
     //prova commit
     public ListaSegnalazioni(Moderatore moderatore,GestioneModerazioneController controller){
-
         VerticalLayout vertical = new VerticalLayout();
         for(Segnalazione s : moderatore.getSegnalazioneRicevute()){
             vertical.add(segnalazione(s,controller,moderatore));
@@ -41,19 +37,21 @@ public class ListaSegnalazioni extends VerticalLayout{
         HorizontalLayout horizontal = new HorizontalLayout();
         StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(segnalazione.getFoto().getImg()));
         Image image = new Image(resource,"");
-        image.getStyle().set("width","250px");
-        image.getStyle().set("height","250px");
-        Span testo = new Span("Hai ricevuto una segnalazione per una foto di : " + segnalazione.getFoto().getProfilo().getNome() + segnalazione.getFoto().getProfilo().getCognome() );
+        image.getStyle().set("width","100px");
+        image.getStyle().set("height","100px");
+        Span testo = new Span("Hai ricevuto una segnalazione per una foto di : " + segnalazione.getFoto().getProfilo().getNome() + segnalazione.getFoto().getProfilo().getCognome());
         horizontal.setAlignItems(FlexComponent.Alignment.CENTER);
         horizontal.add(image, testo, pulsanteSegnalazione(segnalazione,controller, moderatore));
         return horizontal;
     }
 
+    public Notification notification;
+
     public Button pulsanteSegnalazione(Segnalazione segnalazione, GestioneModerazioneController controller, Moderatore moderatore){
         Button button = new Button("Apri");
         Button annulla = new Button("Annulla");
 
-       Notification notification = new Notification();
+        notification = new Notification();
         VerticalLayout vertical = new VerticalLayout();
         vertical.setAlignItems(FlexComponent.Alignment.CENTER);
 
@@ -63,7 +61,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         image.getStyle().set("height","250px");
 
         HorizontalLayout horizontal = new HorizontalLayout();
-        horizontal.add(infoSegnalazione(segnalazione), email(segnalazione, controller, moderatore));
+        horizontal.add(infoSegnalazione(segnalazione,controller,moderatore));
         vertical.add(image,horizontal,annulla);
 
         notification.add(vertical);
@@ -80,34 +78,39 @@ public class ListaSegnalazioni extends VerticalLayout{
         return button;
     }
 
-    public VerticalLayout infoSegnalazione(Segnalazione segnalazione){
+    public HorizontalLayout infoSegnalazione(Segnalazione segnalazione,GestioneModerazioneController controller, Moderatore moderatore){
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+
+        //layout sinistra
         VerticalLayout vertical = new VerticalLayout();
         Span nome = new Span(segnalazione.getFoto().getProfilo().getNome());
 
-        motivazione = new TextField();
+        TextField motivazione = new TextField();
         motivazione.setPlaceholder("Motivazione");
 
-        dettagli= new TextField();
+        TextField dettagli = new TextField();
         dettagli.setPlaceholder("Dettagli");
 
-        vertical.setAlignItems(FlexComponent.Alignment.CENTER);
-        vertical.add(nome, motivazione, dettagli);
-        return vertical;
-    }
 
-    public VerticalLayout email(Segnalazione segnalazione, GestioneModerazioneController controller, Moderatore moderatore){
-        VerticalLayout vertical = new VerticalLayout();
+        //layout destra
+        VerticalLayout vertical_due = new VerticalLayout();
 
         Span email = new Span(segnalazione.getFoto().getProfilo().getStudente().getEmail());
 
         com.vaadin.flow.component.button.Button inviaAmmonimento = new com.vaadin.flow.component.button.Button("Invia Ammonimento");
         inviaAmmonimento.addClickListener(e -> {
-            Ammonimento ammonimento = new Ammonimento(motivazione.getValue(), dettagli.getValue(), segnalazione.getFoto(), segnalazione.getFoto().getProfilo().getStudente(),moderatore);
+            Ammonimento ammonimento = new Ammonimento();
+            ammonimento.setDettagli(dettagli.getValue());
+            ammonimento.setMotivazione(motivazione.getValue());
             controller.inviaAmmonimento(ammonimento, moderatore, segnalazione.getFoto().getProfilo().getStudente(), segnalazione.getFoto());
+            notification.close();
         });
-        vertical.setAlignItems(FlexComponent.Alignment.CENTER);
-        vertical.add(email, inviaAmmonimento);
-        return vertical;
+        vertical_due.setAlignItems(FlexComponent.Alignment.CENTER);
+        vertical_due.add(email, inviaAmmonimento);
 
+        vertical.setAlignItems(FlexComponent.Alignment.CENTER);
+        vertical.add(nome, motivazione, dettagli);
+        horizontalLayout.add(vertical,vertical_due);
+        return horizontalLayout;
     }
 }

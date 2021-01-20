@@ -24,11 +24,6 @@ public class Notifica_Component extends Div {
         VerticalLayout internal_card_due = new VerticalLayout();
         H6 descrizione = new H6(notifica.getTestoNotifica());
         internal_card_due.add(descrizione);
-        if(notifica.getTipo_notifica() == Tipo_Notifica.MATCH){
-            Button avvia_chat = new Button("Avvia chat!",new Icon(VaadinIcon.FIRE));
-            internal_card_due.add(avvia_chat);
-        }
-
 
 
         setSizeFull();

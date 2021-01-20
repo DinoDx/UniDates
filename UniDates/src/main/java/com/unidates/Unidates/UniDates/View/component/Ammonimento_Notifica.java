@@ -7,6 +7,9 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.StreamResource;
+
+import java.io.ByteArrayInputStream;
 
 public class Ammonimento_Notifica extends Div {
 
@@ -17,10 +20,11 @@ public class Ammonimento_Notifica extends Div {
         internal_layout.setHeight("100px");
 
         VerticalLayout didascalie = new VerticalLayout();
-        H6 descrizione = new H6("Hai ricevuto un ammonimento.La tua foto è stata rimossa");
+        H6 descrizione = new H6(notifica.getTestoNotifica());
         didascalie.add(descrizione);
 
-        Image image = new Image("https://randomuser.me/api/portraits/men/42.jpg","ciao");
+        StreamResource resource = new StreamResource("fotoprofilo",()-> new ByteArrayInputStream(notifica.getFoto().getImg()));
+        Image image = new Image(resource,"");
         image.setWidth("80px");
         image.getStyle().set("margin-left","2em");
         image.setHeight("80px");

@@ -15,7 +15,6 @@ import java.io.ByteArrayInputStream;
 public class infoModeratore extends Div {
 
     public infoModeratore(Moderatore moderatore){
-
         HorizontalLayout horizontal = new HorizontalLayout();
         horizontal.add(immagineMod(moderatore),infoMod(moderatore),segnalazioniMod(moderatore));
         add(horizontal);
