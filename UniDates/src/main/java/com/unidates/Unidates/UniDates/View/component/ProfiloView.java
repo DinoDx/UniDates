@@ -44,7 +44,7 @@ public class ProfiloView extends VerticalLayout {
     Span altezza = new Span();
     Span compleanno = new Span();
 
-    public ProfiloView(Utente utente){
+    public ProfiloView(){
         httpSession.removeAttribute("studente");
         VerticalLayout tot = Page();
         tot.setAlignItems(Alignment.CENTER);
