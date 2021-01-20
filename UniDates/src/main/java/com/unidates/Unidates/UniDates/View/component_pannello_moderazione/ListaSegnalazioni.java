@@ -27,7 +27,7 @@ public class ListaSegnalazioni extends VerticalLayout{
     TextField dettagli;
 
 
-
+    //prova commit
     public ListaSegnalazioni(Moderatore moderatore,GestioneModerazioneController controller){
 
         VerticalLayout vertical = new VerticalLayout();
