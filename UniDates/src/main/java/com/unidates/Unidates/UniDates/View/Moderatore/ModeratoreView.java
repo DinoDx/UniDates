@@ -28,9 +28,9 @@ public class ModeratoreView extends VerticalLayout {
         verticalLayout.setAlignItems(Alignment.CENTER);
 
         HorizontalLayout horizontalLayout = new HorizontalLayout();
-       // horizontalLayout.add(new ListaSegnalazioni(moderatore),);
+        //horizontalLayout.add(new ListaSegnalazioni(moderatore));
 
-       // verticalLayout.add(new infoModeratore(moderatore), );
+        verticalLayout.add(new infoModeratore(moderatore));
 
     }
 
