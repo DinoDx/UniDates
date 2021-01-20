@@ -28,7 +28,6 @@ public class Segnalazione {
     }
 
     public Segnalazione(String motivazione, String dettagli){
-
         this.motivazione = motivazione;
         this.dettagli = dettagli;
     }

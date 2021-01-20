@@ -5,14 +5,12 @@ import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.*;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Messaggio;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
 import com.unidates.Unidates.UniDates.Model.Service.Publisher;
@@ -24,20 +22,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 
 @Route("")
@@ -175,19 +164,7 @@ public class homeTest extends VerticalLayout {
         });
 
 
-        Button sendMessage = new Button("Invio messaggio", buttonClickEvent -> {
-            Messaggio toSend = new Messaggio();
-            toSend.setTestoMessaggio(messaggio.getValue());
-            gestioneInterazioniController.inviaMessaggio(trovaStudente(email.getValue()),trovaStudente(email2.getValue()),toSend);
 
-            /* Utente mittente = gestioneUtentiController.trovaUtente(email.getValue());
-            Utente destinatario = gestioneUtentiController.trovaUtente(email2.getValue());
-
-            gestioneUtentiController.trovaUtente(email.getValue()).getMittente().forEach(chat -> { //.getMittente() tutte le chat che l'utente ha iniziato -- .getDestinatario() // tutte le chat che l'utente ha ricevuto
-                chat.getMessaggi().forEach(messaggio1 -> System.out.println(messaggio1.getTestoMessaggio()));
-            });          // in questo caso la funzione stampa tutti i messaggi di tutte le chat che l'utente nel campo email, ha INIZIATO
-            */
-        });
 
         Button inviaAmmonimento = new Button("inviaAmmonimento", e ->{
             Ammonimento a = new Ammonimento();
@@ -219,7 +196,6 @@ public class homeTest extends VerticalLayout {
         //add(modificaProfilo);
         add(aggiungiModeratore);
         add(aggiungiCM);
-        add(sendMessage);
         add(aggiungiFotoProfilo);
         add(cambiapassowrd);
         /*

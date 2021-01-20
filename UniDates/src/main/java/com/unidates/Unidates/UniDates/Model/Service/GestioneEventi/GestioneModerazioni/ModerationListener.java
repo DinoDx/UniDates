@@ -27,9 +27,6 @@ public class ModerationListener {
     private NotificaService notificaService;
 
     @Autowired
-    private Publisher publisher;
-
-    @Autowired
     SessionRegistry sessionRegistry;
 
     @EventListener
@@ -49,14 +46,8 @@ public class ModerationListener {
         Logger logger = Logger.getLogger("BannedLogger");
         logger.info("BannedLogger in azione");
         logger.info(bannedEvent.getSospensione().getStudente().getEmail() + " ha ricevuto una sospensione di " + bannedEvent.getSospensione().getDurata() + " giorni!");
-        //new PersistentTokenBasedRememberMeServices().logout(request, response, auth);
         logger.info("Sospensione allo studente inviata");
-        List<SessionInformation> sessionInformations = SecurityUtils.getListActiveSession(bannedEvent.getSospensione().getStudente(), sessionRegistry);
-        if( sessionInformations != null){
-            sessionInformations.forEach(SessionInformation::expireNow); // slogga lo studente
-        };
-        logger.info("Utente sloggato!");
-       // sessionRegistry.getSessionInformation(sessionId).expireNow();
+        SecurityUtils.forceLogout(bannedEvent.getSospensione().getStudente(), sessionRegistry);
 
     }
 }

@@ -44,7 +44,7 @@ public class ModerazioneService {
     public void inviaSegnalazione(Segnalazione s ,Foto f){
         s.setFoto(f);
         List<Utente> moderatores = utenteRepository.findAllByRuolo(Ruolo.MODERATORE);
-        s.setModeratore( (Moderatore) moderatores.get(new Random().nextInt(moderatores.size() - 1))); //Moderatore scelto casualmente tra tutti i moderatori
+        s.setModeratore( (Moderatore) moderatores.get(new Random().nextInt(moderatores.size()))); //Moderatore scelto casualmente tra tutti i moderatori
         segnalazioniRepository.save(s);
     }
 

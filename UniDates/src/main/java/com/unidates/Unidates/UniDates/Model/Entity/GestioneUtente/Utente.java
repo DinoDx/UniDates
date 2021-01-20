@@ -1,13 +1,10 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 
 import com.unidates.Unidates.UniDates.Enum.Ruolo;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -27,12 +24,6 @@ public abstract class Utente implements Serializable {
 
     @OneToMany(mappedBy = "utente", cascade = CascadeType.REMOVE)
     private List<Notifica> listNotifica;
-
-    @OneToMany(mappedBy = "mittente",cascade = CascadeType.REMOVE)
-    private List<Chat> mittente;
-
-    @OneToMany(mappedBy = "destinatario", cascade = CascadeType.REMOVE)
-    private List<Chat> destinatario;
 
 
     public Utente() {
@@ -93,22 +84,6 @@ public abstract class Utente implements Serializable {
         isActive = active;
     }
 
-    public List<Chat> getMittente() {
-        return mittente;
-    }
-
-    public void setMittente(List<Chat> mittente) {
-        this.mittente = mittente;
-    }
-
-    public List<Chat> getDestinatario() {
-        return destinatario;
-    }
-
-    public void setDestinatario(List<Chat> destinatario) {
-        this.destinatario = destinatario;
-    }
-
 
     @Override
     public String toString() {
@@ -119,8 +94,6 @@ public abstract class Utente implements Serializable {
                 ", ruolo=" + ruolo +
                 ", isActive=" + isActive +
                 ", listNotifica=" + listNotifica +
-                ", mittente=" + mittente +
-                ", destinatario=" + destinatario +
                 '}';
     }
 }

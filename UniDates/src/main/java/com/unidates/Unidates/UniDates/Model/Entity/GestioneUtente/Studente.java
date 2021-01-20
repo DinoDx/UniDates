@@ -2,8 +2,6 @@ package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 
 
 import com.unidates.Unidates.UniDates.Enum.Ruolo;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Chat;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;

@@ -1,12 +1,14 @@
 package com.unidates.Unidates.UniDates.Model;
 
 import com.unidates.Unidates.UniDates.Enum.*;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni.MatchService;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione.ModerazioneService;
 import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
 import com.unidates.Unidates.UniDates.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class Populator implements ApplicationRunner {
 
     @Autowired
     private MatchService matchService;
+
+    @Autowired
+    private ModerazioneService moderazioneService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -84,6 +89,11 @@ public class Populator implements ApplicationRunner {
         p5.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
 
         utenteService.registrazioneCommunityManager(cm1, p5);
+
+
+        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione1","dettagli1"), p1.getFotoProfilo());
+        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione2","dettagli2"), p2.getFotoProfilo());
+        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione3","dettagli3"), p3.getFotoProfilo());
 
 
     }

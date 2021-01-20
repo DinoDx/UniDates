@@ -6,6 +6,7 @@ import com.vaadin.flow.server.ServletHelper;
 import com.vaadin.flow.shared.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -56,17 +57,22 @@ public class SecurityUtils {
         return utente;
     }
 
-    public static List<SessionInformation> getListActiveSession(Utente utente, SessionRegistry sessionRegistry){
+    public static void  forceLogout(Utente utente, SessionRegistry sessionRegistry){
         List<Object> userDetails =  sessionRegistry.getAllPrincipals();
         for (Object o : userDetails){
             if( o instanceof User){
                 User user = (User) o;
                 if(user.getUsername().equals(utente.getEmail())){
-                    return sessionRegistry.getAllSessions(user, false);
+                    List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(user, false);
+                    if(sessionInformations != null)
+                        sessionInformations.forEach(SessionInformation::expireNow);
                 }
 
             }
         }
-        return null;
+    }
+
+    public static void  refreshNotify(Utente utente,Utente utente2, SessionRegistry sessionRegistry){
+
     }
 }
