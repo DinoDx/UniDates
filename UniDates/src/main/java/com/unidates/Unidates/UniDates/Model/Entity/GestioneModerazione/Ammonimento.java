@@ -38,10 +38,7 @@ public class Ammonimento {
     public Ammonimento(){
     }
 
-    public Ammonimento(String motivazione, String dettagli, Foto foto, Studente studente,Moderatore moderatore){
-        this.moderatore = moderatore;
-        this.studente = studente;
-        this.foto = foto;
+    public Ammonimento(String motivazione, String dettagli){
         this.motivazione = motivazione;
         this.dettagli = dettagli;
     }

@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.Model;
 
 import com.unidates.Unidates.UniDates.Enum.*;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
@@ -102,6 +103,13 @@ public class Populator implements ApplicationRunner {
         moderazioneService.inviaSegnalazione(new Segnalazione("motivazione1","dettagli1"), p1.getFotoProfilo());
         moderazioneService.inviaSegnalazione(new Segnalazione("motivazione2","dettagli2"), p2.getFotoProfilo());
         moderazioneService.inviaSegnalazione(new Segnalazione("motivazione3","dettagli3"), p3.getFotoProfilo());
+
+        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione1", "dettagli1"), s1, m1, s1.getProfilo().getFotoProfilo());
+        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione2", "dettagli2"), s2, m1, s2.getProfilo().getFotoProfilo());
+
+        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), s3, m1, s3.getProfilo().getListaFoto().get(1));
+        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), s3, m1, s3.getProfilo().getListaFoto().get(2));
+        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), s3, m1, s3.getProfilo().getFotoProfilo());
 
 
     }

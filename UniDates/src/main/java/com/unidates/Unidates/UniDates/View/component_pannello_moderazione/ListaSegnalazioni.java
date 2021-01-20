@@ -99,9 +99,7 @@ public class ListaSegnalazioni extends VerticalLayout{
 
         com.vaadin.flow.component.button.Button inviaAmmonimento = new com.vaadin.flow.component.button.Button("Invia Ammonimento");
         inviaAmmonimento.addClickListener(e -> {
-            Ammonimento ammonimento = new Ammonimento();
-            ammonimento.setDettagli(dettagli.getValue());
-            ammonimento.setMotivazione(motivazione.getValue());
+            Ammonimento ammonimento = new Ammonimento(dettagli.getValue(),motivazione.getValue());
             controller.inviaAmmonimento(ammonimento, moderatore, segnalazione.getFoto().getProfilo().getStudente(), segnalazione.getFoto());
             notification.close();
         });

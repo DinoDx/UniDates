@@ -60,7 +60,7 @@ public class SegnalazioneComponent extends Div {
 
          Button inviaAmmonimento = new Button("Invia Ammonimento");
         inviaAmmonimento.addClickListener(e -> {
-            Ammonimento ammonimento = new Ammonimento(motivazione.getValue(), dettagli.getValue(), segnalazione.getFoto(), segnalazione.getFoto().getProfilo().getStudente(),moderatore);
+            Ammonimento ammonimento = new Ammonimento(motivazione.getValue(), dettagli.getValue());
             controller.inviaAmmonimento(ammonimento, moderatore, segnalazione.getFoto().getProfilo().getStudente(), segnalazione.getFoto());
         });
         vertical.setAlignItems(FlexComponent.Alignment.CENTER);
