@@ -4,6 +4,8 @@ package com.unidates.Unidates.UniDates.View.component_home_page;
 import com.example.application.views.Person;
 import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Enum.Ruolo;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.UtenteRepository;
 import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
@@ -14,6 +16,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -46,6 +49,8 @@ public class Home extends VerticalLayout{
     @Autowired
     GestioneUtentiController gestioneUtentiController;
 
+
+
     public Home(GestioneUtentiController gestioneUtentiController,GestioneInterazioniController gestioneInterazioniController){
         this.gestioneInterazioniController = gestioneInterazioniController;
         this.gestioneUtentiController = gestioneUtentiController;
@@ -53,7 +58,17 @@ public class Home extends VerticalLayout{
         VerticalLayout utenti = new VerticalLayout();
         utenti.setAlignItems(Alignment.CENTER);
 
+        Button pannelloAmministrativo = new Button("Pannello amministrazione");
+        Anchor pannello = new Anchor("/pannellomoderatore");
+        pannello.add(pannelloAmministrativo);
+
         Utente utente = SecurityUtils.getLoggedIn();
+
+
+        if(utente.getRuolo() == Ruolo.MODERATORE){
+            utenti.add(pannello);
+        }
+
         for(Utente u : gestioneUtentiController.findAll()){
                 if(!(u.getEmail().equals(utente.getEmail()))) {
                     utenti.add(new Card_Utente_Home_Component(gestioneInterazioniController,u));

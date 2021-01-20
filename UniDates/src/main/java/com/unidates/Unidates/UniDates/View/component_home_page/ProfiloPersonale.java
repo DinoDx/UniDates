@@ -73,12 +73,8 @@ public class ProfiloPersonale extends VerticalLayout {
         VerticalLayout totale_info = new VerticalLayout();
         totale_info.add(Info1(),Info2(),Info3(),Info4());
 
-        HorizontalLayout pulsanti = new HorizontalLayout();
-        pulsanti.add(Modifica(),Conferma(),CambiaPassword());
-        pulsanti.add(Pulsanti());
-
         sotto_padre.add(ImageUtente(),totale_info);
-        padre.add(NomeUtente(),sotto_padre,pulsanti);
+        padre.add(NomeUtente(),sotto_padre,Pulsanti());
         add(padre);
     }
 
@@ -94,8 +90,8 @@ public class ProfiloPersonale extends VerticalLayout {
         VerticalLayout image = new VerticalLayout();
         StreamResource resource = new StreamResource("fotoprofilo",()-> new ByteArrayInputStream(studente.getProfilo().getListaFoto().get(0).getImg()));
         Image img = new Image(resource,"");
-        img.getStyle().set("width","100px");
-        img.getStyle().set("height","100px");
+        img.getStyle().set("width","200px");
+        img.getStyle().set("height","200px");
         image.add(img);
         return image;
     }
@@ -132,6 +128,7 @@ public class ProfiloPersonale extends VerticalLayout {
         città.setEnabled(false);
         luogo_di_nascita.setValue(profilo.getLuogoNascita());
         luogo_di_nascita.setEnabled(false);
+
         interessi.setLabel("Interessi");
         interessi.setValue(studente.getProfilo().getInteressi().toString());
         Interessi [] interess = Interessi.values();
@@ -151,11 +148,13 @@ public class ProfiloPersonale extends VerticalLayout {
 
         capelli.setLabel("Capelli");
         capelli.setPlaceholder("Colore capelli");
+        capelli.setEnabled(false);
         Colori_Capelli [] colore_cap = Colori_Capelli.values();
         capelli.setItems(colore_cap[0].toString(),colore_cap[1].toString(),colore_cap[2].toString(),colore_cap[3].toString(),colore_cap[4].toString(),colore_cap[5].toString(),colore_cap[6].toString());
 
         occhi.setLabel("Occhi");
         occhi.setPlaceholder("Colore occhi");
+        occhi.setEnabled(false);
         Colore_Occhi [] colore_occhi = Colore_Occhi.values();
         occhi.setItems(colore_occhi[0].toString(),colore_occhi[1].toString(),colore_occhi[2].toString(),colore_occhi[3].toString(),colore_occhi[4].toString(),colore_occhi[5].toString(),colore_occhi[6].toString());
 
@@ -178,9 +177,7 @@ public class ProfiloPersonale extends VerticalLayout {
 
     public HorizontalLayout Pulsanti(){
         HorizontalLayout pulsanti = new HorizontalLayout();
-
-
-
+        pulsanti.add(Modifica(),Conferma(),CambiaPassword());
         return pulsanti;
     }
 
@@ -205,35 +202,61 @@ public class ProfiloPersonale extends VerticalLayout {
 
     public Button Conferma(){
         Button conferma = new Button("Conferma", buttonClickEvent -> {
-            studente.getProfilo().setAltezza(altezza.getValue());
-            studente.getProfilo().setNome(nome.getValue());
-            studente.getProfilo().setCognome(cognome.getValue());
-            studente.getProfilo().setDataDiNascita(compleanno.getValue());
-            studente.setEmail(email.getValue());
-            studente.getProfilo().setResidenza(città.getValue());
-            studente.getProfilo().setLuogoNascita(luogo_di_nascita.getValue());
-            studente.getProfilo().setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
-            studente.getProfilo().setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
-            studente.getProfilo().setInteressi(Interessi.valueOf(interessi.getValue()));
-            //hobby
-            ArrayList<Hobby> hob = new ArrayList<Hobby>();
-            for(String s : multiselectComboBox.getValue()) hob.add(Hobby.valueOf(s));
-            studente.getProfilo().setHobbyList(hob);
+            if(nome.isEmpty()){
+                new Notification("Campo Nome vuoto",2000).open();
+            }else if(cognome.isEmpty()){
+                new Notification("Campo Cognome vuoto",2000).open();
+            }else if(compleanno.isEmpty()){
+                new Notification("Campo Data di nascita vuoto",2000).open();
+            }else if(email.isEmpty()){
+                new Notification("Campo Email vuoto",2000).open();
+            }else if(altezza.isEmpty()){
+                new Notification("Campo Altezza vuoto",2000).open();
+            }else if(città.isEmpty()){
+                new Notification("Campo vuoto").open();
+            }else if(luogo_di_nascita.isEmpty()){
+                new Notification("Campo Luogo di nascita vuoto",2000).open();
+            }else if(interessi.isEmpty()){
+                new Notification("Campo Interessi vuoto",2000).open();
+            }else if(capelli.isEmpty()){
+                new Notification("Campo Capelli vuoto",2000).open();
+            }else if(occhi.isEmpty()){
+                new Notification("Campo Occhi vuoto",2000).open();
+            }else if(multiselectComboBox.isEmpty()){
+                new Notification("Campo Topics vuoto",2000).open();
 
-            controller.modificaProfilo(studente.getProfilo(),studente.getPassword());
+            }else {
+                studente.getProfilo().setAltezza(altezza.getValue());
+                studente.getProfilo().setNome(nome.getValue());
+                studente.getProfilo().setCognome(cognome.getValue());
+                studente.getProfilo().setDataDiNascita(compleanno.getValue());
+                studente.setEmail(email.getValue());
+                studente.getProfilo().setResidenza(città.getValue());
+                studente.getProfilo().setLuogoNascita(luogo_di_nascita.getValue());
+                studente.getProfilo().setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
+                studente.getProfilo().setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
+                studente.getProfilo().setInteressi(Interessi.valueOf(interessi.getValue()));
+                //hobby
+                ArrayList<Hobby> hob = new ArrayList<Hobby>();
+                for (String s : multiselectComboBox.getValue()) hob.add(Hobby.valueOf(s));
+                studente.getProfilo().setHobbyList(hob);
 
-            nome.setEnabled(false);
-            cognome.setEnabled(false);
-            compleanno.setEnabled(false);
-            email.setEnabled(false);
-            città.setEnabled(false);
-            luogo_di_nascita.setEnabled(false);
-            occhi.setEnabled(false);
-            capelli.setEnabled(false);
-            multiselectComboBox.setEnabled(false);
-            altezza.setEnabled(false);
-            interessi.setEnabled(false);
-            //VEDERE IMMAGINE
+                nome.setEnabled(false);
+                cognome.setEnabled(false);
+                compleanno.setEnabled(false);
+                email.setEnabled(false);
+                città.setEnabled(false);
+                luogo_di_nascita.setEnabled(false);
+                occhi.setEnabled(false);
+                capelli.setEnabled(false);
+                multiselectComboBox.setEnabled(false);
+                altezza.setEnabled(false);
+                interessi.setEnabled(false);
+                //VEDERE IMMAGINE
+
+
+                controller.modificaProfilo(studente.getProfilo(), studente.getPassword());
+            }
         });
         return conferma;
     }
@@ -255,17 +278,22 @@ public class ProfiloPersonale extends VerticalLayout {
         PasswordField seconda_password = new PasswordField("Conferma password");
         Button conferma = new Button("Conferma");
         conferma.addClickListener(buttonClickEvent -> {
-           if(encoder.matches(utente.getPassword(),password_attuale.getValue())){
-
-               if(prima_password.getValue().equals(seconda_password.getValue())){
-                   utente_controller.cambiaPassword(utente,prima_password.getValue(), password_attuale.getValue());
-               }else{
-                   Notification errore_password_attuale = new Notification("La password attuale non corrisponde",3000, Notification.Position.MIDDLE);
-                   errore_password_attuale.open();
+           if(encoder.matches(password_attuale.getValue(),utente.getPassword())){
+               if(prima_password.getValue().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")){
+                   if (prima_password.getValue().equals(seconda_password.getValue())) {
+                       utente_controller.cambiaPassword(utente, prima_password.getValue(), password_attuale.getValue());
+                       cambio.close();
+                   } else {
+                       Notification errore_password = new Notification("Le password nuove non corrispondono", 3000, Notification.Position.MIDDLE);
+                       errore_password.open();
+                   }
+               }else {
+                   Notification errore_password = new Notification("Le nuova password deve avere minimo 8 carrateri tra cui un nuemro e un carattere speciale", 3000, Notification.Position.MIDDLE);
+                   errore_password.open();
                }
            }else {
-               Notification errore_password = new Notification("Le password nuove non corrispondono",3000,Notification.Position.MIDDLE);
-               errore_password.open();
+               Notification errore_password_attuale = new Notification("La password attuale non corrisponde",3000, Notification.Position.MIDDLE);
+               errore_password_attuale.open();
            }
         });
         Button annulla = new Button("Annulla");

@@ -53,7 +53,7 @@ public class GestioneProfiloController {
     public void modificaProfilo(Profilo p, String password){
         if(checkProfilo(p))
             profiloService.modificaProfilo(p, password);
-        throw new InvalidModifyFormatException();
+        else throw new InvalidModifyFormatException();
     }
 
     @RequestMapping("/visualizzaProfilo")
@@ -76,7 +76,7 @@ public class GestioneProfiloController {
                 if(p.getSesso() == Sesso.UOMO || p.getSesso() == Sesso.DONNA || p.getSesso() == Sesso.ALTRO){
                     if(p.getInteressi() == Interessi.UOMINI || p.getInteressi() == Interessi.DONNE || p.getInteressi() == Interessi.ENTRAMBI || p.getInteressi() == Interessi.ALTRO){
                         // Controlli su colore occhi e capelli
-                        if(!p.getHobbyList().contains(null)) return true;
+                        if(p.getHobbyList().size()>0) return true;
                     }
                 }
             }

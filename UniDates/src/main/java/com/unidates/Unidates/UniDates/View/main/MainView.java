@@ -23,6 +23,7 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -88,8 +89,12 @@ public class MainView extends AppLayout {
         image.setHeight("30px");
 
         HorizontalLayout horizontalLayout = new HorizontalLayout();
-        horizontalLayout.add(image);
-        horizontalLayout.add("  Ciao " + studente.getProfilo().getNome());
+        horizontalLayout.setSpacing(false);
+        Span ciao = new Span("Ciao");
+        ciao.getStyle().set("margin-left","10px");
+        ciao.getStyle().set("margin-right","5px");
+        Span nome = new Span(studente.getProfilo().getNome());
+        horizontalLayout.add(image,ciao,nome);
 
 
         MenuItem profile = menuBar.addItem("");
@@ -112,12 +117,6 @@ public class MainView extends AppLayout {
                 notifiche.getSubMenu().addItem(new Ammonimento_Notifica(n));
         }
 
-        //Button Chat
-        Button chats = new Button(new Icon(VaadinIcon.PAPERPLANE_O));
-        Anchor anchor = new Anchor("/chat");
-        anchor.add(chats);
-        anchor.setId("aereo");
-
         //Layout Principale
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
@@ -135,7 +134,6 @@ public class MainView extends AppLayout {
 
         layout.add(viewTitle);
         layout.add(SearchFilter(),menuBar,notification);
-        layout.add(anchor);
         return layout;
     }
 
