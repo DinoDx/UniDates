@@ -67,14 +67,27 @@ public class ProfiloPersonale extends VerticalLayout {
 
     public ProfiloPersonale(GestioneProfiloController controller){
         this.controller = controller;
+
+
+        multiselectComboBox.setLabel("Seleziona Topic");
+        multiselectComboBox.setPlaceholder("Scelti...");
+        Hobby [] topic = Hobby.values();
+        List<String> topiclist = new ArrayList<String>();
+        for(Hobby h : topic) topiclist.add(h.toString());
+        multiselectComboBox.setItems(topiclist);
+        multiselectComboBox.getStyle().set("margin-bottom","30px");
+
+
         VerticalLayout padre = new VerticalLayout();
+        padre.setAlignItems(Alignment.CENTER);
 
         HorizontalLayout sotto_padre = new HorizontalLayout();
         VerticalLayout totale_info = new VerticalLayout();
         totale_info.add(Info1(),Info2(),Info3(),Info4());
 
+
         sotto_padre.add(ImageUtente(),totale_info);
-        padre.add(NomeUtente(),sotto_padre,Pulsanti());
+        padre.add(NomeUtente(),sotto_padre,multiselectComboBox,Pulsanti());
         add(padre);
     }
 
@@ -158,14 +171,7 @@ public class ProfiloPersonale extends VerticalLayout {
         Colore_Occhi [] colore_occhi = Colore_Occhi.values();
         occhi.setItems(colore_occhi[0].toString(),colore_occhi[1].toString(),colore_occhi[2].toString(),colore_occhi[3].toString(),colore_occhi[4].toString(),colore_occhi[5].toString(),colore_occhi[6].toString());
 
-        multiselectComboBox.setLabel("Seleziona Topic");
-        multiselectComboBox.setPlaceholder("Scelti...");
-        Hobby [] topic = Hobby.values();
-        List<String> topiclist = new ArrayList<String>();
-        for(Hobby h : topic) topiclist.add(h.toString());
-        multiselectComboBox.setItems(topiclist);
-
-        info3.add(capelli,occhi,multiselectComboBox);
+        info3.add(capelli,occhi);
         return info3;
     }
 

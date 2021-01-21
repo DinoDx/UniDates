@@ -1,10 +1,12 @@
 package com.unidates.Unidates.UniDates.View.component;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
+import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
+import com.unidates.Unidates.UniDates.Utils.Utils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -16,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.server.StreamResource;
 import org.hibernate.internal.build.AllowPrintStacktrace;
@@ -27,11 +30,15 @@ public class Card_Utente_Home_Component extends Div {
 
     GestioneInterazioniController gestioneInterazioniController;
 
-    public Card_Utente_Home_Component(GestioneInterazioniController gestioneInterazioniController, Utente utente){
+    GestioneModerazioneController gestioneModerazioneController;
+
+    public Card_Utente_Home_Component(GestioneInterazioniController gestioneInterazioniController, Utente utente, GestioneModerazioneController gestioneModerazioneController){
         this.gestioneInterazioniController = gestioneInterazioniController;
+        this.gestioneModerazioneController = gestioneModerazioneController;
         HorizontalLayout tot = Card(utente);
         add(tot);
     }
+
 
     public HorizontalLayout Card(Utente utente){
         Studente studente = (Studente) utente;
@@ -47,7 +54,7 @@ public class Card_Utente_Home_Component extends Div {
         image_profilo.getStyle().set("width","250px");
         image_profilo.getStyle().set("height","250px");
         Button like = getLikeButton(utente);
-        Button report = reportButton();
+        Button report = reportButton(studente);
         pulsanti.add(like,report);
         layout_foto.add(image_profilo,pulsanti);
 
@@ -82,19 +89,23 @@ public class Card_Utente_Home_Component extends Div {
         return like;
     }
 
-    private Button reportButton(){
+    private Button reportButton(Studente studente){
         //Notifica Segnalazione
         Notification notifica = new Notification();
         VerticalLayout layout_report = new VerticalLayout();
-        TextArea reporting = new TextArea("Inserisci moticazione segnalazione:");
+        TextField reporting = new TextField();
+        reporting.setPlaceholder("Inserisci moticazione segnalazione");
+        TextArea dettagli = new TextArea();
+        dettagli.setPlaceholder("Dettagli segnalazione");
         Button invio = new Button("Invia report",buttonClickEvent -> {
-            //implmentare invio segnalazione
+            gestioneModerazioneController.inviaSegnalazione(reporting.getValue(),dettagli.getValue(),studente.getProfilo().getFotoProfilo());
+            notifica.close();
         });
         Button annulla = new Button("Annulla",buttonClickEvent -> {
             notifica.close();
         });
         layout_report.setAlignItems(FlexComponent.Alignment.CENTER);
-        layout_report.add(reporting,invio,annulla);
+        layout_report.add(reporting,dettagli,invio,annulla);
         notifica.add(layout_report);
         //Pulsante Report
         Button report = new Button("Report",new Icon(VaadinIcon.PENCIL),buttonClickEvent->{

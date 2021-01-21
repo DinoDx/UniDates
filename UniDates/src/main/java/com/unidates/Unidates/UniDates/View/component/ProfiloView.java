@@ -1,8 +1,11 @@
 package com.unidates.Unidates.UniDates.View.component;
 
+import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
+import com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni.MatchService;
+import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.View.main.MainView;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -25,12 +28,20 @@ import java.io.ByteArrayInputStream;
 @Route(value = "ricercaprofilo",layout = MainView.class)
 public class ProfiloView extends VerticalLayout {
 
+    @Autowired
+    MatchService matchService;
+
+    //utente ricercato
     ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
     HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
 
 
     String email;
     Studente studente = (Studente) httpSession.getAttribute("studente");
+
+    //utente in sessione
+    Utente utente = SecurityUtils.getLoggedIn();
+    Studente s = (Studente) utente;
 
 
     Span nome;
@@ -44,7 +55,8 @@ public class ProfiloView extends VerticalLayout {
     Span altezza = new Span();
     Span compleanno = new Span();
 
-    public ProfiloView(){
+    public ProfiloView(MatchService matchService){
+       this.matchService = matchService;
         httpSession.removeAttribute("studente");
         VerticalLayout tot = Page();
         tot.setAlignItems(Alignment.CENTER);
@@ -57,6 +69,7 @@ public class ProfiloView extends VerticalLayout {
         //padre
         HorizontalLayout horizontal = new HorizontalLayout();
 
+        //layout immagine
         VerticalLayout image_layout = new VerticalLayout();
         StreamResource resource = new StreamResource("ciao", () -> new ByteArrayInputStream(studente.getProfilo().getListaFoto().get(0).getImg()));
         Image image_profilo = new Image(resource, "");
@@ -64,7 +77,7 @@ public class ProfiloView extends VerticalLayout {
         image_profilo.getStyle().set("height","250px");
         image_layout.add(image_profilo);
 
-        VerticalLayout info_layout = new VerticalLayout();
+
 
         HorizontalLayout nome_cognome = new HorizontalLayout();
         nome = new Span(studente.getProfilo().getNome());
@@ -86,10 +99,16 @@ public class ProfiloView extends VerticalLayout {
         compleanno = new Span("Data di nascita:" + studente.getProfilo().getDataDiNascita());
         caratteristiche.add(colore_capelli, colore_occhi, altezza, compleanno);
 
+        if(matchService.trovaMatch(s,studente) != null){
+            VerticalLayout info_layout = new VerticalLayout();
+            info_layout.add(nome_cognome, topics, interessi, città, caratteristiche);
+            horizontal.add(image_layout, info_layout);
+        }else {
+            VerticalLayout noMatch = new VerticalLayout();
+            noMatch.add(nome_cognome,topics,interessi);
+            horizontal.add(image_layout,noMatch);
+        }
 
-        info_layout.add(nome_cognome, topics, interessi, città, caratteristiche);
-
-        horizontal.add(image_layout, info_layout);
         allPage.add(horizontal);
         return allPage;
     }

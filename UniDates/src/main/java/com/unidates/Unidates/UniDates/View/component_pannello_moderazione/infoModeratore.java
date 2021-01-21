@@ -2,6 +2,7 @@ package com.unidates.Unidates.UniDates.View.component_pannello_moderazione;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -14,7 +15,8 @@ import java.io.ByteArrayInputStream;
 
 public class infoModeratore extends Div {
 
-    public infoModeratore(Moderatore moderatore){
+    public infoModeratore(Utente utente){
+        Moderatore moderatore = (Moderatore) utente;
         HorizontalLayout horizontal = new HorizontalLayout();
         horizontal.add(immagineMod(moderatore),infoMod(moderatore),segnalazioniMod(moderatore));
         add(horizontal);

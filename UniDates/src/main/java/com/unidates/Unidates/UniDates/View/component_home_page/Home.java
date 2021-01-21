@@ -3,6 +3,7 @@ package com.unidates.Unidates.UniDates.View.component_home_page;
 
 import com.example.application.views.Person;
 import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
+import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
@@ -49,10 +50,15 @@ public class Home extends VerticalLayout{
     @Autowired
     GestioneUtentiController gestioneUtentiController;
 
+    @Autowired
+    GestioneModerazioneController gestioneModerazioneController;
 
 
-    public Home(GestioneUtentiController gestioneUtentiController,GestioneInterazioniController gestioneInterazioniController){
+
+
+    public Home(GestioneUtentiController gestioneUtentiController,GestioneInterazioniController gestioneInterazioniController,GestioneModerazioneController gestioneModerazioneController){
         this.gestioneInterazioniController = gestioneInterazioniController;
+        this.gestioneModerazioneController = gestioneModerazioneController;
         this.gestioneUtentiController = gestioneUtentiController;
         setAlignItems(Alignment.CENTER);
         VerticalLayout utenti = new VerticalLayout();
@@ -65,13 +71,13 @@ public class Home extends VerticalLayout{
         Utente utente = SecurityUtils.getLoggedIn();
 
 
-        if(utente.getRuolo() == Ruolo.MODERATORE){
+        if(utente.getRuolo() == Ruolo.MODERATORE || utente.getRuolo() == Ruolo.COMMUNITY_MANAGER){
             utenti.add(pannello);
         }
 
         for(Utente u : gestioneUtentiController.findAll()){
                 if(!(u.getEmail().equals(utente.getEmail()))) {
-                    utenti.add(new Card_Utente_Home_Component(gestioneInterazioniController,u));
+                    utenti.add(new Card_Utente_Home_Component(gestioneInterazioniController,u,gestioneModerazioneController));
                 }
         }
         add(utenti);
