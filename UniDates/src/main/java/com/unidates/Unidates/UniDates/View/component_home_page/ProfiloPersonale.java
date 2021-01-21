@@ -255,8 +255,9 @@ public class ProfiloPersonale extends VerticalLayout {
                 //VEDERE IMMAGINE
 
 
-                controller.modificaProfilo(studente.getProfilo(), studente.getPassword());
+                controller.modificaProfilo(studente.getProfilo());
             }
+
         });
         return conferma;
     }

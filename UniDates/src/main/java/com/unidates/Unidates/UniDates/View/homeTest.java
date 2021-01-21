@@ -114,7 +114,7 @@ public class homeTest extends VerticalLayout {
 
         Button aggiungiFoto = new Button("Aggiungi Foto", buttonClickEvent -> {
             byte[] img = new byte[] {(byte)0xe0};
-           gestioneProfiloController.aggiungiFoto(trovaStudente(email.getValue()).getProfilo(),new Foto(img));
+           gestioneProfiloController.aggiungiFoto(trovaStudente(email.getValue()).getProfilo(),img);
             for(Foto f : gestioneProfiloController.visualizzaProfilo(trovaStudente(email.getValue())).getListaFoto())
                 System.out.println(Arrays.toString(f.getImg()) + " " + gestioneProfiloController.visualizzaProfilo(trovaStudente(email.getValue())).getListaFoto().indexOf(f));
         });
@@ -171,7 +171,7 @@ public class homeTest extends VerticalLayout {
             a.setMotivazione(messaggio.getValue());
             a.setDettagli(messaggio.getValue());
             Studente studente = (Studente) gestioneUtentiController.trovaUtente(email2.getValue());
-            gestioneModerazioneController.inviaAmmonimento(a, (Moderatore) gestioneUtentiController.trovaUtente(email.getValue()), studente , studente.getProfilo().getListaFoto().get(0));
+            //gestioneModerazioneController.inviaAmmonimento(a, (Moderatore) gestioneUtentiController.trovaUtente(email.getValue()), studente , studente.getProfilo().getListaFoto().get(0));
         });
 
         Button cambiapassowrd = new Button("cambiapassword", e ->{

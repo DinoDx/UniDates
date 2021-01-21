@@ -9,7 +9,10 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Service.GestioneProfilo.ProfiloService;
+import com.unidates.Unidates.UniDates.Model.Service.Publisher;
+import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,10 +29,11 @@ public class GestioneProfiloController {
 
 
     @RequestMapping("/aggiungiFoto")
-    public void aggiungiFoto(Profilo p, Foto f){
+    public void aggiungiFoto(Profilo p, byte[] img){
+        Foto f = new Foto(img);
         if (checkFoto(f))
-                profiloService.aggiungiFoto(p, f);
-            else throw new InvalidPhotoException();
+            profiloService.aggiungiFoto(p, f);
+        else throw new InvalidPhotoException();
     }
 
     @RequestMapping("/eliminaFoto")
@@ -44,15 +48,16 @@ public class GestioneProfiloController {
 
     @RequestMapping("/eliminaProfile")
     public void eliminaProfilo(Profilo p, String password){
-        if (passwordEncoder.matches(password, p.getStudente().getPassword()))
-            profiloService.eliminaProfilo(p, password);
+        if (passwordEncoder.matches(password, p.getStudente().getPassword())){
+            profiloService.eliminaProfilo(p);
+        }
         else throw new PasswordMissmatchException();
     }
 
     @RequestMapping("/modificaProfile")
-    public void modificaProfilo(Profilo p, String password){
+    public void modificaProfilo(Profilo p){
         if(checkProfilo(p))
-            profiloService.modificaProfilo(p, password);
+            profiloService.modificaProfilo(p);
         else throw new InvalidModifyFormatException();
     }
 

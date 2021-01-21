@@ -5,13 +5,17 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneProfilo.FotoRepository;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneProfilo.ProfiloRepository;
+import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ProfiloService {
+    @Autowired
+    SessionRegistry sessionRegistry;
 
     @Autowired
     private ProfiloRepository profiloRepository;
@@ -19,11 +23,12 @@ public class ProfiloService {
     @Autowired
     private FotoRepository fotoRepository;
 
-    public void eliminaProfilo(Profilo profilo, String password){
+    public void eliminaProfilo(Profilo profilo){
         profiloRepository.deleteById(profilo.getId());
+        SecurityUtils.forceLogout(profilo.getStudente(), sessionRegistry);
     }
     
-    public void modificaProfilo(Profilo profilo, String password){
+    public void modificaProfilo(Profilo profilo){
         profiloRepository.save(profilo);
     }
 

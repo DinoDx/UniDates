@@ -25,21 +25,29 @@ public class GestioneModerazioneController {
 
 
     @RequestMapping("/inviaSegnalazione")
-    public void inviaSegnalazione(Foto f, Segnalazione s){
+    public void inviaSegnalazione(String motivazione,String dettagli, Foto f){
+        Segnalazione s = new Segnalazione(motivazione,dettagli);
+        s.setFoto(f);
         if(checkSegnalazione(s))
-            moderazioneService.inviaSegnalazione(s,f);
+            moderazioneService.inviaSegnalazione(s);
         else throw new InvalidReportFormatException();
     }
 
     @RequestMapping("/inviaAmmonimento") // non propriamente necessario
-    public void inviaAmmonimento(Ammonimento a,Moderatore m, Studente s, Foto f){
+    public void inviaAmmonimento(String motivazione,String dettagli,Moderatore m, Studente s, Foto f){
+        Ammonimento a = new Ammonimento(motivazione,dettagli);
+        a.setFoto(f);
+        a.setStudente(s);
+        a.setModeratore(m);
         if(checkAmmonimento(a))
             moderazioneService.inviaAmmonimento(a, s, m, f);
         else throw new InvalidWarningFormatException();
     }
 
     @RequestMapping("/inviaSospensione")
-    public void inviaSospensione(Sospensione sp, Studente s){
+    public void inviaSospensione(int durata, String dettagli, Studente s){
+        Sospensione sp = new Sospensione(durata, dettagli);
+        sp.setStudente(s);
         if(checkSospensione(sp))
             moderazioneService.inviaSospensione(sp, s);
         else throw new InvalidBanFormatException();

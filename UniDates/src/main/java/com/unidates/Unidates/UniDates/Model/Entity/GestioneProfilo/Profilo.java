@@ -61,9 +61,8 @@ public class Profilo implements Serializable {
         this.colore_occhi = colore_occhi;
         this.hobbyList = hobbyList;
         this.fotoProfilo = fotoProfilo;
+        this.listaFoto = new ArrayList<Foto>();
         fotoProfilo.setProfilo(this);
-        this.listaFoto = new ArrayList<Foto>(){
-        };
     }
 
     public Long getId() { return id; }

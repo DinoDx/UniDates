@@ -1,5 +1,6 @@
 package com.unidates.Unidates.UniDates.Model;
 
+import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
@@ -36,7 +37,7 @@ public class Populator implements ApplicationRunner {
     private MatchService matchService;
 
     @Autowired
-    private ModerazioneService moderazioneService;
+    private GestioneModerazioneController gestioneModerazioneController;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -100,16 +101,17 @@ public class Populator implements ApplicationRunner {
         utenteService.registrazioneCommunityManager(cm1, p5);
 
 
-        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione1","dettagli1"), p1.getFotoProfilo());
-        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione2","dettagli2"), p2.getFotoProfilo());
-        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione3","dettagli3"), p3.getFotoProfilo());
+        gestioneModerazioneController.inviaSegnalazione("motivazione1", "dettagli1", p1.getFotoProfilo());
+        gestioneModerazioneController.inviaSegnalazione("motivazione2", "dettagli2", p2.getFotoProfilo());
+        gestioneModerazioneController.inviaSegnalazione("motivazione3", "dettagli3", p3.getFotoProfilo());
 
-        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione1", "dettagli1"), s1, m1, s1.getProfilo().getFotoProfilo());
-        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione2", "dettagli2"), s2, m1, s2.getProfilo().getFotoProfilo());
+        gestioneModerazioneController.inviaAmmonimento("motivazione1", "dettagli1", m1, s1, s1.getProfilo().getFotoProfilo());
+        gestioneModerazioneController.inviaAmmonimento("motivazione2", "dettagli2", m1, s2, s2.getProfilo().getFotoProfilo());
+        gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getFotoProfilo());
 
-        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), s3, m1, s3.getProfilo().getListaFoto().get(1));
-        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), s3, m1, s3.getProfilo().getListaFoto().get(2));
-        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), s3, m1, s3.getProfilo().getFotoProfilo());
+        gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getListaFoto().get(0));
+        gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getListaFoto().get(0));
+
 
 
     }

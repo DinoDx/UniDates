@@ -169,10 +169,10 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
                         ArrayList<Hobby> hobby = new ArrayList<Hobby>();
                         for (String s : multiselectComboBox.getValue()) hobby.add(Hobby.valueOf(s));
 
-                            Profilo profilo = new Profilo(nome.getValue(),cognome.getValue(),luogo_di_nascita.getValue(),residenza.getValue(),picker.getValue(), altezza.getValue(),Sesso.valueOf(sessi.getValue()),Interessi.valueOf(interessi.getValue()),Colori_Capelli.valueOf(capelli.getValue()),Colore_Occhi.valueOf(occhi.getValue()),toadd,hobby);
 
-
-                            gestioneUtentiController.registrazioneStudente(da_registrare, profilo, VaadinServletRequest.getCurrent());
+                            gestioneUtentiController.registrazioneStudente(da_registrare.getEmail(),da_registrare.getPassword(),nome.getValue(),cognome.getValue(),luogo_di_nascita.getValue(),residenza.getValue(),picker.getValue(),
+                                    altezza.getValue(),Sesso.valueOf(sessi.getValue()),Interessi.valueOf(interessi.getValue()),Colori_Capelli.valueOf(capelli.getValue()),
+                                    Colore_Occhi.valueOf(occhi.getValue()),toadd,hobby, VaadinServletRequest.getCurrent());
 
                              //NOTIFICA DI SUCCESSO REGISTRAZIONE
                             Notification successo_registrazione = new Notification();

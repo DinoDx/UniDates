@@ -41,22 +41,16 @@ public class ModerazioneService {
     Publisher publisher;
 
 
-    public void inviaSegnalazione(Segnalazione s ,Foto f){
-        s.setFoto(f);
+    public void inviaSegnalazione(Segnalazione s){
         List<Utente> moderatores = utenteRepository.findAllByRuolo(Ruolo.MODERATORE);
         s.setModeratore( (Moderatore) moderatores.get(new Random().nextInt(moderatores.size()))); //Moderatore scelto casualmente tra tutti i moderatori
         segnalazioniRepository.save(s);
     }
 
     public void inviaAmmonimento(Ammonimento a, Studente s, Moderatore m, Foto foto){
-        a.setStudente(s);
-        a.setModeratore(m);
-        a.setFoto(foto);
         ammonimentiRepository.save(a);
-
         s.addAmmonimentoattivo();
         utenteRepository.save(s);
-
         publisher.publishWarning(a);
     }
 

@@ -1,9 +1,9 @@
 package com.unidates.Unidates.UniDates.Controller;
 
+import com.unidates.Unidates.UniDates.Enum.*;
 import com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneUtenti.OnRegistrationCompleteEvent;
-import com.unidates.Unidates.UniDates.Enum.Interessi;
-import com.unidates.Unidates.UniDates.Enum.Sesso;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.*;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 
@@ -36,7 +37,12 @@ public class GestioneUtentiController {
     PasswordEncoder passwordEncoder;
 
     @RequestMapping("/registrazioneStudente")
-    public void registrazioneStudente(Studente s, Profilo p, HttpServletRequest request) {
+    public void registrazioneStudente(String email, String password, String nome, String cognome, String luogoNascita,
+                                      String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso,
+                                      Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi,
+                                      Foto fotoProfilo, List<Hobby> hobbyList,HttpServletRequest request) {
+        Studente s = new Studente(email,password);
+        Profilo p = new Profilo(nome, cognome, luogoNascita, residenza, dataDiNascita, altezza, sesso, interessi, colori_capelli, colore_occhi, fotoProfilo, hobbyList);
         if(checkStudente(s) && checkProfilo(p)) {
             if(!utenteService.isPresent(s)){
                 utenteService.registrazioneStudente(s, p);
@@ -49,7 +55,12 @@ public class GestioneUtentiController {
     }
 
     @RequestMapping("/registrazioneModeratore")
-    public void registrazioneModeratore(Moderatore m, Profilo p )  {
+    public void registrazioneModeratore(String email, String password, String nome, String cognome, String luogoNascita,
+                                        String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso,
+                                        Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi,
+                                        Foto fotoProfilo, List<Hobby> hobbyList) {
+        Moderatore m = new Moderatore(email,password);
+        Profilo p = new Profilo(nome, cognome, luogoNascita, residenza, dataDiNascita, altezza, sesso, interessi, colori_capelli, colore_occhi, fotoProfilo, hobbyList);
         if(checkStudente(m) && checkProfilo(p)) { // per il moderatore e il cm non viene inviata alcuna mail di registrazione
             if(!utenteService.isPresent(m))
                 utenteService.registrazioneModeratore(m, p);
@@ -59,7 +70,12 @@ public class GestioneUtentiController {
     }
 
     @RequestMapping("/registrazioneCommunityManager")
-    public void registrazioneCommunityManager(CommunityManager cm, Profilo p){
+    public void registrazioneCommunityManager(String email, String password, String nome, String cognome, String luogoNascita,
+                                              String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso,
+                                              Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi,
+                                              Foto fotoProfilo, List<Hobby> hobbyList){
+        CommunityManager cm = new CommunityManager(email,password);
+        Profilo p = new Profilo(nome, cognome, luogoNascita, residenza, dataDiNascita, altezza, sesso, interessi, colori_capelli, colore_occhi, fotoProfilo, hobbyList);
         if(checkStudente(cm) && checkProfilo(p)){
             if(!utenteService.isPresent(cm))
                 utenteService.registrazioneCommunityManager(cm, p);

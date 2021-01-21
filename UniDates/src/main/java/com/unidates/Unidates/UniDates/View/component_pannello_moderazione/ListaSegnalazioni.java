@@ -99,8 +99,7 @@ public class ListaSegnalazioni extends VerticalLayout{
 
         com.vaadin.flow.component.button.Button inviaAmmonimento = new com.vaadin.flow.component.button.Button("Invia Ammonimento");
         inviaAmmonimento.addClickListener(e -> {
-            Ammonimento ammonimento = new Ammonimento(dettagli.getValue(),motivazione.getValue());
-            controller.inviaAmmonimento(ammonimento, moderatore, segnalazione.getFoto().getProfilo().getStudente(), segnalazione.getFoto());
+            controller.inviaAmmonimento(dettagli.getValue(),motivazione.getValue(), moderatore, segnalazione.getFoto().getProfilo().getStudente(), segnalazione.getFoto());
             notification.close();
         });
         vertical_due.setAlignItems(FlexComponent.Alignment.CENTER);
