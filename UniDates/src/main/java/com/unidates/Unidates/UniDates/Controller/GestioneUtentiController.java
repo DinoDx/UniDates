@@ -2,6 +2,7 @@ package com.unidates.Unidates.UniDates.Controller;
 
 import com.unidates.Unidates.UniDates.Enum.*;
 import com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException;
+import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneUtenti.OnRegistrationCompleteEvent;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
@@ -96,8 +97,12 @@ public class GestioneUtentiController {
 
     @RequestMapping("/trovaUtente")
     public Utente trovaUtente(String email) {
-        if(checkEmail(email))
-            return utenteService.trovaUtente(email);
+        if(checkEmail(email)) {
+            Utente utente = utenteService.trovaUtente(email);
+            if(utente != null)
+                return utente;
+            else throw new UserNotFoundException();
+        }
         else throw new InvalidRegistrationFormatException();
     }
 

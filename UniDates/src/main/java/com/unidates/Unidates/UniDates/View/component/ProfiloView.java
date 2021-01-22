@@ -12,9 +12,7 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.ui.UI;
@@ -26,18 +24,17 @@ import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 
 @Route(value = "ricercaprofilo",layout = MainView.class)
-public class ProfiloView extends VerticalLayout {
+public class ProfiloView extends VerticalLayout implements HasUrlParameter<String> {
 
     @Autowired
     MatchService matchService;
 
-    //utente ricercato
-    ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-    HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
+    @Autowired
+    GestioneUtentiController gestioneUtentiController;
 
+    VerticalLayout tot;
 
-    String email;
-    Studente studente = (Studente) httpSession.getAttribute("studente");
+    Studente studente;
 
     //utente in sessione
     Utente utente = SecurityUtils.getLoggedIn();
@@ -55,12 +52,10 @@ public class ProfiloView extends VerticalLayout {
     Span altezza = new Span();
     Span compleanno = new Span();
 
-    public ProfiloView(MatchService matchService){
+    public ProfiloView(MatchService matchService, GestioneUtentiController gestioneUtentiController){
        this.matchService = matchService;
-        httpSession.removeAttribute("studente");
-        VerticalLayout tot = Page();
-        tot.setAlignItems(Alignment.CENTER);
-        add(tot);
+       this.gestioneUtentiController = gestioneUtentiController;
+
     }
 
     public VerticalLayout Page() {
@@ -111,5 +106,15 @@ public class ProfiloView extends VerticalLayout {
 
         allPage.add(horizontal);
         return allPage;
+    }
+
+    @Override
+    public void setParameter(BeforeEvent beforeEvent, String s) {
+        if(tot != null)
+           remove(tot);
+        studente = (Studente) gestioneUtentiController.trovaUtente(s);
+        tot = Page();
+        tot.setAlignItems(Alignment.CENTER);
+        add(tot);
     }
 }

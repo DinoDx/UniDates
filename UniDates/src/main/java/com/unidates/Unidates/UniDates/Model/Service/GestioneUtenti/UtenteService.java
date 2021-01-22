@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti;
 
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
+import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Repository.GestioneUtenti.*;

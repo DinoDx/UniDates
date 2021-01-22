@@ -17,7 +17,7 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Route(value = "pannellomoderatore", layout = MainView.class)
-public class ModeratoreView extends VerticalLayout /*implements BeforeEnterListener */{
+public class ModeratoreView extends VerticalLayout {
 
     @Autowired
     GestioneModerazioneController controller;
@@ -38,14 +38,5 @@ public class ModeratoreView extends VerticalLayout /*implements BeforeEnterListe
         verticalLayout.add(new infoModeratore(moderatore),horizontalLayout);
         add(verticalLayout);
     }
-
-/*
-    @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        if(utente.getRuolo() == Ruolo.STUDENTE){
-            UI.getCurrent().navigate("home");
-        }
-    }
-       */
 
 }

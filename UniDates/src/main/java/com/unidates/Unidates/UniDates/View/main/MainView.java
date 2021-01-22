@@ -3,6 +3,7 @@ package com.unidates.Unidates.UniDates.View.main;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.Tipo_Notifica;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
+import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
@@ -136,17 +137,15 @@ public class MainView extends AppLayout {
            try {
                if (gestioneUtentiController.trovaUtente(searchField.getValue()) != null) {
 
-                   /*(try)VaadinServletResponse.getCurrent().getHttpServletResponse().sendRedirect("ricercaprofilo?email="+searchField.getValue());
-                   UI.getCurrent().navigate("ricercaprofilo/"+searchField.getValue());*/
-
-                   ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-                   HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
-                   httpSession.setAttribute("studente", gestioneUtentiController.trovaUtente(searchField.getValue()));
-                   UI.getCurrent().navigate("ricercaprofilo");
+                   UI.getCurrent().navigate("ricercaprofilo/"+ searchField.getValue());
                }
            }
-           catch(InvalidRegistrationFormatException e){
+           catch(UserNotFoundException e){
                Notification erroreRicerca = new Notification("Utente non trovato!",5000, Notification.Position.MIDDLE);
+               erroreRicerca.open();
+           }
+           catch(InvalidRegistrationFormatException e){
+               Notification erroreRicerca = new Notification("Email non valida",5000, Notification.Position.MIDDLE);
                erroreRicerca.open();
            }
        });
