@@ -94,7 +94,6 @@ public class MainView extends AppLayout {
         notification.getStyle().set("margin-right","1em");
         MenuItem notifiche = notification.addItem("");
         notifiche.addComponentAsFirst(new Icon(VaadinIcon.BELL));
-
         for(Notifica n : utente.getListNotifica()){
             if(n.getTipo_notifica().equals(Tipo_Notifica.MATCH))
                 notifiche.getSubMenu().addComponentAtIndex(0,new Notifica_Component(n));

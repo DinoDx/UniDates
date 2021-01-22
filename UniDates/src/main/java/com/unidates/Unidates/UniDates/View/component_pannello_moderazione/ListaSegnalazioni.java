@@ -6,6 +6,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazi
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -15,6 +16,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.StreamResource;
+import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import org.dom4j.rule.Mode;
 
 
@@ -22,19 +24,19 @@ import java.io.ByteArrayInputStream;
 
 public class ListaSegnalazioni extends VerticalLayout{
 
-    //prova commit
     public ListaSegnalazioni(Utente utente,GestioneModerazioneController controller){
         VerticalLayout vertical = new VerticalLayout();
         if(utente.getRuolo() == Ruolo.MODERATORE) {
             Moderatore moderatore = (Moderatore) utente;
             for (Segnalazione s : moderatore.getSegnalazioneRicevute()) {
+                if(s.getFoto().isVisible() && !(s.getFoto().getProfilo().getStudente().isBanned())) //da ricontrollare
                 vertical.addComponentAsFirst(segnalazione(utente, s, controller));
-
             }
         }else if (utente.getRuolo() == Ruolo.COMMUNITY_MANAGER){
             CommunityManager manager = (CommunityManager) utente;
             for (Segnalazione s : manager.getSegnalazioneRicevute()){
-                vertical.add(segnalazione(utente,s,controller));
+                if(s.getFoto().isVisible() && !(s.getFoto().getProfilo().getStudente().isBanned())) //da ricontrollare
+                vertical.addComponentAsFirst(segnalazione(utente,s,controller));
             }
         }
         add(vertical);
@@ -49,8 +51,34 @@ public class ListaSegnalazioni extends VerticalLayout{
         image.getStyle().set("width","100px");
         image.getStyle().set("height","100px");
         Span testo = new Span("Hai ricevuto una segnalazione per una foto di : " + segnalazione.getFoto().getProfilo().getNome() + segnalazione.getFoto().getProfilo().getCognome());
+        Button dettagliSegnalazione = new Button("Mostra dettagli");
+        dettagliSegnalazione.addClickListener(buttonClickEvent -> {
+            Notification notificaDettagli = new Notification();
+            VerticalLayout verticalNotifica = new VerticalLayout();
+            verticalNotifica.setAlignItems(Alignment.CENTER);
+            TextField motivazione = new TextField();
+            motivazione.setValue(segnalazione.getMotivazione());
+            motivazione.setEnabled(false);
+
+            TextField dettagli = new TextField();
+            dettagli.setValue(segnalazione.getDettagli());
+            dettagli.setEnabled(false);
+
+            Button chiudi = new Button("Chiudi");
+            chiudi.addClickListener(buttonClickEvent1 -> {
+                notificaDettagli.close();
+            });
+
+            verticalNotifica.add(motivazione, dettagli, chiudi);
+            notificaDettagli.add(verticalNotifica);
+            notificaDettagli.setPosition(Notification.Position.MIDDLE);
+            notificaDettagli.open();
+        });
+
+        VerticalLayout verticalSegnalazione = new VerticalLayout();
+        verticalSegnalazione.add(testo, dettagliSegnalazione);
         horizontal.setAlignItems(FlexComponent.Alignment.CENTER);
-        horizontal.add(image, testo, pulsanteAmmonimento(segnalazione,controller, moderatore));
+        horizontal.add(image,verticalSegnalazione, pulsanteAmmonimento(segnalazione,controller, moderatore));
         if(utente.getRuolo() == Ruolo.COMMUNITY_MANAGER){
             horizontal.add(pulsanteSospensione(segnalazione,controller,moderatore));
         }
@@ -142,10 +170,11 @@ public class ListaSegnalazioni extends VerticalLayout{
 
         Span email = new Span(segnalazione.getFoto().getProfilo().getStudente().getEmail());
 
-        com.vaadin.flow.component.button.Button inviaSospensione = new com.vaadin.flow.component.button.Button("Invia Ammonimento");
+        com.vaadin.flow.component.button.Button inviaSospensione = new com.vaadin.flow.component.button.Button("Invia Sospensione");
         inviaSospensione.addClickListener(e -> {
             controller.inviaSospensione(Integer.parseInt(durata.getValue()),dettagli.getValue(), segnalazione.getFoto().getProfilo().getStudente());
             notification.close();
+            UI.getCurrent().getPage().reload();
         });
         vertical_due.setAlignItems(FlexComponent.Alignment.CENTER);
         vertical_due.add(email, inviaSospensione);
@@ -180,6 +209,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         inviaAmmonimento.addClickListener(e -> {
             controller.inviaAmmonimento(dettagli.getValue(),motivazione.getValue(), moderatore, segnalazione.getFoto().getProfilo().getStudente(), segnalazione.getFoto());
             notification.close();
+            UI.getCurrent().getPage().reload();
         });
         vertical_due.setAlignItems(FlexComponent.Alignment.CENTER);
         vertical_due.add(email, inviaAmmonimento);

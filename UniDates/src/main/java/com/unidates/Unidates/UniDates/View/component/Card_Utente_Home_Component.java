@@ -49,7 +49,7 @@ public class Card_Utente_Home_Component extends Div {
         //layout sinistra con foto e pulsanti
         VerticalLayout layout_foto = new VerticalLayout();
         HorizontalLayout pulsanti = new HorizontalLayout();
-        StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(studente.getProfilo().getListaFoto().get(0).getImg()));
+        StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(studente.getProfilo().getFotoProfilo().getImg()));
         Image image_profilo = new Image(resource,"");
         image_profilo.getStyle().set("width","250px");
         image_profilo.getStyle().set("height","250px");

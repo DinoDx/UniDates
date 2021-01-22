@@ -1,54 +1,43 @@
 package com.unidates.Unidates.UniDates.View.component_home_page;
 
 
-import com.example.application.views.Person;
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.Enum.Colore_Occhi;
 import com.unidates.Unidates.UniDates.Enum.Colori_Capelli;
 import com.unidates.Unidates.UniDates.Enum.Hobby;
 import com.unidates.Unidates.UniDates.Enum.Interessi;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
-import com.unidates.Unidates.UniDates.View.main.MainViewProfile;
-import com.vaadin.flow.component.Component;
+import com.unidates.Unidates.UniDates.View.main.MainView;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.*;
-import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
-import com.vaadin.flow.router.AfterNavigationEvent;
-import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.vaadin.gatanaso.MultiselectComboBox;
 
-import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
 
-@Route(value = "profilo-personale", layout = MainViewProfile.class)
+@Route(value = "profilo-personale", layout = MainView.class)
 @PageTitle("Profilo")
 @CssImport("./styles/views/home/profilopersonale.css")
 public class ProfiloPersonale extends VerticalLayout {
@@ -83,11 +72,11 @@ public class ProfiloPersonale extends VerticalLayout {
 
         HorizontalLayout sotto_padre = new HorizontalLayout();
         VerticalLayout totale_info = new VerticalLayout();
-        totale_info.add(Info1(),Info2(),Info3(),Info4());
+        totale_info.add(Info5());
 
 
         sotto_padre.add(ImageUtente(),totale_info);
-        padre.add(NomeUtente(),sotto_padre,multiselectComboBox,Pulsanti());
+        padre.add(NomeUtente(),sotto_padre,Info1(),Info2(),Info3(),Info4(),multiselectComboBox,Pulsanti());
         add(padre);
     }
 
@@ -115,6 +104,7 @@ public class ProfiloPersonale extends VerticalLayout {
     public TextField cognome = new TextField("Cognome");
     public DatePicker compleanno = new DatePicker("Data di nascita");
     public EmailField email = new EmailField("Email");
+
     public HorizontalLayout Info1(){
         HorizontalLayout info1 = new HorizontalLayout();
         nome.setValue(profilo.getNome());
@@ -133,6 +123,7 @@ public class ProfiloPersonale extends VerticalLayout {
     public TextField città = new TextField("Città");
     private Select<String> interessi = new Select<>();
     public TextField luogo_di_nascita = new TextField("Luogo di nascita");
+
     public HorizontalLayout Info2 (){
         HorizontalLayout info2 = new HorizontalLayout();
         altezza.setValue(profilo.getAltezza());
@@ -156,6 +147,7 @@ public class ProfiloPersonale extends VerticalLayout {
     private Select<String> capelli = new Select<>();
     private Select<String> occhi = new Select<>();
     private MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
+
     public HorizontalLayout Info3(){
         HorizontalLayout info3 = new HorizontalLayout();
 
@@ -179,6 +171,17 @@ public class ProfiloPersonale extends VerticalLayout {
         HorizontalLayout info4 = new HorizontalLayout();
         //Image
         return info4;
+    }
+
+    public VerticalLayout Info5(){
+        VerticalLayout info5 =  new VerticalLayout();
+        Span interessi = new Span("Interessi : " + studente.getProfilo().getInteressi().toString());
+        Span capelli = new Span("Capelli : " + studente.getProfilo().getColori_capelli().toString());
+        Span occhi = new Span("Occhi : " + studente.getProfilo().getColore_occhi().toString());
+        Span topic = new Span("Topic : " + studente.getProfilo().getHobbyList().toString());
+
+        info5.add(capelli, occhi, interessi, topic);
+        return info5;
     }
 
     public HorizontalLayout Pulsanti(){
@@ -222,15 +225,6 @@ public class ProfiloPersonale extends VerticalLayout {
                 new Notification("Campo vuoto").open();
             }else if(luogo_di_nascita.isEmpty()){
                 new Notification("Campo Luogo di nascita vuoto",2000).open();
-            }else if(interessi.isEmpty()){
-                new Notification("Campo Interessi vuoto",2000).open();
-            }else if(capelli.isEmpty()){
-                new Notification("Campo Capelli vuoto",2000).open();
-            }else if(occhi.isEmpty()){
-                new Notification("Campo Occhi vuoto",2000).open();
-            }else if(multiselectComboBox.isEmpty()){
-                new Notification("Campo Topics vuoto",2000).open();
-
             }else {
                 studente.getProfilo().setAltezza(altezza.getValue());
                 studente.getProfilo().setNome(nome.getValue());
@@ -239,13 +233,17 @@ public class ProfiloPersonale extends VerticalLayout {
                 studente.setEmail(email.getValue());
                 studente.getProfilo().setResidenza(città.getValue());
                 studente.getProfilo().setLuogoNascita(luogo_di_nascita.getValue());
-                studente.getProfilo().setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
-                studente.getProfilo().setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
-                studente.getProfilo().setInteressi(Interessi.valueOf(interessi.getValue()));
+                if(!(interessi.isEmpty()))
+                    studente.getProfilo().setInteressi(Interessi.valueOf(interessi.getValue()));
+                if(!(occhi.isEmpty()))
+                    studente.getProfilo().setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
+                if(!(capelli.isEmpty()))
+                    studente.getProfilo().setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
                 //hobby
                 ArrayList<Hobby> hob = new ArrayList<Hobby>();
                 for (String s : multiselectComboBox.getValue()) hob.add(Hobby.valueOf(s));
-                studente.getProfilo().setHobbyList(hob);
+                if(!(multiselectComboBox.isEmpty()))
+                    studente.getProfilo().setHobbyList(hob);
 
                 nome.setEnabled(false);
                 cognome.setEnabled(false);
@@ -262,6 +260,10 @@ public class ProfiloPersonale extends VerticalLayout {
 
 
                 controller.modificaProfilo(studente.getProfilo());
+                Page pagina = UI.getCurrent().getPage();
+
+                pagina.reload();
+
             }
 
         });

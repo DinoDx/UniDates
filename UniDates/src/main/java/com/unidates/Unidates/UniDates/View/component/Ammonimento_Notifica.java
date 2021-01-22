@@ -1,9 +1,12 @@
 package com.unidates.Unidates.UniDates.View.component;
 
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -29,7 +32,19 @@ public class Ammonimento_Notifica extends Div {
         image.getStyle().set("margin-left","2em");
         image.setHeight("80px");
 
-        internal_layout.add(didascalie,image);
+        Button mostraAmmonimento = new Button("Apri");
+        mostraAmmonimento.addClickListener(buttonClickEvent -> {
+            Notification notification = new Notification();
+           VerticalLayout verticalLayout = new VerticalLayout();
+           Span motivazione = new Span("Motivo ammonimento : " + notifica.getAmmonimento().getMotivazione());
+           Span dettagli = new Span("Dettagli : " + notifica.getAmmonimento().getDettagli());
+           verticalLayout.add(motivazione,dettagli);
+           notification.add(verticalLayout);
+           notification.setPosition(Notification.Position.MIDDLE);
+           notification.setDuration(5000);
+           notification.open();
+        });
+        internal_layout.add(didascalie,mostraAmmonimento,image);
         add(internal_layout);
     }
 }

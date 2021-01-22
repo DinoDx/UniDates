@@ -27,7 +27,7 @@ import java.io.ByteArrayInputStream;
 public class ProfiloView extends VerticalLayout implements HasUrlParameter<String> {
 
     @Autowired
-    MatchService matchService;
+    GestioneInterazioniController gestioneInterazioniController;
 
     @Autowired
     GestioneUtentiController gestioneUtentiController;
@@ -52,8 +52,8 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
     Span altezza = new Span();
     Span compleanno = new Span();
 
-    public ProfiloView(MatchService matchService, GestioneUtentiController gestioneUtentiController){
-       this.matchService = matchService;
+    public ProfiloView(GestioneInterazioniController gestioneInterazioniController, GestioneUtentiController gestioneUtentiController){
+       this.gestioneInterazioniController = gestioneInterazioniController;
        this.gestioneUtentiController = gestioneUtentiController;
 
     }
@@ -94,7 +94,7 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
         compleanno = new Span("Data di nascita:" + studente.getProfilo().getDataDiNascita());
         caratteristiche.add(colore_capelli, colore_occhi, altezza, compleanno);
 
-        if(matchService.trovaMatch(s,studente) != null){
+        if(gestioneInterazioniController.isValidMatch(s, studente)){
             VerticalLayout info_layout = new VerticalLayout();
             info_layout.add(nome_cognome, topics, interessi, città, caratteristiche);
             horizontal.add(image_layout, info_layout);
