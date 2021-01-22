@@ -25,6 +25,11 @@ public class GestioneInterazioniController {
         matchService.aggiungiMatch(s1, s2);
     }
 
+    @RequestMapping("/isValidMatch")
+    public boolean isValidMatch(Studente s1, Studente s2){
+       return matchService.isValidMatch(s1, s2);
+    }
+
     @RequestMapping("/visualizzaNotifica")
     public List<Notifica> visualizzaNotifica(Utente u){
         return notificaService.visualizzaNotifiche(u);

@@ -35,7 +35,7 @@ public class ModerationListener {
         logger.info("WarningHandler in azione");
         moderazioneService.nascondiFoto(warningEvent.getAmmonimento().getFoto());
         logger.info("Foto nascosta!");
-        notificaService.genereateNotificaWarning(warningEvent.getAmmonimento().getStudente(), warningEvent.getAmmonimento().getFoto());
+        notificaService.genereateNotificaWarning(warningEvent.getAmmonimento().getStudente(), warningEvent.getAmmonimento().getFoto(), warningEvent.getAmmonimento());
         logger.info("Notifica di ammonimento inviata!");
         moderazioneService.checkAmmonimentiStudente(warningEvent.getAmmonimento().getStudente());
         logger.info("Check sugli ammonimenti dello studente, avvenuto!");

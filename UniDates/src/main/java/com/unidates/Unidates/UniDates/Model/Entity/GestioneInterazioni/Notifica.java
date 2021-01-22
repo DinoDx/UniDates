@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni;
 
 import com.unidates.Unidates.UniDates.Enum.Tipo_Notifica;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import javassist.LoaderClassPath;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "Notifica")
-public class Notifica implements Serializable, Cloneable {
+public class Notifica implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -20,9 +21,7 @@ public class Notifica implements Serializable, Cloneable {
     @JoinColumn(name = "utente_id")
     private Utente utente;
 
-
     private String emailToMatchWith;
-
 
     @OneToOne
     private Foto foto;
@@ -30,6 +29,9 @@ public class Notifica implements Serializable, Cloneable {
     private String testoNotifica;
 
     private Tipo_Notifica tipo_notifica;
+
+    @OneToOne
+    private Ammonimento ammonimento;
 
     private LocalDate creationTime;
 
@@ -99,5 +101,13 @@ public class Notifica implements Serializable, Cloneable {
 
     public void setCreationTime(LocalDate creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public Ammonimento getAmmonimento() {
+        return ammonimento;
+    }
+
+    public void setAmmonimento(Ammonimento ammonimento) {
+        this.ammonimento = ammonimento;
     }
 }

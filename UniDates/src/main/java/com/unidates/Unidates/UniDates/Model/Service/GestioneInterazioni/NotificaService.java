@@ -2,6 +2,7 @@ package com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni;
 
 import com.unidates.Unidates.UniDates.Enum.Tipo_Notifica;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
@@ -49,18 +50,16 @@ public class NotificaService {
         logger.info("Notifica di match pubblicata!");
     }
 
-    public void genereateNotificaWarning(Studente studente1, Foto removedfoto){ //DA RICONTROLLARE PER MODERAZIONE
+    public void genereateNotificaWarning(Studente studente1, Foto removedfoto, Ammonimento ammonimento){ //DA RICONTROLLARE PER MODERAZIONE
         Notifica notificaWarning = new Notifica(
                 studente1,
                 studente1.getProfilo().getNome() + " la tua foto é stata nascosta per violazione dei termini di servizio. Hai ricevuto un ammonimento!",
                 Tipo_Notifica.AMMONIMENTO,
                 removedfoto
         );
-
+        notificaWarning.setAmmonimento(ammonimento);
 
         //logica di notifica ammonimento
-
-
         notificaRepository.save(notificaWarning);
         logger.info("Notifica di warning pubblicata!");
 

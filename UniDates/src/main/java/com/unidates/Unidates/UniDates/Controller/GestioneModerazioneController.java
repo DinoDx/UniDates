@@ -6,6 +6,7 @@ import com.unidates.Unidates.UniDates.Exception.InvalidWarningFormatException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
@@ -33,6 +34,12 @@ public class GestioneModerazioneController {
         else throw new InvalidReportFormatException();
     }
 
+    public void inviaSegnalazioneCommunityManager(Segnalazione s){
+        if(checkSegnalazione(s))
+            moderazioneService.inviaSegnalazioneCommunityManager(s);
+        else throw new InvalidReportFormatException();
+    }
+
     @RequestMapping("/inviaAmmonimento") // non propriamente necessario
     public void inviaAmmonimento(String motivazione,String dettagli,Moderatore m, Studente s, Foto f){
         Ammonimento a = new Ammonimento(motivazione,dettagli);
@@ -40,7 +47,7 @@ public class GestioneModerazioneController {
         a.setStudente(s);
         a.setModeratore(m);
         if(checkAmmonimento(a))
-            moderazioneService.inviaAmmonimento(a, s, m, f);
+            moderazioneService.inviaAmmonimento(a, s);
         else throw new InvalidWarningFormatException();
     }
 

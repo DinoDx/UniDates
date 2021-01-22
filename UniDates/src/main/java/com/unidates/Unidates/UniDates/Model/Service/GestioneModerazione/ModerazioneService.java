@@ -5,6 +5,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimen
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
+import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
@@ -47,7 +48,13 @@ public class ModerazioneService {
         segnalazioniRepository.save(s);
     }
 
-    public void inviaAmmonimento(Ammonimento a, Studente s, Moderatore m, Foto foto){
+    public void inviaSegnalazioneCommunityManager(Segnalazione s){
+        List<Utente> cms =  utenteRepository.findAllByRuolo(Ruolo.COMMUNITY_MANAGER);
+        s.setModeratore((CommunityManager) cms.get(new Random().nextInt(cms.size())));
+        segnalazioniRepository.save(s);
+    }
+
+    public void inviaAmmonimento(Ammonimento a, Studente s){
         ammonimentiRepository.save(a);
         s.addAmmonimentoattivo();
         utenteRepository.save(s);
@@ -78,7 +85,7 @@ public class ModerazioneService {
         return studente.getListSospensioni();
     }
 
-    private void sospendiStudente(Studente studente){
+    public void sospendiStudente(Studente studente){
         studente.setBanned(true);
         utenteRepository.save(studente);
     }
@@ -96,4 +103,5 @@ public class ModerazioneService {
             inviaSospensione(toSend, studente);
         }
     }
+
 }

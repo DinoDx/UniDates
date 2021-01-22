@@ -109,6 +109,9 @@ public class Populator implements ApplicationRunner {
         gestioneModerazioneController.inviaAmmonimento("motivazione2", "dettagli2", m1, s2, s2.getProfilo().getFotoProfilo());
         gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getFotoProfilo());
 
+        Moderatore m2 = (Moderatore) utenteService.trovaUtente("moderatore@gmail.com");
+        gestioneModerazioneController.inviaSegnalazioneCommunityManager(m2.getSegnalazioneRicevute().get(0));
+
         gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getListaFoto().get(0));
         gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getListaFoto().get(0));
 
