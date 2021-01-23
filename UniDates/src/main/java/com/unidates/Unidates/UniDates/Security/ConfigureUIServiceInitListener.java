@@ -1,8 +1,7 @@
 package com.unidates.Unidates.UniDates.Security;
 
-import com.unidates.Unidates.UniDates.Enum.Ruolo;
+import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
 import com.unidates.Unidates.UniDates.View.LoginRegistrazione.Login;
 import com.unidates.Unidates.UniDates.View.LoginRegistrazione.RegistrazioneAccount;
 import com.unidates.Unidates.UniDates.View.LoginRegistrazione.RegistrazioneProfilo;
@@ -10,10 +9,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.logging.Logger;
 
 @Component
 

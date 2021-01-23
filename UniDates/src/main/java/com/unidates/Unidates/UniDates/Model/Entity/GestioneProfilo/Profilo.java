@@ -1,8 +1,7 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo;
 
-import com.unidates.Unidates.UniDates.Enum.*;
+import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,8 +9,6 @@ import java.io.Serializable;
 import java.util.*;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Date;
 
 
 @Entity

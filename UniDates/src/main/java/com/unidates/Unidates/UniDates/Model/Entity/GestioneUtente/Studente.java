@@ -1,7 +1,7 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 
 
-import com.unidates.Unidates.UniDates.Enum.Ruolo;
+import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
@@ -25,16 +25,16 @@ public class Studente extends Utente{
     private List<Studente> listaBloccati;
 
     @OneToMany(mappedBy = "studente", cascade = CascadeType.REMOVE)
-    private List<Sospensione> listSospensione;
+    private List<Sospensione> listaSospensioni;
 
     @OneToMany(mappedBy = "studente", cascade = CascadeType.REMOVE)
-    private List<Ammonimento> listAmmonimento;
+    private List<Ammonimento> listaAmmonimenti;
 
     @OneToMany(mappedBy = "studente1", cascade = CascadeType.REMOVE)
-    private List<Match> listMatch;
+    private List<Match> listaMatch;
 
     @OneToMany(mappedBy = "studente2", cascade = CascadeType.REMOVE)
-    private List<Match> listMatchRicevuti;
+    private List<Match> listaMatchRicevuti;
 
     private int ammonimentiAttivi;
 
@@ -44,10 +44,10 @@ public class Studente extends Utente{
     public Studente(String email, String password) {
         super(email, password, Ruolo.STUDENTE);
         this.listaBloccati = new ArrayList<Studente>();
-        this.listSospensione = new ArrayList<Sospensione>();
-        this.listAmmonimento = new ArrayList<Ammonimento>();
-        this.listMatch = new ArrayList<Match>();
-        this.listMatchRicevuti = new ArrayList<Match>();
+        this.listaSospensioni = new ArrayList<Sospensione>();
+        this.listaAmmonimenti = new ArrayList<Ammonimento>();
+        this.listaMatch = new ArrayList<Match>();
+        this.listaMatchRicevuti = new ArrayList<Match>();
         this.ammonimentiAttivi = 0;
         this.isBanned = false;
     }
@@ -76,38 +76,38 @@ public class Studente extends Utente{
         this.listaBloccati = listaBloccati;
     }
 
-    public List<Sospensione> getListSospensioni() {
-        return listSospensione;
+    public List<Sospensione> getListaSospensioni() {
+        return listaSospensioni;
     }
 
-    public void setListSospensioni(List<Sospensione> listSospensione) {
-        this.listSospensione = listSospensione;
+    public void setListaSospensioni(List<Sospensione> listSospensione) {
+        this.listaSospensioni = listSospensione;
     }
 
-    public List<Ammonimento> getListAmmonimenti() {
-        return listAmmonimento;
+    public List<Ammonimento> getListaAmmonimenti() {
+        return listaAmmonimenti;
     }
 
-    public void setListAmmonimenti(List<Ammonimento> listAmmonimento) {
-        this.listAmmonimento = listAmmonimento;
+    public void setListaAmmonimenti(List<Ammonimento> listAmmonimento) {
+        this.listaAmmonimenti = listAmmonimento;
     }
 
-    public List<Match> getListMatch() {
-        return listMatch;
+    public List<Match> getListaMatch() {
+        return listaMatch;
     }
 
-    public void setListMatch(List<Match> listMatch) {
-        this.listMatch = listMatch;
+    public void setListaMatch(List<Match> listMatch) {
+        this.listaMatch = listMatch;
     }
 
 
 
-    public List<Match> getListMatchRicevuti() {
-        return listMatchRicevuti;
+    public List<Match> getListaMatchRicevuti() {
+        return listaMatchRicevuti;
     }
 
-    public void setListMatchRicevuti(List<Match> listMatchRicevuti) {
-        this.listMatchRicevuti = listMatchRicevuti;
+    public void setListaMatchRicevuti(List<Match> listMatchRicevuti) {
+        this.listaMatchRicevuti = listMatchRicevuti;
     }
 
     public void addBloccato(Studente studente){
@@ -115,19 +115,19 @@ public class Studente extends Utente{
     }
 
     public void addSospensione(Sospensione sospensione){
-        listSospensione.add(sospensione);
+        listaSospensioni.add(sospensione);
     }
 
     public void addAmmonimento(Ammonimento ammonimento){
-        listAmmonimento.add(ammonimento);
+        listaAmmonimenti.add(ammonimento);
     }
 
     public void addMatch(Match match){
-        listMatch.add(match);
+        listaMatch.add(match);
     }
 
     public void addMatchRicevuto(Match match){
-        listMatchRicevuti.add(match);
+        listaMatchRicevuti.add(match);
     }
 
     public void addAmmonimentoattivo(){
@@ -153,8 +153,8 @@ public class Studente extends Utente{
                 "isBanned=" + isBanned +
                 ", profilo=" + profilo +
                 ", listaBloccati=" + listaBloccati +
-                ", listSospensioni=" + listSospensione +
-                ", listAmmonimenti=" + listAmmonimento +
+                ", listSospensioni=" + listaSospensioni +
+                ", listAmmonimenti=" + listaAmmonimenti +
                 '}';
     }
 }

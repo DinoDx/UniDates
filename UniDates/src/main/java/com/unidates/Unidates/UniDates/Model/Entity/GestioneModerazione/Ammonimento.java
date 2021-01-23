@@ -3,7 +3,6 @@ package com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione.ModerazioneService;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

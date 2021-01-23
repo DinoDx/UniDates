@@ -2,9 +2,8 @@ package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
-import com.unidates.Unidates.UniDates.Enum.*;
+import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.*;

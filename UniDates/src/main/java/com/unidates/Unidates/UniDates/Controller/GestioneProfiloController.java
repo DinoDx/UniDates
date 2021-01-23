@@ -1,18 +1,15 @@
 package com.unidates.Unidates.UniDates.Controller;
 
-import com.unidates.Unidates.UniDates.Enum.Interessi;
-import com.unidates.Unidates.UniDates.Enum.Sesso;
+import com.unidates.Unidates.UniDates.Model.Enum.Interessi;
+import com.unidates.Unidates.UniDates.Model.Enum.Sesso;
 import com.unidates.Unidates.UniDates.Exception.InvalidModifyFormatException;
 import com.unidates.Unidates.UniDates.Exception.InvalidPhotoException;
 import com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneProfilo.ProfiloService;
-import com.unidates.Unidates.UniDates.Model.Service.Publisher;
-import com.unidates.Unidates.UniDates.Security.SecurityUtils;
+import com.unidates.Unidates.UniDates.Service.GestioneProfilo.ProfiloService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

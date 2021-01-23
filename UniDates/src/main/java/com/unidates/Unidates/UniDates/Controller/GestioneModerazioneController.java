@@ -6,11 +6,10 @@ import com.unidates.Unidates.UniDates.Exception.InvalidWarningFormatException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione.ModerazioneService;
+import com.unidates.Unidates.UniDates.Service.GestioneModerazione.ModerazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +39,7 @@ public class GestioneModerazioneController {
         else throw new InvalidReportFormatException();
     }
 
-    @RequestMapping("/inviaAmmonimento") // non propriamente necessario
+    @RequestMapping("/inviaAmmonimento")
     public void inviaAmmonimento(String motivazione,String dettagli,Moderatore m, Studente s, Foto f){
         Ammonimento a = new Ammonimento(motivazione,dettagli);
         a.setFoto(f);

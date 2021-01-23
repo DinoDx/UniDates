@@ -1,11 +1,8 @@
 package com.unidates.Unidates.UniDates.View.component;
 
 
-import com.unidates.Unidates.UniDates.Enum.Tipo_Notifica;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.html.Image;

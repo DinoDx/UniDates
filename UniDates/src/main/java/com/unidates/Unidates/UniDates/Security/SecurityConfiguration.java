@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.Security;
 
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -76,5 +77,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public ModelMapper modelMapper() { // messa qui anche se non va propro qui
+        return new ModelMapper();
     }
 }

@@ -3,10 +3,7 @@ package com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 
 @Entity
 @Table(name="Foto")
@@ -21,10 +18,11 @@ public class Foto implements Cloneable {
     private Profilo profilo;
 
     @OneToMany(mappedBy = "foto", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-    private Collection<Segnalazione> segnalazioneRicevute;
+    private List<Segnalazione> segnalazioneRicevute;
 
     @Column(length = 10000000)
     private byte[] img;
+
 
     private boolean isVisible;
 
@@ -60,11 +58,8 @@ public class Foto implements Cloneable {
         this.img = img;
     }
 
-    public Collection<Segnalazione> getSegnalazioniRicevuto() {
-        return segnalazioneRicevute;
-    }
 
-    public void setSegnalazioniRicevuto(Collection<Segnalazione> segnalazioneRicevuto) {
+    public void setSegnalazioniRicevuto(List<Segnalazione> segnalazioneRicevuto) {
         segnalazioneRicevute = segnalazioneRicevuto;
     }
 
@@ -72,11 +67,11 @@ public class Foto implements Cloneable {
         segnalazioneRicevute.add(segnalazione);
     }
 
-    public Collection<Segnalazione> getSegnalazioneRicevute() {
+    public List<Segnalazione> getSegnalazioneRicevute() {
         return segnalazioneRicevute;
     }
 
-    public void setSegnalazioneRicevute(Collection<Segnalazione> segnalazioneRicevute) {
+    public void setSegnalazioneRicevute(List<Segnalazione> segnalazioneRicevute) {
         this.segnalazioneRicevute = segnalazioneRicevute;
     }
 

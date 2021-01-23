@@ -1,16 +1,17 @@
 package com.unidates.Unidates.UniDates.Controller;
 
-import com.unidates.Unidates.UniDates.Enum.*;
+import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneEventi.GestioneUtenti.OnRegistrationCompleteEvent;
+import com.unidates.Unidates.UniDates.Service.GestioneEventi.GestioneUtenti.OnRegistrationCompleteEvent;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
+import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
 
+import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,7 +39,7 @@ public class GestioneUtentiController {
     PasswordEncoder passwordEncoder;
 
     @RequestMapping("/registrazioneStudente")
-    public void registrazioneStudente(String email, String password, String nome, String cognome, String luogoNascita,
+    public void registrazioneStudente( @RequestParam String email, @RequestParam String password, @RequestParam String nome, @RequestParam String cognome, String luogoNascita,
                                       String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso,
                                       Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi,
                                       Foto fotoProfilo, List<Hobby> hobbyList,HttpServletRequest request) {
@@ -86,7 +87,8 @@ public class GestioneUtentiController {
     }
 
     @RequestMapping("/bloccoStudente")
-    public boolean bloccaStudente(Studente sBloccante, Studente sBloccato){
+    public boolean bloccaStudente(@RequestParam Studente sBloccante, @RequestParam Studente sBloccato){
+        if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE)) return false;
        return utenteService.bloccaStudente(sBloccante,sBloccato);
     }
 
@@ -174,4 +176,5 @@ public class GestioneUtentiController {
             } else throw new PasswordMissmatchException();
         }else throw new InvalidRegistrationFormatException();
     }
+
 }

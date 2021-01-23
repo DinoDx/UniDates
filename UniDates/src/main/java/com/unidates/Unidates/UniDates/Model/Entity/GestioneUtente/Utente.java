@@ -1,6 +1,6 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 
-import com.unidates.Unidates.UniDates.Enum.Ruolo;
+import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 
 import javax.persistence.*;
@@ -13,17 +13,14 @@ public abstract class Utente implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-
     private String email;
     private String password;
     private Ruolo ruolo;
-
     private boolean isActive;
 
 
     @OneToMany(mappedBy = "utente", cascade = CascadeType.REMOVE)
-    private List<Notifica> listNotifica;
+    private List<Notifica> listaNotifica;
 
 
     public Utente() {
@@ -68,12 +65,12 @@ public abstract class Utente implements Serializable {
         this.ruolo = ruolo;
     }
 
-    public List<Notifica> getListNotifica() {
-        return listNotifica;
+    public List<Notifica> getListaNotifica() {
+        return listaNotifica;
     }
 
-    public void setListNotifica(List<Notifica> listNotifica) {
-        this.listNotifica = listNotifica;
+    public void setListaNotifica(List<Notifica> listNotifica) {
+        this.listaNotifica = listNotifica;
     }
 
     public boolean isActive() {
@@ -93,7 +90,7 @@ public abstract class Utente implements Serializable {
                 ", password='" + password + '\'' +
                 ", ruolo=" + ruolo +
                 ", isActive=" + isActive +
-                ", listNotifica=" + listNotifica +
+                ", listNotifica=" + listaNotifica +
                 '}';
     }
 }

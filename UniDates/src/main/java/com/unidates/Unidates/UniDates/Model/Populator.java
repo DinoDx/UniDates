@@ -1,17 +1,14 @@
 package com.unidates.Unidates.UniDates.Model;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
-import com.unidates.Unidates.UniDates.Enum.*;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
+import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneInterazioni.MatchService;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneModerazione.ModerazioneService;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
+import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.MatchService;
+import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
 import com.unidates.Unidates.UniDates.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -104,6 +101,9 @@ public class Populator implements ApplicationRunner {
         gestioneModerazioneController.inviaSegnalazione("motivazione1", "dettagli1", p1.getFotoProfilo());
         gestioneModerazioneController.inviaSegnalazione("motivazione2", "dettagli2", p2.getFotoProfilo());
         gestioneModerazioneController.inviaSegnalazione("motivazione3", "dettagli3", p3.getFotoProfilo());
+        gestioneModerazioneController.inviaSegnalazione("motivazione3", "dettagli3", p1.getListaFoto().get(1));
+        gestioneModerazioneController.inviaSegnalazione("motivazione3", "dettagli3", p2.getListaFoto().get(1));
+        gestioneModerazioneController.inviaSegnalazione("motivazione3", "dettagli3", p3.getListaFoto().get(1));
 
         gestioneModerazioneController.inviaAmmonimento("motivazione1", "dettagli1", m1, s1, s1.getProfilo().getFotoProfilo());
         gestioneModerazioneController.inviaAmmonimento("motivazione2", "dettagli2", m1, s2, s2.getProfilo().getFotoProfilo());

@@ -1,7 +1,7 @@
 package com.unidates.Unidates.UniDates.View.component_pannello_moderazione;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
-import com.unidates.Unidates.UniDates.Enum.Ruolo;
+import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
@@ -16,8 +16,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.StreamResource;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
-import org.dom4j.rule.Mode;
 
 
 import java.io.ByteArrayInputStream;

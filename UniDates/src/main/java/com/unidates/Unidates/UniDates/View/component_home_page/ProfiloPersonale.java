@@ -3,10 +3,10 @@ package com.unidates.Unidates.UniDates.View.component_home_page;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
-import com.unidates.Unidates.UniDates.Enum.Colore_Occhi;
-import com.unidates.Unidates.UniDates.Enum.Colori_Capelli;
-import com.unidates.Unidates.UniDates.Enum.Hobby;
-import com.unidates.Unidates.UniDates.Enum.Interessi;
+import com.unidates.Unidates.UniDates.Model.Enum.Colore_Occhi;
+import com.unidates.Unidates.UniDates.Model.Enum.Colori_Capelli;
+import com.unidates.Unidates.UniDates.Model.Enum.Hobby;
+import com.unidates.Unidates.UniDates.Model.Enum.Interessi;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;

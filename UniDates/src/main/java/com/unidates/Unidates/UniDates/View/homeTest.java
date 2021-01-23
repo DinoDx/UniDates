@@ -4,33 +4,34 @@ import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
-import com.unidates.Unidates.UniDates.Enum.*;
+import com.unidates.Unidates.UniDates.DTOs.EntityToDto;
+import com.unidates.Unidates.UniDates.DTOs.GestioneUtenti.StudenteDTO;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Service.GestioneUtenti.UtenteService;
-import com.unidates.Unidates.UniDates.Model.Service.Publisher;
+import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
+import com.unidates.Unidates.UniDates.Service.Publisher;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinServletRequest;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 
 @Route("")
 public class homeTest extends VerticalLayout {
+
+    @Autowired
+    ModelMapper modelMapper;
 
     @Autowired
     Publisher publisher;
@@ -160,7 +161,7 @@ public class homeTest extends VerticalLayout {
 
         Button aggiungiMatch1 = new Button("Aggiungi Match 1", buttonClickEvent ->{
             gestioneInterazioniController.aggiungiMatch(trovaStudente(email.getValue()),trovaStudente(email2.getValue()));
-            System.out.println(trovaStudente(email.getValue()).getListMatch().size());
+            System.out.println(trovaStudente(email.getValue()).getListaMatch().size());
         });
 
 
@@ -176,6 +177,11 @@ public class homeTest extends VerticalLayout {
 
         Button cambiapassowrd = new Button("cambiapassword", e ->{
             gestioneUtentiController.cambiaPassword(trovaStudente(email.getValue()), password.getValue(), messaggio.getValue());
+        });
+
+        Button provaDto = new Button("provaDTO", e ->{
+            System.out.println(EntityToDto.toDTO(gestioneUtentiController.trovaUtente(email.getValue())));
+
         });
 
 
@@ -198,6 +204,7 @@ public class homeTest extends VerticalLayout {
         add(aggiungiCM);
         add(aggiungiFotoProfilo);
         add(cambiapassowrd);
+        add(provaDto);
         /*
         add(aggiungiNotifica);
         add(mostraNotifica);

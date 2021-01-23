@@ -1,12 +1,11 @@
 package com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente;
 
-import com.unidates.Unidates.UniDates.Enum.Ruolo;
+import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity

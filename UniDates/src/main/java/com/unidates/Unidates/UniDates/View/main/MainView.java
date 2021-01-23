@@ -1,7 +1,7 @@
 package com.unidates.Unidates.UniDates.View.main;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
-import com.unidates.Unidates.UniDates.Enum.Tipo_Notifica;
+import com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
@@ -31,10 +31,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.StreamResource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 @JsModule("./styles/shared-styles.js")
 @CssImport("./styles/views/main/main-view.css")
@@ -94,7 +91,7 @@ public class MainView extends AppLayout {
         notification.getStyle().set("margin-right","1em");
         MenuItem notifiche = notification.addItem("");
         notifiche.addComponentAsFirst(new Icon(VaadinIcon.BELL));
-        for(Notifica n : utente.getListNotifica()){
+        for(Notifica n : utente.getListaNotifica()){
             if(n.getTipo_notifica().equals(Tipo_Notifica.MATCH))
                 notifiche.getSubMenu().addComponentAtIndex(0,new Notifica_Component(n));
             else
