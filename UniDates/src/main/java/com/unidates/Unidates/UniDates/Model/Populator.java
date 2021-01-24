@@ -57,14 +57,19 @@ public class Populator implements ApplicationRunner {
 
 
         Profilo p1 = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto(Utils.downloadUrl("https://source.unsplash.com/random")) ,hobbyArrayList);
+        p1.setNumeroTelefono("3333339900");
+        p1.setNickInstagram("marco.prova1");
         p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         Profilo p2 = new Profilo("Paolo", "Prova2", "Napoli", "Napoli", LocalDate.of(1995,7,15), 185, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.ROSSI, Colore_Occhi.VERDI,new Foto(Utils.downloadUrl("https://source.unsplash.com/random")), hobbyArrayList);
+        p2.setNumeroTelefono("3335559900");
+        p2.setNickInstagram("PaoloSonoBello.prova2");
         p2.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p2.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p2.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));;
         Profilo p3 = new Profilo("Lucia", "Prova3", "Napoli", "Napoli", LocalDate.of(1991,1,25), 164, Sesso.DONNA, Interessi.ENTRAMBI, Colori_Capelli.CASTANI, Colore_Occhi.CASTANI,new Foto(Utils.downloadUrl("https://source.unsplash.com/random")), hobbyArrayList);
+        p2.setNickInstagram("SimpyLucia");
         p3.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p3.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p3.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));

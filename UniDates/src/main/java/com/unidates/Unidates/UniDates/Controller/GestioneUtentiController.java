@@ -6,21 +6,22 @@ import com.unidates.Unidates.UniDates.DTOs.CommunityManagerDTO;
 import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
+import com.unidates.Unidates.UniDates.Exception.*;
 import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
-import com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException;
-import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
-import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
-import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Service.UtenteService;
 
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.Service.Publisher;
+import com.vaadin.flow.server.VaadinServletRequest;
+import com.vaadin.flow.server.VaadinServletResponse;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -46,7 +47,8 @@ public class GestioneUtentiController {
     PasswordEncoder passwordEncoder;
 
     @RequestMapping("/registrazioneStudente")
-    public void registrazioneStudente(StudenteDTO studenteDTO, HttpServletRequest request) {
+    public void registrazioneStudente(@RequestBody StudenteDTO studenteDTO, @RequestBody HttpServletRequest request) {
+
         ProfiloDTO profiloDTO = studenteDTO.getProfilo();
 
         Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
@@ -70,69 +72,77 @@ public class GestioneUtentiController {
     }
 
     @RequestMapping("/registrazioneModeratore")
-    public void registrazioneModeratore(ModeratoreDTO moderatoreDTO) {
-        ProfiloDTO profiloDTO = moderatoreDTO.getProfilo();
+    public void registrazioneModeratore( @RequestBody ModeratoreDTO moderatoreDTO) {
+        if(SecurityUtils.getLoggedIn().getRuolo() == Ruolo.COMMUNITY_MANAGER){
+            ProfiloDTO profiloDTO = moderatoreDTO.getProfilo();
 
-        Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
-                profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
-                new Foto(profiloDTO.getFotoProfilo().getImg()),profiloDTO.getHobbyList());
+            Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
+                    profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
+                    new Foto(profiloDTO.getFotoProfilo().getImg()), profiloDTO.getHobbyList());
 
-        Moderatore m = new Moderatore(moderatoreDTO.getEmail(),moderatoreDTO.getPassword());
+            Moderatore m = new Moderatore(moderatoreDTO.getEmail(), moderatoreDTO.getPassword());
 
-        m.setProfilo(p);
+            m.setProfilo(p);
 
-        if(checkStudente(m) && checkProfilo(p)) { // per il moderatore e il cm non viene inviata alcuna mail di registrazione
-            if(!utenteService.isPresent(m))
-                utenteService.registrazioneModeratore(m, p);
-            else throw new AlreadyExistUserException();
+            if (checkStudente(m) && checkProfilo(p)) { // per il moderatore e il cm non viene inviata alcuna mail di registrazione
+                if (!utenteService.isPresent(m))
+                    utenteService.registrazioneModeratore(m, p);
+                else throw new AlreadyExistUserException();
+            } else throw new InvalidRegistrationFormatException();
         }
-        else throw new InvalidRegistrationFormatException();
+        else throw new NotAuthorizedException();
     }
 
     @RequestMapping("/registrazioneCommunityManager")
-    public void registrazioneCommunityManager(CommunityManagerDTO communityManagerDTO){
-        ProfiloDTO profiloDTO = communityManagerDTO.getProfilo();
+    public void registrazioneCommunityManager( @RequestBody CommunityManagerDTO communityManagerDTO){
+        if(SecurityUtils.getLoggedIn().getRuolo() == Ruolo.COMMUNITY_MANAGER) {
+            ProfiloDTO profiloDTO = communityManagerDTO.getProfilo();
+            Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
+                    profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
+                    new Foto(profiloDTO.getFotoProfilo().getImg()), profiloDTO.getHobbyList());
 
-        Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
-                profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
-                new Foto(profiloDTO.getFotoProfilo().getImg()),profiloDTO.getHobbyList());
+            CommunityManager cm = new CommunityManager(communityManagerDTO.getEmail(), communityManagerDTO.getPassword());
 
-        CommunityManager cm = new CommunityManager(communityManagerDTO.getEmail(), communityManagerDTO.getPassword());
-
-        cm.setProfilo(p);
-        if(checkStudente(cm) && checkProfilo(p)){
-            if(!utenteService.isPresent(cm))
-                utenteService.registrazioneCommunityManager(cm, p);
-            else throw new AlreadyExistUserException();
+            cm.setProfilo(p);
+            if (checkStudente(cm) && checkProfilo(p)) {
+                if (!utenteService.isPresent(cm))
+                    utenteService.registrazioneCommunityManager(cm, p);
+                else throw new AlreadyExistUserException();
+            } else throw new InvalidRegistrationFormatException();
         }
-        else throw new InvalidRegistrationFormatException();
+
     }
 
     @RequestMapping("/bloccoStudente")
     public boolean bloccaStudente(@RequestParam String emailBloccante, @RequestParam String emailBloccato){
-        if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE)) return false;
-       return utenteService.bloccaStudente(emailBloccante,emailBloccato);
+        if(SecurityUtils.getLoggedIn().getEmail().equals(emailBloccante)) {
+            return utenteService.bloccaStudente(emailBloccante, emailBloccato);
+        }
+        else throw new NotAuthorizedException();
     }
 
     @RequestMapping("/sbloccoStudente")
     public boolean sbloccaStudente(@RequestParam String emailSbloccante, @RequestParam String emailSbloccato){
-        return utenteService.sbloccaStudente(emailSbloccante, emailSbloccato);
+        if(SecurityUtils.getLoggedIn().getEmail().equals(emailSbloccante)) {
+            return utenteService.sbloccaStudente(emailSbloccante, emailSbloccato);
+        }
+        else throw new NotAuthorizedException();
     }
 
     @RequestMapping("/trovaUtente")
-    public UtenteDTO trovaUtente(String email) {
+    public UtenteDTO trovaUtente(@RequestParam String email) {
         if(checkEmail(email)) {
             Utente utente = utenteService.trovaUtente(email);
 
             if(utente != null)
                 return EntityToDto.toDTO(utente);
             else throw new UserNotFoundException();
+            }
+            else throw new InvalidRegistrationFormatException();
         }
-        else throw new InvalidRegistrationFormatException();
-    }
 
     @RequestMapping("/trovaStudente")
-    public StudenteDTO trovaStudente(String email) {
+    public StudenteDTO trovaStudente(@RequestParam String email) {
         if(checkEmail(email)) {
             Studente studente = (Studente) utenteService.trovaUtente(email);
 
@@ -187,22 +197,28 @@ public class GestioneUtentiController {
     }
 
     @RequestMapping("/cambiaPassword")
-    public void cambiaPassword(String emailUtente, String nuovaPassword, String vecchiaPassword) {
-        Studente toChange = utenteService.trovaStudente(emailUtente);
-        if(checkStudente(new Studente(emailUtente,nuovaPassword))){
-            if (passwordEncoder.matches(vecchiaPassword, toChange.getPassword())) {
-                utenteService.cambiaPassword(emailUtente, nuovaPassword);
-            } else throw new PasswordMissmatchException();
-        }else throw new InvalidRegistrationFormatException();
+    public void cambiaPassword(@RequestParam String emailUtente,@RequestParam  String nuovaPassword,@RequestParam  String vecchiaPassword) {
+        if(SecurityUtils.getLoggedIn().getEmail().equals(emailUtente)) {
+            Studente toChange = utenteService.trovaStudente(emailUtente);
+            if (checkStudente(new Studente(emailUtente, nuovaPassword))) {
+                if (passwordEncoder.matches(vecchiaPassword, toChange.getPassword())) {
+                    utenteService.cambiaPassword(emailUtente, nuovaPassword);
+                } else throw new PasswordMissmatchException();
+            } else throw new InvalidRegistrationFormatException();
+        }
+        else throw new NotAuthorizedException();
     }
 
     @RequestMapping("/cancellaAccountPersonale")
-    public void cancellaAccountPersonale(String email, String password){
-        Studente toDelete = utenteService.trovaStudente(email);
-        if(passwordEncoder.matches(password, toDelete.getPassword())){
-            utenteService.deleteUtente(toDelete);
+    public void cancellaAccountPersonale(@RequestParam String email,@RequestParam  String password){
+        if(SecurityUtils.getLoggedIn().getEmail().equals(email)){
+            Studente toDelete = utenteService.trovaStudente(email);
+            if(passwordEncoder.matches(password, toDelete.getPassword())){
+                utenteService.deleteUtente(toDelete);
+            }
+            SecurityUtils.forceLogout(toDelete, sessionRegistry);
         }
-        SecurityUtils.forceLogout(toDelete, sessionRegistry);
+        else throw new NotAuthorizedException();
     }
 
     private boolean checkEmail(String email){

@@ -21,6 +21,8 @@ public class ProfiloDTO {
     private FotoDTO fotoProfilo;
     private List<FotoDTO> listaFoto;
 
+    private String numeroTelefono, nickInstagram;
+
     public ProfiloDTO(){    this.listaFoto = new ArrayList<FotoDTO>();
     }
 
@@ -38,6 +40,7 @@ public class ProfiloDTO {
         this.hobbyList = hobbyList;
         this.id = id;
         this.fotoProfilo = fotoProfilo;
+
         this.listaFoto = new ArrayList<FotoDTO>();
     }
 
@@ -171,6 +174,22 @@ public class ProfiloDTO {
         return hobbyList;
     }
 
+    public String getNumeroTelefono() {
+        return numeroTelefono;
+    }
+
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
+    }
+
+    public String getNickInstagram() {
+        return nickInstagram;
+    }
+
+    public void setNickInstagram(String nickInstagram) {
+        this.nickInstagram = nickInstagram;
+    }
+
     @Override
     public String toString() {
         return "ProfiloDTO{" +
@@ -189,6 +208,8 @@ public class ProfiloDTO {
                 ", emailStudente='" + emailStudente + '\'' +
                 ", fotoProfilo=" + fotoProfilo +
                 ", listaFoto=" + listaFoto +
+                ", numeroTelefono='" + numeroTelefono + '\'' +
+                ", nickInstagram='" + nickInstagram + '\'' +
                 '}';
     }
 }

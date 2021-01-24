@@ -36,6 +36,8 @@ public class Profilo implements Serializable {
     private Colori_Capelli colori_capelli;
     private Colore_Occhi colore_occhi;
 
+    private String numeroTelefono, nickInstagram;
+
     @ElementCollection
     private List<Hobby> hobbyList;
 
@@ -174,6 +176,22 @@ public class Profilo implements Serializable {
 
     public void setHobbyList(List<Hobby> hobbyList) {
         this.hobbyList = hobbyList;
+    }
+
+    public String getNumeroTelefono() {
+        return numeroTelefono;
+    }
+
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
+    }
+
+    public String getNickInstagram() {
+        return nickInstagram;
+    }
+
+    public void setNickInstagram(String nickInstagram) {
+        this.nickInstagram = nickInstagram;
     }
 
     public void addFoto(Foto foto) {

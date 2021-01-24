@@ -189,6 +189,8 @@ public class EntityToDto {
                 .setLuogoNascita(profilo.getLuogoNascita()).setResidenza(profilo.getResidenza())
                 .setSesso(profilo.getSesso()).setInteressi(profilo.getInteressi()).setHobbyList(new ArrayList<Hobby>(profilo.getHobbyList()));
 
+        if(profilo.getNickInstagram() != null) profiloDTO.setNickInstagram(profilo.getNickInstagram());
+        if(profilo.getNumeroTelefono() != null) profiloDTO.setNumeroTelefono(profilo.getNumeroTelefono());
 
         return profiloDTO;
     }
