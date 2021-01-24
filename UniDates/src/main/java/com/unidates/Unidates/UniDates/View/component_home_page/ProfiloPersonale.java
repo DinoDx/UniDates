@@ -14,6 +14,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
@@ -55,6 +56,8 @@ public class ProfiloPersonale extends VerticalLayout {
     public ProfiloPersonale(){
         addAttachListener(event -> create());
     }
+
+
     public void create(){
         studente = (StudenteDTO) gestioneUtentiController.utenteInSessione();
         profilo = studente.getProfilo();
@@ -71,15 +74,24 @@ public class ProfiloPersonale extends VerticalLayout {
         VerticalLayout padre = new VerticalLayout();
         padre.setAlignItems(Alignment.CENTER);
 
-        HorizontalLayout sotto_padre = new HorizontalLayout();
         VerticalLayout totale_info = new VerticalLayout();
         totale_info.add(Info5());
 
-
+        HorizontalLayout sotto_padre = new HorizontalLayout();
         sotto_padre.add(ImageUtente(),totale_info);
-        padre.add(NomeUtente(),sotto_padre,Info1(),Info2(),Info3(),Info4(),multiselectComboBox,Pulsanti());
+
+        HorizontalLayout textfield = new HorizontalLayout();
+        textfield.add(Info1(),Info2(),Contatti());
+
+        padre.add(NomeUtente(),sotto_padre,textfield,Info4(),multiselectComboBox,Pulsanti());
         add(padre);
     }
+
+
+
+
+
+
     public HorizontalLayout NomeUtente(){
         HorizontalLayout nome = new HorizontalLayout();
         Span nome_utente = new Span(profilo.getNome());
@@ -105,8 +117,21 @@ public class ProfiloPersonale extends VerticalLayout {
     public DatePicker compleanno = new DatePicker("Data di nascita");
     public EmailField email = new EmailField("Email");
 
-    public HorizontalLayout Info1(){
-        HorizontalLayout info1 = new HorizontalLayout();
+    public NumberField altezza = new NumberField("Altezza (cm)");
+    public TextField città = new TextField("Città");
+    private Select<String> interessi = new Select<>();
+    public TextField luogo_di_nascita = new TextField("Luogo di nascita");
+
+
+    private Select<String> capelli = new Select<>();
+    private Select<String> occhi = new Select<>();
+    private MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
+
+    public TextField numero = new TextField("Numero cellulare");
+    public TextField instagram = new TextField("Contatto Instagram");;
+
+    public VerticalLayout Info1(){
+        VerticalLayout info1 = new VerticalLayout();
         nome.setValue(profilo.getNome());
         nome.setEnabled(false);
         cognome.setValue(profilo.getCognome());
@@ -115,19 +140,15 @@ public class ProfiloPersonale extends VerticalLayout {
         compleanno.setEnabled(false);
         email.setValue(studente.getEmail());
         email.setEnabled(false);
-        info1.add(nome,cognome,compleanno,email);
+        altezza.setValue(profilo.getAltezza());
+        altezza.setEnabled(false);
+        info1.add(nome,cognome,compleanno,email,altezza);
         return info1;
     }
 
-    public NumberField altezza = new NumberField("Altezza (cm)");
-    public TextField città = new TextField("Città");
-    private Select<String> interessi = new Select<>();
-    public TextField luogo_di_nascita = new TextField("Luogo di nascita");
+    public VerticalLayout Info2(){
+        VerticalLayout info2 = new VerticalLayout();
 
-    public HorizontalLayout Info2 (){
-        HorizontalLayout info2 = new HorizontalLayout();
-        altezza.setValue(profilo.getAltezza());
-        altezza.setEnabled(false);
         città.setValue(profilo.getResidenza());
         città.setEnabled(false);
         luogo_di_nascita.setValue(profilo.getLuogoNascita());
@@ -138,18 +159,7 @@ public class ProfiloPersonale extends VerticalLayout {
         Interessi [] interess = Interessi.values();
         interessi.setItems(interess[0].toString(),interess[1].toString(),interess[2].toString(),interess[3].toString());
         interessi.setEnabled(false);
-        info2.add(altezza,città,luogo_di_nascita,interessi);
 
-        return info2;
-    }
-
-
-    private Select<String> capelli = new Select<>();
-    private Select<String> occhi = new Select<>();
-    private MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
-
-    public HorizontalLayout Info3(){
-        HorizontalLayout info3 = new HorizontalLayout();
 
         capelli.setLabel("Capelli");
         capelli.setPlaceholder("Colore capelli");
@@ -163,8 +173,8 @@ public class ProfiloPersonale extends VerticalLayout {
         Colore_Occhi [] colore_occhi = Colore_Occhi.values();
         occhi.setItems(colore_occhi[0].toString(),colore_occhi[1].toString(),colore_occhi[2].toString(),colore_occhi[3].toString(),colore_occhi[4].toString(),colore_occhi[5].toString(),colore_occhi[6].toString());
 
-        info3.add(capelli,occhi);
-        return info3;
+        info2.add(città,luogo_di_nascita,interessi,capelli,occhi);
+        return info2;
     }
 
     public HorizontalLayout Info4(){
@@ -182,6 +192,20 @@ public class ProfiloPersonale extends VerticalLayout {
 
         info5.add(capelli, occhi, interessi, topic);
         return info5;
+    }
+
+    public VerticalLayout Contatti(){
+        VerticalLayout contatti  = new VerticalLayout();
+        contatti.setAlignItems(Alignment.CENTER);
+
+        H4 testo = new H4("Sezione Contatti");
+        contatti.getStyle().set("margin-top","40px");
+        numero.setValue(studente.getProfilo().getNumeroTelefono());
+        numero.setEnabled(false);
+        instagram.setValue(studente.getProfilo().getNickInstagram());
+        instagram.setEnabled(false);
+        contatti.add(testo,numero,instagram);
+        return contatti;
     }
 
     public HorizontalLayout Pulsanti(){
@@ -204,6 +228,8 @@ public class ProfiloPersonale extends VerticalLayout {
             multiselectComboBox.setEnabled(true);
             altezza.setEnabled(true);
             interessi.setEnabled(true);
+            numero.setEnabled(true);
+            instagram.setEnabled(true);
             multiselectComboBox.setEnabled(true);
         });
         return modifica;
@@ -225,7 +251,7 @@ public class ProfiloPersonale extends VerticalLayout {
                 new Notification("Campo vuoto").open();
             }else if(luogo_di_nascita.isEmpty()){
                 new Notification("Campo Luogo di nascita vuoto",2000).open();
-            }else {
+            }else{
                 studente.getProfilo().setAltezza(altezza.getValue());
                 studente.getProfilo().setNome(nome.getValue());
                 studente.getProfilo().setCognome(cognome.getValue());
@@ -239,6 +265,10 @@ public class ProfiloPersonale extends VerticalLayout {
                     studente.getProfilo().setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
                 if(!(capelli.isEmpty()))
                     studente.getProfilo().setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
+                if(!(numero.isEmpty()))
+                    studente.getProfilo().setNumeroTelefono(numero.getValue());
+                if(!(instagram.isEmpty()))
+                    studente.getProfilo().setNickInstagram(instagram.getValue());
                 //hobby
                 ArrayList<Hobby> hob = new ArrayList<Hobby>();
                 for (String s : multiselectComboBox.getValue()) hob.add(Hobby.valueOf(s));
@@ -256,8 +286,9 @@ public class ProfiloPersonale extends VerticalLayout {
                 multiselectComboBox.setEnabled(false);
                 altezza.setEnabled(false);
                 interessi.setEnabled(false);
+                numero.setEnabled(false);
+                instagram.setEnabled(false);
                 //VEDERE IMMAGINE
-
 
                 gestioneProfiloController.modificaProfilo(studente.getEmail(),studente.getProfilo());
                 Page pagina = UI.getCurrent().getPage();

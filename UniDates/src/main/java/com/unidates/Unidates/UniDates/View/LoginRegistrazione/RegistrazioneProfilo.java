@@ -188,6 +188,9 @@ public class RegistrazioneProfilo extends VerticalLayout {
                 ProfiloDTO  profiloDTO = new ProfiloDTO(nome.getValue(),cognome.getValue(),luogo_di_nascita.getValue(),residenza.getValue(),picker.getValue(),
                         altezza.getValue(),Sesso.valueOf(sessi.getValue()),Interessi.valueOf(interessi.getValue()),Colori_Capelli.valueOf(capelli.getValue()),
                         Colore_Occhi.valueOf(occhi.getValue()),hobby, toadd); //AGGIUNGERE TELEFONO E CONTATTO
+                profiloDTO.setNumeroTelefono(numero.getValue());
+                profiloDTO.setNickInstagram(contatto_ig.getValue());
+
                 StudenteDTO studenteDTO = new StudenteDTO(da_registrare.getEmail(),da_registrare.getPassword(), profiloDTO);
 
                 gestioneUtentiController.registrazioneStudente(studenteDTO, VaadinServletRequest.getCurrent());
@@ -209,10 +212,12 @@ public class RegistrazioneProfilo extends VerticalLayout {
             }
         });
 
+
+        Span star = new Span("I campi (*) non sono obbligatori");
         H2 titolo = new H2("Inserisci i dati del profilo!");
         titolo.setId("titolo-registrazione");
 
-        padre.add(titolo,verticals,topics,checkbox,conferma);
+        padre.add(titolo,verticals,topics,checkbox,star,conferma);
         add(padre);
     }
 
@@ -245,10 +250,10 @@ public class RegistrazioneProfilo extends VerticalLayout {
         destra.setId("layout-destra");
 
         numero = new TextField();
-        numero.setLabel("Numero di telefono");
+        numero.setLabel("Numero di telefono (*)");
 
         contatto_ig = new TextField();
-        contatto_ig.setLabel("Contatto instagram");
+        contatto_ig.setLabel("Contatto instagram (*)");
 
         interessi.setLabel("Interessi");
         Interessi [] interess = Interessi.values();

@@ -21,7 +21,7 @@ public class Ammonimento_Notifica extends Div {
         HorizontalLayout internal_layout = new HorizontalLayout();
         internal_layout.setAlignItems(FlexComponent.Alignment.CENTER);
         internal_layout.setWidth("300px");
-        internal_layout.setHeight("100px");
+        internal_layout.setHeight("165px");
 
         VerticalLayout didascalie = new VerticalLayout();
         H6 descrizione = new H6(notifica.getTestoNotifica());
@@ -29,9 +29,8 @@ public class Ammonimento_Notifica extends Div {
 
         StreamResource resource = new StreamResource("fotoprofilo",()-> new ByteArrayInputStream(notifica.getFoto().getImg()));
         Image image = new Image(resource,"");
-        image.setWidth("80px");
-        image.getStyle().set("margin-left","2em");
-        image.setHeight("80px");
+        image.setWidth("200px");
+        image.setHeight("200px");
 
         Button mostraAmmonimento = new Button("Apri");
         mostraAmmonimento.addClickListener(buttonClickEvent -> {
@@ -39,13 +38,19 @@ public class Ammonimento_Notifica extends Div {
            VerticalLayout verticalLayout = new VerticalLayout();
            Span motivazione = new Span("Motivo ammonimento : " + notifica.getAmmonimento().getMotivazione());
            Span dettagli = new Span("Dettagli : " + notifica.getAmmonimento().getDettagli());
-           verticalLayout.add(motivazione,dettagli);
+           Button annulla = new Button("Chiudi");
+           annulla.addClickListener(buttonClickEvent1 -> {
+              notification.close();
+           });
+           verticalLayout.setWidth("400px");
+           verticalLayout.setHeight("400px");
+           verticalLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+           verticalLayout.add(image,motivazione,dettagli,annulla);
            notification.add(verticalLayout);
            notification.setPosition(Notification.Position.MIDDLE);
-           notification.setDuration(5000);
            notification.open();
         });
-        internal_layout.add(didascalie,mostraAmmonimento,image);
+        internal_layout.add(didascalie,mostraAmmonimento);
         add(internal_layout);
     }
 }

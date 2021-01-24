@@ -124,15 +124,15 @@ public class GestioneProfiloController {
 
     @RequestMapping("/trovaFoto")
     public FotoDTO trovaFoto(@RequestParam Long fotoId) {
-        if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))
+        //if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))
             return EntityToDto.toDTO(profiloService.findFotoById(fotoId));
-        else throw new NotAuthorizedException();
+        //else throw new NotAuthorizedException();
     }
 
     @RequestMapping("/trovaProfilo")
     public ProfiloDTO trovaProfilo(@RequestParam Long profiloId) {
-        if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))
+        //if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))
             return EntityToDto.toDTO(profiloService.findProfiloById(profiloId));
-        else throw new NotAuthorizedException();
+        //else throw new NotAuthorizedException();
     }
 }

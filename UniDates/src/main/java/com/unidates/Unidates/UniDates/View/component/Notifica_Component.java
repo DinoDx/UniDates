@@ -28,6 +28,7 @@ public class Notifica_Component extends Div {
     GestioneProfiloController profiloController;
 
     public Notifica_Component(NotificaDTO notifica,GestioneProfiloController controller){
+        this.notifica = notifica;
         this.profiloController = controller;
         VerticalLayout internal_card_due = new VerticalLayout();
         H6 descrizione = new H6(notifica.getTestoNotifica());
@@ -64,7 +65,6 @@ public class Notifica_Component extends Div {
         email.setDuration(5000);
         VerticalLayout descrizione = new VerticalLayout();
         descrizione.setAlignItems(FlexComponent.Alignment.CENTER);
-
 
         foto = notifica.getFoto();
         profilo = profiloController.trovaProfilo(foto.getProfiloId());

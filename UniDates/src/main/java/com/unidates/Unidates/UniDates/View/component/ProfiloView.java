@@ -35,6 +35,8 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
     Span colore_capelli = new Span();
     Span altezza = new Span();
     Span compleanno = new Span();
+    Span numero = new Span();
+    Span instagram = new Span();
 
     public ProfiloView(){
     }
@@ -75,9 +77,14 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
         compleanno = new Span("Data di nascita:" + daCercare.getProfilo().getDataDiNascita());
         caratteristiche.add(colore_capelli, colore_occhi, altezza, compleanno);
 
+        HorizontalLayout contatti = new HorizontalLayout();
+        numero = new Span("Numero di cellulare: " + daCercare.getProfilo().getNumeroTelefono());
+        instagram = new Span("Contatto instagram: " + daCercare.getProfilo().getNickInstagram());
+        contatti.add(numero,instagram);
+
         if(gestioneInterazioniController.isValidMatch(inSessione.getEmail(), daCercare.getEmail())){
             VerticalLayout info_layout = new VerticalLayout();
-            info_layout.add(nome_cognome, topics, interessi, città, caratteristiche);
+            info_layout.add(nome_cognome, topics, interessi, città,contatti, caratteristiche);
             horizontal.add(image_layout, info_layout);
         }else {
             VerticalLayout noMatch = new VerticalLayout();
