@@ -23,9 +23,11 @@ public class ModeratoreView extends VerticalLayout {
 
     @Autowired
     GestioneProfiloController gestioneProfiloController;
-    public ModeratoreView(GestioneModerazioneController gestioneModerazioneController, GestioneUtentiController gestioneUtentiController, GestioneProfiloController gestioneProfiloController){
-        this.gestioneModerazioneController = gestioneModerazioneController;
-        this.gestioneUtentiController = gestioneUtentiController;
+    public ModeratoreView(){
+        addAttachListener(event -> create());
+    }
+
+    public void create(){
 
         UtenteDTO moderatore =  gestioneUtentiController.utenteInSessione();
 

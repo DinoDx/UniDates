@@ -36,10 +36,7 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
     Span altezza = new Span();
     Span compleanno = new Span();
 
-    public ProfiloView(GestioneInterazioniController gestioneInterazioniController, GestioneUtentiController gestioneUtentiController){
-       this.gestioneInterazioniController = gestioneInterazioniController;
-       this.gestioneUtentiController = gestioneUtentiController;
-
+    public ProfiloView(){
     }
 
     public VerticalLayout Page() {
@@ -102,4 +99,5 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
         tot.setAlignItems(Alignment.CENTER);
         add(tot);
     }
+
 }
