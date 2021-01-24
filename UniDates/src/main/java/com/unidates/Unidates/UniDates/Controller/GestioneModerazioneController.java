@@ -1,20 +1,19 @@
 package com.unidates.Unidates.UniDates.Controller;
 
+import com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO;
+import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
+import com.unidates.Unidates.UniDates.DTOs.SospensioneDTO;
+import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.Exception.InvalidBanFormatException;
 import com.unidates.Unidates.UniDates.Exception.InvalidReportFormatException;
 import com.unidates.Unidates.UniDates.Exception.InvalidWarningFormatException;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
-import com.unidates.Unidates.UniDates.Service.GestioneModerazione.ModerazioneService;
+import com.unidates.Unidates.UniDates.Model.Entity.Ammonimento;
+import com.unidates.Unidates.UniDates.Model.Entity.Sospensione;
+import com.unidates.Unidates.UniDates.Model.Entity.Segnalazione;
+import com.unidates.Unidates.UniDates.Service.ModerazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/api/ModManager")
@@ -25,59 +24,34 @@ public class GestioneModerazioneController {
 
 
     @RequestMapping("/inviaSegnalazione")
-    public void inviaSegnalazione(String motivazione,String dettagli, Foto f){
-        Segnalazione s = new Segnalazione(motivazione,dettagli);
-        s.setFoto(f);
+    public void inviaSegnalazione(SegnalazioneDTO segnalazioneDTO, FotoDTO f){
+        Segnalazione s = new Segnalazione(segnalazioneDTO.getMotivazione(),segnalazioneDTO.getDettagli());
         if(checkSegnalazione(s))
-            moderazioneService.inviaSegnalazione(s);
+            moderazioneService.inviaSegnalazione(s, f.getId());
         else throw new InvalidReportFormatException();
     }
-
-    public void inviaSegnalazioneCommunityManager(Segnalazione s){
+    @RequestMapping("/inviaSegnalazioneManager")
+    public void inviaSegnalazioneCommunityManager(SegnalazioneDTO segnalazioneDTO, FotoDTO f){
+        Segnalazione s = new Segnalazione(segnalazioneDTO.getMotivazione(),segnalazioneDTO.getDettagli());
         if(checkSegnalazione(s))
-            moderazioneService.inviaSegnalazioneCommunityManager(s);
+            moderazioneService.inviaSegnalazioneCommunityManager(s, f.getId());
         else throw new InvalidReportFormatException();
     }
 
     @RequestMapping("/inviaAmmonimento")
-    public void inviaAmmonimento(String motivazione,String dettagli,Moderatore m, Studente s, Foto f){
-        Ammonimento a = new Ammonimento(motivazione,dettagli);
-        a.setFoto(f);
-        a.setStudente(s);
-        a.setModeratore(m);
+    public void inviaAmmonimento(AmmonimentoDTO ammonimentoDTO, String emailModeratore, String emailStudenteAmmonito, FotoDTO fotoDTO){
+        Ammonimento a = new Ammonimento(ammonimentoDTO.getMotivazione(),ammonimentoDTO.getDettagli());
         if(checkAmmonimento(a))
-            moderazioneService.inviaAmmonimento(a, s);
+            moderazioneService.inviaAmmonimento(a, emailModeratore, emailStudenteAmmonito, fotoDTO.getId());
         else throw new InvalidWarningFormatException();
     }
 
     @RequestMapping("/inviaSospensione")
-    public void inviaSospensione(int durata, String dettagli, Studente s){
-        Sospensione sp = new Sospensione(durata, dettagli);
-        sp.setStudente(s);
+    public void inviaSospensione(SospensioneDTO sospensioneDTO, String emailSospeso){
+        Sospensione sp = new Sospensione(sospensioneDTO.getDurata(), sospensioneDTO.getDettagli());
         if(checkSospensione(sp))
-            moderazioneService.inviaSospensione(sp, s);
+            moderazioneService.inviaSospensione(sp, emailSospeso);
         else throw new InvalidBanFormatException();
-    }
-
-    @RequestMapping("/visualizzaAmmonimentiInviati")
-    public List<Ammonimento> showAmmonimentiInviati(Moderatore m){
-        return  moderazioneService.visualizzaAmmonimentiInviati(m);
-    }
-
-    @RequestMapping("/visualizzaAmmonimentiRicevuti")
-    public List<Ammonimento> showAmmonimentiRicevuti(Studente s){
-        return  moderazioneService.visualizzaAmmonimentiRicevuti(s);
-    }
-
-    @RequestMapping("/sospensioniUtente")
-    public List<Sospensione> visualizzaSospensioni(Studente s){
-        return  moderazioneService.visualizzaSospensioni(s);
-    }
-
-    @RequestMapping("/visualizzaSegnalazioniRicevute")
-    public List<Segnalazione> visualizzaSegnazioniRicevute(Moderatore m){
-        return  moderazioneService.visualizzaSegnalazioniRicevute(m);
-
     }
 
 

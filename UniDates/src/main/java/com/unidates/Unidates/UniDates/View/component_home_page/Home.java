@@ -4,8 +4,9 @@ package com.unidates.Unidates.UniDates.View.component_home_page;
 import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
+import com.unidates.Unidates.UniDates.Model.Entity.Utente;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.View.component.Card_Utente_Home_Component;
 import com.unidates.Unidates.UniDates.View.main.MainView;
@@ -54,9 +55,9 @@ public class Home extends VerticalLayout{
             utenti.add(pannello);
         }
 
-        for(Utente u : gestioneUtentiController.findAll()){
-                if(!(u.getEmail().equals(utente.getEmail()))) {
-                    utenti.add(new Card_Utente_Home_Component(gestioneInterazioniController,u,gestioneModerazioneController));
+        for(StudenteDTO studenteDTO: gestioneUtentiController.trovaTuttiStudenti()){
+                if(!(studenteDTO.getEmail().equals(utente.getEmail()))) {
+                    utenti.add(new Card_Utente_Home_Component(gestioneInterazioniController,studenteDTO,gestioneModerazioneController));
                 }
         }
         add(utenti);

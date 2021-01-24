@@ -1,9 +1,9 @@
 package com.unidates.Unidates.UniDates.View.Moderatore;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Security.SecurityUtils;
+import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
+import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
 import com.unidates.Unidates.UniDates.View.component_pannello_moderazione.ListaSegnalazioni;
 import com.unidates.Unidates.UniDates.View.component_pannello_moderazione.infoModeratore;
 import com.unidates.Unidates.UniDates.View.main.MainView;
@@ -16,20 +16,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ModeratoreView extends VerticalLayout {
 
     @Autowired
-    GestioneModerazioneController controller;
+    GestioneModerazioneController gestioneModerazioneController;
 
-    Utente utente = SecurityUtils.getLoggedIn();
+    @Autowired
+    GestioneUtentiController gestioneUtentiController;
 
+    @Autowired
+    GestioneProfiloController gestioneProfiloController;
+    public ModeratoreView(GestioneModerazioneController gestioneModerazioneController, GestioneUtentiController gestioneUtentiController, GestioneProfiloController gestioneProfiloController){
+        this.gestioneModerazioneController = gestioneModerazioneController;
+        this.gestioneUtentiController = gestioneUtentiController;
 
-    public ModeratoreView(GestioneModerazioneController controller){
-        this.controller = controller;
-        Moderatore moderatore = (Moderatore) utente;
+        UtenteDTO moderatore =  gestioneUtentiController.utenteInSessione();
 
         VerticalLayout verticalLayout =  new VerticalLayout();
         verticalLayout.setAlignItems(Alignment.CENTER);
 
         HorizontalLayout horizontalLayout = new HorizontalLayout();
-        horizontalLayout.add(new ListaSegnalazioni(utente,controller));
+        horizontalLayout.add(new ListaSegnalazioni(moderatore, gestioneModerazioneController, gestioneUtentiController, gestioneProfiloController));
 
         verticalLayout.add(new infoModeratore(moderatore),horizontalLayout);
         add(verticalLayout);

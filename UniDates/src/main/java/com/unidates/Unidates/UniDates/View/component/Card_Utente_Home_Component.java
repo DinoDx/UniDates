@@ -2,11 +2,9 @@ package com.unidates.Unidates.UniDates.View.component;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
-import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
+import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
+import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
-import com.unidates.Unidates.UniDates.Utils.Utils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -21,8 +19,6 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.server.StreamResource;
-import org.hibernate.internal.build.AllowPrintStacktrace;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayInputStream;
 
@@ -32,16 +28,15 @@ public class Card_Utente_Home_Component extends Div {
 
     GestioneModerazioneController gestioneModerazioneController;
 
-    public Card_Utente_Home_Component(GestioneInterazioniController gestioneInterazioniController, Utente utente, GestioneModerazioneController gestioneModerazioneController){
+    public Card_Utente_Home_Component(GestioneInterazioniController gestioneInterazioniController, StudenteDTO studenteDTO, GestioneModerazioneController gestioneModerazioneController){
         this.gestioneInterazioniController = gestioneInterazioniController;
         this.gestioneModerazioneController = gestioneModerazioneController;
-        HorizontalLayout tot = Card(utente);
+        HorizontalLayout tot = Card(studenteDTO);
         add(tot);
     }
 
 
-    public HorizontalLayout Card(Utente utente){
-        Studente studente = (Studente) utente;
+    public HorizontalLayout Card(StudenteDTO studente){
         //layput padre
         HorizontalLayout contenitore = new HorizontalLayout();
         contenitore.setSpacing(false);
@@ -53,7 +48,7 @@ public class Card_Utente_Home_Component extends Div {
         Image image_profilo = new Image(resource,"");
         image_profilo.getStyle().set("width","250px");
         image_profilo.getStyle().set("height","250px");
-        Button like = getLikeButton(utente);
+        Button like = getLikeButton(studente);
         Button report = reportButton(studente);
         pulsanti.add(like,report);
         layout_foto.add(image_profilo,pulsanti);
@@ -74,14 +69,14 @@ public class Card_Utente_Home_Component extends Div {
     }
 
 
-    private Button getLikeButton(Utente utente) {
+    private Button getLikeButton(StudenteDTO studente) {
         Button like = new Button(new Icon(VaadinIcon.HEART));
         like.getStyle().set("color","white");
         like.addClickListener((buttonClickEvent)->{
             Style style = buttonClickEvent.getSource().getStyle();
             if(style.get("color").equals("white")) {
                 buttonClickEvent.getSource().getStyle().set("color", "red");
-                gestioneInterazioniController.aggiungiMatch((Studente)SecurityUtils.getLoggedIn(),(Studente)utente);
+                gestioneInterazioniController.aggiungiMatch(SecurityUtils.getLoggedIn().getEmail(), studente.getEmail());
             }else {
                 style.set("color","white");
             }
@@ -89,7 +84,7 @@ public class Card_Utente_Home_Component extends Div {
         return like;
     }
 
-    private Button reportButton(Studente studente){
+    private Button reportButton(StudenteDTO studente){
         //Notifica Segnalazione
         Notification notifica = new Notification();
         VerticalLayout layout_report = new VerticalLayout();
@@ -98,7 +93,8 @@ public class Card_Utente_Home_Component extends Div {
         TextArea dettagli = new TextArea();
         dettagli.setPlaceholder("Dettagli segnalazione");
         Button invio = new Button("Invia report",buttonClickEvent -> {
-            gestioneModerazioneController.inviaSegnalazione(reporting.getValue(),dettagli.getValue(),studente.getProfilo().getFotoProfilo());
+            SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(reporting.getValue(), dettagli.getValue());
+            gestioneModerazioneController.inviaSegnalazione(segnalazioneDTO,studente.getProfilo().getFotoProfilo());
             notifica.close();
         });
         Button annulla = new Button("Annulla",buttonClickEvent -> {

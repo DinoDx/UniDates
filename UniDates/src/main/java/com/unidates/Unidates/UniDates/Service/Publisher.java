@@ -1,13 +1,16 @@
 package com.unidates.Unidates.UniDates.Service;
 
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Ammonimento;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Sospensione;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Service.GestioneEventi.GestioneInterazioni.MatchEvent;
-import com.unidates.Unidates.UniDates.Service.GestioneEventi.GestioneModerazioni.BannedEvent;
-import com.unidates.Unidates.UniDates.Service.GestioneEventi.GestioneModerazioni.WarningEvent;
+import com.unidates.Unidates.UniDates.Model.Entity.Ammonimento;
+import com.unidates.Unidates.UniDates.Model.Entity.Sospensione;
+import com.unidates.Unidates.UniDates.Model.Entity.Studente;
+import com.unidates.Unidates.UniDates.Service.GestioneEventi.MatchEvent;
+import com.unidates.Unidates.UniDates.Service.GestioneEventi.BannedEvent;
+import com.unidates.Unidates.UniDates.Service.GestioneEventi.WarningEvent;
+import com.unidates.Unidates.UniDates.Service.GestioneEventi.OnRegistrationCompleteEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
+
+import java.util.Locale;
 
 @Component
 public class Publisher {
@@ -27,5 +30,8 @@ public class Publisher {
         publisher.publishEvent(new BannedEvent(this, sospensione));
     }
 
+    public void publishOnRegistrationEvent(final Studente s, final Locale locale, final String url){
+        publisher.publishEvent(new OnRegistrationCompleteEvent(s,locale, url));
+    }
 }
 

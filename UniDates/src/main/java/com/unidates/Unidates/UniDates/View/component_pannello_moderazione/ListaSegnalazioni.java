@@ -1,11 +1,18 @@
 package com.unidates.Unidates.UniDates.View.component_pannello_moderazione;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
+import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
+import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO;
+import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
+import com.unidates.Unidates.UniDates.DTOs.SospensioneDTO;
+import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
+import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
+import com.unidates.Unidates.UniDates.DTOs.CommunityManagerDTO;
+import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
+import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneModerazione.Segnalazione;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Image;
@@ -22,33 +29,57 @@ import java.io.ByteArrayInputStream;
 
 public class ListaSegnalazioni extends VerticalLayout{
 
-    public ListaSegnalazioni(Utente utente,GestioneModerazioneController controller){
+    GestioneModerazioneController controller;
+
+    GestioneUtentiController gestioneUtentiController;
+
+    GestioneProfiloController gestioneProfiloController;
+
+    SegnalazioneDTO segnalazione;
+    ModeratoreDTO moderatore;
+    FotoDTO fotoSegnalata;
+    ProfiloDTO profiloSegnalato;
+    StudenteDTO studenteSegnalato;
+
+    public ListaSegnalazioni(UtenteDTO moderatore, GestioneModerazioneController controller, GestioneUtentiController gestioneUtentiController, GestioneProfiloController gestioneProfiloController){
+        this.controller = controller;
+        this.gestioneUtentiController = gestioneUtentiController;
+        this.gestioneProfiloController = gestioneProfiloController;
         VerticalLayout vertical = new VerticalLayout();
-        if(utente.getRuolo() == Ruolo.MODERATORE) {
-            Moderatore moderatore = (Moderatore) utente;
-            for (Segnalazione s : moderatore.getSegnalazioneRicevute()) {
-                if(s.getFoto().isVisible() && !(s.getFoto().getProfilo().getStudente().isBanned())) //da ricontrollare
-                vertical.addComponentAsFirst(segnalazione(utente, s, controller));
+        if(moderatore.getRuolo() == Ruolo.MODERATORE) {
+            this.moderatore = (ModeratoreDTO) moderatore;
+            for (SegnalazioneDTO segnalazioneDTO : this.moderatore.getSegnalazioneRicevute()) {
+                segnalazione = segnalazioneDTO;
+                fotoSegnalata = gestioneProfiloController.trovaFoto(segnalazioneDTO.getFotoId());
+                profiloSegnalato = gestioneProfiloController.trovaProfilo(fotoSegnalata.getProfiloId());
+                studenteSegnalato =(StudenteDTO) gestioneUtentiController.trovaUtente(profiloSegnalato.getEmailStudente());
+                if(fotoSegnalata.isVisible() && !(studenteSegnalato.isBanned())) //da ricontrollare
+                vertical.addComponentAsFirst(segnalazione());
             }
-        }else if (utente.getRuolo() == Ruolo.COMMUNITY_MANAGER){
-            CommunityManager manager = (CommunityManager) utente;
-            for (Segnalazione s : manager.getSegnalazioneRicevute()){
-                if(s.getFoto().isVisible() && !(s.getFoto().getProfilo().getStudente().isBanned())) //da ricontrollare
-                vertical.addComponentAsFirst(segnalazione(utente,s,controller));
+        }else if (moderatore.getRuolo() == Ruolo.COMMUNITY_MANAGER){
+            this.moderatore = (CommunityManagerDTO)  moderatore;
+            for (SegnalazioneDTO segnalazioneDTO : ((CommunityManagerDTO) moderatore).getSegnalazioneRicevute()){
+                segnalazione = segnalazioneDTO;
+                fotoSegnalata = gestioneProfiloController.trovaFoto(segnalazioneDTO.getFotoId());
+                profiloSegnalato = gestioneProfiloController.trovaProfilo(fotoSegnalata.getProfiloId());
+                studenteSegnalato =(StudenteDTO) gestioneUtentiController.trovaUtente(profiloSegnalato.getEmailStudente());
+                if(fotoSegnalata.isVisible() && !(studenteSegnalato.isBanned())) //da ricontrollare
+                vertical.addComponentAsFirst(segnalazione());
             }
         }
         add(vertical);
     }
 
-    public HorizontalLayout segnalazione(Utente utente,Segnalazione segnalazione, GestioneModerazioneController controller){
-        Moderatore moderatore = (Moderatore) utente;
+    public HorizontalLayout segnalazione(){
+
 
         HorizontalLayout horizontal = new HorizontalLayout();
-        StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(segnalazione.getFoto().getImg()));
+
+        StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream( fotoSegnalata.getImg()));
         Image image = new Image(resource,"");
         image.getStyle().set("width","100px");
         image.getStyle().set("height","100px");
-        Span testo = new Span("Hai ricevuto una segnalazione per una foto di : " + segnalazione.getFoto().getProfilo().getNome() + segnalazione.getFoto().getProfilo().getCognome());
+        Span testo = new Span("Hai ricevuto una segnalazione per una foto di : " + profiloSegnalato.getNome() + profiloSegnalato.getCognome());
         Button dettagliSegnalazione = new Button("Mostra dettagli");
         dettagliSegnalazione.addClickListener(buttonClickEvent -> {
             Notification notificaDettagli = new Notification();
@@ -75,17 +106,17 @@ public class ListaSegnalazioni extends VerticalLayout{
 
         VerticalLayout verticalSegnalazione = new VerticalLayout();
         verticalSegnalazione.add(testo, dettagliSegnalazione);
-        horizontal.setAlignItems(FlexComponent.Alignment.CENTER);
-        horizontal.add(image,verticalSegnalazione, pulsanteAmmonimento(segnalazione,controller, moderatore));
-        if(utente.getRuolo() == Ruolo.COMMUNITY_MANAGER){
-            horizontal.add(pulsanteSospensione(segnalazione,controller,moderatore));
+        horizontal.setAlignItems(Alignment.CENTER);
+        horizontal.add(image,verticalSegnalazione, pulsanteAmmonimento());
+        if(moderatore.getRuolo() == Ruolo.COMMUNITY_MANAGER){
+            horizontal.add(pulsanteSospensione());
         }
         return horizontal;
     }
 
     public Notification notification;
 
-    public Button pulsanteAmmonimento(Segnalazione segnalazione, GestioneModerazioneController controller, Moderatore moderatore){
+    public Button pulsanteAmmonimento(){
         Button button = new Button("Ammonimento");
         Button annulla = new Button("Annulla");
 
@@ -93,13 +124,13 @@ public class ListaSegnalazioni extends VerticalLayout{
         VerticalLayout vertical = new VerticalLayout();
         vertical.setAlignItems(FlexComponent.Alignment.CENTER);
 
-        StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(segnalazione.getFoto().getImg()));
+        StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(fotoSegnalata.getImg()));
         Image image = new Image(resource,"");
         image.getStyle().set("width","250px");
         image.getStyle().set("height","250px");
 
         HorizontalLayout horizontal = new HorizontalLayout();
-        horizontal.add(infoAmmonimento(segnalazione,controller,moderatore));
+        horizontal.add(infoAmmonimento());
         vertical.add(image,horizontal,annulla);
 
         notification.add(vertical);
@@ -118,7 +149,7 @@ public class ListaSegnalazioni extends VerticalLayout{
 
     public Notification sospensione;
 
-    public Button pulsanteSospensione(Segnalazione segnalazione, GestioneModerazioneController controller, Moderatore moderatore){
+    public Button pulsanteSospensione(){
         Button button = new Button("Sospensione");
         Button annulla = new Button("Annulla");
 
@@ -126,13 +157,13 @@ public class ListaSegnalazioni extends VerticalLayout{
         VerticalLayout vertical = new VerticalLayout();
         vertical.setAlignItems(FlexComponent.Alignment.CENTER);
 
-        StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(segnalazione.getFoto().getImg()));
+        StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(fotoSegnalata.getImg()));
         Image image = new Image(resource,"");
         image.getStyle().set("width","250px");
         image.getStyle().set("height","250px");
 
         HorizontalLayout horizontal = new HorizontalLayout();
-        horizontal.add(infoSospensione(segnalazione,controller,moderatore));
+        horizontal.add(infoSospensione());
         vertical.add(image,horizontal,annulla);
 
         sospensione.add(vertical);
@@ -149,12 +180,12 @@ public class ListaSegnalazioni extends VerticalLayout{
         return button;
     }
 
-    private HorizontalLayout infoSospensione(Segnalazione segnalazione, GestioneModerazioneController controller, Moderatore moderatore) {
+    private HorizontalLayout infoSospensione() {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
 
         //layout sinistra
         VerticalLayout vertical = new VerticalLayout();
-        Span nome = new Span(segnalazione.getFoto().getProfilo().getNome());
+        Span nome = new Span(profiloSegnalato.getNome());
 
         TextField durata = new TextField("(Inserire un numero)");
         durata.setPlaceholder("Durata sospensione");
@@ -166,11 +197,12 @@ public class ListaSegnalazioni extends VerticalLayout{
         //layout destra
         VerticalLayout vertical_due = new VerticalLayout();
 
-        Span email = new Span(segnalazione.getFoto().getProfilo().getStudente().getEmail());
+        Span email = new Span(studenteSegnalato.getEmail());
 
         com.vaadin.flow.component.button.Button inviaSospensione = new com.vaadin.flow.component.button.Button("Invia Sospensione");
         inviaSospensione.addClickListener(e -> {
-            controller.inviaSospensione(Integer.parseInt(durata.getValue()),dettagli.getValue(), segnalazione.getFoto().getProfilo().getStudente());
+            SospensioneDTO sospensioneDTO = new SospensioneDTO(Integer.parseInt(durata.getValue()),dettagli.getValue());
+            controller.inviaSospensione(sospensioneDTO,studenteSegnalato.getEmail());
             notification.close();
             UI.getCurrent().getPage().reload();
         });
@@ -184,12 +216,12 @@ public class ListaSegnalazioni extends VerticalLayout{
     }
 
 
-    public HorizontalLayout infoAmmonimento(Segnalazione segnalazione,GestioneModerazioneController controller, Moderatore moderatore){
+    public HorizontalLayout infoAmmonimento(){
         HorizontalLayout horizontalLayout = new HorizontalLayout();
 
         //layout sinistra
         VerticalLayout vertical = new VerticalLayout();
-        Span nome = new Span(segnalazione.getFoto().getProfilo().getNome());
+        Span nome = new Span(profiloSegnalato.getNome());
 
         TextField motivazione = new TextField();
         motivazione.setPlaceholder("Motivazione");
@@ -201,11 +233,12 @@ public class ListaSegnalazioni extends VerticalLayout{
         //layout destra
         VerticalLayout vertical_due = new VerticalLayout();
 
-        Span email = new Span(segnalazione.getFoto().getProfilo().getStudente().getEmail());
+        Span email = new Span(studenteSegnalato.getEmail());
 
         com.vaadin.flow.component.button.Button inviaAmmonimento = new com.vaadin.flow.component.button.Button("Invia Ammonimento");
         inviaAmmonimento.addClickListener(e -> {
-            controller.inviaAmmonimento(dettagli.getValue(),motivazione.getValue(), moderatore, segnalazione.getFoto().getProfilo().getStudente(), segnalazione.getFoto());
+            AmmonimentoDTO ammonimentoDTO = new AmmonimentoDTO(dettagli.getValue(),motivazione.getValue());
+            controller.inviaAmmonimento(ammonimentoDTO, moderatore.getEmail(),studenteSegnalato.getEmail(),fotoSegnalata);
             notification.close();
             UI.getCurrent().getPage().reload();
         });

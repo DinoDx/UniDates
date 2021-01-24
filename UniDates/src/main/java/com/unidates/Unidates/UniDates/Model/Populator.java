@@ -1,14 +1,14 @@
 package com.unidates.Unidates.UniDates.Model;
 
-import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.CommunityManager;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Service.GestioneInterazioni.MatchService;
-import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
+import com.unidates.Unidates.UniDates.Model.Entity.Foto;
+import com.unidates.Unidates.UniDates.Model.Entity.Profilo;
+import com.unidates.Unidates.UniDates.Model.Entity.CommunityManager;
+import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
+import com.unidates.Unidates.UniDates.Model.Entity.Studente;
+import com.unidates.Unidates.UniDates.Service.MatchService;
+import com.unidates.Unidates.UniDates.Service.ModerazioneService;
+import com.unidates.Unidates.UniDates.Service.UtenteService;
 import com.unidates.Unidates.UniDates.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -34,7 +34,7 @@ public class Populator implements ApplicationRunner {
     private MatchService matchService;
 
     @Autowired
-    private GestioneModerazioneController gestioneModerazioneController;
+    private ModerazioneService moderazioneService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -73,10 +73,10 @@ public class Populator implements ApplicationRunner {
         utenteService.registrazioneStudente(s2, p2);
         utenteService.registrazioneStudente(s3, p3);
 
-        matchService.aggiungiMatch(s1, s2);
-        matchService.aggiungiMatch(s2, s1);
-        matchService.aggiungiMatch(s1, s3);
-        matchService.aggiungiMatch(s3, s1);
+        matchService.aggiungiMatch(s1.getEmail(), s2.getEmail());
+        matchService.aggiungiMatch(s2.getEmail(), s1.getEmail());
+        matchService.aggiungiMatch(s1.getEmail(), s3.getEmail());
+        matchService.aggiungiMatch(s3.getEmail(), s1.getEmail());
 
         //Aggiungo un moderatore
         Moderatore m1 = new Moderatore("moderatore@gmail.com", "moderatore");
@@ -98,22 +98,22 @@ public class Populator implements ApplicationRunner {
         utenteService.registrazioneCommunityManager(cm1, p5);
 
 
-        gestioneModerazioneController.inviaSegnalazione("motivazione1", "dettagli1", p1.getFotoProfilo());
-        gestioneModerazioneController.inviaSegnalazione("motivazione2", "dettagli2", p2.getFotoProfilo());
-        gestioneModerazioneController.inviaSegnalazione("motivazione3", "dettagli3", p3.getFotoProfilo());
-        gestioneModerazioneController.inviaSegnalazione("motivazione3", "dettagli3", p1.getListaFoto().get(1));
-        gestioneModerazioneController.inviaSegnalazione("motivazione3", "dettagli3", p2.getListaFoto().get(1));
-        gestioneModerazioneController.inviaSegnalazione("motivazione3", "dettagli3", p3.getListaFoto().get(1));
+       /* gestioneModerazioneController.inviaSegnalazione(new SegnalazioneDTO("motivazione1", "dettagli1") , new FotoDTO(p1.getFotoProfilo().getImg()));
+        gestioneModerazioneController.inviaSegnalazione(new SegnalazioneDTO("motivazione2", "dettagli2") , new FotoDTO(p2.getFotoProfilo().getImg()));
+        gestioneModerazioneController.inviaSegnalazione(new SegnalazioneDTO("motivazione3", "dettagli3") , new FotoDTO(p3.getFotoProfilo().getImg()));
+        gestioneModerazioneController.inviaSegnalazione(new SegnalazioneDTO("motivazione1", "dettagli1") , new FotoDTO(p3.getListaFoto().get(0).getImg()));
+        gestioneModerazioneController.inviaSegnalazione(new SegnalazioneDTO("motivazione1", "dettagli1") , new FotoDTO(p3.getListaFoto().get(0).getImg()));
+        gestioneModerazioneController.inviaSegnalazione(new SegnalazioneDTO("motivazione1", "dettagli1") , new FotoDTO(p1.getListaFoto().get(0).getImg()));
 
-        gestioneModerazioneController.inviaAmmonimento("motivazione1", "dettagli1", m1, s1, s1.getProfilo().getFotoProfilo());
-        gestioneModerazioneController.inviaAmmonimento("motivazione2", "dettagli2", m1, s2, s2.getProfilo().getFotoProfilo());
+        gestioneModerazioneController.inviaAmmonimento(new AmmonimentoDTO("motivazione1", "dettagli1"), m1.getEmail(), s1.getEmail(),( s1.getProfilo().getFotoProfilo()));
+        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione2", "dettagli2"), m1.getEmail(), s2.getEmail(), s2.getProfilo();
         gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getFotoProfilo());
 
         Moderatore m2 = (Moderatore) utenteService.trovaUtente("moderatore@gmail.com");
         gestioneModerazioneController.inviaSegnalazioneCommunityManager(m2.getSegnalazioneRicevute().get(0));
 
         gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getListaFoto().get(0));
-        gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getListaFoto().get(0));
+        gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getListaFoto().get(0)); */
 
 
 

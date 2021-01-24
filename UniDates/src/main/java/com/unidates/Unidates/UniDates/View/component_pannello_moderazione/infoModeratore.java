@@ -1,31 +1,29 @@
 package com.unidates.Unidates.UniDates.View.component_pannello_moderazione;
 
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
+import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
+import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
-import org.dom4j.rule.Mode;
 
 import java.io.ByteArrayInputStream;
 
 public class infoModeratore extends Div {
 
-    public infoModeratore(Utente utente){
-        Moderatore moderatore = (Moderatore) utente;
+    ModeratoreDTO moderatore;
+    public infoModeratore(UtenteDTO utente){
+        ModeratoreDTO moderatore = (ModeratoreDTO) utente;
         HorizontalLayout horizontal = new HorizontalLayout();
-        horizontal.add(immagineMod(moderatore),infoMod(moderatore),segnalazioniMod(moderatore));
+        horizontal.add(immagineMod(),infoMod(),segnalazioniMod());
         add(horizontal);
     }
 
-   public VerticalLayout immagineMod(Moderatore moderatore){
+   public VerticalLayout immagineMod(){
         VerticalLayout immagine = new VerticalLayout();
-       Studente studente = (Studente) moderatore;
-       StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(studente.getProfilo().getListaFoto().get(0).getImg()));
+       StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(moderatore.getProfilo().getFotoProfilo().getImg()));
        Image image_profilo = new Image(resource,"");
        image_profilo.getStyle().set("width","250px");
        image_profilo.getStyle().set("height","250px");
@@ -33,17 +31,16 @@ public class infoModeratore extends Div {
        return immagine;
    }
 
-   public VerticalLayout infoMod(Moderatore moderatore){
+   public VerticalLayout infoMod(){
         VerticalLayout info = new VerticalLayout();
-       Studente studente = (Studente) moderatore;
-       Span nome = new Span("Nome : " + studente.getProfilo().getNome());
-       Span cognome = new Span("Cognome : "+ studente.getProfilo().getCognome());
+       Span nome = new Span("Nome : " + moderatore.getProfilo().getNome());
+       Span cognome = new Span("Cognome : "+ moderatore.getProfilo().getCognome());
        Span email = new Span("Email : " + moderatore.getEmail());
        info.add(nome, cognome, email);
        return info;
    }
 
-   public VerticalLayout segnalazioniMod(Moderatore moderatore){
+   public VerticalLayout segnalazioniMod(){
         VerticalLayout segnalazioni = new VerticalLayout();
         Span segnalazioniRicevute = new Span("Segnalazioni Ricevute : " + moderatore.getSegnalazioneRicevute().size());
         Span segnalazioniRicevuteNV = new Span("Segnalazioni Ricevute Non Viste : ");

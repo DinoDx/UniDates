@@ -1,19 +1,23 @@
 package com.unidates.Unidates.UniDates.Controller;
 
+import com.unidates.Unidates.UniDates.DTOs.EntityToDto;
+import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
+import com.unidates.Unidates.UniDates.DTOs.CommunityManagerDTO;
+import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
+import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
+import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
-import com.unidates.Unidates.UniDates.Service.GestioneEventi.GestioneUtenti.OnRegistrationCompleteEvent;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.*;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
-import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
+import com.unidates.Unidates.UniDates.Service.UtenteService;
 
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
+import com.unidates.Unidates.UniDates.Service.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -30,7 +34,10 @@ import java.util.List;
 public class GestioneUtentiController {
 
     @Autowired
-    ApplicationEventPublisher applicationEventPublisher;
+    SessionRegistry sessionRegistry;
+
+    @Autowired
+    Publisher publisher;
 
     @Autowired
     UtenteService utenteService;
@@ -39,17 +46,23 @@ public class GestioneUtentiController {
     PasswordEncoder passwordEncoder;
 
     @RequestMapping("/registrazioneStudente")
-    public void registrazioneStudente( @RequestParam String email, @RequestParam String password, @RequestParam String nome, @RequestParam String cognome, String luogoNascita,
-                                      String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso,
-                                      Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi,
-                                      Foto fotoProfilo, List<Hobby> hobbyList,HttpServletRequest request) {
-        Studente s = new Studente(email,password);
-        Profilo p = new Profilo(nome, cognome, luogoNascita, residenza, dataDiNascita, altezza, sesso, interessi, colori_capelli, colore_occhi, fotoProfilo, hobbyList);
+    public void registrazioneStudente(StudenteDTO studenteDTO, HttpServletRequest request) {
+        ProfiloDTO profiloDTO = studenteDTO.getProfilo();
+
+        Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
+        profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
+        new Foto(profiloDTO.getFotoProfilo().getImg()),profiloDTO.getHobbyList());
+
+
+        Studente s = new Studente(studenteDTO.getEmail(), studenteDTO.getPassword());
+
+        s.setProfilo(p);
+
         if(checkStudente(s) && checkProfilo(p)) {
             if(!utenteService.isPresent(s)){
                 utenteService.registrazioneStudente(s, p);
                 String appUrl = request.getContextPath();
-                applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(s, request.getLocale(), appUrl));
+                publisher.publishOnRegistrationEvent(s, request.getLocale(), appUrl);
             }
             else throw new AlreadyExistUserException();
         }
@@ -57,12 +70,17 @@ public class GestioneUtentiController {
     }
 
     @RequestMapping("/registrazioneModeratore")
-    public void registrazioneModeratore(String email, String password, String nome, String cognome, String luogoNascita,
-                                        String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso,
-                                        Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi,
-                                        Foto fotoProfilo, List<Hobby> hobbyList) {
-        Moderatore m = new Moderatore(email,password);
-        Profilo p = new Profilo(nome, cognome, luogoNascita, residenza, dataDiNascita, altezza, sesso, interessi, colori_capelli, colore_occhi, fotoProfilo, hobbyList);
+    public void registrazioneModeratore(ModeratoreDTO moderatoreDTO) {
+        ProfiloDTO profiloDTO = moderatoreDTO.getProfilo();
+
+        Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
+                profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
+                new Foto(profiloDTO.getFotoProfilo().getImg()),profiloDTO.getHobbyList());
+
+        Moderatore m = new Moderatore(moderatoreDTO.getEmail(),moderatoreDTO.getPassword());
+
+        m.setProfilo(p);
+
         if(checkStudente(m) && checkProfilo(p)) { // per il moderatore e il cm non viene inviata alcuna mail di registrazione
             if(!utenteService.isPresent(m))
                 utenteService.registrazioneModeratore(m, p);
@@ -72,12 +90,16 @@ public class GestioneUtentiController {
     }
 
     @RequestMapping("/registrazioneCommunityManager")
-    public void registrazioneCommunityManager(String email, String password, String nome, String cognome, String luogoNascita,
-                                              String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso,
-                                              Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi,
-                                              Foto fotoProfilo, List<Hobby> hobbyList){
-        CommunityManager cm = new CommunityManager(email,password);
-        Profilo p = new Profilo(nome, cognome, luogoNascita, residenza, dataDiNascita, altezza, sesso, interessi, colori_capelli, colore_occhi, fotoProfilo, hobbyList);
+    public void registrazioneCommunityManager(CommunityManagerDTO communityManagerDTO){
+        ProfiloDTO profiloDTO = communityManagerDTO.getProfilo();
+
+        Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
+                profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
+                new Foto(profiloDTO.getFotoProfilo().getImg()),profiloDTO.getHobbyList());
+
+        CommunityManager cm = new CommunityManager(communityManagerDTO.getEmail(), communityManagerDTO.getPassword());
+
+        cm.setProfilo(p);
         if(checkStudente(cm) && checkProfilo(p)){
             if(!utenteService.isPresent(cm))
                 utenteService.registrazioneCommunityManager(cm, p);
@@ -87,26 +109,45 @@ public class GestioneUtentiController {
     }
 
     @RequestMapping("/bloccoStudente")
-    public boolean bloccaStudente(@RequestParam Studente sBloccante, @RequestParam Studente sBloccato){
+    public boolean bloccaStudente(@RequestParam String emailBloccante, @RequestParam String emailBloccato){
         if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE)) return false;
-       return utenteService.bloccaStudente(sBloccante,sBloccato);
+       return utenteService.bloccaStudente(emailBloccante,emailBloccato);
     }
 
     @RequestMapping("/sbloccoStudente")
-    public boolean sbloccaStudente(Studente sBloccante, Studente sBloccato){
-        return utenteService.sbloccaStudente(sBloccante,sBloccato);
+    public boolean sbloccaStudente(@RequestParam String emailSbloccante, @RequestParam String emailSbloccato){
+        return utenteService.sbloccaStudente(emailSbloccante, emailSbloccato);
     }
 
     @RequestMapping("/trovaUtente")
-    public Utente trovaUtente(String email) {
+    public UtenteDTO trovaUtente(String email) {
         if(checkEmail(email)) {
             Utente utente = utenteService.trovaUtente(email);
+
             if(utente != null)
-                return utente;
+                return EntityToDto.toDTO(utente);
             else throw new UserNotFoundException();
         }
         else throw new InvalidRegistrationFormatException();
     }
+
+    @RequestMapping("/trovaStudente")
+    public StudenteDTO trovaStudente(String email) {
+        if(checkEmail(email)) {
+            Studente studente = (Studente) utenteService.trovaUtente(email);
+
+            if(studente != null)
+                return EntityToDto.toDTO(studente);
+            else throw new UserNotFoundException();
+        }
+        else throw new InvalidRegistrationFormatException();
+    }
+
+    @RequestMapping("/studenteInSessione")
+    public UtenteDTO utenteInSessione(){
+        return EntityToDto.toDTO((Studente) SecurityUtils.getLoggedIn());
+    }
+
 
 
     @GetMapping("/registrationConfirm")
@@ -131,19 +172,46 @@ public class GestioneUtentiController {
         return "Utente confermato";
     }
 
-    @RequestMapping("/findAll")
-    public List<Utente> findAll(){
-        return utenteService.findAll();
+    @RequestMapping("/trovaTutti")
+    public List<UtenteDTO> trovaTutti(){
+        List<UtenteDTO> lista = new ArrayList<UtenteDTO>();
+        utenteService.findAll().forEach(utente -> lista.add(EntityToDto.toDTO(utente)));
+        return lista;
     }
 
-    public boolean checkEmail(String email){
+    @RequestMapping("/trovaTuttuStudenti")
+    public List<StudenteDTO> trovaTuttiStudenti(){
+        List<StudenteDTO> lista = new ArrayList<StudenteDTO>();
+        utenteService.findAllStudenti().forEach(studente -> lista.add(EntityToDto.toDTO(studente)));
+        return lista;
+    }
+
+    @RequestMapping("/cambiaPassword")
+    public void cambiaPassword(String emailUtente, String nuovaPassword, String vecchiaPassword) {
+        Studente toChange = utenteService.trovaStudente(emailUtente);
+        if(checkStudente(new Studente(emailUtente,nuovaPassword))){
+            if (passwordEncoder.matches(vecchiaPassword, toChange.getPassword())) {
+                utenteService.cambiaPassword(emailUtente, nuovaPassword);
+            } else throw new PasswordMissmatchException();
+        }else throw new InvalidRegistrationFormatException();
+    }
+
+    @RequestMapping("/cancellaAccountPersonale")
+    public void cancellaAccountPersonale(String email, String password){
+        Studente toDelete = utenteService.trovaStudente(email);
+        if(passwordEncoder.matches(password, toDelete.getPassword())){
+            utenteService.deleteUtente(toDelete);
+        }
+        SecurityUtils.forceLogout(toDelete, sessionRegistry);
+    }
+
+    private boolean checkEmail(String email){
         if (email != null && email.matches("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"))
             return true;
 
         return false;
     }
-
-    public boolean checkProfilo(Profilo p) {
+    private boolean checkProfilo(Profilo p) {
         if (p.getNome() != null && p.getCognome() != null && p.getLuogoNascita() != null && p.getResidenza() != null && p.getDataDiNascita() != null && p.getAltezza() != 0 && p.getSesso() != null && p.getInteressi() != null && p.getColori_capelli() != null && p.getColore_occhi() != null && p.getHobbyList().size() > 0){
             if (p.getNome().length() > 0 && p.getCognome().length() > 0 && p.getLuogoNascita().length() > 0 && p.getResidenza().length() > 0){
                 if(p.getSesso() == Sesso.UOMO || p.getSesso() == Sesso.DONNA || p.getSesso() == Sesso.ALTRO){
@@ -158,8 +226,6 @@ public class GestioneUtentiController {
 
         return false;
     }
-
-
     private boolean checkStudente(Studente s) {
         if(s.getEmail() != null && s.getPassword() != null){
             if(checkEmail(s.getEmail())){
@@ -169,12 +235,5 @@ public class GestioneUtentiController {
          return false;
     }
 
-    public void cambiaPassword(Utente utente, String nuovaPassword, String vecchiaPassword) {
-        if(checkStudente(new Studente(utente.getEmail(),nuovaPassword))){
-            if (passwordEncoder.matches(vecchiaPassword, utente.getPassword())) {
-                utenteService.cambiaPassword(utente, nuovaPassword);
-            } else throw new PasswordMissmatchException();
-        }else throw new InvalidRegistrationFormatException();
-    }
 
 }

@@ -3,14 +3,12 @@ package com.unidates.Unidates.UniDates.View.component_home_page;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
+import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Model.Enum.Colore_Occhi;
 import com.unidates.Unidates.UniDates.Model.Enum.Colori_Capelli;
 import com.unidates.Unidates.UniDates.Model.Enum.Hobby;
 import com.unidates.Unidates.UniDates.Model.Enum.Interessi;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Profilo;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.View.main.MainView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -41,22 +39,26 @@ import java.util.*;
 @PageTitle("Profilo")
 @CssImport("./styles/views/home/profilopersonale.css")
 public class ProfiloPersonale extends VerticalLayout {
-    Utente utente = SecurityUtils.getLoggedIn();
-    Studente studente = (Studente) utente;
-    Profilo profilo = studente.getProfilo();
+
+    StudenteDTO studente;
+    ProfiloDTO profilo;
 
     @Autowired
     PasswordEncoder encoder;
 
     @Autowired
-    GestioneUtentiController utente_controller;
+    GestioneUtentiController gestioneUtentiController;
 
     @Autowired
-    GestioneProfiloController controller;
+    GestioneProfiloController gestioneProfiloController;
 
-    public ProfiloPersonale(GestioneProfiloController controller){
-        this.controller = controller;
+    public ProfiloPersonale(GestioneProfiloController gestioneProfiloController, GestioneUtentiController gestioneUtentiController){
+        this.gestioneProfiloController = gestioneProfiloController;
+        this.gestioneUtentiController = gestioneUtentiController;
 
+
+        studente = (StudenteDTO) gestioneUtentiController.utenteInSessione();
+        profilo = studente.getProfilo();
 
         multiselectComboBox.setLabel("Seleziona Topic");
         multiselectComboBox.setPlaceholder("Scelti...");
@@ -113,7 +115,7 @@ public class ProfiloPersonale extends VerticalLayout {
         cognome.setEnabled(false);
         compleanno.setValue(profilo.getDataDiNascita());
         compleanno.setEnabled(false);
-        email.setValue(utente.getEmail());
+        email.setValue(studente.getEmail());
         email.setEnabled(false);
         info1.add(nome,cognome,compleanno,email);
         return info1;
@@ -259,7 +261,7 @@ public class ProfiloPersonale extends VerticalLayout {
                 //VEDERE IMMAGINE
 
 
-                controller.modificaProfilo(studente.getProfilo());
+                gestioneProfiloController.modificaProfilo(studente.getEmail(),studente.getProfilo());
                 Page pagina = UI.getCurrent().getPage();
 
                 pagina.reload();
@@ -287,10 +289,10 @@ public class ProfiloPersonale extends VerticalLayout {
         PasswordField seconda_password = new PasswordField("Conferma password");
         Button conferma = new Button("Conferma");
         conferma.addClickListener(buttonClickEvent -> {
-           if(encoder.matches(password_attuale.getValue(),utente.getPassword())){
+           if(encoder.matches(password_attuale.getValue(),studente.getPassword())){
                if(prima_password.getValue().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")){
                    if (prima_password.getValue().equals(seconda_password.getValue())) {
-                       utente_controller.cambiaPassword(utente, prima_password.getValue(), password_attuale.getValue());
+                       gestioneUtentiController.cambiaPassword(studente.getEmail(), prima_password.getValue(), password_attuale.getValue());
                        cambio.close();
                    } else {
                        Notification errore_password = new Notification("Le password nuove non corrispondono", 3000, Notification.Position.MIDDLE);

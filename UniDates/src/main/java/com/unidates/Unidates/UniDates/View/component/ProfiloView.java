@@ -2,9 +2,7 @@ package com.unidates.Unidates.UniDates.View.component;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Security.SecurityUtils;
+import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.View.main.MainView;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -21,18 +19,11 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
 
     @Autowired
     GestioneInterazioniController gestioneInterazioniController;
-
     @Autowired
     GestioneUtentiController gestioneUtentiController;
-
     VerticalLayout tot;
-
-    Studente studente;
-
-    //utente in sessione
-    Utente utente = SecurityUtils.getLoggedIn();
-    Studente s = (Studente) utente;
-
+    StudenteDTO daCercare;
+    StudenteDTO inSessione;
 
     Span nome;
     Span cognome = new Span();
@@ -59,7 +50,7 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
 
         //layout immagine
         VerticalLayout image_layout = new VerticalLayout();
-        StreamResource resource = new StreamResource("ciao", () -> new ByteArrayInputStream(studente.getProfilo().getListaFoto().get(0).getImg()));
+        StreamResource resource = new StreamResource("ciao", () -> new ByteArrayInputStream(daCercare.getProfilo().getListaFoto().get(0).getImg()));
         Image image_profilo = new Image(resource, "");
         image_profilo.getStyle().set("width","250px");
         image_profilo.getStyle().set("height","250px");
@@ -68,26 +59,26 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
 
 
         HorizontalLayout nome_cognome = new HorizontalLayout();
-        nome = new Span(studente.getProfilo().getNome());
-        cognome = new Span(studente.getProfilo().getCognome());
+        nome = new Span(daCercare.getProfilo().getNome());
+        cognome = new Span(daCercare.getProfilo().getCognome());
         nome_cognome.add(nome, cognome);
 
-        topics = new Span("Topics:" + studente.getProfilo().getHobbyList().toString());
-        interessi = new Span("Interessato a:" + studente.getProfilo().getInteressi().toString());
+        topics = new Span("Topics:" + daCercare.getProfilo().getHobbyList().toString());
+        interessi = new Span("Interessato a:" + daCercare.getProfilo().getInteressi().toString());
 
         HorizontalLayout città = new HorizontalLayout();
-        residenza = new Span("Residenza:" + studente.getProfilo().getResidenza());
-        nascita = new Span("Città di nascita:" + studente.getProfilo().getLuogoNascita());
+        residenza = new Span("Residenza:" + daCercare.getProfilo().getResidenza());
+        nascita = new Span("Città di nascita:" + daCercare.getProfilo().getLuogoNascita());
         città.add(residenza, nascita);
 
         HorizontalLayout caratteristiche = new HorizontalLayout();
-        colore_occhi = new Span("Colore occhi" + studente.getProfilo().getColore_occhi());
-        colore_capelli = new Span("Colore capelli:" + studente.getProfilo().getColori_capelli());
-        altezza = new Span("Altezza:" + studente.getProfilo().getAltezza());
-        compleanno = new Span("Data di nascita:" + studente.getProfilo().getDataDiNascita());
+        colore_occhi = new Span("Colore occhi" + daCercare.getProfilo().getColore_occhi());
+        colore_capelli = new Span("Colore capelli:" + daCercare.getProfilo().getColori_capelli());
+        altezza = new Span("Altezza:" + daCercare.getProfilo().getAltezza());
+        compleanno = new Span("Data di nascita:" + daCercare.getProfilo().getDataDiNascita());
         caratteristiche.add(colore_capelli, colore_occhi, altezza, compleanno);
 
-        if(gestioneInterazioniController.isValidMatch(s, studente)){
+        if(gestioneInterazioniController.isValidMatch(inSessione.getEmail(), daCercare.getEmail())){
             VerticalLayout info_layout = new VerticalLayout();
             info_layout.add(nome_cognome, topics, interessi, città, caratteristiche);
             horizontal.add(image_layout, info_layout);
@@ -105,7 +96,8 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
     public void setParameter(BeforeEvent beforeEvent, String s) {
         if(tot != null)
            remove(tot);
-        studente = (Studente) gestioneUtentiController.trovaUtente(s);
+        daCercare =  gestioneUtentiController.trovaStudente(s);
+        inSessione = (StudenteDTO) gestioneUtentiController.utenteInSessione();
         tot = Page();
         tot.setAlignItems(Alignment.CENTER);
         add(tot);

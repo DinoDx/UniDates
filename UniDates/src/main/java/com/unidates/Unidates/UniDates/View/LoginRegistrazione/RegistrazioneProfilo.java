@@ -2,9 +2,12 @@ package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
+import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
+import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneProfilo.Foto;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
+import com.unidates.Unidates.UniDates.Model.Entity.Foto;
+import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
@@ -82,7 +85,7 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
     private Checkbox checkbox;
     private MemoryBuffer image;
     private ArrayList<Foto> foto = new ArrayList<Foto>();
-    private Foto toadd;
+    private FotoDTO toadd;
 
     public RegistrazioneProfilo(){
         httpSession.removeAttribute("utente_reg");
@@ -169,9 +172,13 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
                         for (String s : multiselectComboBox.getValue()) hobby.add(Hobby.valueOf(s));
 
 
-                            gestioneUtentiController.registrazioneStudente(da_registrare.getEmail(),da_registrare.getPassword(),nome.getValue(),cognome.getValue(),luogo_di_nascita.getValue(),residenza.getValue(),picker.getValue(),
-                                    altezza.getValue(),Sesso.valueOf(sessi.getValue()),Interessi.valueOf(interessi.getValue()),Colori_Capelli.valueOf(capelli.getValue()),
-                                    Colore_Occhi.valueOf(occhi.getValue()),toadd,hobby, VaadinServletRequest.getCurrent());
+
+                        ProfiloDTO  profiloDTO = new ProfiloDTO(nome.getValue(),cognome.getValue(),luogo_di_nascita.getValue(),residenza.getValue(),picker.getValue(),
+                                altezza.getValue(),Sesso.valueOf(sessi.getValue()),Interessi.valueOf(interessi.getValue()),Colori_Capelli.valueOf(capelli.getValue()),
+                                Colore_Occhi.valueOf(occhi.getValue()),hobby, toadd);
+                        StudenteDTO studenteDTO = new StudenteDTO(da_registrare.getEmail(),da_registrare.getPassword(), profiloDTO);
+
+                        gestioneUtentiController.registrazioneStudente(studenteDTO, VaadinServletRequest.getCurrent());
 
                              //NOTIFICA DI SUCCESSO REGISTRAZIONE
                             Notification successo_registrazione = new Notification();
@@ -254,7 +261,7 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
         output.getStyle().set("max-heght","20px");
         upload.addSucceededListener(event -> {
             try{
-                toadd = new Foto(image.getInputStream().readAllBytes());
+                toadd = new FotoDTO(image.getInputStream().readAllBytes());
 
                 Component component = createComponent(event.getMIMEType(),event.getFileName(),image.getInputStream());
                 HtmlComponent p = new HtmlComponent(Tag.P);
