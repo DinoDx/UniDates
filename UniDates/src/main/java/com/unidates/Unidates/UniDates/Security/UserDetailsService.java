@@ -2,9 +2,9 @@ package com.unidates.Unidates.UniDates.Security;
 
 import com.unidates.Unidates.UniDates.Exception.BannedUserException;
 import com.unidates.Unidates.UniDates.Exception.NotConfirmedAccountException;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Repository.GestioneUtenti.UtenteRepository;
+import com.unidates.Unidates.UniDates.Model.Entity.Studente;
+import com.unidates.Unidates.UniDates.Model.Entity.Utente;
+import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

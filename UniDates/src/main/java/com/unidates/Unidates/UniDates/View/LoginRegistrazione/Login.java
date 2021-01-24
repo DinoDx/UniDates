@@ -2,8 +2,6 @@ package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 
 
-import com.unidates.Unidates.UniDates.Exception.BannedUserException;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -16,7 +14,6 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.router.*;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 
 
 @Route(value = "login", layout = MainViewLogin.class)

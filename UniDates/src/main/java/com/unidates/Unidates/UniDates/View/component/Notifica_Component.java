@@ -1,7 +1,7 @@
 package com.unidates.Unidates.UniDates.View.component;
 
 
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneInterazioni.Notifica;
+import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H6;

@@ -1,7 +1,7 @@
 package com.unidates.Unidates.UniDates.Security;
 
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
+import com.unidates.Unidates.UniDates.Model.Entity.Utente;
 import com.unidates.Unidates.UniDates.View.LoginRegistrazione.Login;
 import com.unidates.Unidates.UniDates.View.LoginRegistrazione.RegistrazioneAccount;
 import com.unidates.Unidates.UniDates.View.LoginRegistrazione.RegistrazioneProfilo;

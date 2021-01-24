@@ -1,7 +1,7 @@
 package com.unidates.Unidates.UniDates.Security;
 
-import com.unidates.Unidates.UniDates.Model.Entity.GestioneUtente.Utente;
-import com.unidates.Unidates.UniDates.Service.GestioneUtenti.UtenteService;
+import com.unidates.Unidates.UniDates.Model.Entity.Utente;
+import com.unidates.Unidates.UniDates.Service.UtenteService;
 import com.vaadin.flow.server.ServletHelper;
 import com.vaadin.flow.shared.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
