@@ -79,7 +79,7 @@ public class GestioneProfiloController {
         if(SecurityUtils.getLoggedIn().getEmail().equals(emailStudenteToModify)) {
             Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
                     profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
-                    null, profiloDTO.getHobbyList());
+                    new Foto(), profiloDTO.getHobbyList());
 
             if (checkProfilo(p))
                 profiloService.modificaProfilo(emailStudenteToModify, p);
