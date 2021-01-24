@@ -81,8 +81,10 @@ public class GestioneProfiloController {
                     profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
                     new Foto(), profiloDTO.getHobbyList());
 
-            p.setNumeroTelefono(profiloDTO.getNumeroTelefono());
-            p.setNickInstagram(profiloDTO.getNickInstagram());
+            if(profiloDTO.getNumeroTelefono()!= null)
+                p.setNickInstagram(profiloDTO.getNickInstagram());
+            if(profiloDTO.getNickInstagram() != null)
+                p.setNumeroTelefono(profiloDTO.getNumeroTelefono());
 
             if (checkProfilo(p))
                 profiloService.modificaProfilo(emailStudenteToModify, p);
