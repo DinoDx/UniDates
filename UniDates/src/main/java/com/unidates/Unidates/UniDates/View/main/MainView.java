@@ -58,13 +58,14 @@ public class MainView extends AppLayout {
     UtenteDTO utente;
 
 
-    public MainView(GestioneUtentiController gestioneUtentiController, GestioneProfiloController profiloController) {
-        this.gestioneUtentiController = gestioneUtentiController;
-        this.profiloController = profiloController;
+    public MainView() {
+        addAttachListener(event -> create());
+    }
+
+    public void create(){
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
     }
-
 
 
     private Component createHeaderContent() {

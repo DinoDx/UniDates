@@ -52,11 +52,10 @@ public class ProfiloPersonale extends VerticalLayout {
     @Autowired
     GestioneProfiloController gestioneProfiloController;
 
-    public ProfiloPersonale(GestioneProfiloController gestioneProfiloController, GestioneUtentiController gestioneUtentiController){
-        this.gestioneProfiloController = gestioneProfiloController;
-        this.gestioneUtentiController = gestioneUtentiController;
-
-
+    public ProfiloPersonale(){
+        addAttachListener(event -> create());
+    }
+    public void create(){
         studente = (StudenteDTO) gestioneUtentiController.utenteInSessione();
         profilo = studente.getProfilo();
 
@@ -81,7 +80,6 @@ public class ProfiloPersonale extends VerticalLayout {
         padre.add(NomeUtente(),sotto_padre,Info1(),Info2(),Info3(),Info4(),multiselectComboBox,Pulsanti());
         add(padre);
     }
-
     public HorizontalLayout NomeUtente(){
         HorizontalLayout nome = new HorizontalLayout();
         Span nome_utente = new Span(profilo.getNome());
@@ -92,7 +90,7 @@ public class ProfiloPersonale extends VerticalLayout {
 
     public VerticalLayout ImageUtente(){
         VerticalLayout image = new VerticalLayout();
-        StreamResource resource = new StreamResource("fotoprofilo",()-> new ByteArrayInputStream(studente.getProfilo().getListaFoto().get(0).getImg()));
+        StreamResource resource = new StreamResource("fotoprofilo",()-> new ByteArrayInputStream(studente.getProfilo().getFotoProfilo().getImg()));
         Image img = new Image(resource,"");
         img.getStyle().set("width","200px");
         img.getStyle().set("height","200px");

@@ -57,7 +57,7 @@ import java.util.List;
 @Route(value = "registrazione_due", layout = MainViewLogin.class)
 @PageTitle("Registrazione_2")
 @CssImport("./styles/views/registrazione/registrazione_due.css")
-public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterObserver {
+public class RegistrazioneProfilo extends VerticalLayout {
 
     @Autowired
     GestioneUtentiController gestioneUtentiController;
@@ -68,7 +68,7 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
     ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
     HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
 
-    StudenteDTO da_registrare = (StudenteDTO) httpSession.getAttribute("utente_reg");
+
 
     private Select<String> interessi = new Select<>();
     private TextField nome;
@@ -85,8 +85,20 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
     private MemoryBuffer image;
     private ArrayList<Foto> foto = new ArrayList<Foto>();
     private FotoDTO toadd;
+    private TextField numero;
+    private TextField contatto_ig;
 
     public RegistrazioneProfilo(){
+        addAttachListener(event -> create());
+    }
+
+    public void create(){
+        StudenteDTO da_registrare = (StudenteDTO) httpSession.getAttribute("utente_reg");
+
+        if(da_registrare == null){
+           UI.getCurrent().navigate("registrazione");
+        }
+
         httpSession.removeAttribute("utente_reg");
         setSizeFull();
 
@@ -117,83 +129,84 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
 
         Button conferma = new Button("Conferma",buttonClickEvent -> {
             //Sessione
-                    if(nome.isEmpty()){
-                        Notification nome_errore = new Notification("Inserisci il campo Nome",3000, Notification.Position.MIDDLE);
-                        nome_errore.open();
-                    }
-                    else if(cognome.isEmpty()){
-                        Notification cognome_errore = new Notification("Inserisci il campo Cognome",3000, Notification.Position.MIDDLE);
-                        cognome_errore.open();
-                    }
-                    else if(picker.isEmpty() || !checkMaggiorenne(picker.getValue())){
-                        Notification picker_errore = new Notification("Devi essere maggiorenne per registrarti",3000, Notification.Position.MIDDLE);
-                        picker_errore.open();
-                    }
-                    else if(luogo_di_nascita.isEmpty()){
-                        Notification luogo_di_nascita_errore = new Notification("Inserisci il campo Luogo di nascita",3000, Notification.Position.MIDDLE);
-                        luogo_di_nascita_errore.open();
-                    }
-                    else if(residenza.isEmpty()){
-                        Notification residenza_errore = new Notification("Inserisci il campo Residenza",3000, Notification.Position.MIDDLE);
-                        residenza_errore.open();
-                    }
-                    else if(sessi.isEmpty()){
-                        Notification sessi_errore = new Notification("Inserisci il campo Sessi",3000, Notification.Position.MIDDLE);
-                        sessi_errore.open();
-                    }
-                    else if(interessi.isEmpty()){
-                        Notification interessi_errore = new Notification("Inserisci il campo Interessi",3000, Notification.Position.MIDDLE);
-                        interessi_errore.open();
-                    }
-                    else if(capelli.isEmpty()){
-                        Notification capelli_errore = new Notification("Inserisci il campo Capelli",3000, Notification.Position.MIDDLE);
-                        capelli_errore.open();
+            if(nome.isEmpty()){
+                Notification nome_errore = new Notification("Inserisci il campo Nome",3000, Notification.Position.MIDDLE);
+                nome_errore.open();
+            }
+            else if(cognome.isEmpty()){
+                Notification cognome_errore = new Notification("Inserisci il campo Cognome",3000, Notification.Position.MIDDLE);
+                cognome_errore.open();
+            }
+            else if(picker.isEmpty() || !checkMaggiorenne(picker.getValue())){
+                Notification picker_errore = new Notification("Devi essere maggiorenne per registrarti",3000, Notification.Position.MIDDLE);
+                picker_errore.open();
+            }
+            else if(luogo_di_nascita.isEmpty()){
+                Notification luogo_di_nascita_errore = new Notification("Inserisci il campo Luogo di nascita",3000, Notification.Position.MIDDLE);
+                luogo_di_nascita_errore.open();
+            }
+            else if(residenza.isEmpty()){
+                Notification residenza_errore = new Notification("Inserisci il campo Residenza",3000, Notification.Position.MIDDLE);
+                residenza_errore.open();
+            }
+            else if(sessi.isEmpty()){
+                Notification sessi_errore = new Notification("Inserisci il campo Sessi",3000, Notification.Position.MIDDLE);
+                sessi_errore.open();
+            }
+            else if(interessi.isEmpty()){
+                Notification interessi_errore = new Notification("Inserisci il campo Interessi",3000, Notification.Position.MIDDLE);
+                interessi_errore.open();
+            }
+            else if(capelli.isEmpty()){
+                Notification capelli_errore = new Notification("Inserisci il campo Capelli",3000, Notification.Position.MIDDLE);
+                capelli_errore.open();
 
-                    }
-                    else if(occhi.isEmpty()){
-                        Notification occhi_errore = new Notification("Inserisci il campo Occhi",3000, Notification.Position.MIDDLE);
-                        occhi_errore.open();
-                    }
-                    else if(altezza.isEmpty()){
-                        Notification altezza_errore = new Notification("Inserisci il campo Altezza",3000, Notification.Position.MIDDLE);
-                        altezza_errore.open();
-                    }
-                    else if(multiselectComboBox.isEmpty()){
-                        Notification topic_errore = new Notification("Inserisci il campo Topic",3000, Notification.Position.MIDDLE);
-                        topic_errore.open();
-                    }
-                    else if(checkbox.isEmpty()){
-                        Notification dati_errore = new Notification("Acconsenti al trattamento dati",3000, Notification.Position.MIDDLE);
-                        dati_errore.open();
-                    }
-                        else {
-                        ArrayList<Hobby> hobby = new ArrayList<Hobby>();
-                        for (String s : multiselectComboBox.getValue()) hobby.add(Hobby.valueOf(s));
+            }
+            else if(occhi.isEmpty()){
+                Notification occhi_errore = new Notification("Inserisci il campo Occhi",3000, Notification.Position.MIDDLE);
+                occhi_errore.open();
+            }
+            else if(altezza.isEmpty()){
+                Notification altezza_errore = new Notification("Inserisci il campo Altezza",3000, Notification.Position.MIDDLE);
+                altezza_errore.open();
+            }
+            else if(multiselectComboBox.isEmpty()){
+                Notification topic_errore = new Notification("Inserisci il campo Topic",3000, Notification.Position.MIDDLE);
+                topic_errore.open();
+            }
+            else if(checkbox.isEmpty()){
+                Notification dati_errore = new Notification("Acconsenti al trattamento dati",3000, Notification.Position.MIDDLE);
+                dati_errore.open();
+            }
+
+            else {
+                ArrayList<Hobby> hobby = new ArrayList<Hobby>();
+                for (String s : multiselectComboBox.getValue()) hobby.add(Hobby.valueOf(s));
 
 
 
-                        ProfiloDTO  profiloDTO = new ProfiloDTO(nome.getValue(),cognome.getValue(),luogo_di_nascita.getValue(),residenza.getValue(),picker.getValue(),
-                                altezza.getValue(),Sesso.valueOf(sessi.getValue()),Interessi.valueOf(interessi.getValue()),Colori_Capelli.valueOf(capelli.getValue()),
-                                Colore_Occhi.valueOf(occhi.getValue()),hobby, toadd);
-                        StudenteDTO studenteDTO = new StudenteDTO(da_registrare.getEmail(),da_registrare.getPassword(), profiloDTO);
+                ProfiloDTO  profiloDTO = new ProfiloDTO(nome.getValue(),cognome.getValue(),luogo_di_nascita.getValue(),residenza.getValue(),picker.getValue(),
+                        altezza.getValue(),Sesso.valueOf(sessi.getValue()),Interessi.valueOf(interessi.getValue()),Colori_Capelli.valueOf(capelli.getValue()),
+                        Colore_Occhi.valueOf(occhi.getValue()),hobby, toadd); //AGGIUNGERE TELEFONO E CONTATTO
+                StudenteDTO studenteDTO = new StudenteDTO(da_registrare.getEmail(),da_registrare.getPassword(), profiloDTO);
 
-                        gestioneUtentiController.registrazioneStudente(studenteDTO, VaadinServletRequest.getCurrent());
+                gestioneUtentiController.registrazioneStudente(studenteDTO, VaadinServletRequest.getCurrent());
 
-                             //NOTIFICA DI SUCCESSO REGISTRAZIONE
-                            Notification successo_registrazione = new Notification();
-                            successo_registrazione.setPosition(Notification.Position.MIDDLE);
-                            H5 notifica = new H5("La registrazione è andata a buon fine. Confermare l'email di validazione prima di accedere al sistama");
-                            Button ricevuto = new Button("OK");
-                            ricevuto.addClickListener(buttonClickEvent1 -> {
-                                UI.getCurrent().navigate("login");
-                                successo_registrazione.close();
-                            });
-                            VerticalLayout successo_registrazione_layout = new VerticalLayout();
-                            successo_registrazione_layout.setAlignItems(Alignment.CENTER);
-                            successo_registrazione_layout.add(notifica,ricevuto);
-                            successo_registrazione.add(successo_registrazione_layout);
-                            successo_registrazione.open();
-                        }
+                //NOTIFICA DI SUCCESSO REGISTRAZIONE
+                Notification successo_registrazione = new Notification();
+                successo_registrazione.setPosition(Notification.Position.MIDDLE);
+                H5 notifica = new H5("La registrazione è andata a buon fine. Confermare l'email di validazione prima di accedere al sistama");
+                Button ricevuto = new Button("OK");
+                ricevuto.addClickListener(buttonClickEvent1 -> {
+                  //  UI.getCurrent().navigate("login");
+                    successo_registrazione.close();
+                });
+                VerticalLayout successo_registrazione_layout = new VerticalLayout();
+                successo_registrazione_layout.setAlignItems(Alignment.CENTER);
+                successo_registrazione_layout.add(notifica,ricevuto);
+                successo_registrazione.add(successo_registrazione_layout);
+                successo_registrazione.open();
+            }
         });
 
         H2 titolo = new H2("Inserisci i dati del profilo!");
@@ -230,6 +243,12 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
     public VerticalLayout secondo(){
         VerticalLayout destra = new VerticalLayout();
         destra.setId("layout-destra");
+
+        numero = new TextField();
+        numero.setLabel("Numero di telefono");
+
+        contatto_ig = new TextField();
+        contatto_ig.setLabel("Contatto instagram");
 
         interessi.setLabel("Interessi");
         Interessi [] interess = Interessi.values();
@@ -283,16 +302,10 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
             }
         });
 
-        destra.add(interessi,capelli,occhi,altezza,upload,output);
+        destra.add(numero,contatto_ig,interessi,capelli,occhi,altezza,upload,output);
         return destra;
     }
 
-    @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        if(da_registrare == null){
-            beforeEnterEvent.rerouteTo(RegistrazioneAccount.class);
-        }
-    }
 
     private Component createComponent(String mimeType, String fileName, InputStream stream) {
         if (mimeType.startsWith("text")) {
