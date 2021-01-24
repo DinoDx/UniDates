@@ -5,6 +5,7 @@ import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.Utente;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
@@ -14,15 +15,20 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterListener;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 
 @Route(value = "home", layout = MainView.class)
 @CssImport("./styles/views/home/home.css")
 @PageTitle("Home")
-public class Home extends VerticalLayout{
+
+public class Home extends VerticalLayout {
 
     @Autowired
     GestioneInterazioniController gestioneInterazioniController;
@@ -34,12 +40,16 @@ public class Home extends VerticalLayout{
     GestioneModerazioneController gestioneModerazioneController;
 
 
+    List<StudenteDTO> listaStudenti;
+
+    public Home(){
+            addAttachListener(event -> create());
+    }
 
 
-    public Home(GestioneUtentiController gestioneUtentiController,GestioneInterazioniController gestioneInterazioniController,GestioneModerazioneController gestioneModerazioneController){
-        this.gestioneInterazioniController = gestioneInterazioniController;
-        this.gestioneModerazioneController = gestioneModerazioneController;
-        this.gestioneUtentiController = gestioneUtentiController;
+
+    public void create() {
+        listaStudenti = gestioneUtentiController.trovaTuttiStudenti();
         setAlignItems(Alignment.CENTER);
         VerticalLayout utenti = new VerticalLayout();
         utenti.setAlignItems(Alignment.CENTER);
@@ -48,17 +58,17 @@ public class Home extends VerticalLayout{
         Anchor pannello = new Anchor("/pannellomoderatore");
         pannello.add(pannelloAmministrativo);
 
-        Utente utente = SecurityUtils.getLoggedIn();
+        UtenteDTO utente = gestioneUtentiController.utenteInSessione();
 
 
         if(utente.getRuolo() == Ruolo.MODERATORE || utente.getRuolo() == Ruolo.COMMUNITY_MANAGER){
             utenti.add(pannello);
         }
 
-        for(StudenteDTO studenteDTO: gestioneUtentiController.trovaTuttiStudenti()){
-                if(!(studenteDTO.getEmail().equals(utente.getEmail()))) {
-                    utenti.add(new Card_Utente_Home_Component(gestioneInterazioniController,studenteDTO,gestioneModerazioneController));
-                }
+        for(StudenteDTO studenteDTO: listaStudenti){
+            if(!(studenteDTO.getEmail().equals(utente.getEmail()))) {
+                utenti.add(new Card_Utente_Home_Component(gestioneInterazioniController,studenteDTO,gestioneModerazioneController));
+            }
         }
         add(utenti);
     }

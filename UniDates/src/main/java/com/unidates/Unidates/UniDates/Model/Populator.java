@@ -1,13 +1,10 @@
 package com.unidates.Unidates.UniDates.Model;
 
+import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
-import com.unidates.Unidates.UniDates.Model.Entity.Foto;
-import com.unidates.Unidates.UniDates.Model.Entity.Profilo;
-import com.unidates.Unidates.UniDates.Model.Entity.CommunityManager;
-import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
-import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.Service.MatchService;
 import com.unidates.Unidates.UniDates.Service.ModerazioneService;
+import com.unidates.Unidates.UniDates.Service.ProfiloService;
 import com.unidates.Unidates.UniDates.Service.UtenteService;
 import com.unidates.Unidates.UniDates.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,9 @@ public class Populator implements ApplicationRunner {
 
     @Autowired
     private ModerazioneService moderazioneService;
+
+    @Autowired
+    private ProfiloService profiloService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -98,22 +98,20 @@ public class Populator implements ApplicationRunner {
         utenteService.registrazioneCommunityManager(cm1, p5);
 
 
-       /* gestioneModerazioneController.inviaSegnalazione(new SegnalazioneDTO("motivazione1", "dettagli1") , new FotoDTO(p1.getFotoProfilo().getImg()));
-        gestioneModerazioneController.inviaSegnalazione(new SegnalazioneDTO("motivazione2", "dettagli2") , new FotoDTO(p2.getFotoProfilo().getImg()));
-        gestioneModerazioneController.inviaSegnalazione(new SegnalazioneDTO("motivazione3", "dettagli3") , new FotoDTO(p3.getFotoProfilo().getImg()));
-        gestioneModerazioneController.inviaSegnalazione(new SegnalazioneDTO("motivazione1", "dettagli1") , new FotoDTO(p3.getListaFoto().get(0).getImg()));
-        gestioneModerazioneController.inviaSegnalazione(new SegnalazioneDTO("motivazione1", "dettagli1") , new FotoDTO(p3.getListaFoto().get(0).getImg()));
-        gestioneModerazioneController.inviaSegnalazione(new SegnalazioneDTO("motivazione1", "dettagli1") , new FotoDTO(p1.getListaFoto().get(0).getImg()));
 
-        gestioneModerazioneController.inviaAmmonimento(new AmmonimentoDTO("motivazione1", "dettagli1"), m1.getEmail(), s1.getEmail(),( s1.getProfilo().getFotoProfilo()));
-        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione2", "dettagli2"), m1.getEmail(), s2.getEmail(), s2.getProfilo();
-        gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getFotoProfilo());
+        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione1", "dettagli1"),utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
+        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione2", "dettagli2"),utenteService.trovaStudente(s2.getEmail()).getProfilo().getFotoProfilo().getId());
+        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione3", "dettagli3"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
+        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione4", "dettagli4"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(0).getId());
+        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione5", "dettagli5"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
+        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione6", "dettagli6"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(2).getId());
 
-        Moderatore m2 = (Moderatore) utenteService.trovaUtente("moderatore@gmail.com");
-        gestioneModerazioneController.inviaSegnalazioneCommunityManager(m2.getSegnalazioneRicevute().get(0));
+        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione1", "dettagli1"), m1.getEmail(), s1.getEmail(),utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
+        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione2", "dettagli2"), m1.getEmail(), s2.getEmail(),utenteService.trovaStudente(s2.getEmail()).getProfilo().getFotoProfilo().getId());
+        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
+        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(0).getId());
+        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
 
-        gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getListaFoto().get(0));
-        gestioneModerazioneController.inviaAmmonimento("motivazione3", "dettagli3", m1, s3, s3.getProfilo().getListaFoto().get(0)); */
 
 
 

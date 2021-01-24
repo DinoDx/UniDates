@@ -41,74 +41,65 @@ public class StudenteDTO extends UtenteDTO{
         return profilo;
     }
 
-    public StudenteDTO setProfilo(ProfiloDTO profilo) {
+    public void setProfilo(ProfiloDTO profilo) {
         this.profilo = profilo;
-        return this;
     }
 
-    public List<java.lang.String> getListaBloccatiEmail() {
+    public List<String> getListaBloccatiEmail() {
         return listaBloccatiEmail;
     }
 
-    public StudenteDTO setListaBloccatiEmail(List<java.lang.String> listaBloccatiEmail) {
+    public void setListaBloccatiEmail(List<String> listaBloccatiEmail) {
         this.listaBloccatiEmail = listaBloccatiEmail;
-        return this;
     }
 
     public List<AmmonimentoDTO> getListaAmmonimenti() {
         return listaAmmonimenti;
     }
 
-    public StudenteDTO setListaAmmonimenti(List<AmmonimentoDTO> listaAmmonimenti) {
+    public void setListaAmmonimenti(List<AmmonimentoDTO> listaAmmonimenti) {
         this.listaAmmonimenti = listaAmmonimenti;
-        return this;
     }
 
     public List<SospensioneDTO> getListaSospensione() {
         return listaSospensione;
     }
 
-    public StudenteDTO setListaSospensione(List<SospensioneDTO> listaSospensione) {
+    public void setListaSospensione(List<SospensioneDTO> listaSospensione) {
         this.listaSospensione = listaSospensione;
-        return this;
     }
 
     public List<MatchDTO> getListaMatch() {
         return listaMatch;
     }
 
-    public StudenteDTO setListaMatch(List<MatchDTO> listaMatch) {
+    public void setListaMatch(List<MatchDTO> listaMatch) {
         this.listaMatch = listaMatch;
-        return this;
     }
 
     public List<MatchDTO> getListaMatchRicevuti() {
         return listaMatchRicevuti;
     }
 
-    public StudenteDTO setListaMatchRicevuti(List<MatchDTO> listaMatchRicevuti) {
+    public void setListaMatchRicevuti(List<MatchDTO> listaMatchRicevuti) {
         this.listaMatchRicevuti = listaMatchRicevuti;
-        return this;
     }
 
     public boolean isBanned() {
         return isBanned;
     }
 
-    public StudenteDTO setBanned(boolean banned) {
+    public void setBanned(boolean banned) {
         isBanned = banned;
-        return this;
     }
 
     public int getAmmonimentiAttivi() {
         return ammonimentiAttivi;
     }
 
-    public StudenteDTO setAmmonimentiAttivi(int ammonimentiAttivi) {
+    public void setAmmonimentiAttivi(int ammonimentiAttivi) {
         this.ammonimentiAttivi = ammonimentiAttivi;
-        return this;
     }
-
 
     @Override
     public java.lang.String toString() {

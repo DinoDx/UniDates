@@ -5,7 +5,7 @@ import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UtenteDTO {
+public  class UtenteDTO {
     private Long id;
     private String email;
     private String password;
@@ -27,45 +27,41 @@ public class UtenteDTO {
         return id;
     }
 
-    public UtenteDTO setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
-        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public UtenteDTO setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
-        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public UtenteDTO setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
-        return this;
     }
 
     public Ruolo getRuolo() {
         return ruolo;
     }
 
-    public UtenteDTO setRuolo(Ruolo ruolo) {
+    public void setRuolo(Ruolo ruolo) {
         this.ruolo = ruolo;
-        return this;
     }
 
     public List<NotificaDTO> getListaNotifica() {
         return listaNotifica;
     }
 
-    public UtenteDTO setListaNotifica(List<NotificaDTO> listaNotifica) {
+    public void setListaNotifica(List<NotificaDTO> listaNotifica) {
         this.listaNotifica = listaNotifica;
-        return this;
+
     }
 
     @Override

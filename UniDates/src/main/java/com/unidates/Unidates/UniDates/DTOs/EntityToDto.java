@@ -19,9 +19,9 @@ public class EntityToDto {
 
     public static UtenteDTO toDTO(Utente u){
         UtenteDTO utenteDTO = new UtenteDTO();
-        utenteDTO.setEmail(u.getEmail())
-                .setPassword(u.getPassword())
-                .setRuolo(u.getRuolo());
+        utenteDTO.setEmail(u.getEmail());
+        utenteDTO.setPassword(u.getPassword());
+        utenteDTO.setRuolo(u.getRuolo());
 
         List<NotificaDTO> notificaDTO = new ArrayList<NotificaDTO>();
         u.getListaNotifica().forEach(notifica -> notificaDTO.add(toDTO(notifica)));
@@ -53,25 +53,44 @@ public class EntityToDto {
     }
 
     public static ModeratoreDTO toDTO(Moderatore m){
-        ModeratoreDTO moderatoreDTO = (ModeratoreDTO) toDTO((Studente) m);
 
+        StudenteDTO studenteDTO = toDTO((Studente) m);
+        ModeratoreDTO sdto = new ModeratoreDTO();
+        sdto.setEmail(studenteDTO.getEmail());
+        sdto.setPassword(studenteDTO.getPassword());
+        sdto.setListaNotifica(studenteDTO.getListaNotifica());
+        sdto.setRuolo(studenteDTO.getRuolo());
+        sdto.setId(studenteDTO.getId());
+        sdto.setAmmonimentiAttivi(studenteDTO.getAmmonimentiAttivi());
+        sdto.setBanned(studenteDTO.isBanned());
+        sdto.setListaAmmonimenti(studenteDTO.getListaAmmonimenti());
+        sdto.setListaSospensione(studenteDTO.getListaSospensione());
+        sdto.setListaBloccatiEmail(studenteDTO.getListaBloccatiEmail());
+        sdto.setListaMatch(sdto.getListaMatch());
+        sdto.setListaMatchRicevuti(sdto.getListaMatchRicevuti());
 
         List<SegnalazioneDTO> segnalazioneDTO = new ArrayList<SegnalazioneDTO>();
         m.getSegnalazioneRicevute().forEach(segnalazione -> segnalazioneDTO.add(toDTO(segnalazione)));
-        moderatoreDTO.setSegnalazioneRicevute(segnalazioneDTO);
+        sdto.setSegnalazioneRicevute(segnalazioneDTO);
 
         List<AmmonimentoDTO> ammonimentoDTO = new ArrayList<AmmonimentoDTO>();
         m.getAmmonimentoInviati().forEach(ammonimento -> ammonimentoDTO.add(toDTO(ammonimento)));
-        moderatoreDTO.setAmmonimentoInviati(ammonimentoDTO);
+        sdto.setAmmonimentoInviati(ammonimentoDTO);
 
-         return moderatoreDTO;
+         return sdto;
     }
 
     public static StudenteDTO toDTO(Studente s){
-       StudenteDTO sdto = (StudenteDTO) toDTO((Utente) s);
+        UtenteDTO utenteDTO = toDTO((Utente) s);
+        StudenteDTO sdto = new StudenteDTO();
+        sdto.setEmail(utenteDTO.getEmail());
+        sdto.setPassword(utenteDTO.getPassword());
+        sdto.setListaNotifica(utenteDTO.getListaNotifica());
+        sdto.setRuolo(utenteDTO.getRuolo());
+        sdto.setId(utenteDTO.getId());
 
-               sdto.setAmmonimentiAttivi(s.getAmmonimentiAttivi())
-               .setBanned(s.isBanned());
+        sdto.setAmmonimentiAttivi(s.getAmmonimentiAttivi());
+        sdto.setBanned(s.isBanned());
 
        ArrayList<AmmonimentoDTO> ammonimentoDTO  = new ArrayList<AmmonimentoDTO>();
        s.getListaAmmonimenti().forEach(ammonimento -> ammonimentoDTO.add(EntityToDto.toDTO(ammonimento)));
