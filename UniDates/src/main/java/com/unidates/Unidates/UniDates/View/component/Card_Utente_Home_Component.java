@@ -19,13 +19,12 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.server.StreamResource;
-
 import java.io.ByteArrayInputStream;
+
 
 public class Card_Utente_Home_Component extends Div {
 
     GestioneInterazioniController gestioneInterazioniController;
-
     GestioneModerazioneController gestioneModerazioneController;
 
     public Card_Utente_Home_Component(GestioneInterazioniController gestioneInterazioniController, StudenteDTO studenteDTO, GestioneModerazioneController gestioneModerazioneController){

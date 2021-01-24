@@ -40,6 +40,7 @@ public class Home extends VerticalLayout {
     GestioneModerazioneController gestioneModerazioneController;
 
 
+
     List<StudenteDTO> listaStudenti;
 
     public Home(){
@@ -58,7 +59,11 @@ public class Home extends VerticalLayout {
         Anchor pannello = new Anchor("/pannellomoderatore");
         pannello.add(pannelloAmministrativo);
 
+
         UtenteDTO utente = gestioneUtentiController.utenteInSessione();
+
+
+        utente = gestioneUtentiController.utenteInSessione();
 
 
         if(utente.getRuolo() == Ruolo.MODERATORE || utente.getRuolo() == Ruolo.COMMUNITY_MANAGER){

@@ -148,7 +148,6 @@ public class ListaSegnalazioni extends VerticalLayout{
     }
 
     public Notification sospensione;
-
     public Button pulsanteSospensione(){
         Button button = new Button("Sospensione");
         Button annulla = new Button("Annulla");

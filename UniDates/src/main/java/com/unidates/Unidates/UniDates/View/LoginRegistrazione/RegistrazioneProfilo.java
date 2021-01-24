@@ -40,7 +40,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.vaadin.gatanaso.MultiselectComboBox;
-
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
@@ -69,7 +68,7 @@ public class RegistrazioneProfilo extends VerticalLayout implements BeforeEnterO
     ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
     HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
 
-    Studente da_registrare = (Studente) httpSession.getAttribute("utente_reg");
+    StudenteDTO da_registrare = (StudenteDTO) httpSession.getAttribute("utente_reg");
 
     private Select<String> interessi = new Select<>();
     private TextField nome;

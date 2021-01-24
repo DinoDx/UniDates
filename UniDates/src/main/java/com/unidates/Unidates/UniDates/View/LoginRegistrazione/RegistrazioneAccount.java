@@ -1,6 +1,8 @@
 package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 
+import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
+import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.UI;
@@ -80,7 +82,9 @@ public class RegistrazioneAccount extends VerticalLayout {
                 new Notification("Le password non corrispondono!",2000, Notification.Position.MIDDLE).open();
             }
             else {
-                Studente studente = new Studente(email.getValue(), password.getValue());
+                StudenteDTO studente = new StudenteDTO();
+                studente.setEmail(email.getValue());
+                studente.setPassword(password.getValue());
                 httpSession.setAttribute("utente_reg", studente);
                 UI.getCurrent().navigate("registrazione_due");
             }

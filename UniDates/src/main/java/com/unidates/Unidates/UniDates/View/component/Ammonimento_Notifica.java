@@ -1,5 +1,6 @@
 package com.unidates.Unidates.UniDates.View.component;
 
+import com.unidates.Unidates.UniDates.DTOs.NotificaDTO;
 import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -11,12 +12,12 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
-
 import java.io.ByteArrayInputStream;
 
 public class Ammonimento_Notifica extends Div {
 
-    public Ammonimento_Notifica(Notifica notifica){
+
+    public Ammonimento_Notifica(NotificaDTO notifica){
         HorizontalLayout internal_layout = new HorizontalLayout();
         internal_layout.setAlignItems(FlexComponent.Alignment.CENTER);
         internal_layout.setWidth("300px");

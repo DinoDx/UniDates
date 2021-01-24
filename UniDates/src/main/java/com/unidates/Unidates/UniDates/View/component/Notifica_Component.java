@@ -1,6 +1,10 @@
 package com.unidates.Unidates.UniDates.View.component;
 
 
+import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
+import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
+import com.unidates.Unidates.UniDates.DTOs.NotificaDTO;
+import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -14,12 +18,17 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
-
 import java.io.ByteArrayInputStream;
 
 public class Notifica_Component extends Div {
 
-    public Notifica_Component(Notifica notifica){
+    NotificaDTO notifica;
+    ProfiloDTO profilo;
+    FotoDTO foto;
+    GestioneProfiloController profiloController;
+
+    public Notifica_Component(NotificaDTO notifica,GestioneProfiloController controller){
+        this.profiloController = controller;
         VerticalLayout internal_card_due = new VerticalLayout();
         H6 descrizione = new H6(notifica.getTestoNotifica());
         internal_card_due.add(descrizione);
@@ -39,7 +48,7 @@ public class Notifica_Component extends Div {
         image.setHeight("80px");
         Button pulsante_email = new Button(new Icon(VaadinIcon.FIRE));
         pulsante_email.addClickListener(buttonClickEvent -> {
-            MatchEmail(notifica).open();
+            MatchEmail().open();
         });
 
 
@@ -47,14 +56,21 @@ public class Notifica_Component extends Div {
         add(internal_card);
     }
 
-    public Notification MatchEmail(Notifica notifica){
+
+
+    public Notification MatchEmail(){
         Notification email = new Notification();
         email.setPosition(Notification.Position.MIDDLE);
         email.setDuration(5000);
         VerticalLayout descrizione = new VerticalLayout();
         descrizione.setAlignItems(FlexComponent.Alignment.CENTER);
-        Span testo = new Span("Hai un match con:"+notifica.getFoto().getProfilo().getNome());
-        Span testo_due = new Span("Email:"+notifica.getEmailToMatchWith());
+
+
+        foto = notifica.getFoto();
+        profilo = profiloController.trovaProfilo(foto.getProfiloId());
+
+        Span testo = new Span("Hai un match con:"+ profilo.getNome());
+        Span testo_due = new Span("Email:"+ notifica.getEmailToMatchWith());
         Span testo_tre = new Span("Cerca l'utente!");
         descrizione.add(testo,testo_due,testo_tre);
         email.add(descrizione);
