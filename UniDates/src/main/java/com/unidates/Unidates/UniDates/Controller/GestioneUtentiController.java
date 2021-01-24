@@ -54,6 +54,10 @@ public class GestioneUtentiController {
         Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
         profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
         new Foto(profiloDTO.getFotoProfilo().getImg()),profiloDTO.getHobbyList());
+        if(profiloDTO.getNumeroTelefono()!= null)
+            p.setNickInstagram(profiloDTO.getNickInstagram());
+        if(profiloDTO.getNickInstagram() != null)
+            p.setNumeroTelefono(profiloDTO.getNumeroTelefono());
 
 
         Studente s = new Studente(studenteDTO.getEmail(), studenteDTO.getPassword());
@@ -80,6 +84,11 @@ public class GestioneUtentiController {
                     profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
                     new Foto(profiloDTO.getFotoProfilo().getImg()), profiloDTO.getHobbyList());
 
+            if(profiloDTO.getNumeroTelefono()!= null)
+                p.setNickInstagram(profiloDTO.getNickInstagram());
+            if(profiloDTO.getNickInstagram() != null)
+                p.setNumeroTelefono(profiloDTO.getNumeroTelefono());
+
             Moderatore m = new Moderatore(moderatoreDTO.getEmail(), moderatoreDTO.getPassword());
 
             m.setProfilo(p);
@@ -100,6 +109,11 @@ public class GestioneUtentiController {
             Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
                     profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
                     new Foto(profiloDTO.getFotoProfilo().getImg()), profiloDTO.getHobbyList());
+
+            if(profiloDTO.getNumeroTelefono()!= null)
+                p.setNickInstagram(profiloDTO.getNickInstagram());
+            if(profiloDTO.getNickInstagram() != null)
+                p.setNumeroTelefono(profiloDTO.getNumeroTelefono());
 
             CommunityManager cm = new CommunityManager(communityManagerDTO.getEmail(), communityManagerDTO.getPassword());
 
