@@ -4,6 +4,7 @@ import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.View.main.MainView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -16,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.StreamResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 
 import java.io.ByteArrayInputStream;
 
@@ -59,7 +61,11 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
         Image image_profilo = new Image(resource, "");
         image_profilo.getStyle().set("width","250px");
         image_profilo.getStyle().set("height","250px");
-        image_layout.add(image_profilo);
+        Button blocca = new Button("Blocca");
+        blocca.addClickListener(buttonClickEvent -> {
+                    gestioneUtentiController.bloccaStudente(SecurityUtils.getLoggedIn().getEmail(), daCercare.getEmail());
+        });
+        image_layout.add(image_profilo,blocca);
 
 
 
@@ -116,10 +122,13 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, String s) {
-        if(tot != null)
-           remove(tot);
-        daCercare =  gestioneUtentiController.trovaStudente(s);
+        daCercare = gestioneUtentiController.trovaStudente(s);
         inSessione = (StudenteDTO) gestioneUtentiController.utenteInSessione();
+
+        //controllare bloccati
+
+        if (tot != null)
+            remove(tot);
         tot = Page();
         tot.setAlignItems(Alignment.CENTER);
         add(tot);

@@ -2,6 +2,7 @@ package com.unidates.Unidates.UniDates.View.component;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
+import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
@@ -26,9 +27,11 @@ public class Card_Utente_Home_Component extends Div {
 
     GestioneInterazioniController gestioneInterazioniController;
     GestioneModerazioneController gestioneModerazioneController;
+    GestioneUtentiController gestioneUtentiController;
 
-    public Card_Utente_Home_Component(GestioneInterazioniController gestioneInterazioniController, StudenteDTO studenteDTO, GestioneModerazioneController gestioneModerazioneController){
+    public Card_Utente_Home_Component(GestioneUtentiController gestioneUtentiController, GestioneInterazioniController gestioneInterazioniController, StudenteDTO studenteDTO, GestioneModerazioneController gestioneModerazioneController){
         this.gestioneInterazioniController = gestioneInterazioniController;
+        this.gestioneUtentiController = gestioneUtentiController;
         this.gestioneModerazioneController = gestioneModerazioneController;
         HorizontalLayout tot = Card(studenteDTO);
         add(tot);
@@ -99,8 +102,15 @@ public class Card_Utente_Home_Component extends Div {
         Button annulla = new Button("Annulla",buttonClickEvent -> {
             notifica.close();
         });
+        Button blocca = new Button("Blocca");
+        blocca.addClickListener(buttonClickEvent -> {
+            gestioneUtentiController.bloccaStudente(SecurityUtils.getLoggedIn().getEmail(),studente.getEmail() );
+            notifica.close();
+        });
+
+
         layout_report.setAlignItems(FlexComponent.Alignment.CENTER);
-        layout_report.add(reporting,dettagli,invio,annulla);
+        layout_report.add(reporting,dettagli,invio,blocca,annulla);
         notifica.add(layout_report);
         //Pulsante Report
         Button report = new Button("Report",new Icon(VaadinIcon.PENCIL),buttonClickEvent->{

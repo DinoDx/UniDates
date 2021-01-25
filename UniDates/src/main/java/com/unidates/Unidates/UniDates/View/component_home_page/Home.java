@@ -6,6 +6,7 @@ import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
+import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.Utente;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
@@ -21,6 +22,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.validation.constraints.Email;
 import java.util.List;
 
 
@@ -47,9 +49,10 @@ public class Home extends VerticalLayout {
             addAttachListener(event -> create());
     }
 
-
+//controllare bloccati
 
     public void create() {
+        StudenteDTO s = (StudenteDTO) gestioneUtentiController.utenteInSessione();
         listaStudenti = gestioneUtentiController.trovaTuttiStudenti();
         setAlignItems(Alignment.CENTER);
         VerticalLayout utenti = new VerticalLayout();
@@ -72,7 +75,10 @@ public class Home extends VerticalLayout {
 
         for(StudenteDTO studenteDTO: listaStudenti){
             if(!(studenteDTO.getEmail().equals(utente.getEmail()))) {
-                utenti.add(new Card_Utente_Home_Component(gestioneInterazioniController,studenteDTO,gestioneModerazioneController));
+               // for(String e : s.getListaBloccatiEmail()) {
+                    //if (!(studenteDTO.getEmail().equals(e)))
+                        utenti.add(new Card_Utente_Home_Component(gestioneUtentiController, gestioneInterazioniController, studenteDTO, gestioneModerazioneController));
+        //        }
             }
         }
         add(utenti);
