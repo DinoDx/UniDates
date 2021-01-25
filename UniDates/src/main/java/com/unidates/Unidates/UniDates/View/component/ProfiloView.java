@@ -2,10 +2,15 @@ package com.unidates.Unidates.UniDates.View.component;
 
 import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.View.main.MainView;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
@@ -21,6 +26,7 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
     GestioneInterazioniController gestioneInterazioniController;
     @Autowired
     GestioneUtentiController gestioneUtentiController;
+
     VerticalLayout tot;
     StudenteDTO daCercare;
     StudenteDTO inSessione;
@@ -82,17 +88,29 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
         instagram = new Span("Contatto instagram: " + daCercare.getProfilo().getNickInstagram());
         contatti.add(numero,instagram);
 
+
+        HorizontalLayout listaFoto = new HorizontalLayout();
+
+        for(FotoDTO f : daCercare.getProfilo().getListaFoto()) {
+            StreamResource resource2 = new StreamResource("fotoprofilo", () -> new ByteArrayInputStream(f.getImg()));
+            Image img = new Image(resource2, "");
+            img.getStyle().set("width", "200px");
+            img.getStyle().set("height", "200px");
+            listaFoto.add(img);
+        }
+
+
         if(gestioneInterazioniController.isValidMatch(inSessione.getEmail(), daCercare.getEmail())){
             VerticalLayout info_layout = new VerticalLayout();
             info_layout.add(nome_cognome, topics, interessi, città,contatti, caratteristiche);
             horizontal.add(image_layout, info_layout);
+            allPage.add(horizontal,listaFoto);
         }else {
             VerticalLayout noMatch = new VerticalLayout();
             noMatch.add(nome_cognome,topics,interessi);
             horizontal.add(image_layout,noMatch);
+            allPage.add(horizontal);
         }
-
-        allPage.add(horizontal);
         return allPage;
     }
 

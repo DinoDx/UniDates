@@ -35,7 +35,8 @@ public class GestioneProfiloController {
 
     @RequestMapping("/aggiungiFoto")
     public void aggiungiFoto(@RequestParam String emailFotoToAdd,@RequestBody FotoDTO fotoDTO){
-        if(SecurityUtils.getLoggedIn().getEmail().equals(emailFotoToAdd)) {
+        Studente s = (Studente) SecurityUtils.getLoggedIn();
+        if(s.getEmail().equals(emailFotoToAdd)) {
             Foto f = new Foto(fotoDTO.getImg());
             if (checkFoto(f))
                 profiloService.aggiungiFoto(emailFotoToAdd, f);
@@ -46,12 +47,19 @@ public class GestioneProfiloController {
 
     @RequestMapping("/eliminaFoto")
     public void eliminaFoto(@RequestBody FotoDTO f){
-        Studente studente = (Studente) SecurityUtils.getLoggedIn();
-        Foto foto = new Foto();
-        foto.setId(f.getId());
-        if(studente.getProfilo().getListaFoto().contains(f))
+        if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.STUDENTE)){
+            Studente studente = (Studente) SecurityUtils.getLoggedIn();
+            boolean founded = false;
+            for (Foto f1 : studente.getProfilo().getListaFoto()) {
+                if (f1.getId().equals(f.getId()))
+                    founded = true;
+            }
+            if (founded)
+                profiloService.eliminaFoto(f.getId());
+            else throw new NotAuthorizedException();
+        }else{
             profiloService.eliminaFoto(f.getId());
-        else throw new NotAuthorizedException();
+        }
     }
 
     @RequestMapping("/aggiungifotoProfilo")
