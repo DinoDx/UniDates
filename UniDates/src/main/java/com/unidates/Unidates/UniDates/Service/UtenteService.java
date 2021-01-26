@@ -68,7 +68,7 @@ public class UtenteService {
 
     public boolean bloccaStudente(String emailStudenteBloccante, String emailStudenteBloccato) {
         Studente studenteBloccante = (Studente) utenteRepository.findByEmail(emailStudenteBloccante);
-        Studente studenteBloccato = (Studente) utenteRepository.findByEmail(emailStudenteBloccante);
+        Studente studenteBloccato = (Studente) utenteRepository.findByEmail(emailStudenteBloccato);
         studenteBloccante.getListaBloccati().add(studenteBloccato);
         utenteRepository.save(studenteBloccante);
         return true;
