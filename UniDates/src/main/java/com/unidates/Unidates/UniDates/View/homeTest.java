@@ -17,11 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 
 
-@Route("")
+@Route("/homeTest")
 public class homeTest extends VerticalLayout {
-
-    @Autowired
-    ModelMapper modelMapper;
 
     @Autowired
     Publisher publisher;
@@ -45,12 +42,6 @@ public class homeTest extends VerticalLayout {
     SessionRegistry sessionRegistry;
     public homeTest() {
         Utente utente = SecurityUtils.getLoggedIn();  // Come prendere l'utente attualmente loggato
-        TextField email = new TextField("Email");
-        TextField email2 = new TextField("Email2");
-        TextField password = new TextField("Password");
-        Text emailRuolo = new Text(utente.getRuolo() + " " + utente.getEmail());
-        add(emailRuolo);
-        TextField messaggio = new TextField("Messaggio");
 
 
     }

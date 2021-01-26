@@ -26,7 +26,7 @@ import javax.validation.constraints.Email;
 import java.util.List;
 
 
-@Route(value = "home", layout = MainView.class)
+@Route(value = "", layout = MainView.class)
 @CssImport("./styles/views/home/home.css")
 @PageTitle("Home")
 

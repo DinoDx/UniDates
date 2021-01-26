@@ -65,10 +65,6 @@ public class RegistrazioneProfilo extends VerticalLayout {
     @Autowired
     GestioneProfiloController gestioneProfiloController;
 
-    ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-    HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
-
-
 
     private Select<String> interessi = new Select<>();
     private TextField nome;
@@ -93,13 +89,12 @@ public class RegistrazioneProfilo extends VerticalLayout {
     }
 
     public void create(){
-        StudenteDTO da_registrare = (StudenteDTO) httpSession.getAttribute("utente_reg");
+        StudenteDTO da_registrare = (StudenteDTO) UI.getCurrent().getSession().getAttribute("utente_reg");
 
         if(da_registrare == null){
            UI.getCurrent().navigate("registrazione");
         }
 
-        httpSession.removeAttribute("utente_reg");
         setSizeFull();
 
         VerticalLayout padre = new VerticalLayout();
@@ -201,7 +196,7 @@ public class RegistrazioneProfilo extends VerticalLayout {
                 H5 notifica = new H5("La registrazione è andata a buon fine. Confermare l'email di validazione prima di accedere al sistama");
                 Button ricevuto = new Button("OK");
                 ricevuto.addClickListener(buttonClickEvent1 -> {
-                  //  UI.getCurrent().navigate("login");
+                    UI.getCurrent().navigate("login");
                     successo_registrazione.close();
                 });
                 VerticalLayout successo_registrazione_layout = new VerticalLayout();

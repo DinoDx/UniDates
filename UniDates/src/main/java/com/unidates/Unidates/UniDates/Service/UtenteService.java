@@ -1,5 +1,8 @@
 package com.unidates.Unidates.UniDates.Service;
 
+import com.unidates.Unidates.UniDates.Exception.BannedUserException;
+import com.unidates.Unidates.UniDates.Exception.NotConfirmedAccountException;
+import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
 import com.unidates.Unidates.UniDates.Repository.VerificationTokenRepository;
@@ -15,7 +18,6 @@ public class UtenteService {
 
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -121,5 +123,6 @@ public class UtenteService {
         toChange.setPassword(passwordEncoder.encode(nuovaPassword));
         utenteRepository.save(toChange);
     }
+
 }
 

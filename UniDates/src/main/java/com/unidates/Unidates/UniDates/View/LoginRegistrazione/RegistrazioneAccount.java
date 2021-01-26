@@ -27,9 +27,6 @@ import javax.servlet.http.HttpSession;
 @CssImport("./styles/views/registrazione/registrazione.css")
 public class RegistrazioneAccount extends VerticalLayout {
 
-    ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-    HttpSession httpSession = servletRequestAttributes.getRequest().getSession(true);
-
     private EmailField email;
     private PasswordField password;
     private PasswordField conferma_password;
@@ -85,7 +82,7 @@ public class RegistrazioneAccount extends VerticalLayout {
                 StudenteDTO studente = new StudenteDTO();
                 studente.setEmail(email.getValue());
                 studente.setPassword(password.getValue());
-                httpSession.setAttribute("utente_reg", studente);
+                UI.getCurrent().getSession().setAttribute("utente_reg", studente);
                 UI.getCurrent().navigate("registrazione_due");
             }
         });

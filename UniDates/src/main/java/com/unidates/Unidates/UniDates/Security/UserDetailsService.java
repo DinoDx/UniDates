@@ -6,6 +6,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.Utente;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,17 +19,16 @@ public class UserDetailsService implements org.springframework.security.core.use
     private UtenteRepository utenteRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Utente utente = utenteRepository.findByEmail(email);
-        Studente toLog = (Studente) utente;
-        if(utente == null)
-            throw new UsernameNotFoundException(email);
-
-        else if (toLog.isBanned()){
-            throw new BannedUserException();
+    public UserDetails loadUserByUsername(String email) throws BadCredentialsException {
+        Studente utente = (Studente) utenteRepository.findByEmail(email);
+        if(utente == null){
+            throw new BadCredentialsException("Utente non trovato!");
+        } else if(!utente.isActive()){
+            throw new BadCredentialsException("Utente non attivo!");
+        }else if(utente.isBanned()){
+            throw new BadCredentialsException("Utente bannato!");
         }
-
-        else if (utente.isActive()) return User.withUsername(utente.getEmail()).password(utente.getPassword()).roles(utente.getRuolo().toString()).build();
-        else throw new NotConfirmedAccountException();
+        else return User.withUsername(utente.getEmail()).password(utente.getPassword()).roles(utente.getRuolo().toString()).build();
     }
+
 }

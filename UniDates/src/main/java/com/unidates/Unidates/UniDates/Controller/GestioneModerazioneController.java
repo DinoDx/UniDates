@@ -7,9 +7,12 @@ import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.Exception.InvalidBanFormatException;
 import com.unidates.Unidates.UniDates.Exception.InvalidReportFormatException;
 import com.unidates.Unidates.UniDates.Exception.InvalidWarningFormatException;
+import com.unidates.Unidates.UniDates.Exception.NotAuthorizedException;
 import com.unidates.Unidates.UniDates.Model.Entity.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.Sospensione;
 import com.unidates.Unidates.UniDates.Model.Entity.Segnalazione;
+import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
+import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.Service.ModerazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,26 +35,35 @@ public class GestioneModerazioneController {
     }
     @RequestMapping("/inviaSegnalazioneManager")
     public void inviaSegnalazioneCommunityManager(SegnalazioneDTO segnalazioneDTO, FotoDTO f){
-        Segnalazione s = new Segnalazione(segnalazioneDTO.getMotivazione(),segnalazioneDTO.getDettagli());
-        if(checkSegnalazione(s))
-            moderazioneService.inviaSegnalazioneCommunityManager(s, f.getId());
-        else throw new InvalidReportFormatException();
+        if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE)) {
+            Segnalazione s = new Segnalazione(segnalazioneDTO.getMotivazione(), segnalazioneDTO.getDettagli());
+            if (checkSegnalazione(s))
+                moderazioneService.inviaSegnalazioneCommunityManager(s, f.getId());
+            else throw new InvalidReportFormatException();
+        }
+        else throw new NotAuthorizedException();
     }
 
     @RequestMapping("/inviaAmmonimento")
     public void inviaAmmonimento(AmmonimentoDTO ammonimentoDTO, String emailModeratore, String emailStudenteAmmonito, FotoDTO fotoDTO){
-        Ammonimento a = new Ammonimento(ammonimentoDTO.getMotivazione(),ammonimentoDTO.getDettagli());
-        if(checkAmmonimento(a))
-            moderazioneService.inviaAmmonimento(a, emailModeratore, emailStudenteAmmonito, fotoDTO.getId());
-        else throw new InvalidWarningFormatException();
+        if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))){
+            Ammonimento a = new Ammonimento(ammonimentoDTO.getMotivazione(), ammonimentoDTO.getDettagli());
+            if (checkAmmonimento(a))
+                moderazioneService.inviaAmmonimento(a, emailModeratore, emailStudenteAmmonito, fotoDTO.getId());
+            else throw new InvalidWarningFormatException();
+        }
+        else throw new NotAuthorizedException();
     }
 
     @RequestMapping("/inviaSospensione")
     public void inviaSospensione(SospensioneDTO sospensioneDTO, String emailSospeso){
-        Sospensione sp = new Sospensione(sospensioneDTO.getDurata(), sospensioneDTO.getDettagli());
-        if(checkSospensione(sp))
-            moderazioneService.inviaSospensione(sp, emailSospeso);
-        else throw new InvalidBanFormatException();
+        if((SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))) {
+            Sospensione sp = new Sospensione(sospensioneDTO.getDurata(), sospensioneDTO.getDettagli());
+            if (checkSospensione(sp))
+                moderazioneService.inviaSospensione(sp, emailSospeso);
+            else throw new InvalidBanFormatException();
+        }
+        else throw new NotAuthorizedException();
     }
 
 

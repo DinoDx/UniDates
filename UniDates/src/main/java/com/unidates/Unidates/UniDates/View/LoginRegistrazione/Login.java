@@ -2,7 +2,11 @@ package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 
 
+import com.unidates.Unidates.UniDates.Exception.BannedUserException;
+import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
+import com.unidates.Unidates.UniDates.Security.CustomRequestCache;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
@@ -14,28 +18,60 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.router.*;
+import com.vaadin.flow.server.VaadinServletRequest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.WebAttributes;
 
 
 @Route(value = "login", layout = MainViewLogin.class)
 @PageTitle("Login")
 @RouteAlias(value = "login", layout = MainViewLogin.class)
 @CssImport("./styles/views/registrazione/login.css")
-public class Login extends VerticalLayout implements BeforeEnterListener {
+public class Login extends VerticalLayout {
 
 
+    public static final CharSequence ROUTE = "login" ;
     private LoginForm loginForm = new LoginForm();
 
+    String erroreLogin;
+
     public Login() {
-            addClassName("login-view");
-            setId("login-view");
-            setSizeFull();
-            setAlignItems(Alignment.CENTER);
-            setJustifyContentMode(JustifyContentMode.CENTER);
-            loginForm.setI18n(createLoginI18n());
-            loginForm.setId("login");
-            loginForm.setAction("login");
-            loginForm.addForgotPasswordListener(event -> createRecuperoPassword().open());
-            add(new H1("Accedi a Unidates"), loginForm, createLinkToRegister());
+            addAttachListener(event -> create());
+    }
+    public void create(){
+
+        erroreLogin = (String) VaadinServletRequest.getCurrent().getHttpServletRequest().getSession().getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        if(erroreLogin != null) {
+            switch (erroreLogin){
+                case "usernotfound":
+                    Notification.show("E-mail o password non validi, é pregato di riprovare!", 3000, Notification.Position.MIDDLE).open();
+                    break;
+                case "notactiveuser":
+                    Notification.show("L'utente con cui si sta provando ad accedere non é stato ancora attivato!", 3000, Notification.Position.MIDDLE).open();
+                    break;
+                case "banneduser":
+                    Notification.show("L'utente con cui si sta provando ad accedere risulta al momento sospeso!", 3000, Notification.Position.MIDDLE).open();
+                    break;
+                default:
+                    Notification.show("Errore generico, riprovare piú tardi!", 3000, Notification.Position.MIDDLE).open();
+                    break;
+            }
+        };
+        addClassName("login-view");
+        setId("login-view");
+        setSizeFull();
+        setAlignItems(Alignment.CENTER);
+        setJustifyContentMode(JustifyContentMode.CENTER);
+        loginForm.setI18n(createLoginI18n());
+        loginForm.setId("login");
+        loginForm.setAction("login");
+        loginForm.addForgotPasswordListener(event -> createRecuperoPassword().open());
+        add(new H1("Accedi a Unidates"), loginForm, createLinkToRegister());
 
     }
 
@@ -76,20 +112,5 @@ public class Login extends VerticalLayout implements BeforeEnterListener {
         i18n.getForm().setSubmit("Accedi!");
         i18n.getForm().setForgotPassword("Password dimenticata? Recuperala");
         return i18n;
-    }
-
-    /**
-     * Callback executed before navigation to attaching Component chain is made.
-     *
-     * @param event before navigation event with event details
-     */
-    @Override
-    public void beforeEnter(BeforeEnterEvent event) {
-        if(event.getLocation()
-            .getQueryParameters()
-            .getParameters()
-            .containsKey("error")){
-            loginForm.setError(true);
-        }
     }
 }
