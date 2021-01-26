@@ -3,10 +3,7 @@ package com.unidates.Unidates.UniDates.Service;
 import com.unidates.Unidates.UniDates.Model.Entity.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.Sospensione;
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
-import com.unidates.Unidates.UniDates.Service.GestioneEventi.MatchEvent;
-import com.unidates.Unidates.UniDates.Service.GestioneEventi.BannedEvent;
-import com.unidates.Unidates.UniDates.Service.GestioneEventi.WarningEvent;
-import com.unidates.Unidates.UniDates.Service.GestioneEventi.OnRegistrationCompleteEvent;
+import com.unidates.Unidates.UniDates.Service.GestioneEventi.*;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +29,10 @@ public class Publisher {
 
     public void publishOnRegistrationEvent(final Studente s, final Locale locale, final String url){
         publisher.publishEvent(new OnRegistrationCompleteEvent(s,locale, url));
+    }
+
+    public void publishBlockedEvent (final Studente bloccate, final Studente bloccato){
+        publisher.publishEvent(new BlockedEvent(this, bloccate, bloccato));
     }
 }
 

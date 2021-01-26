@@ -1,5 +1,6 @@
 package com.unidates.Unidates.UniDates.Service.GestioneEventi;
 
+import com.unidates.Unidates.UniDates.Service.MatchService;
 import com.unidates.Unidates.UniDates.Service.NotificaService;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,14 @@ public class InteractionListener {
     NotificaService notificaService;
 
     @Autowired
+    MatchService matchService;
+
+    @Autowired
     private SessionRegistry sessionRegistry;
 
     Logger matchLogger = Logger.getLogger("MatchLogger");
 
-    Logger messageLogger = Logger.getLogger("MessageLogger");
+    Logger blockLogger = Logger.getLogger("BlockLogger");
 
     @EventListener
     public void handleMatchEvent(MatchEvent matchEvent){
@@ -28,5 +32,15 @@ public class InteractionListener {
         matchLogger.info("Notifica gestita!");
         SecurityUtils.refreshNotify(matchEvent.getStudente1(),matchEvent.getStudente2(), sessionRegistry);
 
+    }
+
+    @EventListener
+    public void handleBlocckedEvent(BlockedEvent blockedEvent){
+        blockLogger.info(blockedEvent.getBloccante().getEmail() + " ha bloccato " + blockedEvent.getBloccato().getEmail() );
+        if(matchService.isValidMatch(blockedEvent.getBloccante().getEmail(), blockedEvent.getBloccato().getEmail())){
+            blockLogger.info("Match esistente tra i due studenti bloccati : Rimuovo il match");
+            matchService.eliminaMatch(blockedEvent.getBloccante().getEmail(), blockedEvent.getBloccato().getEmail());
+            blockLogger.info("Match rimosso!");
+        }
     }
 }

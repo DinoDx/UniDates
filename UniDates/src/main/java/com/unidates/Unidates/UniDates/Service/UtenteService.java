@@ -23,6 +23,9 @@ public class UtenteService {
     @Autowired
     private UtenteRepository utenteRepository;
 
+    @Autowired
+    Publisher publisher;
+
 
 
     public boolean isPresent(Utente u){
@@ -71,6 +74,7 @@ public class UtenteService {
         Studente studenteBloccato = (Studente) utenteRepository.findByEmail(emailStudenteBloccato);
         studenteBloccante.getListaBloccati().add(studenteBloccato);
         utenteRepository.save(studenteBloccante);
+        publisher.publishBlockedEvent(studenteBloccante, studenteBloccato);
         return true;
     }
 

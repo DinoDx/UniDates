@@ -42,9 +42,14 @@ public class  MatchService {
         }
     }
 
-    public Match trovaMatch(Studente studente1, Studente studente2){
+    public Match trovaMatch(String emailStudente1, String  emailStudente2){
+
+        Studente studente1 = (Studente) utenteRepository.findByEmail(emailStudente1);
+        Studente studente2 = (Studente) utenteRepository.findByEmail(emailStudente2);
+
         Match invia = matchRepository.findAllByStudente1AndStudente2(studente1, studente2);
         Match reverse = matchRepository.findAllByStudente1AndStudente2(studente2, studente1);
+
         return invia == null ? reverse: invia;
     }
 
@@ -52,8 +57,10 @@ public class  MatchService {
 
         Studente studente1 = (Studente) utenteRepository.findByEmail(emailStudente1);
         Studente studente2 = (Studente) utenteRepository.findByEmail(emailStudente2);
+
         Match invia = matchRepository.findAllByStudente1AndStudente2(studente1, studente2);
         Match reverse = matchRepository.findAllByStudente1AndStudente2(studente2, studente1);
+
         if(invia != null){
             return invia.isLikeByStudent2() && invia.isLikedByStudent1();
         }
@@ -65,6 +72,11 @@ public class  MatchService {
         }
     }
 
-    private void eliminaMatch(Studente studente1, Studente studente2){}
+
+    public void eliminaMatch(String  emailStudente1, String emailStudente2){
+        Studente invia = (Studente) utenteRepository.findByEmail(emailStudente1);
+        Studente riceve = (Studente) utenteRepository.findByEmail(emailStudente2);
+        matchRepository.deleteById(trovaMatch(emailStudente1,emailStudente2).getId());
+    }
 }
 
