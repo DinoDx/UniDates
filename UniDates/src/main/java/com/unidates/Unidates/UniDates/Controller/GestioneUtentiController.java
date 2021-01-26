@@ -182,7 +182,7 @@ public class GestioneUtentiController {
     @RequestMapping("/moderatoreInSessione")
     public ModeratoreDTO moderatoreInSessione(){
         Utente mod = SecurityUtils.getLoggedIn();
-        if( mod != null && mod.getRuolo().equals(Ruolo.MODERATORE)){
+        if( mod != null && (mod.getRuolo().equals(Ruolo.MODERATORE) || mod.getRuolo().equals(Ruolo.COMMUNITY_MANAGER))){
             return EntityToDto.toDTO((Moderatore) mod);
         }
         else throw new NotAuthorizedException();
