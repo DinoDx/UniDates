@@ -5,6 +5,8 @@ import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
+import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
@@ -188,7 +190,17 @@ public class RegistrazioneProfilo extends VerticalLayout {
 
                 StudenteDTO studenteDTO = new StudenteDTO(da_registrare.getEmail(),da_registrare.getPassword(), profiloDTO);
 
-                gestioneUtentiController.registrazioneStudente(studenteDTO, VaadinServletRequest.getCurrent());
+                try {
+                    gestioneUtentiController.registrazioneStudente(studenteDTO, VaadinServletRequest.getCurrent());
+                }
+                catch (AlreadyExistUserException e){
+                   new Notification("Email già in uso", 2000, Notification.Position.MIDDLE).open();
+
+                }
+                catch (InvalidRegistrationFormatException e){
+                    new Notification("Uno o più campi non validi", 2000, Notification.Position.MIDDLE).open();
+
+                }
 
                 //NOTIFICA DI SUCCESSO REGISTRAZIONE
                 Notification successo_registrazione = new Notification();

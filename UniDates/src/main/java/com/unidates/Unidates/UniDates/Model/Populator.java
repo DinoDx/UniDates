@@ -39,6 +39,8 @@ public class Populator implements ApplicationRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private final String LINK = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.miciogatto.it%2Fpreso-un-gattino-devo-comportarmi-nei-primi-giorni%2F&psig=AOvVaw1fDXog3w6XRCbgSWcrmk8i&ust=1611768863578000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPjEzoeRuu4CFQAAAAAdAAAAABAJ";
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         //Aggiungo 3 utenti
@@ -56,23 +58,23 @@ public class Populator implements ApplicationRunner {
         ;
 
 
-        Profilo p1 = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto(Utils.downloadUrl("https://source.unsplash.com/random")) ,hobbyArrayList);
+        Profilo p1 = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto(Utils.downloadUrl(LINK)) ,hobbyArrayList);
         p1.setNumeroTelefono("3333339900");
         p1.setNickInstagram("marco.prova1");
-        p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
-        p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
-        p1.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
-        Profilo p2 = new Profilo("Paolo", "Prova2", "Napoli", "Napoli", LocalDate.of(1995,7,15), 185, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.ROSSI, Colore_Occhi.VERDI,new Foto(Utils.downloadUrl("https://source.unsplash.com/random")), hobbyArrayList);
+        p1.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p1.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p1.addFoto(new Foto(Utils.downloadUrl("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.miciogatto.it%2Fpreso-un-gattino-devo-comportarmi-nei-primi-giorni%2F&psig=AOvVaw1fDXog3w6XRCbgSWcrmk8i&ust=1611768863578000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPjEzoeRuu4CFQAAAAAdAAAAABAJ")));
+        Profilo p2 = new Profilo("Paolo", "Prova2", "Napoli", "Napoli", LocalDate.of(1995,7,15), 185, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.ROSSI, Colore_Occhi.VERDI,new Foto(Utils.downloadUrl(LINK)), hobbyArrayList);
         p2.setNumeroTelefono("3335559900");
         p2.setNickInstagram("PaoloSonoBello.prova2");
-        p2.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
-        p2.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
-        p2.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));;
-        Profilo p3 = new Profilo("Lucia", "Prova3", "Napoli", "Napoli", LocalDate.of(1991,1,25), 164, Sesso.DONNA, Interessi.ENTRAMBI, Colori_Capelli.CASTANI, Colore_Occhi.CASTANI,new Foto(Utils.downloadUrl("https://source.unsplash.com/random")), hobbyArrayList);
+        p2.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p2.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p2.addFoto(new Foto(Utils.downloadUrl("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.miciogatto.it%2Fpreso-un-gattino-devo-comportarmi-nei-primi-giorni%2F&psig=AOvVaw1fDXog3w6XRCbgSWcrmk8i&ust=1611768863578000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPjEzoeRuu4CFQAAAAAdAAAAABAJ")));;
+        Profilo p3 = new Profilo("Lucia", "Prova3", "Napoli", "Napoli", LocalDate.of(1991,1,25), 164, Sesso.DONNA, Interessi.ENTRAMBI, Colori_Capelli.CASTANI, Colore_Occhi.CASTANI,new Foto(Utils.downloadUrl(LINK)), hobbyArrayList);
         p3.setNickInstagram("SimpyLucia");
-        p3.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
-        p3.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
-        p3.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
+        p3.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p3.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p3.addFoto(new Foto(Utils.downloadUrl("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.miciogatto.it%2Fpreso-un-gattino-devo-comportarmi-nei-primi-giorni%2F&psig=AOvVaw1fDXog3w6XRCbgSWcrmk8i&ust=1611768863578000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPjEzoeRuu4CFQAAAAAdAAAAABAJ")));
 
         utenteService.registrazioneStudente(s1, p1);
         utenteService.registrazioneStudente(s2, p2);
@@ -85,20 +87,20 @@ public class Populator implements ApplicationRunner {
 
         //Aggiungo un moderatore
         Moderatore m1 = new Moderatore("moderatore@gmail.com", "moderatore");
-        Profilo p4 = new Profilo("Marcello", "Moderatore", "Napoli", "Napoli", LocalDate.of(1999,6,12), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.GRIGI, Colore_Occhi.AZZURRI,new Foto(Utils.downloadUrl("https://source.unsplash.com/random")),hobbyArrayList );
-        p4.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
-        p4.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
-        p4.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
+        Profilo p4 = new Profilo("Marcello", "Moderatore", "Napoli", "Napoli", LocalDate.of(1999,6,12), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.GRIGI, Colore_Occhi.AZZURRI,new Foto(Utils.downloadUrl(LINK)),hobbyArrayList );
+        p4.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p4.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p4.addFoto(new Foto(Utils.downloadUrl("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.miciogatto.it%2Fpreso-un-gattino-devo-comportarmi-nei-primi-giorni%2F&psig=AOvVaw1fDXog3w6XRCbgSWcrmk8i&ust=1611768863578000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPjEzoeRuu4CFQAAAAAdAAAAABAJ")));
 
         utenteService.registrazioneModeratore(m1, p4);
 
         //Aggiungo un communityManager
 
         CommunityManager cm1 = new CommunityManager("communitymanager@gmail.com","communitymanager");
-        Profilo p5 = new Profilo("Francesca", "CM", "Napoli", "Napoli", LocalDate.of(1980,7,12), 170, Sesso.DONNA, Interessi.UOMINI, Colori_Capelli.CASTANI, Colore_Occhi.AZZURRI, new Foto(Utils.downloadUrl("https://source.unsplash.com/random")),hobbyArrayList);
-        p5.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
-        p5.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
-        p5.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
+        Profilo p5 = new Profilo("Francesca", "CM", "Napoli", "Napoli", LocalDate.of(1980,7,12), 170, Sesso.DONNA, Interessi.UOMINI, Colori_Capelli.CASTANI, Colore_Occhi.AZZURRI, new Foto(Utils.downloadUrl(LINK)),hobbyArrayList);
+        p5.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p5.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p5.addFoto(new Foto(Utils.downloadUrl("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.miciogatto.it%2Fpreso-un-gattino-devo-comportarmi-nei-primi-giorni%2F&psig=AOvVaw1fDXog3w6XRCbgSWcrmk8i&ust=1611768863578000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPjEzoeRuu4CFQAAAAAdAAAAABAJ")));
 
         utenteService.registrazioneCommunityManager(cm1, p5);
 

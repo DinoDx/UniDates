@@ -61,11 +61,22 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
         Image image_profilo = new Image(resource, "");
         image_profilo.getStyle().set("width","250px");
         image_profilo.getStyle().set("height","250px");
-        Button blocca = new Button("Blocca");
-        blocca.addClickListener(buttonClickEvent -> {
-                    gestioneUtentiController.bloccaStudente(SecurityUtils.getLoggedIn().getEmail(), daCercare.getEmail());
-        });
-        image_layout.add(image_profilo,blocca);
+        Button bloccaSblocca;
+        if(inSessione.getListaBloccatiEmail().contains(daCercare.getEmail())){
+            bloccaSblocca = new Button("Sblocca");
+            bloccaSblocca.addClickListener(buttonClickEvent -> {
+                gestioneUtentiController.sbloccaStudente(inSessione.getEmail(), daCercare.getEmail());
+                UI.getCurrent().getPage().reload();
+            });
+        }else {
+            bloccaSblocca = new Button("Blocca");
+            bloccaSblocca.addClickListener(buttonClickEvent -> {
+                gestioneUtentiController.bloccaStudente(inSessione.getEmail(), daCercare.getEmail());
+                UI.getCurrent().getPage().reload();
+            });
+        }
+        image_layout.add(image_profilo,bloccaSblocca);
+
 
 
 
@@ -125,7 +136,6 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
         daCercare = gestioneUtentiController.trovaStudente(s);
         inSessione = gestioneUtentiController.utenteInSessione();
 
-        //controllare bloccati
 
         if (tot != null)
             remove(tot);

@@ -47,6 +47,10 @@ public class GestioneUtentiController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    public boolean isPresentEmail(String email){
+         return utenteService.isPresent(email);
+    }
+
     @RequestMapping("/registrazioneStudente")
     public void registrazioneStudente(@RequestBody StudenteDTO studenteDTO, @RequestBody HttpServletRequest request) {
 
@@ -66,7 +70,7 @@ public class GestioneUtentiController {
         s.setProfilo(p);
 
         if(checkStudente(s) && checkProfilo(p)) {
-            if(!utenteService.isPresent(s)){
+            if(!utenteService.isPresent(s.getEmail())){
                 utenteService.registrazioneStudente(s, p);
                 String appUrl = request.getContextPath();
                 publisher.publishOnRegistrationEvent(s, request.getLocale(), appUrl);
@@ -95,7 +99,7 @@ public class GestioneUtentiController {
             m.setProfilo(p);
 
             if (checkStudente(m) && checkProfilo(p)) { // per il moderatore e il cm non viene inviata alcuna mail di registrazione
-                if (!utenteService.isPresent(m))
+                if (!utenteService.isPresent(m.getEmail()))
                     utenteService.registrazioneModeratore(m, p);
                 else throw new AlreadyExistUserException();
             } else throw new InvalidRegistrationFormatException();
@@ -120,7 +124,7 @@ public class GestioneUtentiController {
 
             cm.setProfilo(p);
             if (checkStudente(cm) && checkProfilo(p)) {
-                if (!utenteService.isPresent(cm))
+                if (!utenteService.isPresent(cm.getEmail()))
                     utenteService.registrazioneCommunityManager(cm, p);
                 else throw new AlreadyExistUserException();
             } else throw new InvalidRegistrationFormatException();

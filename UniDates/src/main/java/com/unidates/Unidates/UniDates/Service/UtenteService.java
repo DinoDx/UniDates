@@ -28,8 +28,8 @@ public class UtenteService {
 
 
 
-    public boolean isPresent(Utente u){
-        return utenteRepository.findByEmail(u.getEmail()) != null;
+    public boolean isPresent(String email){
+        return utenteRepository.findByEmail(email) != null;
     }
 
     public boolean isBanned(Studente s){
@@ -82,7 +82,7 @@ public class UtenteService {
         Studente studenteSbloccante = (Studente) utenteRepository.findByEmail(emailStudenteSbloccante);
         Studente studentesBloccato = (Studente) utenteRepository.findByEmail(emailStudenteSbloccato);
         studenteSbloccante.getListaBloccati().remove(studentesBloccato);
-        utenteRepository.save(studentesBloccato);
+        utenteRepository.save(studenteSbloccante);
         return true;
     }
 

@@ -20,6 +20,8 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.ui.UI;
+
 import java.io.ByteArrayInputStream;
 
 
@@ -78,7 +80,7 @@ public class Card_Utente_Home_Component extends Div {
             Style style = buttonClickEvent.getSource().getStyle();
             if(style.get("color").equals("white")) {
                 buttonClickEvent.getSource().getStyle().set("color", "red");
-                gestioneInterazioniController.aggiungiMatch(SecurityUtils.getLoggedIn().getEmail(), studente.getEmail());
+                gestioneInterazioniController.aggiungiMatch(gestioneUtentiController.utenteInSessione().getEmail(), studente.getEmail());
             }else {
                 style.set("color","white");
             }
@@ -104,8 +106,9 @@ public class Card_Utente_Home_Component extends Div {
         });
         Button blocca = new Button("Blocca");
         blocca.addClickListener(buttonClickEvent -> {
-            gestioneUtentiController.bloccaStudente(SecurityUtils.getLoggedIn().getEmail(),studente.getEmail() );
+            gestioneUtentiController.bloccaStudente(gestioneUtentiController.utenteInSessione().getEmail(),studente.getEmail() );
             notifica.close();
+            UI.getCurrent().getPage().reload();
         });
 
 

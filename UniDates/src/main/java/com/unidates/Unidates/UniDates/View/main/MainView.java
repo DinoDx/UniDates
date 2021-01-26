@@ -137,14 +137,16 @@ public class MainView extends AppLayout {
        SearchBox.setAlignItems(FlexComponent.Alignment.CENTER);
        SearchBox.setSpacing(false);
 
+
        //componenti ricerca
        TextField searchField = new TextField();
        searchField.setPlaceholder("Inserisci email dell'utente da cercare");
+
        Button searchIcon = new Button(new Icon(VaadinIcon.SEARCH));
        searchIcon.addClickListener(buttonClickEvent -> {
            try {
-               if (gestioneUtentiController.trovaUtente(searchField.getValue()) != null) {
-
+               StudenteDTO daCercare = gestioneUtentiController.trovaStudente(searchField.getValue());
+               if (gestioneUtentiController.trovaUtente(searchField.getValue()) != null && !(daCercare.isBanned())) {
                    UI.getCurrent().navigate("ricercaprofilo/"+ searchField.getValue());
                }
            }

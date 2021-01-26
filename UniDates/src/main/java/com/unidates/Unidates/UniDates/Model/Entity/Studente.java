@@ -153,6 +153,17 @@ public class Studente extends Utente{
 
 
     @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(!(obj instanceof Studente))
+            return false;
+
+        Studente s = (Studente) obj;
+        return this.getEmail().equals(s.getEmail());
+    }
+
+    @Override
     public String toString() {
         return super.toString() + "Studente{" +
                 "isBanned=" + isBanned +

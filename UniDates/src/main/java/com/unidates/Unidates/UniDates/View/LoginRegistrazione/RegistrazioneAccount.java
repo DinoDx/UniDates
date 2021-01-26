@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 
+import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
@@ -17,6 +18,7 @@ import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -31,7 +33,14 @@ public class RegistrazioneAccount extends VerticalLayout {
     private PasswordField password;
     private PasswordField conferma_password;
 
+    @Autowired
+    GestioneUtentiController gestioneUtentiController;
+
     private RegistrazioneAccount(){
+      addAttachListener(e -> create());
+    }
+
+    public void create(){
         setSizeFull();
         setId("Layout-registazione");
         Div formRegistraizioneAccount = createFormRegistrazioneAccount();
@@ -69,6 +78,9 @@ public class RegistrazioneAccount extends VerticalLayout {
             if(email.isEmpty() || !email.getValue().matches("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"))
                 new Notification("Inserire una email valida!",1000, Notification.Position.MIDDLE).open();
 
+            else if(gestioneUtentiController.isPresentEmail(email.getValue())){
+                new Notification("Email già in uso", 2000, Notification.Position.MIDDLE).open();
+            }
             else if(password.isEmpty() || conferma_password.isEmpty()){
                 new Notification("Inserire una password!",1000, Notification.Position.MIDDLE).open();
             }

@@ -74,11 +74,9 @@ public class Home extends VerticalLayout {
         }
 
         for(StudenteDTO studenteDTO: listaStudenti){
-            if(!(studenteDTO.getEmail().equals(utente.getEmail()))) {
-               // for(String e : s.getListaBloccatiEmail()) {
-                    //if (!(studenteDTO.getEmail().equals(e)))
+            if(!(studenteDTO.getEmail().equals(utente.getEmail())) && !(s.getListaBloccatiEmail().contains(studenteDTO.getEmail())) && !(studenteDTO.isBanned()) && !(studenteDTO.getListaBloccatiEmail().contains(s.getEmail()))) {
+
                         utenti.add(new Card_Utente_Home_Component(gestioneUtentiController, gestioneInterazioniController, studenteDTO, gestioneModerazioneController));
-        //        }
             }
         }
         add(utenti);
