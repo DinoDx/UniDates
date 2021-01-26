@@ -2,9 +2,7 @@ package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
-import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
-import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -19,10 +17,6 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpSession;
 
 @Route(value = "registrazione", layout = MainViewLogin.class)
 @PageTitle("Registrazione")

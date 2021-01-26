@@ -5,7 +5,6 @@ import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.NotificaDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
-import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
 import com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;

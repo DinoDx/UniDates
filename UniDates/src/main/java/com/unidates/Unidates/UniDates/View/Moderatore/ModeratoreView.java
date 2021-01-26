@@ -4,7 +4,6 @@ import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
-import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
 import com.unidates.Unidates.UniDates.View.component_pannello_moderazione.ListaSegnalazioni;
 import com.unidates.Unidates.UniDates.View.component_pannello_moderazione.infoModeratore;
 import com.unidates.Unidates.UniDates.View.main.MainView;

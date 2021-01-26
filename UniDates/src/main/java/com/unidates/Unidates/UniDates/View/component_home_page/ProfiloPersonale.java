@@ -343,8 +343,8 @@ public class ProfiloPersonale extends VerticalLayout {
                 new Notification("Campo Nome vuoto",2000).open();
             }else if(cognome.isEmpty()){
                 new Notification("Campo Cognome vuoto",2000).open();
-            }else if(compleanno.isEmpty()){
-                new Notification("Campo Data di nascita vuoto",2000).open();
+            }else if(compleanno.isEmpty() || (!checkMaggiorenne(compleanno.getValue()))){
+                new Notification("Campo Data di nascita vuoto o non valida",2000).open();
             }else if(email.isEmpty()){
                 new Notification("Campo Email vuoto",2000).open();
             }else if(altezza.isEmpty()){

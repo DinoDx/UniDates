@@ -1,12 +1,7 @@
 package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
 
 
-
-import com.unidates.Unidates.UniDates.Exception.BannedUserException;
-import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
-import com.unidates.Unidates.UniDates.Security.CustomRequestCache;
 import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
@@ -19,12 +14,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinServletRequest;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
 
 

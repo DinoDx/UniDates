@@ -1,8 +1,6 @@
 package com.unidates.Unidates.UniDates.View.component_pannello_moderazione;
 
 import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
-import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
-import com.unidates.Unidates.UniDates.Model.Entity.Moderatore;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
