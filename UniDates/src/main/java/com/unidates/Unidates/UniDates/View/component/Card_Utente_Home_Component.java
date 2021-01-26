@@ -6,6 +6,7 @@ import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -20,7 +21,6 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.ui.UI;
 
 import java.io.ByteArrayInputStream;
 

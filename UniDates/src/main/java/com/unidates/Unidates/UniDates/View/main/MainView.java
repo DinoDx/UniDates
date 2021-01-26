@@ -3,17 +3,10 @@ package com.unidates.Unidates.UniDates.View.main;
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.NotificaDTO;
-import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
-import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
 import com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
-import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
-import com.unidates.Unidates.UniDates.Model.Entity.Studente;
-import com.unidates.Unidates.UniDates.Model.Entity.Utente;
-import com.unidates.Unidates.UniDates.Security.SecurityUtils;
-import com.unidates.Unidates.UniDates.View.component.Ammonimento_Notifica;
 import com.unidates.Unidates.UniDates.View.component.Notifica_Component;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -35,7 +28,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.StreamResource;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayInputStream;
@@ -52,10 +44,7 @@ public class MainView extends AppLayout {
     @Autowired
     GestioneProfiloController profiloController;
 
-    NotificaDTO notifica;
-    ProfiloDTO profilo;
     StudenteDTO studente;
-    UtenteDTO utente;
 
 
     public MainView() {
@@ -70,8 +59,7 @@ public class MainView extends AppLayout {
 
     private Component createHeaderContent() {
 
-        utente = gestioneUtentiController.utenteInSessione();
-        studente = (StudenteDTO) utente;
+        studente = gestioneUtentiController.utenteInSessione();
 
 
         //MenuBar Profilo Personale
@@ -103,11 +91,14 @@ public class MainView extends AppLayout {
         notification.getStyle().set("margin-right","1em");
         MenuItem notifiche = notification.addItem("");
         notifiche.addComponentAsFirst(new Icon(VaadinIcon.BELL));
-        for(NotificaDTO n : utente.getListaNotifica()){
-            if(n.getTipo_notifica().equals(Tipo_Notifica.MATCH))
-                notifiche.getSubMenu().addComponentAtIndex(0,new Notifica_Component(n,profiloController));
-            else
-                notifiche.getSubMenu().addComponentAtIndex(0,new Ammonimento_Notifica(n));
+        for(NotificaDTO n : studente.getListaNotifica()){
+            if(n.getTipo_notifica().equals(Tipo_Notifica.MATCH)){
+                if(!gestioneUtentiController.trovaStudente(n.getEmailToMatchWith()).isBanned()) notifiche.getSubMenu().addComponentAtIndex(0,new Notifica_Component(n,profiloController));
+            }
+            else notifiche.getSubMenu().addComponentAtIndex(0,new Notifica_Component(n,profiloController));
+
+           // else if(n.getTipo_notifica().equals(Tipo_Notifica.AMMONIMENTO))
+              //  notifiche.getSubMenu().addComponentAtIndex(0,new Ammonimento_Notifica(n));
         }
 
         //Layout Principale
@@ -146,16 +137,18 @@ public class MainView extends AppLayout {
        searchIcon.addClickListener(buttonClickEvent -> {
            try {
                StudenteDTO daCercare = gestioneUtentiController.trovaStudente(searchField.getValue());
-               if (gestioneUtentiController.trovaUtente(searchField.getValue()) != null && !(daCercare.isBanned())) {
-                   UI.getCurrent().navigate("ricercaprofilo/"+ searchField.getValue());
+               if (gestioneUtentiController.trovaUtente(searchField.getValue()) != null) {
+                   if(!daCercare.isBanned())
+                    UI.getCurrent().navigate("ricercaprofilo/"+ searchField.getValue());
+                   else  new Notification("L'utente attualmente cercato risulta sospeso!",3000, Notification.Position.MIDDLE).open();
                }
            }
            catch(UserNotFoundException e){
-               Notification erroreRicerca = new Notification("Utente non trovato!",5000, Notification.Position.MIDDLE);
+               Notification erroreRicerca = new Notification("Utente non trovato!",3000, Notification.Position.MIDDLE);
                erroreRicerca.open();
            }
            catch(InvalidRegistrationFormatException e){
-               Notification erroreRicerca = new Notification("Email non valida",5000, Notification.Position.MIDDLE);
+               Notification erroreRicerca = new Notification("Email non valida",3000, Notification.Position.MIDDLE);
                erroreRicerca.open();
            }
        });

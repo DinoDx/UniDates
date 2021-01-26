@@ -1,11 +1,10 @@
 package com.unidates.Unidates.UniDates.Service;
 
+import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica;
-import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
-import com.unidates.Unidates.UniDates.Model.Entity.Ammonimento;
-import com.unidates.Unidates.UniDates.Model.Entity.Foto;
-import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.Repository.NotificaRepository;
+import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +17,9 @@ public class NotificaService {
 
     @Autowired
     private NotificaRepository notificaRepository;
+
+    @Autowired
+    private UtenteRepository utenteRepository;
 
     public void generateNotificaMatch(Studente studente1, Studente studente2){
 
@@ -60,5 +62,16 @@ public class NotificaService {
         notificaRepository.save(notificaWarning);
         logger.info("Notifica di warning pubblicata!");
 
+    }
+
+
+
+    public void eliminaNoificaMatch(Studente bloccante, Studente bloccato){
+
+        Notifica notifica1 = notificaRepository.findByUtenteAndEmailToMatchWith(bloccante, bloccato.getEmail());
+        Notifica notifica2 = notificaRepository.findByUtenteAndEmailToMatchWith(bloccato, bloccante.getEmail());
+
+        notificaRepository.delete(notifica1);
+        notificaRepository.delete(notifica2);
     }
 }

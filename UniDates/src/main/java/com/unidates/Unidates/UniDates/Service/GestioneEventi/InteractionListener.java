@@ -40,7 +40,9 @@ public class InteractionListener {
         if(matchService.isValidMatch(blockedEvent.getBloccante().getEmail(), blockedEvent.getBloccato().getEmail())){
             blockLogger.info("Match esistente tra i due studenti bloccati : Rimuovo il match");
             matchService.eliminaMatch(blockedEvent.getBloccante().getEmail(), blockedEvent.getBloccato().getEmail());
-            blockLogger.info("Match rimosso!");
+            blockLogger.info("Match rimosso! Ora rimuovo le notifiche!");
+            notificaService.eliminaNoificaMatch(blockedEvent.getBloccante(), blockedEvent.getBloccato());
+            blockLogger.info("Notifiche rimosse!");
         }
     }
 }
