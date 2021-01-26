@@ -112,6 +112,7 @@ public class Card_Utente_Home_Component extends Div {
         });
         Button blocca = new Button("Blocca");
         blocca.addClickListener(buttonClickEvent -> {
+
             gestioneUtentiController.bloccaStudente(gestioneUtentiController.utenteInSessione().getEmail(),studente.getEmail() );
             notifica.close();
             UI.getCurrent().getPage().reload();

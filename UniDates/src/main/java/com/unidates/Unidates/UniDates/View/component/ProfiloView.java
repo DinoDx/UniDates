@@ -4,6 +4,8 @@ import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
+import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.View.main.MainView;
 import com.vaadin.flow.component.UI;
@@ -12,6 +14,7 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
@@ -133,7 +136,17 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, String s) {
-        daCercare = gestioneUtentiController.trovaStudente(s);
+        try{
+            daCercare = gestioneUtentiController.trovaStudente(s);
+        }
+        catch(UserNotFoundException e){
+            Notification erroreRicerca = new Notification("Utente non trovato!",5000, Notification.Position.MIDDLE);
+            erroreRicerca.open();
+        }
+        catch(InvalidRegistrationFormatException e){
+
+        }
+
         inSessione = gestioneUtentiController.utenteInSessione();
 
 
