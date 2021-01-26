@@ -3,6 +3,7 @@ package com.unidates.Unidates.UniDates.View.Moderatore;
 import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
 import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
 import com.unidates.Unidates.UniDates.View.component_pannello_moderazione.ListaSegnalazioni;
 import com.unidates.Unidates.UniDates.View.component_pannello_moderazione.infoModeratore;
@@ -29,7 +30,7 @@ public class ModeratoreView extends VerticalLayout {
 
     public void create(){
 
-        UtenteDTO moderatore =  gestioneUtentiController.utenteInSessione();
+        ModeratoreDTO moderatore =  gestioneUtentiController.moderatoreInSessione();
 
         VerticalLayout verticalLayout =  new VerticalLayout();
         verticalLayout.setAlignItems(Alignment.CENTER);

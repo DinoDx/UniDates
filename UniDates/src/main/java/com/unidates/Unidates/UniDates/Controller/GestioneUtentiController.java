@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Security;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -168,8 +169,19 @@ public class GestioneUtentiController {
     }
 
     @RequestMapping("/studenteInSessione")
-    public UtenteDTO utenteInSessione(){
-        return EntityToDto.toDTO((Studente) SecurityUtils.getLoggedIn());
+    public StudenteDTO utenteInSessione(){
+        if(SecurityUtils.getLoggedIn() != null)
+            return EntityToDto.toDTO((Studente) SecurityUtils.getLoggedIn());
+        else throw new NotAuthorizedException();
+    }
+
+    @RequestMapping("/moderatoreInSessione")
+    public ModeratoreDTO moderatoreInSessione(){
+        Utente mod = SecurityUtils.getLoggedIn();
+        if( mod != null && mod.getRuolo().equals(Ruolo.MODERATORE)){
+            return EntityToDto.toDTO((Moderatore) mod);
+        }
+        else throw new NotAuthorizedException();
     }
 
 

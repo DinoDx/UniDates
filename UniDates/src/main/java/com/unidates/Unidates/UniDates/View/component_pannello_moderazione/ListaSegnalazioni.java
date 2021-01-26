@@ -12,6 +12,7 @@ import com.unidates.Unidates.UniDates.DTOs.CommunityManagerDTO;
 import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
+import com.unidates.Unidates.UniDates.Model.Entity.Segnalazione;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -35,42 +36,37 @@ public class ListaSegnalazioni extends VerticalLayout{
 
     GestioneProfiloController gestioneProfiloController;
 
-    SegnalazioneDTO segnalazione;
     ModeratoreDTO moderatore;
-    FotoDTO fotoSegnalata;
-    ProfiloDTO profiloSegnalato;
-    StudenteDTO studenteSegnalato;
 
-    public ListaSegnalazioni(UtenteDTO moderatore, GestioneModerazioneController controller, GestioneUtentiController gestioneUtentiController, GestioneProfiloController gestioneProfiloController){
+    public ListaSegnalazioni(ModeratoreDTO moderatore, GestioneModerazioneController controller, GestioneUtentiController gestioneUtentiController, GestioneProfiloController gestioneProfiloController){
         this.controller = controller;
         this.gestioneUtentiController = gestioneUtentiController;
         this.gestioneProfiloController = gestioneProfiloController;
         VerticalLayout vertical = new VerticalLayout();
         if(moderatore.getRuolo() == Ruolo.MODERATORE) {
-            this.moderatore = (ModeratoreDTO) moderatore;
+            this.moderatore =  moderatore;
             for (SegnalazioneDTO segnalazioneDTO : this.moderatore.getSegnalazioneRicevute()) {
-                segnalazione = segnalazioneDTO;
-                fotoSegnalata = gestioneProfiloController.trovaFoto(segnalazioneDTO.getFotoId());
-                profiloSegnalato = gestioneProfiloController.trovaProfilo(fotoSegnalata.getProfiloId());
-                studenteSegnalato =(StudenteDTO) gestioneUtentiController.trovaUtente(profiloSegnalato.getEmailStudente());
+                FotoDTO fotoSegnalata = gestioneProfiloController.trovaFoto(segnalazioneDTO.getFotoId());
+                ProfiloDTO profiloSegnalato = gestioneProfiloController.trovaProfilo(fotoSegnalata.getProfiloId());
+                StudenteDTO studenteSegnalato =gestioneUtentiController.trovaStudente(profiloSegnalato.getEmailStudente());
                 if(fotoSegnalata.isVisible() && !(studenteSegnalato.isBanned())) //da ricontrollare
-                vertical.addComponentAsFirst(segnalazione());
+                vertical.addComponentAsFirst(segnalazione(fotoSegnalata, profiloSegnalato, segnalazioneDTO, studenteSegnalato));
             }
         }else if (moderatore.getRuolo() == Ruolo.COMMUNITY_MANAGER){
-            this.moderatore = (CommunityManagerDTO)  moderatore;
-            for (SegnalazioneDTO segnalazioneDTO : ((CommunityManagerDTO) moderatore).getSegnalazioneRicevute()){
-                segnalazione = segnalazioneDTO;
-                fotoSegnalata = gestioneProfiloController.trovaFoto(segnalazioneDTO.getFotoId());
-                profiloSegnalato = gestioneProfiloController.trovaProfilo(fotoSegnalata.getProfiloId());
-                studenteSegnalato =(StudenteDTO) gestioneUtentiController.trovaUtente(profiloSegnalato.getEmailStudente());
+            this.moderatore =  moderatore;
+            for (SegnalazioneDTO segnalazioneDTO : (moderatore).getSegnalazioneRicevute()){
+                SegnalazioneDTO segnalazione = segnalazioneDTO;
+                FotoDTO fotoSegnalata = gestioneProfiloController.trovaFoto(segnalazioneDTO.getFotoId());
+                ProfiloDTO profiloSegnalato = gestioneProfiloController.trovaProfilo(fotoSegnalata.getProfiloId());
+                StudenteDTO studenteSegnalato = gestioneUtentiController.trovaStudente(profiloSegnalato.getEmailStudente());
                 if(fotoSegnalata.isVisible() && !(studenteSegnalato.isBanned())) //da ricontrollare
-                vertical.addComponentAsFirst(segnalazione());
+                vertical.addComponentAsFirst(segnalazione(fotoSegnalata, profiloSegnalato, segnalazione, studenteSegnalato));
             }
         }
         add(vertical);
     }
 
-    public HorizontalLayout segnalazione(){
+    public HorizontalLayout segnalazione(FotoDTO fotoSegnalata, ProfiloDTO profiloSegnalato, SegnalazioneDTO segnalazione, StudenteDTO studenteSegnalato){
 
 
         HorizontalLayout horizontal = new HorizontalLayout();
@@ -107,16 +103,16 @@ public class ListaSegnalazioni extends VerticalLayout{
         VerticalLayout verticalSegnalazione = new VerticalLayout();
         verticalSegnalazione.add(testo, dettagliSegnalazione);
         horizontal.setAlignItems(Alignment.CENTER);
-        horizontal.add(image,verticalSegnalazione, pulsanteAmmonimento());
+        horizontal.add(image,verticalSegnalazione, pulsanteAmmonimento(fotoSegnalata, profiloSegnalato, segnalazione,studenteSegnalato));
         if(moderatore.getRuolo() == Ruolo.COMMUNITY_MANAGER){
-            horizontal.add(pulsanteSospensione());
+            horizontal.add(pulsanteSospensione(fotoSegnalata, profiloSegnalato, studenteSegnalato));
         }
         return horizontal;
     }
 
     public Notification notification;
 
-    public Button pulsanteAmmonimento(){
+    public Button pulsanteAmmonimento(FotoDTO fotoSegnalata, ProfiloDTO profiloSegnalato, SegnalazioneDTO segnalazione, StudenteDTO studenteDTO){
         Button button = new Button("Ammonimento");
         Button annulla = new Button("Annulla");
 
@@ -130,7 +126,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         image.getStyle().set("height","250px");
 
         HorizontalLayout horizontal = new HorizontalLayout();
-        horizontal.add(infoAmmonimento());
+        horizontal.add(infoAmmonimento(fotoSegnalata, profiloSegnalato, studenteDTO));
         vertical.add(image,horizontal,annulla);
 
         notification.add(vertical);
@@ -148,7 +144,7 @@ public class ListaSegnalazioni extends VerticalLayout{
     }
 
     public Notification sospensione;
-    public Button pulsanteSospensione(){
+    public Button pulsanteSospensione(FotoDTO fotoSegnalata, ProfiloDTO profiloSegnalato,StudenteDTO studenteSegnalato){
         Button button = new Button("Sospensione");
         Button annulla = new Button("Annulla");
 
@@ -162,7 +158,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         image.getStyle().set("height","250px");
 
         HorizontalLayout horizontal = new HorizontalLayout();
-        horizontal.add(infoSospensione());
+        horizontal.add(infoSospensione(profiloSegnalato, studenteSegnalato));
         vertical.add(image,horizontal,annulla);
 
         sospensione.add(vertical);
@@ -179,7 +175,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         return button;
     }
 
-    private HorizontalLayout infoSospensione() {
+    private HorizontalLayout infoSospensione(ProfiloDTO profiloSegnalato, StudenteDTO studenteSegnalato) {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
 
         //layout sinistra
@@ -215,7 +211,7 @@ public class ListaSegnalazioni extends VerticalLayout{
     }
 
 
-    public HorizontalLayout infoAmmonimento(){
+    public HorizontalLayout infoAmmonimento(FotoDTO fotoSegnalata, ProfiloDTO profiloSegnalato, StudenteDTO studenteSegnalato){
         HorizontalLayout horizontalLayout = new HorizontalLayout();
 
         //layout sinistra

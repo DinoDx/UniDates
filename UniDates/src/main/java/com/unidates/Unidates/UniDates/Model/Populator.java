@@ -69,7 +69,7 @@ public class Populator implements ApplicationRunner {
         p2.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p2.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));;
         Profilo p3 = new Profilo("Lucia", "Prova3", "Napoli", "Napoli", LocalDate.of(1991,1,25), 164, Sesso.DONNA, Interessi.ENTRAMBI, Colori_Capelli.CASTANI, Colore_Occhi.CASTANI,new Foto(Utils.downloadUrl("https://source.unsplash.com/random")), hobbyArrayList);
-        p2.setNickInstagram("SimpyLucia");
+        p3.setNickInstagram("SimpyLucia");
         p3.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p3.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
         p3.addFoto(new Foto(Utils.downloadUrl("https://source.unsplash.com/random")));
@@ -112,7 +112,6 @@ public class Populator implements ApplicationRunner {
         moderazioneService.inviaSegnalazione(new Segnalazione("motivazione6", "dettagli6"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(2).getId());
 
         moderazioneService.inviaAmmonimento(new Ammonimento("motivazione1", "dettagli1"), m1.getEmail(), s1.getEmail(),utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
-        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione2", "dettagli2"), m1.getEmail(), s2.getEmail(),utenteService.trovaStudente(s2.getEmail()).getProfilo().getFotoProfilo().getId());
         moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
         moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(0).getId());
         moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());

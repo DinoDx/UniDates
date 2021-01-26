@@ -55,8 +55,10 @@ public class EntityToDto {
     public static ModeratoreDTO toDTO(Moderatore m){
 
         StudenteDTO studenteDTO = toDTO((Studente) m);
+
         ModeratoreDTO sdto = new ModeratoreDTO();
         sdto.setEmail(studenteDTO.getEmail());
+        sdto.setProfilo(studenteDTO.getProfilo());
         sdto.setPassword(studenteDTO.getPassword());
         sdto.setListaNotifica(studenteDTO.getListaNotifica());
         sdto.setRuolo(studenteDTO.getRuolo());

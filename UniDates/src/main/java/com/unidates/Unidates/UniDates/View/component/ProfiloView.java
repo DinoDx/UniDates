@@ -123,7 +123,7 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
     @Override
     public void setParameter(BeforeEvent beforeEvent, String s) {
         daCercare = gestioneUtentiController.trovaStudente(s);
-        inSessione = (StudenteDTO) gestioneUtentiController.utenteInSessione();
+        inSessione = gestioneUtentiController.utenteInSessione();
 
         //controllare bloccati
 
