@@ -6,6 +6,8 @@ import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.Exception.InvalidModifyFormatException;
+import com.unidates.Unidates.UniDates.Exception.InvalidPhotoException;
 import com.unidates.Unidates.UniDates.Model.Enum.Colore_Occhi;
 import com.unidates.Unidates.UniDates.Model.Enum.Colori_Capelli;
 import com.unidates.Unidates.UniDates.Model.Enum.Hobby;
@@ -235,9 +237,14 @@ public class ProfiloPersonale extends VerticalLayout {
 
         Button insertFoto = new Button("Inserisci");
         insertFoto.addClickListener(buttonClickEvent -> {
-            if(toadd.getImg() != null){
-                gestioneProfiloController.aggiungiFoto(studente.getEmail(),toadd);
-                UI.getCurrent().getPage().reload();
+            if (toadd.getImg() != null) {
+                try {
+                    gestioneProfiloController.aggiungiFoto(studente.getEmail(), toadd);
+                    UI.getCurrent().getPage().reload();
+                }
+                catch(InvalidPhotoException e){
+                    new Notification("La foto non rispetta le dimensioni", 2000, Notification.Position.MIDDLE);
+                }
             }
         });
 
@@ -392,7 +399,12 @@ public class ProfiloPersonale extends VerticalLayout {
                 instagram.setEnabled(false);
                 //VEDERE IMMAGINE
 
-                gestioneProfiloController.modificaProfilo(studente.getEmail(),studente.getProfilo());
+                try{
+                    gestioneProfiloController.modificaProfilo(studente.getEmail(),studente.getProfilo());
+                }catch (InvalidModifyFormatException e){
+                    new Notification("Formato non valido per uno o più campi.",2000, Notification.Position.MIDDLE);
+                }
+
                 Page pagina = UI.getCurrent().getPage();
 
                 pagina.reload();

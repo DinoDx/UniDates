@@ -12,6 +12,9 @@ import com.unidates.Unidates.UniDates.DTOs.CommunityManagerDTO;
 import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.DTOs.UtenteDTO;
+import com.unidates.Unidates.UniDates.Exception.InvalidBanFormatException;
+import com.unidates.Unidates.UniDates.Exception.InvalidReportFormatException;
+import com.unidates.Unidates.UniDates.Exception.InvalidWarningFormatException;
 import com.unidates.Unidates.UniDates.Model.Entity.Segnalazione;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.vaadin.flow.component.UI;
@@ -22,6 +25,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.StreamResource;
 
@@ -63,6 +67,7 @@ public class ListaSegnalazioni extends VerticalLayout{
                 vertical.addComponentAsFirst(segnalazione(fotoSegnalata, profiloSegnalato, segnalazione, studenteSegnalato));
             }
         }
+        vertical.setWidth("1000px");
         add(vertical);
     }
 
@@ -73,8 +78,8 @@ public class ListaSegnalazioni extends VerticalLayout{
 
         StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream( fotoSegnalata.getImg()));
         Image image = new Image(resource,"");
-        image.getStyle().set("width","100px");
-        image.getStyle().set("height","100px");
+        image.getStyle().set("width","150px");
+        image.getStyle().set("height","150px");
         Span testo = new Span("Hai ricevuto una segnalazione per una foto di : " + profiloSegnalato.getNome() + profiloSegnalato.getCognome());
         Button dettagliSegnalazione = new Button("Mostra dettagli");
         dettagliSegnalazione.addClickListener(buttonClickEvent -> {
@@ -100,12 +105,46 @@ public class ListaSegnalazioni extends VerticalLayout{
             notificaDettagli.open();
         });
 
+        Button sospensioneCm = new Button("Invia a CM");
+        sospensioneCm.addClickListener(buttonClickEvent -> {
+            Notification notifica = new Notification();
+
+            TextField reporting = new TextField();
+            reporting.setPlaceholder("Inserisci moticazione segnalazione");
+            TextArea dettagli = new TextArea();
+            dettagli.setPlaceholder("Dettagli segnalazione");
+            Button annulla = new Button("Chiudi");
+            annulla.addClickListener(buttonClickEvent1 -> {
+               notifica.close();
+            });
+
+            Button invia = new Button("Invia");
+            invia.addClickListener(buttonClickEvent1 -> {
+                SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(reporting.getValue(), dettagli.getValue());
+                try {
+                    controller.inviaSegnalazioneCommunityManager(segnalazioneDTO,fotoSegnalata);
+                }catch (InvalidReportFormatException c){
+                    new Notification("Motivazione e/o dettagli non validi.",2000, Notification.Position.MIDDLE);
+                }
+                notifica.close();
+            });
+
+            VerticalLayout layout_report = new VerticalLayout();
+            layout_report.setAlignItems(Alignment.CENTER);
+            layout_report.add(reporting,dettagli,annulla,invia);
+            notifica.add(layout_report);
+
+            notifica.open();
+        });
+
         VerticalLayout verticalSegnalazione = new VerticalLayout();
         verticalSegnalazione.add(testo, dettagliSegnalazione);
         horizontal.setAlignItems(Alignment.CENTER);
         horizontal.add(image,verticalSegnalazione, pulsanteAmmonimento(fotoSegnalata, profiloSegnalato, segnalazione,studenteSegnalato));
         if(moderatore.getRuolo() == Ruolo.COMMUNITY_MANAGER){
             horizontal.add(pulsanteSospensione(fotoSegnalata, profiloSegnalato, studenteSegnalato));
+        }else{
+            verticalSegnalazione.add(sospensioneCm);
         }
         return horizontal;
     }
@@ -114,6 +153,7 @@ public class ListaSegnalazioni extends VerticalLayout{
 
     public Button pulsanteAmmonimento(FotoDTO fotoSegnalata, ProfiloDTO profiloSegnalato, SegnalazioneDTO segnalazione, StudenteDTO studenteDTO){
         Button button = new Button("Ammonimento");
+        button.setWidth("250px");
         Button annulla = new Button("Annulla");
 
         notification = new Notification();
@@ -146,6 +186,7 @@ public class ListaSegnalazioni extends VerticalLayout{
     public Notification sospensione;
     public Button pulsanteSospensione(FotoDTO fotoSegnalata, ProfiloDTO profiloSegnalato,StudenteDTO studenteSegnalato){
         Button button = new Button("Sospensione");
+        button.setWidth("230px");
         Button annulla = new Button("Annulla");
 
         sospensione = new Notification();
@@ -197,7 +238,12 @@ public class ListaSegnalazioni extends VerticalLayout{
         com.vaadin.flow.component.button.Button inviaSospensione = new com.vaadin.flow.component.button.Button("Invia Sospensione");
         inviaSospensione.addClickListener(e -> {
             SospensioneDTO sospensioneDTO = new SospensioneDTO(Integer.parseInt(durata.getValue()),dettagli.getValue());
-            controller.inviaSospensione(sospensioneDTO,studenteSegnalato.getEmail());
+            try {
+                controller.inviaSospensione(sospensioneDTO,studenteSegnalato.getEmail());
+            }catch (InvalidBanFormatException d){
+                new Notification("Dettagli e/o durata non validi",2000, Notification.Position.MIDDLE);
+            }
+
             notification.close();
             UI.getCurrent().getPage().reload();
         });
@@ -233,8 +279,13 @@ public class ListaSegnalazioni extends VerticalLayout{
         com.vaadin.flow.component.button.Button inviaAmmonimento = new com.vaadin.flow.component.button.Button("Invia Ammonimento");
         inviaAmmonimento.addClickListener(e -> {
             AmmonimentoDTO ammonimentoDTO = new AmmonimentoDTO(dettagli.getValue(),motivazione.getValue());
-            controller.inviaAmmonimento(ammonimentoDTO, moderatore.getEmail(),studenteSegnalato.getEmail(),fotoSegnalata);
-            notification.close();
+            try {
+                controller.inviaAmmonimento(ammonimentoDTO, moderatore.getEmail(),studenteSegnalato.getEmail(),fotoSegnalata);
+                notification.close();
+            }catch (InvalidWarningFormatException d){
+                new Notification("Motivazione e/o dettagli non validi",2000, Notification.Position.MIDDLE);
+            }
+
             UI.getCurrent().getPage().reload();
         });
         vertical_due.setAlignItems(FlexComponent.Alignment.CENTER);

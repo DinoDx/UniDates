@@ -5,6 +5,7 @@ import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.Exception.InvalidReportFormatException;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -98,7 +99,12 @@ public class Card_Utente_Home_Component extends Div {
         dettagli.setPlaceholder("Dettagli segnalazione");
         Button invio = new Button("Invia report",buttonClickEvent -> {
             SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(reporting.getValue(), dettagli.getValue());
-            gestioneModerazioneController.inviaSegnalazione(segnalazioneDTO,studente.getProfilo().getFotoProfilo());
+            try {
+                gestioneModerazioneController.inviaSegnalazione(segnalazioneDTO,studente.getProfilo().getFotoProfilo());
+            }catch (InvalidReportFormatException c){
+                new Notification("Motivazione e/o dettagli non validi.",2000, Notification.Position.MIDDLE);
+            }
+
             notifica.close();
         });
         Button annulla = new Button("Annulla",buttonClickEvent -> {
