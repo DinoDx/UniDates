@@ -56,7 +56,6 @@ public class MainView extends AppLayout {
         addToNavbar(true, createHeaderContent());
     }
 
-
     private Component createHeaderContent() {
 
         studente = gestioneUtentiController.utenteInSessione();
@@ -88,7 +87,7 @@ public class MainView extends AppLayout {
 
         //MenuBar Notifiche
         MenuBar notification = new MenuBar();
-        notification.getStyle().set("margin-right","1em");
+        notification.getStyle().set("margin-right","1.5em");
         MenuItem notifiche = notification.addItem("");
         notifiche.addComponentAsFirst(new Icon(VaadinIcon.BELL));
         for(NotificaDTO n : studente.getListaNotifica()){

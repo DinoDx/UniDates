@@ -23,6 +23,7 @@ public class ModeratoreView extends VerticalLayout {
 
     @Autowired
     GestioneProfiloController gestioneProfiloController;
+
     public ModeratoreView(){
         addAttachListener(event -> create());
     }
@@ -35,7 +36,7 @@ public class ModeratoreView extends VerticalLayout {
         verticalLayout.setAlignItems(Alignment.CENTER);
 
         HorizontalLayout horizontalLayout = new HorizontalLayout();
-        horizontalLayout.add(new ListaSegnalazioni(moderatore, gestioneModerazioneController, gestioneUtentiController, gestioneProfiloController));
+        horizontalLayout.add(new ListaSegnalazioni(moderatore,gestioneUtentiController,gestioneModerazioneController, gestioneProfiloController));
 
         verticalLayout.add(new infoModeratore(moderatore),horizontalLayout);
         add(verticalLayout);

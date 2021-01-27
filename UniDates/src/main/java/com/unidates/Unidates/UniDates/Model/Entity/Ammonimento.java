@@ -3,6 +3,7 @@ package com.unidates.Unidates.UniDates.Model.Entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Ammonimenti")
@@ -85,4 +86,14 @@ public class Ammonimento {
     public void setFoto(Foto foto) {
         this.foto = foto;
     }
+
+
+    @Override
+    public boolean equals(Object o) {  //Funziona soltanto nel caso in cui gli ammonimenti facciano riferimento alla stessa foto
+        if (this == o) return true;
+        if (!(o instanceof Ammonimento)) return false;
+        Ammonimento that = (Ammonimento) o;
+        return that.getFoto().getId().equals(this.getFoto().getId());
+    }
+
 }

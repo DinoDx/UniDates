@@ -37,7 +37,7 @@ public class Notifica_Component extends Div {
     public void createNotificaMatch(){
         VerticalLayout internal_card_due = new VerticalLayout();
         H6 descrizione = new H6(notifica.getTestoNotifica());
-        internal_card_due.add(descrizione);
+        internal_card_due.add(descrizione, new H6(notifica.getCreationTime().toString()));
 
 
         setSizeFull();
@@ -70,7 +70,7 @@ public class Notifica_Component extends Div {
 
         VerticalLayout didascalie = new VerticalLayout();
         H6 descrizione = new H6(notifica.getTestoNotifica());
-        didascalie.add(descrizione);
+        didascalie.add(descrizione, new H6(notifica.getCreationTime().toString()));
 
         StreamResource resource = new StreamResource("fotoprofilo",()-> new ByteArrayInputStream(notifica.getFoto().getImg()));
         Image image = new Image(resource,"");

@@ -44,27 +44,46 @@ public class ModerazioneService {
 
     public void inviaSegnalazione(Segnalazione s, Long idFoto){
         List<Utente> moderatores = utenteRepository.findAllByRuolo(Ruolo.MODERATORE);
-        s.setModeratore( (Moderatore) moderatores.get(new Random().nextInt(moderatores.size()))); //Moderatore scelto casualmente tra tutti i moderatori
-        s.setFoto(fotoRepository.findById(idFoto).get());
-        segnalazioniRepository.save(s);
+        Moderatore moderatore = (Moderatore) moderatores.get(new Random().nextInt(moderatores.size()));
+        Foto segnalata = fotoRepository.findById(idFoto).get();
+        s.setModeratore(moderatore); //Moderatore scelto casualmente tra tutti i moderatori
+        s.setFoto(segnalata);
+
+        if(segnalazioniRepository.findByModeratoreAndFoto(moderatore, segnalata) == null){ // viene mandata una segnalazione se giá non ne esiste una associata a quella foto
+            segnalazioniRepository.save(s);
+            System.out.println("Segnalazione aggiunta!");
+        }
+
     }
 
     public void inviaSegnalazioneCommunityManager(Segnalazione s, Long idFoto){
         List<Utente> cms =  utenteRepository.findAllByRuolo(Ruolo.COMMUNITY_MANAGER);
-        s.setModeratore((CommunityManager) cms.get(new Random().nextInt(cms.size())));
-        s.setFoto(fotoRepository.findById(idFoto).get());
+        CommunityManager cm = (CommunityManager) cms.get(new Random().nextInt(cms.size()));
+        s.setModeratore(cm);
+
+        Foto f = fotoRepository.findById(idFoto).get();
+        s.setFoto(f);
+        if(segnalazioniRepository.findByModeratoreAndFoto((Moderatore) cm, f) == null){ // viene mandata una segnalazione se giá non ne esiste una associata a quella foto
+            segnalazioniRepository.save(s);
+            System.out.println("Segnalazione aggiunta!");
+        }
         segnalazioniRepository.save(s);
     }
 
     public void inviaAmmonimento(Ammonimento a, String emailModeratore, String emailStudenteAmmonito, Long idFoto){
         Studente ammonito = (Studente) utenteRepository.findByEmail(emailStudenteAmmonito);
+
         a.setModeratore((Moderatore) utenteRepository.findByEmail(emailModeratore));
         a.setStudente(ammonito);
         a.setFoto(fotoRepository.findById(idFoto).get());
-        ammonimentiRepository.save(a);
-        ammonito.addAmmonimentoattivo();
-        utenteRepository.save(ammonito);
-        publisher.publishWarning(a);
+
+        if(!ammonito.getListaAmmonimenti().contains(a)) { //Utente ammonito solo nel caso non abbia già un ammonimento per la stessa foto
+            ammonimentiRepository.save(a);
+            ammonito.addAmmonimentoattivo();
+            utenteRepository.save(ammonito);
+            publisher.publishWarning(a);
+        }
+
     }
 
     public void inviaSospensione(Sospensione sp,String emailSospeso){
