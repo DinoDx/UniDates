@@ -6,6 +6,7 @@ import java.util.List;
 public class FotoDTO {
     private Long Id;
     private Long profiloId;
+    private Long fotoProfiloId;
     private List<SegnalazioneDTO> segnalazioneRicevute;
     private byte[] img;
     private boolean isVisible;
@@ -18,6 +19,14 @@ public class FotoDTO {
         this.segnalazioneRicevute = new ArrayList<SegnalazioneDTO>();
         this.img = img;
         this.isVisible = true;
+    }
+
+    public Long getFotoProfiloId() {
+        return fotoProfiloId;
+    }
+
+    public void setFotoProfiloId(Long fotoProfiloId) {
+        this.fotoProfiloId = fotoProfiloId;
     }
 
     public Long getId() {

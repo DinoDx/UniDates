@@ -123,7 +123,7 @@ public class ProfiloPersonale extends VerticalLayout {
         Image img = new Image(resource,"");
         img.getStyle().set("width","200px");
         img.getStyle().set("height","200px");
-        image.add(img);
+        image.add(img, cambiaFotoProfilo());
         return image;
     }
 
@@ -286,6 +286,57 @@ public class ProfiloPersonale extends VerticalLayout {
         HorizontalLayout pulsanti = new HorizontalLayout();
         pulsanti.add(Modifica(),Conferma(),CambiaPassword(),DeleteAccount());
         return pulsanti;
+    }
+
+    Notification uploadFotoProfilo = new Notification();
+
+    public Button cambiaFotoProfilo(){
+        Button modifica = new Button("Cambia Foto Profilo");
+        modifica.addClickListener(buttonClickEvent -> {
+
+            if(!uploadFotoProfilo.isOpened()) {
+                uploadFotoProfilo = new Notification();
+
+
+                MemoryBuffer image = new MemoryBuffer();
+                Span dropIcon = new Span("Inserisci una nuova foto!");
+                Upload upload = new Upload(image);
+                upload.setDropLabel(dropIcon);
+                upload.setMaxFiles(1);
+
+                FotoDTO nuovaFoto = new FotoDTO();
+                upload.addSucceededListener(event -> {
+                    try {
+                        nuovaFoto.setImg(image.getInputStream().readAllBytes());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+                Button insertFoto = new Button("Inserisci");
+                insertFoto.addClickListener(clickEvent -> {
+                    if (nuovaFoto.getImg() != null) {
+                        gestioneProfiloController.aggiungiFotoProfilo(studente.getEmail(), nuovaFoto);
+                        UI.getCurrent().getPage().reload();
+                    }
+                });
+
+                Button annulla = new Button("Annulla");
+                annulla.addClickListener(buttonClickEvent1 -> {
+                    uploadFotoProfilo.close();
+                });
+                uploadFotoProfilo.add(upload, insertFoto, annulla);
+                uploadFotoProfilo.setPosition(Notification.Position.MIDDLE);
+
+                uploadFotoProfilo.open();
+            }
+            else
+                uploadFotoProfilo.close();
+
+
+        });
+
+        return modifica;
     }
 
     public Button DeleteAccount(){

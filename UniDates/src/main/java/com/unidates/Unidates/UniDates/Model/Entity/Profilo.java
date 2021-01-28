@@ -20,7 +20,7 @@ public class Profilo implements Serializable {
     @OneToOne(mappedBy = "profilo", cascade = CascadeType.REMOVE)
     private Studente studente;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToOne(mappedBy = "fotoProfilo", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     private Foto fotoProfilo;
 
 
@@ -61,7 +61,7 @@ public class Profilo implements Serializable {
         this.hobbyList = hobbyList;
         this.fotoProfilo = fotoProfilo;
         this.listaFoto = new ArrayList<Foto>();
-        fotoProfilo.setProfilo(this);
+        fotoProfilo.setFotoProfilo(this);
     }
 
     public Long getId() { return id; }

@@ -156,7 +156,10 @@ public class EntityToDto {
     public static FotoDTO toDTO(Foto foto) {
         FotoDTO fotoDTO = new FotoDTO();
         fotoDTO.setImg(foto.getImg());
-        fotoDTO.setProfiloId(foto.getProfilo().getId());
+        if(foto.getProfilo() != null)
+            fotoDTO.setProfiloId(foto.getProfilo().getId());
+        if(foto.getFotoProfilo() != null)
+            fotoDTO.setFotoProfiloId(foto.getFotoProfilo().getId());
         fotoDTO.setVisible(foto.isVisible());
         fotoDTO.setId(foto.getId());
 

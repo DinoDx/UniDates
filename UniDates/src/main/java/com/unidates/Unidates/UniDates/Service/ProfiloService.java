@@ -40,8 +40,10 @@ public class ProfiloService {
 
     public void setFotoProfilo(String email, Foto foto){
         Studente studente = (Studente) utenteRepository.findByEmail(email);
-        studente.getProfilo().setFotoProfilo(foto);
-        profiloRepository.save(studente.getProfilo());
+        Profilo profilo = studente.getProfilo();
+        profilo.getFotoProfilo().setImg(foto.getImg()); //NON SI FA!!
+        profiloRepository.save(profilo);
+
     }
 
     public void aggiungiFoto(String email, Foto foto){

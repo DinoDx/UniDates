@@ -21,6 +21,11 @@ public class Foto implements Cloneable {
     @OneToMany(mappedBy = "foto",orphanRemoval = true)
     private List<Notifica> notifiche;
 
+   @OneToOne
+   @JoinColumn(name = "fotoProfiloId")
+   private Profilo fotoProfilo;
+
+
     @Column(length = 10000000)
     private byte[] img;
 
@@ -77,6 +82,14 @@ public class Foto implements Cloneable {
 
     public void setSegnalazioneRicevute(List<Segnalazione> segnalazioneRicevute) {
         this.segnalazioneRicevute = segnalazioneRicevute;
+    }
+
+    public Profilo getFotoProfilo() {
+        return fotoProfilo;
+    }
+
+    public void setFotoProfilo(Profilo fotoProfilo) {
+        this.fotoProfilo = fotoProfilo;
     }
 
     public boolean isVisible() {
