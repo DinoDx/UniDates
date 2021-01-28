@@ -116,7 +116,7 @@ public class Populator implements ApplicationRunner {
         moderazioneService.inviaAmmonimento(new Ammonimento("motivazione1", "dettagli1"), m1.getEmail(), s1.getEmail(),utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
         moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
         moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(0).getId());
-        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
+       // moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
 
 
 
