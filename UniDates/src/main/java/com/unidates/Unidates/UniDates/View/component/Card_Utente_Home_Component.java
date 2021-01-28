@@ -104,7 +104,7 @@ public class Card_Utente_Home_Component extends Div {
             try {
                 gestioneModerazioneController.inviaSegnalazione(segnalazioneDTO,studente.getProfilo().getFotoProfilo());
             }catch (InvalidReportFormatException c){
-                new Notification("Motivazione e/o dettagli non validi.",2000, Notification.Position.MIDDLE);
+                new Notification("Motivazione e/o dettagli non validi.",2000, Notification.Position.MIDDLE).open();
             }
 
             notifica.close();
@@ -114,7 +114,6 @@ public class Card_Utente_Home_Component extends Div {
         });
         Button blocca = new Button("Blocca");
         blocca.addClickListener(buttonClickEvent -> {
-
             gestioneUtentiController.bloccaStudente(gestioneUtentiController.utenteInSessione().getEmail(),studente.getEmail() );
             notifica.close();
             UI.getCurrent().getPage().reload();

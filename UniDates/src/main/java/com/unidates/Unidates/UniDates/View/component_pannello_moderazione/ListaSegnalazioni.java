@@ -145,7 +145,7 @@ public class ListaSegnalazioni extends VerticalLayout{
                     try {
                         gestioneModerazioneController.inviaSegnalazioneCommunityManager(segnalazioneDTO, fotoSegnalata);
                     } catch (InvalidReportFormatException c) {
-                        new Notification("Motivazione e/o dettagli non validi.", 2000, Notification.Position.MIDDLE);
+                        new Notification("Motivazione e/o dettagli non validi.", 2000, Notification.Position.MIDDLE).open();
                     }
                     notifica.close();
                 });

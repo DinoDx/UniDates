@@ -243,7 +243,7 @@ public class ProfiloPersonale extends VerticalLayout {
                     UI.getCurrent().getPage().reload();
                 }
                 catch(InvalidPhotoException e){
-                    new Notification("La foto non rispetta le dimensioni", 2000, Notification.Position.MIDDLE);
+                    new Notification("La foto non rispetta le dimensioni", 2000, Notification.Position.MIDDLE).open();
                 }
             }
         });
