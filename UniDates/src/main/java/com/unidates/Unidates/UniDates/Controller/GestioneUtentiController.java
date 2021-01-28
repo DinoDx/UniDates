@@ -245,8 +245,8 @@ public class GestioneUtentiController {
             Studente toDelete = utenteService.trovaStudente(email);
             if(passwordEncoder.matches(password, toDelete.getPassword())){
                 utenteService.deleteUtente(toDelete);
-            }
-            SecurityUtils.forceLogout(toDelete, sessionRegistry);
+                SecurityUtils.forceLogout(toDelete, sessionRegistry);
+            }else throw new PasswordMissmatchException();
         }
         else throw new NotAuthorizedException();
     }

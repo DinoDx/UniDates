@@ -6,15 +6,12 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinServletRequest;
 import org.springframework.security.web.WebAttributes;
@@ -46,6 +43,7 @@ public class Login extends VerticalLayout {
 
         add(layoutEsterno);
     }
+
     private VerticalLayout createLayoutSinistro(){
         VerticalLayout layoutSinistro = new VerticalLayout();
 
@@ -125,6 +123,7 @@ public class Login extends VerticalLayout {
     private LoginI18n createLoginI18n(){
         LoginI18n i18n = LoginI18n.createDefault();
         i18n.getForm().setUsername("Email");
+        i18n.getForm().setForgotPassword(null);
         i18n.getForm().setTitle("Login");
         i18n.getForm().setSubmit("Accedi!");
         return i18n;

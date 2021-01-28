@@ -107,7 +107,7 @@ public class MainView extends AppLayout {
         layout.setHeight("100px");
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
 
-        Anchor home = new Anchor("/home");
+        Anchor home = new Anchor("/");
         viewTitle = new H1("UniDates");
         viewTitle.getStyle().set("margin-left","30px");
         viewTitle.getStyle().set("font-size","30px");

@@ -6,6 +6,8 @@ import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.Exception.InvalidPhotoException;
+import com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException;
 import com.unidates.Unidates.UniDates.Model.Enum.Colore_Occhi;
 import com.unidates.Unidates.UniDates.Model.Enum.Colori_Capelli;
 import com.unidates.Unidates.UniDates.Model.Enum.Hobby;
@@ -235,9 +237,14 @@ public class ProfiloPersonale extends VerticalLayout {
 
         Button insertFoto = new Button("Inserisci");
         insertFoto.addClickListener(buttonClickEvent -> {
-            if(toadd.getImg() != null){
-                gestioneProfiloController.aggiungiFoto(studente.getEmail(),toadd);
-                UI.getCurrent().getPage().reload();
+            if (toadd.getImg() != null) {
+                try {
+                    gestioneProfiloController.aggiungiFoto(studente.getEmail(), toadd);
+                    UI.getCurrent().getPage().reload();
+                }
+                catch(InvalidPhotoException e){
+                    new Notification("La foto non rispetta le dimensioni", 2000, Notification.Position.MIDDLE);
+                }
             }
         });
 
@@ -287,6 +294,7 @@ public class ProfiloPersonale extends VerticalLayout {
         pulsanti.add(Modifica(),Conferma(),CambiaPassword(),DeleteAccount());
         return pulsanti;
     }
+
 
     Notification uploadFotoProfilo = new Notification();
 
@@ -339,30 +347,44 @@ public class ProfiloPersonale extends VerticalLayout {
         return modifica;
     }
 
+
+    Notification cancellazione = new Notification();
+
     public Button DeleteAccount(){
         Button delete = new Button("Cancella Account");
         delete.addClickListener(buttonClickEvent -> {
-            Notification cancellazione = new Notification();
-            cancellazione.setPosition(Notification.Position.MIDDLE);
+            if(!cancellazione.isOpened()){
+                cancellazione = new Notification();
+                cancellazione.setPosition(Notification.Position.MIDDLE);
+                VerticalLayout internoC = new VerticalLayout();
+                internoC.setAlignItems(Alignment.CENTER);
 
-            VerticalLayout internoC = new VerticalLayout();
-            internoC.setAlignItems(Alignment.CENTER);
-            EmailField email = new EmailField("Email");
-            PasswordField passwordField = new PasswordField("Password");
+                Span attenzione = new Span("ATTENZIONE!!!");
+                Span testo = new Span("Il sistema avvisa che confermando la richiesta, i dati allegati al profilo verranno eliminati definitivamente dalla piattaforma UniDates.");
+                PasswordField passwordField = new PasswordField("Password");
 
-            Button confrema = new Button("Conferma");
-            confrema.addClickListener(buttonClickEvent1 -> {
-               gestioneUtentiController.cancellaAccountPersonale(email.getValue(),passwordField.getValue());
-            });
-            Button annulla = new Button("Annulla");
-            annulla.addClickListener(buttonClickEvent1 -> {
-               cancellazione.close();
-            });
+                Button confrema = new Button("Conferma");
+                confrema.addClickListener(buttonClickEvent1 -> {
+                    try {
+                        gestioneUtentiController.cancellaAccountPersonale(email.getValue(),passwordField.getValue());
+                        UI.getCurrent().getPage().reload();
+                    }catch (PasswordMissmatchException e){
+                        new Notification("La password non corrisponde",3000).open();
+                    }
+                    cancellazione.close();
+                });
 
-            internoC.add(email,passwordField,confrema,annulla);
-            cancellazione.add(internoC);
+                Button annulla = new Button("Annulla");
+                annulla.addClickListener(buttonClickEvent1 -> {
+                    cancellazione.close();
+                });
 
-            cancellazione.open();
+                internoC.add(attenzione,testo,passwordField,confrema,annulla);
+                cancellazione.add(internoC);
+                cancellazione.open();
+            }else cancellazione.close();
+
+
         });
         return delete;
     }
@@ -455,53 +477,55 @@ public class ProfiloPersonale extends VerticalLayout {
     }
 
 
-
+    Notification cambio = new Notification();
     public Button CambiaPassword(){
         Button cambia_password = new Button("Cambia password");
-
-        Notification cambio = new Notification();
-        cambio.setPosition(Notification.Position.MIDDLE);
-
-        VerticalLayout corpo_notifica = new VerticalLayout();
-        corpo_notifica.setAlignItems(Alignment.CENTER);
-
-        Span testo = new Span("Cambia la tua password!");
-        PasswordField password_attuale = new PasswordField("Password corrente");
-        PasswordField prima_password = new PasswordField("Nuova password");
-        PasswordField seconda_password = new PasswordField("Conferma password");
-        Button conferma = new Button("Conferma");
-        conferma.addClickListener(buttonClickEvent -> {
-           if(encoder.matches(password_attuale.getValue(),studente.getPassword())){
-               if(prima_password.getValue().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")){
-                   if (prima_password.getValue().equals(seconda_password.getValue())) {
-                       gestioneUtentiController.cambiaPassword(studente.getEmail(), prima_password.getValue(), password_attuale.getValue());
-                       cambio.close();
-                   } else {
-                       Notification errore_password = new Notification("Le password nuove non corrispondono", 3000, Notification.Position.MIDDLE);
-                       errore_password.open();
-                   }
-               }else {
-                   Notification errore_password = new Notification("Le nuova password deve avere minimo 8 carrateri tra cui un nuemro e un carattere speciale", 3000, Notification.Position.MIDDLE);
-                   errore_password.open();
-               }
-           }else {
-               Notification errore_password_attuale = new Notification("La password attuale non corrisponde",3000, Notification.Position.MIDDLE);
-               errore_password_attuale.open();
-           }
-        });
-        Button annulla = new Button("Annulla");
-        annulla.addClickListener(buttonClickEvent -> {
-           cambio.close();
-        });
-
-
-        corpo_notifica.add(testo,password_attuale,prima_password,seconda_password,conferma,annulla);
-        cambio.add(corpo_notifica);
-
         cambia_password.addClickListener(buttonClickEvent -> {
-            cambio.open();
-        });
+            if(!cambio.isOpened()){
+                cambio = new Notification();
+                cambio.setPosition(Notification.Position.MIDDLE);
 
+                VerticalLayout corpo_notifica = new VerticalLayout();
+                corpo_notifica.setAlignItems(Alignment.CENTER);
+
+                Span testo = new Span("Cambia la tua password!");
+                PasswordField password_attuale = new PasswordField("Password corrente");
+                PasswordField prima_password = new PasswordField("Nuova password");
+                PasswordField seconda_password = new PasswordField("Conferma password");
+                Button conferma = new Button("Conferma");
+
+                conferma.addClickListener(buttonClickEvent1 -> {
+                    if(encoder.matches(password_attuale.getValue(),studente.getPassword())){
+                        if(prima_password.getValue().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")){
+                            if (prima_password.getValue().equals(seconda_password.getValue())) {
+                                gestioneUtentiController.cambiaPassword(studente.getEmail(), prima_password.getValue(), password_attuale.getValue());
+                                cambio.close();
+                            } else {
+                                Notification errore_password = new Notification("Le password nuove non corrispondono", 3000, Notification.Position.MIDDLE);
+                                errore_password.open();
+                            }
+                        }else {
+                            Notification errore_password = new Notification("Le nuova password deve avere minimo 8 carrateri tra cui un nuemro e un carattere speciale", 3000, Notification.Position.MIDDLE);
+                            errore_password.open();
+                        }
+                    }else {
+                        Notification errore_password_attuale = new Notification("La password attuale non corrisponde",3000, Notification.Position.MIDDLE);
+                        errore_password_attuale.open();
+                    }
+                });
+
+                Button annulla = new Button("Annulla");
+                annulla.addClickListener(buttonClickEvent2 -> {
+                    cambio.close();
+                });
+
+                corpo_notifica.add(testo,password_attuale,prima_password,seconda_password,conferma,annulla);
+                cambio.add(corpo_notifica);
+
+                cambio.open();
+
+            }else cambio.close();
+        });
         return cambia_password;
     }
 

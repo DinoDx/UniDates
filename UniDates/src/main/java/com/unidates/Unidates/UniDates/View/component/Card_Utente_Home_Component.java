@@ -8,6 +8,7 @@ import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.InvalidReportFormatException;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -60,9 +61,11 @@ public class Card_Utente_Home_Component extends Div {
         //layout destra con nome interessi e topics
         VerticalLayout layout_info = new VerticalLayout();
         HorizontalLayout nome_cognome = new HorizontalLayout();
-        Span nome = new Span(studente.getProfilo().getNome());
-        Span cogome = new Span(studente.getProfilo().getCognome());
-        nome_cognome.add(nome,cogome);
+
+        Anchor profilo  = new Anchor("ricercaprofilo/"+studente.getEmail());
+        Span nome = new Span(studente.getProfilo().getNome() + " " + studente.getProfilo().getCognome());
+        profilo.add(nome);
+        nome_cognome.add(profilo);
 
         Span topics = new Span(studente.getProfilo().getHobbyList().toString());
         Span interessi = new Span("Interessato a:"+studente.getProfilo().getInteressi().toString());

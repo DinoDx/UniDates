@@ -2,10 +2,13 @@ package com.unidates.Unidates.UniDates.View.component;
 
 
 import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
+import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.NotificaDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
+import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H6;
@@ -26,6 +29,7 @@ public class Notifica_Component extends Div {
     ProfiloDTO profilo;
     FotoDTO foto;
     GestioneProfiloController profiloController;
+    GestioneUtentiController gestioneUtentiController;
 
     public Notifica_Component(NotificaDTO notifica,GestioneProfiloController controller){
         this.notifica = notifica;
@@ -54,7 +58,7 @@ public class Notifica_Component extends Div {
         image.setHeight("80px");
         Button pulsante_email = new Button(new Icon(VaadinIcon.FIRE));
         pulsante_email.addClickListener(buttonClickEvent -> {
-            MatchEmail().open();
+            UI.getCurrent().navigate("ricercaprofilo/"+ notifica.getEmailToMatchWith());
         });
 
 
