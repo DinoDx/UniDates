@@ -23,9 +23,6 @@ public class EntityToDto {
         utenteDTO.setPassword(u.getPassword());
         utenteDTO.setRuolo(u.getRuolo());
 
-        List<NotificaDTO> notificaDTO = new ArrayList<NotificaDTO>();
-        u.getListaNotifica().forEach(notifica -> notificaDTO.add(toDTO(notifica)));
-        utenteDTO.setListaNotifica(notificaDTO);
 
         return utenteDTO;
     }
@@ -87,7 +84,7 @@ public class EntityToDto {
         StudenteDTO sdto = new StudenteDTO();
         sdto.setEmail(utenteDTO.getEmail());
         sdto.setPassword(utenteDTO.getPassword());
-        sdto.setListaNotifica(utenteDTO.getListaNotifica());
+
         sdto.setRuolo(utenteDTO.getRuolo());
         sdto.setId(utenteDTO.getId());
 
@@ -97,6 +94,10 @@ public class EntityToDto {
        ArrayList<AmmonimentoDTO> ammonimentoDTO  = new ArrayList<AmmonimentoDTO>();
        s.getListaAmmonimenti().forEach(ammonimento -> ammonimentoDTO.add(EntityToDto.toDTO(ammonimento)));
        sdto.setListaAmmonimenti(ammonimentoDTO);
+
+       ArrayList<NotificaDTO> notificaDTO = new ArrayList<NotificaDTO>();
+        s.getListaNotifica().forEach(notifica -> notificaDTO.add(toDTO(notifica)));
+       sdto.setListaNotifica(notificaDTO);
 
        ArrayList<SospensioneDTO> sospensioneDTO  = new ArrayList<SospensioneDTO>();
        s.getListaSospensioni().forEach(sospensione -> sospensioneDTO.add(EntityToDto.toDTO(sospensione)));

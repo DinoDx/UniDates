@@ -17,9 +17,8 @@ public abstract class Utente implements Serializable {
     private Ruolo ruolo;
     private boolean isActive;
 
-
-    @OneToMany(mappedBy = "utente", cascade = CascadeType.REMOVE)
-    private List<Notifica> listaNotifica;
+    @OneToOne(orphanRemoval = true)
+    private VerificationToken verificationToken;
 
 
     public Utente() {
@@ -65,14 +64,6 @@ public abstract class Utente implements Serializable {
         this.ruolo = ruolo;
     }
 
-    public List<Notifica> getListaNotifica() {
-        return listaNotifica;
-    }
-
-    public void setListaNotifica(List<Notifica> listNotifica) {
-        this.listaNotifica = listNotifica;
-    }
-
     public boolean isActive() {
         return isActive;
     }
@@ -90,7 +81,6 @@ public abstract class Utente implements Serializable {
                 ", password='" + password + '\'' +
                 ", ruolo=" + ruolo +
                 ", isActive=" + isActive +
-                ", listNotifica=" + listaNotifica +
                 '}';
     }
 }

@@ -12,25 +12,29 @@ public class Studente extends Utente{
 
     private boolean isBanned;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
-    @JoinColumn(name = "profilo_id", referencedColumnName = "id")
-    private Profilo profilo;
-
 
     @ManyToMany
     private List<Studente> listaBloccati;
 
-    @OneToMany(mappedBy = "studente", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "studente", orphanRemoval = true)
     private List<Sospensione> listaSospensioni;
 
-    @OneToMany(mappedBy = "studente", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "studente",orphanRemoval = true)
     private List<Ammonimento> listaAmmonimenti;
 
-    @OneToMany(mappedBy = "studente1", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "studente1", orphanRemoval = true)
     private List<Match> listaMatch;
 
-    @OneToMany(mappedBy = "studente2", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "studente2", orphanRemoval = true)
     private List<Match> listaMatchRicevuti;
+
+    @OneToMany(mappedBy = "utente",orphanRemoval = true)
+    private List<Notifica> listaNotifica;
+
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
+    @JoinColumn(name = "profilo_id", referencedColumnName = "id")
+    private Profilo profilo;
+
 
     private int ammonimentiAttivi;
 
@@ -149,6 +153,14 @@ public class Studente extends Utente{
 
     public int getAmmonimentiAttivi(){
         return this.ammonimentiAttivi;
+    }
+
+    public List<Notifica> getListaNotifica() {
+        return listaNotifica;
+    }
+
+    public void setListaNotifica(List<Notifica> listNotifica) {
+        this.listaNotifica = listNotifica;
     }
 
 

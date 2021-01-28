@@ -19,14 +19,14 @@ public class Notifica implements Serializable {
 
     private String emailToMatchWith;
 
-    @OneToOne
+    @ManyToOne
     private Foto foto;
 
     private String testoNotifica;
 
     private Tipo_Notifica tipo_notifica;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Ammonimento ammonimento;
 
     private LocalDate creationTime;

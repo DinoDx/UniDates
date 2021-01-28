@@ -10,17 +10,14 @@ public  class UtenteDTO {
     private String email;
     private String password;
     private Ruolo ruolo;
-    private List<NotificaDTO> listaNotifica;
 
     public UtenteDTO() {
-        listaNotifica = new ArrayList<NotificaDTO>();
     }
 
     public UtenteDTO(String email, String password, Ruolo ruolo) {
         this.email = email;
         this.password = password;
         this.ruolo = ruolo;
-        listaNotifica = new ArrayList<NotificaDTO>();
     }
 
     public Long getId() {
@@ -55,14 +52,6 @@ public  class UtenteDTO {
         this.ruolo = ruolo;
     }
 
-    public List<NotificaDTO> getListaNotifica() {
-        return listaNotifica;
-    }
-
-    public void setListaNotifica(List<NotificaDTO> listaNotifica) {
-        this.listaNotifica = listaNotifica;
-
-    }
 
     @Override
     public String toString() {
@@ -71,7 +60,6 @@ public  class UtenteDTO {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", ruolo=" + ruolo +
-                ", listaNotifica=" + listaNotifica +
                 '}';
     }
 }

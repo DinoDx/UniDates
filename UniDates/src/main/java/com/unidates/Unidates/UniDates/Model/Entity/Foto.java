@@ -15,8 +15,11 @@ public class Foto implements Cloneable {
     @JoinColumn(name="profilo_id")
     private Profilo profilo;
 
-    @OneToMany(mappedBy = "foto", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "foto", orphanRemoval = true)
     private List<Segnalazione> segnalazioneRicevute;
+
+    @OneToMany(mappedBy = "foto",orphanRemoval = true)
+    private List<Notifica> notifiche;
 
     @Column(length = 10000000)
     private byte[] img;

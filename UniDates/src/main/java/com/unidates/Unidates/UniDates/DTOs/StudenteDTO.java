@@ -12,6 +12,7 @@ public class StudenteDTO extends UtenteDTO{
     private List<SospensioneDTO> listaSospensione;
     private List<MatchDTO> listaMatch;
     private List<MatchDTO> listaMatchRicevuti;
+    private List<NotificaDTO> listaNotifiche;
     private boolean isBanned;
     private int ammonimentiAttivi;
 
@@ -21,6 +22,7 @@ public class StudenteDTO extends UtenteDTO{
         this.listaSospensione = new ArrayList<SospensioneDTO>();
         this.listaMatch = new ArrayList<MatchDTO>();
         this.listaMatchRicevuti = new ArrayList<MatchDTO>();
+        this.listaNotifiche = new ArrayList<NotificaDTO>();
         this.isBanned = false;
         this.ammonimentiAttivi = 0;
     }
@@ -33,6 +35,7 @@ public class StudenteDTO extends UtenteDTO{
         this.listaSospensione = new ArrayList<SospensioneDTO>();
         this.listaMatch = new ArrayList<MatchDTO>();
         this.listaMatchRicevuti = new ArrayList<MatchDTO>();
+        this.listaNotifiche = new ArrayList<NotificaDTO>();
         this.isBanned = false;
         this.ammonimentiAttivi = 0;
     }
@@ -101,15 +104,24 @@ public class StudenteDTO extends UtenteDTO{
         this.ammonimentiAttivi = ammonimentiAttivi;
     }
 
+    public List<NotificaDTO> getListaNotifica() {
+        return listaNotifiche;
+    }
+
+    public void setListaNotifica(List<NotificaDTO> listaNotifiche) {
+        this.listaNotifiche = listaNotifiche;
+    }
+
     @Override
-    public java.lang.String toString() {
+    public String toString() {
         return "StudenteDTO{" +
                 "profilo=" + profilo +
-                ", listaBloccati=" + listaBloccatiEmail +
+                ", listaBloccatiEmail=" + listaBloccatiEmail +
                 ", listaAmmonimenti=" + listaAmmonimenti +
                 ", listaSospensione=" + listaSospensione +
                 ", listaMatch=" + listaMatch +
                 ", listaMatchRicevuti=" + listaMatchRicevuti +
+                ", listaNotifiche=" + listaNotifiche +
                 ", isBanned=" + isBanned +
                 ", ammonimentiAttivi=" + ammonimentiAttivi +
                 '}';

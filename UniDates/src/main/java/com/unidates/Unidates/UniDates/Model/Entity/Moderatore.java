@@ -9,10 +9,10 @@ import java.util.List;
 @Entity
 public class Moderatore extends Studente {
 
-    @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "moderatore", orphanRemoval = true)
     private List<Ammonimento> ammonimentoInviati;
 
-    @OneToMany(mappedBy = "moderatore", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "moderatore", orphanRemoval = true)
     private List<Segnalazione> segnalazioneRicevute;
 
     public Moderatore(){

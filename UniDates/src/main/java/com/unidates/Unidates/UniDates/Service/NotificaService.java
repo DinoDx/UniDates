@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 @Service
 public class NotificaService {
 
-    private Logger logger = Logger.getLogger("global");
+    private Logger logger = Logger.getLogger("generateNotificaLogger");
 
     @Autowired
     private NotificaRepository notificaRepository;
@@ -32,6 +32,11 @@ public class NotificaService {
         );
         matchNotificaStudente1.setEmailToMatchWith(studente2.getEmail());
 
+        logger.info("Notifica di match per: " + matchNotificaStudente1.getUtente().getEmail());
+
+        notificaRepository.save(matchNotificaStudente1);
+
+
         Notifica matchNotificaStudente2 = new Notifica(
                 studente2,
                 studente2.getProfilo().getNome() + " hai un match con " + studente1.getProfilo().getNome() + "!",
@@ -41,12 +46,11 @@ public class NotificaService {
         );
         matchNotificaStudente2.setEmailToMatchWith(studente1.getEmail());
 
-        // evento notifica
-
-        notificaRepository.save(matchNotificaStudente1);
         notificaRepository.save(matchNotificaStudente2);
 
-        logger.info("Notifica di match pubblicata!");
+        logger.info("Notifica di match per: " + matchNotificaStudente2.getUtente().getEmail());
+
+        logger.info("Notifiche di match publicate!");
     }
 
     public void genereateNotificaWarning(Studente studente1, Foto removedfoto, Ammonimento ammonimento){ //DA RICONTROLLARE PER MODERAZIONE

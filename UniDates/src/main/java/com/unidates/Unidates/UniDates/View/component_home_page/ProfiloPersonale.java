@@ -268,12 +268,12 @@ public class ProfiloPersonale extends VerticalLayout {
         H4 testo = new H4("Sezione Contatti");
         contatti.getStyle().set("margin-top","40px");
 
-        if(studente.getProfilo().getNumeroTelefono() != null)
+        if(studente.getProfilo().getNumeroTelefono() == null)
             numero.setValue("Numero non presente!");
         else numero.setValue(studente.getProfilo().getNumeroTelefono());
         numero.setEnabled(false);
 
-        if(studente.getProfilo().getNickInstagram() != null)
+        if(studente.getProfilo().getNickInstagram() == null)
             instagram.setValue("Nickname instagram non presente!");
         else instagram.setValue(studente.getProfilo().getNickInstagram());
 

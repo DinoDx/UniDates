@@ -70,7 +70,4 @@ public class SecurityUtils {
         }
     }
 
-    public static void  refreshNotify(Utente utente,Utente utente2, SessionRegistry sessionRegistry){
-
-    }
 }

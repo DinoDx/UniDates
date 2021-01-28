@@ -24,7 +24,7 @@ public class Profilo implements Serializable {
     private Foto fotoProfilo;
 
 
-    @OneToMany(mappedBy = "profilo", cascade = {CascadeType.MERGE, CascadeType.REMOVE,CascadeType.PERSIST})
+    @OneToMany(mappedBy = "profilo", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Foto> listaFoto;
 
 

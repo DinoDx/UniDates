@@ -29,8 +29,7 @@ public class InteractionListener {
     public void handleMatchEvent(MatchEvent matchEvent){
         matchLogger.info("Hangling match event");
         notificaService.generateNotificaMatch(matchEvent.getStudente1(), matchEvent.getStudente2());
-        matchLogger.info("Notifica gestita!");
-        SecurityUtils.refreshNotify(matchEvent.getStudente1(),matchEvent.getStudente2(), sessionRegistry);
+        matchLogger.info("Notifica gestita!");;
 
     }
 
