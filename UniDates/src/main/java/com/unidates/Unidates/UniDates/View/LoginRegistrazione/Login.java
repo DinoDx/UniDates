@@ -7,9 +7,12 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.router.*;
@@ -33,7 +36,33 @@ public class Login extends VerticalLayout {
             addAttachListener(event -> create());
     }
     public void create(){
+        FlexLayout layoutEsterno = new FlexLayout();
 
+        layoutEsterno.addClassName("layout-esterno");
+        layoutEsterno.setSizeFull();
+        layoutEsterno.setAlignItems(Alignment.CENTER);
+        layoutEsterno.setJustifyContentMode(JustifyContentMode.CENTER);
+        layoutEsterno.add(createLayoutSinistro(), createLeyoutDestro());
+
+        add(layoutEsterno);
+    }
+    private VerticalLayout createLayoutSinistro(){
+        VerticalLayout layoutSinistro = new VerticalLayout();
+
+        VerticalLayout infoInterna = new VerticalLayout();
+        infoInterna.add(new H1("Benvenuto su UniDates!"));
+        infoInterna.add(new Span("L'unica Dating App dedicata completamente agli studenti Universitari! Accedi con la tua mail istituzionale e sei non sei ancora registrato, registrati!"));
+        infoInterna.setAlignItems(Alignment.CENTER);
+        infoInterna.setJustifyContentMode(JustifyContentMode.CENTER);
+
+        infoInterna.setId("info-boxing");
+        layoutSinistro.add(infoInterna);
+        layoutSinistro.setAlignItems(Alignment.CENTER);
+        layoutSinistro.setJustifyContentMode(JustifyContentMode.CENTER);
+        return layoutSinistro;
+    }
+    private VerticalLayout createLeyoutDestro(){
+        VerticalLayout layoutDestro = new VerticalLayout();
         erroreLogin = (String) VaadinServletRequest.getCurrent().getHttpServletRequest().getSession().getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
         if(erroreLogin != null) {
             switch (erroreLogin){
@@ -51,17 +80,16 @@ public class Login extends VerticalLayout {
                     break;
             }
         };
-        addClassName("login-view");
-        setId("login-view");
+
         setSizeFull();
-        setAlignItems(Alignment.CENTER);
-        setJustifyContentMode(JustifyContentMode.CENTER);
+        layoutDestro.setAlignItems(Alignment.CENTER);
+        layoutDestro.setJustifyContentMode(JustifyContentMode.CENTER);
         loginForm.setI18n(createLoginI18n());
         loginForm.setId("login");
         loginForm.setAction("login");
-        loginForm.addForgotPasswordListener(event -> createRecuperoPassword().open());
-        add(new H1("Accedi a Unidates"), loginForm, createLinkToRegister());
-
+        //loginForm.addForgotPasswordListener(event -> createRecuperoPassword().open());
+        layoutDestro.add(new H1("Accedi a Unidates"), loginForm, createLinkToRegister());
+        return layoutDestro;
     }
 
     private Anchor createLinkToRegister() {
@@ -74,7 +102,7 @@ public class Login extends VerticalLayout {
         return link;
     }
 
-    private Notification createRecuperoPassword(){
+   /* private Notification createRecuperoPassword(){
         Notification notificaRecuperoPassword = new Notification();
         notificaRecuperoPassword.setPosition(Notification.Position.MIDDLE);
 
@@ -93,13 +121,12 @@ public class Login extends VerticalLayout {
         notificaRecuperoPassword.add(verticalLayout);
 
         return notificaRecuperoPassword;
-    }
+    } */
     private LoginI18n createLoginI18n(){
         LoginI18n i18n = LoginI18n.createDefault();
         i18n.getForm().setUsername("Email");
         i18n.getForm().setTitle("Login");
         i18n.getForm().setSubmit("Accedi!");
-        i18n.getForm().setForgotPassword("Password dimenticata? Recuperala");
         return i18n;
     }
 }

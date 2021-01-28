@@ -82,7 +82,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/sw.js",
                 "/offline.html",
                 "/icons/**",
-                "/images/**",
+                "**/images/**",
+                "/frontend/**",
                 "/styles/**",
                 "/h2-console/**");
     }
