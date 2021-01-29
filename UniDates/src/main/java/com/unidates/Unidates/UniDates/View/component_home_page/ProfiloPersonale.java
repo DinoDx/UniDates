@@ -211,7 +211,7 @@ public class ProfiloPersonale extends VerticalLayout {
                     UI.getCurrent().getPage().reload();
                 });
 
-                Button setFotoProfilo = new Button(new Icon(VaadinIcon.FIRE));
+                Button setFotoProfilo = new Button("Imposta come foto profilo",new Icon(VaadinIcon.USER));
                 setFotoProfilo.addClickListener(event -> {
                     gestioneProfiloController.setFotoProfilo( studente.getEmail(), f);
                     UI.getCurrent().getPage().reload();
