@@ -211,7 +211,7 @@ public class ProfiloPersonale extends VerticalLayout {
             VerticalLayout singolaFoto = new VerticalLayout();
             Button deleteFoto = new Button(new Icon(VaadinIcon.CLOSE));
             deleteFoto.addClickListener(buttonClickEvent -> {
-                gestioneProfiloController.eliminaFoto(f);
+                gestioneProfiloController.eliminaFoto(f, studente.getEmail());
                 UI.getCurrent().getPage().reload();
             });
             singolaFoto.setAlignItems(Alignment.CENTER);

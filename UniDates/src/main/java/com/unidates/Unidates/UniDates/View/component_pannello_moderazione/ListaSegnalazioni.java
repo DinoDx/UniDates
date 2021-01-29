@@ -25,7 +25,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.StreamResource;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 import java.io.ByteArrayInputStream;
@@ -54,12 +53,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         VerticalLayout layoutListaSegnalazioni = new VerticalLayout();
             for (SegnalazioneDTO segnalazioneDTO : moderatore.getSegnalazioneRicevute()) {
                 FotoDTO fotoSegnalata = gestioneProfiloController.trovaFoto(segnalazioneDTO.getFotoId());
-                ProfiloDTO profiloSegnalato;
-                if(fotoSegnalata.getFotoProfiloId() != null)
-                     profiloSegnalato = gestioneProfiloController.trovaProfilo(fotoSegnalata.getFotoProfiloId());
-                else
-                    profiloSegnalato = gestioneProfiloController.trovaProfilo(fotoSegnalata.getProfiloId());
-
+                ProfiloDTO profiloSegnalato = gestioneProfiloController.trovaProfilo(fotoSegnalata.getProfiloId());
                 StudenteDTO studenteSegnalato =gestioneUtentiController.trovaStudente(profiloSegnalato.getEmailStudente());
                 if(fotoSegnalata.isVisible() && !(studenteSegnalato.isBanned())) //da ricontrollare
                     layoutListaSegnalazioni.addComponentAsFirst(cardSegnalazione(fotoSegnalata, profiloSegnalato, segnalazioneDTO, studenteSegnalato));
@@ -74,9 +68,7 @@ public class ListaSegnalazioni extends VerticalLayout{
 
     public HorizontalLayout cardSegnalazione(FotoDTO fotoSegnalata, ProfiloDTO profiloSegnalato, SegnalazioneDTO segnalazione, StudenteDTO studenteSegnalato){
 
-
         HorizontalLayout layoutCard = new HorizontalLayout();
-        
         Image immagineCard = new Image(new StreamResource("stream",()-> new ByteArrayInputStream( fotoSegnalata.getImg())),"Immagine non trovata!");
         immagineCard.getStyle().set("width","150px");
         immagineCard.getStyle().set("height","150px");
@@ -86,40 +78,14 @@ public class ListaSegnalazioni extends VerticalLayout{
         //Notifica di dettagli della segnalazione
 
 
-
-
         Button mostraDettagliSegnalazione = new Button("Mostra dettagli");
         mostraDettagliSegnalazione.addClickListener(buttonClickEvent -> {
 
             if(!dettagliSegnalazione.isOpened()) {
-
-                dettagliSegnalazione = new Notification();
-                Image image = new Image(new StreamResource("ciao", () -> new ByteArrayInputStream(fotoSegnalata.getImg())), "Immagine non trovata");
-                image.getStyle().set("width", "250px");
-                image.getStyle().set("height", "250px");
-
-                VerticalLayout layoutDettagliSegnalazione = new VerticalLayout();
-                layoutDettagliSegnalazione.setAlignItems(Alignment.CENTER);
-
-                TextField motivazione = new TextField();
-                motivazione.setValue(segnalazione.getMotivazione());
-                motivazione.setEnabled(false);
-
-                TextField dettagli = new TextField();
-                dettagli.setValue(segnalazione.getDettagli());
-                dettagli.setEnabled(false);
-
-                Button chiudiDettagliSegnalazione = new Button("Chiudi");
-                chiudiDettagliSegnalazione.addClickListener(buttonClickEvent1 -> {
-                    dettagliSegnalazione.close();
-                });
-
-
-                layoutDettagliSegnalazione.add(image, motivazione, dettagli, chiudiDettagliSegnalazione);
-                dettagliSegnalazione.add(layoutDettagliSegnalazione);
-                dettagliSegnalazione.setPosition(Notification.Position.MIDDLE);
+                dettagliSegnalazione = createNotificaDettagliSegnalazione(segnalazione, fotoSegnalata);
                 dettagliSegnalazione.open();
             }
+            else dettagliSegnalazione.close();
 
         });
 
@@ -128,35 +94,10 @@ public class ListaSegnalazioni extends VerticalLayout{
         sospensioneCm.addClickListener(buttonClickEvent -> {
 
             if(!notifica.isOpened()) {
-
-                notifica = new Notification();
-                TextField reporting = new TextField();
-                reporting.setPlaceholder("Inserisci moticazione segnalazione");
-                TextArea dettagli = new TextArea();
-                dettagli.setPlaceholder("Dettagli segnalazione");
-                Button annulla = new Button("Chiudi");
-                annulla.addClickListener(buttonClickEvent1 -> {
-                    notifica.close();
-                });
-
-                Button invia = new Button("Invia");
-                invia.addClickListener(buttonClickEvent1 -> {
-                    SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(reporting.getValue(), dettagli.getValue());
-                    try {
-                        gestioneModerazioneController.inviaSegnalazioneCommunityManager(segnalazioneDTO, fotoSegnalata);
-                    } catch (InvalidReportFormatException c) {
-                        new Notification("Motivazione e/o dettagli non validi.", 2000, Notification.Position.MIDDLE).open();
-                    }
-                    notifica.close();
-                });
-
-                VerticalLayout layout_report = new VerticalLayout();
-                layout_report.setAlignItems(Alignment.CENTER);
-                layout_report.add(reporting, dettagli, annulla, invia);
-                notifica.add(layout_report);
-                notifica.setPosition(Notification.Position.MIDDLE);
+                notifica = createNotificaInviaACM(fotoSegnalata);
                 notifica.open();
             }
+            else notifica.close();
         });
         
         VerticalLayout InfoEMostraDettagliLayout = new VerticalLayout();
@@ -165,9 +106,11 @@ public class ListaSegnalazioni extends VerticalLayout{
         Button apriCardAmmonimento = new Button("Ammonimento");
         apriCardAmmonimento.addClickListener(e-> {
 
-            if(!notificaAmm.isOpened())
-                notificaAmm = notificaAmmonimento(fotoSegnalata, profiloSegnalato, segnalazione, studenteSegnalato);
+            if(!notificaAmm.isOpened()){
+                notificaAmm = createNotificaAmmonimento(fotoSegnalata, profiloSegnalato, segnalazione, studenteSegnalato);
                 notificaAmm.open();
+            }
+            else notificaAmm.close();
 
         });
 
@@ -181,16 +124,80 @@ public class ListaSegnalazioni extends VerticalLayout{
             apriCardSospensione.addClickListener( event ->{
                 if(!notificaSos.isOpened())
                            notificaSos.open();
-                layoutCard.add(apriCardSospensione);
+                else notificaSos.close();
             });
-        } else{
+            layoutCard.add(apriCardSospensione);
+        }
+        else{
         layoutCard.add(sospensioneCm);
         }
         return layoutCard;
     }
 
+    private Notification createNotificaDettagliSegnalazione(SegnalazioneDTO segnalazione, FotoDTO fotoSegnalata) {
 
-    public Notification notificaAmmonimento(FotoDTO fotoSegnalata, ProfiloDTO profiloSegnalato, SegnalazioneDTO segnalazione, StudenteDTO studenteDTO){
+        Notification dettagliSegnalazione = new Notification();
+        Image image = new Image(new StreamResource("ciao", () -> new ByteArrayInputStream(fotoSegnalata.getImg())), "Immagine non trovata");
+        image.getStyle().set("width", "250px");
+        image.getStyle().set("height", "250px");
+
+        VerticalLayout layoutDettagliSegnalazione = new VerticalLayout();
+        layoutDettagliSegnalazione.setAlignItems(Alignment.CENTER);
+
+        TextField motivazione = new TextField();
+        motivazione.setValue(segnalazione.getMotivazione());
+        motivazione.setEnabled(false);
+
+        TextField dettagli = new TextField();
+        dettagli.setValue(segnalazione.getDettagli());
+        dettagli.setEnabled(false);
+
+        Button chiudiDettagliSegnalazione = new Button("Chiudi");
+        chiudiDettagliSegnalazione.addClickListener(buttonClickEvent1 -> {
+            dettagliSegnalazione.close();
+        });
+
+
+        layoutDettagliSegnalazione.add(image, motivazione, dettagli, chiudiDettagliSegnalazione);
+        dettagliSegnalazione.add(layoutDettagliSegnalazione);
+        dettagliSegnalazione.setPosition(Notification.Position.MIDDLE);
+
+        return dettagliSegnalazione;
+    }
+
+    private Notification createNotificaInviaACM(FotoDTO fotoSegnalata) {
+        Notification inviaCM = new Notification();
+        TextField reporting = new TextField();
+        reporting.setPlaceholder("Inserisci moticazione segnalazione");
+        TextArea dettagli = new TextArea();
+        dettagli.setPlaceholder("Dettagli segnalazione");
+        Button annulla = new Button("Chiudi");
+        annulla.addClickListener(buttonClickEvent1 -> {
+            inviaCM.close();
+        });
+
+        Button invia = new Button("Invia");
+        invia.addClickListener(buttonClickEvent1 -> {
+            SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(reporting.getValue(), dettagli.getValue());
+            try {
+                gestioneModerazioneController.inviaSegnalazioneCommunityManager(segnalazioneDTO, fotoSegnalata);
+            } catch (InvalidReportFormatException c) {
+                new Notification("Motivazione e/o dettagli non validi.", 2000, Notification.Position.MIDDLE).open();
+            }
+            inviaCM.close();
+        });
+
+        VerticalLayout layout_report = new VerticalLayout();
+        layout_report.setAlignItems(Alignment.CENTER);
+        layout_report.add(reporting, dettagli, annulla, invia);
+        inviaCM.add(layout_report);
+        inviaCM.setPosition(Notification.Position.MIDDLE);
+
+        return inviaCM;
+    }
+
+
+    public Notification createNotificaAmmonimento(FotoDTO fotoSegnalata, ProfiloDTO profiloSegnalato, SegnalazioneDTO segnalazione, StudenteDTO studenteDTO){
 
         Notification cardAmmonimento = new Notification();
 
@@ -201,8 +208,6 @@ public class ListaSegnalazioni extends VerticalLayout{
         chiudiCardAmmonimento.addClickListener(e -> {
             cardAmmonimento.close();
         });
-
-
 
         HorizontalLayout layoutInternoAmmonimento = new HorizontalLayout();
         layoutInternoAmmonimento.add(infoAmmonimento(cardAmmonimento,fotoSegnalata, profiloSegnalato, studenteDTO));

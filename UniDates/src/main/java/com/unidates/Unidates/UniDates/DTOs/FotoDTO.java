@@ -1,15 +1,16 @@
 package com.unidates.Unidates.UniDates.DTOs;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FotoDTO {
     private Long Id;
     private Long profiloId;
-    private Long fotoProfiloId;
     private List<SegnalazioneDTO> segnalazioneRicevute;
     private byte[] img;
     private boolean isVisible;
+    private LocalDateTime creazione;
 
     public FotoDTO(){
         this.segnalazioneRicevute = new ArrayList<SegnalazioneDTO>();
@@ -21,13 +22,6 @@ public class FotoDTO {
         this.isVisible = true;
     }
 
-    public Long getFotoProfiloId() {
-        return fotoProfiloId;
-    }
-
-    public void setFotoProfiloId(Long fotoProfiloId) {
-        this.fotoProfiloId = fotoProfiloId;
-    }
 
     public Long getId() {
         return Id;
@@ -67,5 +61,13 @@ public class FotoDTO {
 
     public void setVisible(boolean visible) {
         isVisible = visible;
+    }
+
+    public LocalDateTime getCreazione() {
+        return creazione;
+    }
+
+    public void setCreazione(LocalDateTime creazione) {
+        this.creazione = creazione;
     }
 }

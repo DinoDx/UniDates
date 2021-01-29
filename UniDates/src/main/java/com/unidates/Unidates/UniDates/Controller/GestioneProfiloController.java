@@ -14,7 +14,6 @@ import com.unidates.Unidates.UniDates.Model.Entity.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.Profilo;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.Service.ProfiloService;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -46,19 +45,29 @@ public class GestioneProfiloController {
     }
 
     @RequestMapping("/eliminaFoto")
-    public void eliminaFoto(@RequestBody FotoDTO f){
+    public void eliminaFotoLista(@RequestBody FotoDTO f, @RequestParam String email){
         if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.STUDENTE)){
             Studente studente = (Studente) SecurityUtils.getLoggedIn();
-            boolean founded = false;
-            for (Foto f1 : studente.getProfilo().getListaFoto()) {
-                if (f1.getId().equals(f.getId()))
-                    founded = true;
-            }
-            if (founded)
-                profiloService.eliminaFoto(f.getId());
+            Foto toDelete = new Foto();
+            toDelete.setId(f.getId());
+            if (studente.getProfilo().getListaFoto().contains(toDelete))
+                profiloService.eliminaFotoLista(email,f.getId());
             else throw new NotAuthorizedException();
         }else{
-            profiloService.eliminaFoto(f.getId());
+            profiloService.eliminaFotoLista(email,f.getId());
+        }
+    }
+
+    public void eliminaFotoProfilo(@RequestBody FotoDTO f, @RequestParam String email){
+        if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.STUDENTE)){
+            Studente studente = (Studente) SecurityUtils.getLoggedIn();
+            Foto toDelete = new Foto();
+            toDelete.setId(f.getId());
+            if(studente.getProfilo().getFotoProfilo().equals(toDelete))
+                profiloService.eliminaFotoProfilo(email);
+            else throw new NotAuthorizedException();
+        }else{
+            profiloService.eliminaFotoLista(email,f.getId());
         }
     }
 

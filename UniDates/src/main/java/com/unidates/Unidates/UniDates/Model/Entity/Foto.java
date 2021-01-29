@@ -1,6 +1,9 @@
 package com.unidates.Unidates.UniDates.Model.Entity;
 
+import org.apache.tomcat.jni.Local;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -21,13 +24,10 @@ public class Foto implements Cloneable {
     @OneToMany(mappedBy = "foto",orphanRemoval = true)
     private List<Notifica> notifiche;
 
-   @OneToOne
-   @JoinColumn(name = "fotoProfiloId")
-   private Profilo fotoProfilo;
-
-
     @Column(length = 10000000)
     private byte[] img;
+
+    private LocalDateTime creazione;
 
 
     private boolean isVisible;
@@ -35,12 +35,14 @@ public class Foto implements Cloneable {
     public Foto(){
         this.segnalazioneRicevute = new ArrayList<Segnalazione>();
         isVisible = true;
+        creazione = LocalDateTime.now();
     }
 
     public Foto(byte[] img){
         this.img = img;
         this.segnalazioneRicevute = new ArrayList<Segnalazione>();
         isVisible = true;
+        creazione = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -84,13 +86,6 @@ public class Foto implements Cloneable {
         this.segnalazioneRicevute = segnalazioneRicevute;
     }
 
-    public Profilo getFotoProfilo() {
-        return fotoProfilo;
-    }
-
-    public void setFotoProfilo(Profilo fotoProfilo) {
-        this.fotoProfilo = fotoProfilo;
-    }
 
     public boolean isVisible() {
         return isVisible;
@@ -98,6 +93,23 @@ public class Foto implements Cloneable {
 
     public void setVisible(boolean visible) {
         isVisible = visible;
+    }
+
+
+    public List<Notifica> getNotifiche() {
+        return notifiche;
+    }
+
+    public void setNotifiche(List<Notifica> notifiche) {
+        this.notifiche = notifiche;
+    }
+
+    public LocalDateTime getCreazione() {
+        return creazione;
+    }
+
+    public void setCreazione(LocalDateTime creazione) {
+        this.creazione = creazione;
     }
 
     @Override

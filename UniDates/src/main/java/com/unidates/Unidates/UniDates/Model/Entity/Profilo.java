@@ -20,11 +20,10 @@ public class Profilo implements Serializable {
     @OneToOne(mappedBy = "profilo", cascade = CascadeType.REMOVE)
     private Studente studente;
 
-    @OneToOne(mappedBy = "fotoProfilo", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     private Foto fotoProfilo;
 
-
-    @OneToMany(mappedBy = "profilo", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(cascade ={CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private List<Foto> listaFoto;
 
 
@@ -61,7 +60,7 @@ public class Profilo implements Serializable {
         this.hobbyList = hobbyList;
         this.fotoProfilo = fotoProfilo;
         this.listaFoto = new ArrayList<Foto>();
-        fotoProfilo.setFotoProfilo(this);
+        fotoProfilo.setProfilo(this);
     }
 
     public Long getId() { return id; }

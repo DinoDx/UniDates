@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProfiloService {
     @Autowired
@@ -41,20 +43,33 @@ public class ProfiloService {
     public void setFotoProfilo(String email, Foto foto){
         Studente studente = (Studente) utenteRepository.findByEmail(email);
         Profilo profilo = studente.getProfilo();
-        profilo.getFotoProfilo().setImg(foto.getImg()); //NON SI FA!!
-        profiloRepository.save(profilo);
 
+        profilo.addFoto(profilo.getFotoProfilo());
+
+        Foto toAdd = new Foto(foto.getImg());
+        toAdd.setProfilo(profilo);
+
+        profilo.setFotoProfilo(toAdd);
+        profiloRepository.save(profilo);
     }
 
     public void aggiungiFoto(String email, Foto foto){
         Studente studente = (Studente) utenteRepository.findByEmail(email);
-        foto.setProfilo(studente.getProfilo());
-        fotoRepository.save(foto);
+        Foto f = new Foto(foto.getImg());
+        studente.getProfilo().addFoto(f);
+        profiloRepository.save(studente.getProfilo());
     }
-    public void eliminaFoto(Long idFototoDelete){
-        fotoRepository.deleteById(idFototoDelete);
+    public void eliminaFotoLista(String email, Long idFototoDelete){
+        Studente studente = (Studente) utenteRepository.findByEmail(email);
+        Foto f = fotoRepository.getOne(idFototoDelete);
+        studente.getProfilo().getListaFoto().remove(f);
+        profiloRepository.save(studente.getProfilo());
     }
-
+    public void eliminaFotoProfilo(String email){
+        Studente studente = (Studente) utenteRepository.findByEmail(email);
+        studente.getProfilo().setFotoProfilo(studente.getProfilo().getListaFoto().remove(0));
+        profiloRepository.save(studente.getProfilo());
+    }
     public Foto findFotoById(Long fotoId) {
         return fotoRepository.findById(fotoId).get();
     }
