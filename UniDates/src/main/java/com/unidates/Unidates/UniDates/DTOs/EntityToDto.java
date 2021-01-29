@@ -160,6 +160,7 @@ public class EntityToDto {
         fotoDTO.setVisible(foto.isVisible());
         fotoDTO.setId(foto.getId());
         fotoDTO.setCreazione(foto.getCreazione());
+        fotoDTO.setFotoProfilo(foto.isFotoProfilo());
 
         ArrayList<SegnalazioneDTO> segnalazioneDTO = new ArrayList<SegnalazioneDTO>();
         foto.getSegnalazioneRicevute().forEach(segnalazione -> segnalazioneDTO.add(toDTO(segnalazione)));

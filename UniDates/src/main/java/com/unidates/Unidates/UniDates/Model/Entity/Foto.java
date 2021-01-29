@@ -24,6 +24,8 @@ public class Foto implements Cloneable {
     @OneToMany(mappedBy = "foto",orphanRemoval = true)
     private List<Notifica> notifiche;
 
+    private boolean isFotoProfilo;
+
     @Column(length = 10000000)
     private byte[] img;
 
@@ -36,6 +38,7 @@ public class Foto implements Cloneable {
         this.segnalazioneRicevute = new ArrayList<Segnalazione>();
         isVisible = true;
         creazione = LocalDateTime.now();
+        isFotoProfilo = false;
     }
 
     public Foto(byte[] img){
@@ -43,6 +46,7 @@ public class Foto implements Cloneable {
         this.segnalazioneRicevute = new ArrayList<Segnalazione>();
         isVisible = true;
         creazione = LocalDateTime.now();
+        isFotoProfilo = false;
     }
 
     public Long getId() {
@@ -110,6 +114,14 @@ public class Foto implements Cloneable {
 
     public void setCreazione(LocalDateTime creazione) {
         this.creazione = creazione;
+    }
+
+    public boolean isFotoProfilo() {
+        return isFotoProfilo;
+    }
+
+    public void setFotoProfilo(boolean fotoProfilo) {
+        isFotoProfilo = fotoProfilo;
     }
 
     @Override

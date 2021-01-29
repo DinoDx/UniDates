@@ -33,12 +33,12 @@ public class GestioneProfiloController {
 
 
     @RequestMapping("/aggiungiFoto")
-    public void aggiungiFoto(@RequestParam String emailFotoToAdd,@RequestBody FotoDTO fotoDTO){
+    public void aggiungiFotoLista(@RequestParam String emailFotoToAdd, @RequestBody FotoDTO fotoDTO){
         Studente s = (Studente) SecurityUtils.getLoggedIn();
         if(s.getEmail().equals(emailFotoToAdd)) {
             Foto f = new Foto(fotoDTO.getImg());
             if (checkFoto(f))
-                profiloService.aggiungiFoto(emailFotoToAdd, f);
+                profiloService.aggiungiFotoLista(emailFotoToAdd, f);
             else throw new InvalidPhotoException();
         }
         else throw new NotAuthorizedException();
@@ -58,38 +58,25 @@ public class GestioneProfiloController {
         }
     }
 
-    public void eliminaFotoProfilo(@RequestBody FotoDTO f, @RequestParam String email){
-        if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.STUDENTE)){
-            Studente studente = (Studente) SecurityUtils.getLoggedIn();
-            Foto toDelete = new Foto();
-            toDelete.setId(f.getId());
-            if(studente.getProfilo().getFotoProfilo().equals(toDelete))
-                profiloService.eliminaFotoProfilo(email);
-            else throw new NotAuthorizedException();
-        }else{
-            profiloService.eliminaFotoLista(email,f.getId());
-        }
-    }
-
     @RequestMapping("/aggiungifotoProfilo")
     public void aggiungiFotoProfilo(@RequestParam String emailFotoToAdd, @RequestBody FotoDTO fotoDTO){
         if(SecurityUtils.getLoggedIn().getEmail().equals(emailFotoToAdd)) {
             Foto f = new Foto(fotoDTO.getImg());
             if (checkFoto(f))
-                profiloService.setFotoProfilo(emailFotoToAdd, f);
+                profiloService.aggiungiFotoProfilo(emailFotoToAdd, f);
             else throw new InvalidPhotoException();
         }
         else throw new NotAuthorizedException();
     }
 
-   /* public void eliminaProfilo(ProfiloDTO p,String emailToDelete, String password){
-        Studente s = utenteService.trovaStudente(emailToDelete);
-        if (passwordEncoder.matches(password,s.getPassword()){
-            profiloService.eliminaProfilo(p);
+    @RequestMapping("/setFotoProfilo")
+    public void setFotoProfilo(@RequestParam String emailStudenteToModify, @RequestBody FotoDTO fotoDTO){
+        if(SecurityUtils.getLoggedIn().getEmail().equals(emailStudenteToModify)) {
+            profiloService.setFotoProfilo(emailStudenteToModify, fotoDTO.getId());
         }
-        else throw new PasswordMissmatchException();
+        else throw new NotAuthorizedException();
     }
-    */
+
 
     @RequestMapping("/modificaProfile")
     public void modificaProfilo(String emailStudenteToModify, ProfiloDTO profiloDTO){
@@ -109,6 +96,7 @@ public class GestioneProfiloController {
         }
         else throw new NotAuthorizedException();
     }
+
 
   /*  @RequestMapping("/visualizzaProfilo")
     public Profilo visualizzaProfilo(Studente s){

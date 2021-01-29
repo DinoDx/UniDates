@@ -61,20 +61,20 @@ public class Populator implements ApplicationRunner {
         Profilo p1 = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto(Utils.downloadUrl(LINK)) ,hobbyArrayList);
         p1.setNumeroTelefono("3333339900");
         p1.setNickInstagram("marco.prova1");
-        p1.addFoto(new Foto(Utils.downloadUrl(LINK)));
-        p1.addFoto(new Foto(Utils.downloadUrl(LINK)));
-        p1.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p1.addFoto(new Foto(Utils.downloadUrl(LINK)),false);
+        p1.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
+        p1.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
         Profilo p2 = new Profilo("Paolo", "Prova2", "Napoli", "Napoli", LocalDate.of(1995,7,15), 185, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.ROSSI, Colore_Occhi.VERDI,new Foto(Utils.downloadUrl(LINK)), hobbyArrayList);
         p2.setNumeroTelefono("3335559900");
         p2.setNickInstagram("PaoloSonoBello.prova2");
-        p2.addFoto(new Foto(Utils.downloadUrl(LINK)));
-        p2.addFoto(new Foto(Utils.downloadUrl(LINK)));
-        p2.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p2.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
+        p2.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
+        p2.addFoto(new Foto(Utils.downloadUrl(LINK)),false);
         Profilo p3 = new Profilo("Lucia", "Prova3", "Napoli", "Napoli", LocalDate.of(1991,1,25), 164, Sesso.DONNA, Interessi.ENTRAMBI, Colori_Capelli.CASTANI, Colore_Occhi.CASTANI,new Foto(Utils.downloadUrl(LINK)), hobbyArrayList);
         p3.setNickInstagram("SimpyLucia");
-        p3.addFoto(new Foto(Utils.downloadUrl(LINK)));
-        p3.addFoto(new Foto(Utils.downloadUrl(LINK)));
-        p3.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p3.addFoto(new Foto(Utils.downloadUrl(LINK)),false);
+        p3.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
+        p3.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
 
         utenteService.registrazioneStudente(s1, p1);
         utenteService.registrazioneStudente(s2, p2);
@@ -88,9 +88,9 @@ public class Populator implements ApplicationRunner {
         //Aggiungo un moderatore
         Moderatore m1 = new Moderatore("moderatore@gmail.com", "moderatore");
         Profilo p4 = new Profilo("Marcello", "Moderatore", "Napoli", "Napoli", LocalDate.of(1999,6,12), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.GRIGI, Colore_Occhi.AZZURRI,new Foto(Utils.downloadUrl(LINK)),hobbyArrayList );
-        p4.addFoto(new Foto(Utils.downloadUrl(LINK)));
-        p4.addFoto(new Foto(Utils.downloadUrl(LINK)));
-        p4.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p4.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
+        p4.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
+        p4.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
 
         utenteService.registrazioneModeratore(m1, p4);
 
@@ -98,9 +98,9 @@ public class Populator implements ApplicationRunner {
 
         CommunityManager cm1 = new CommunityManager("communitymanager@gmail.com","communitymanager");
         Profilo p5 = new Profilo("Francesca", "CM", "Napoli", "Napoli", LocalDate.of(1980,7,12), 170, Sesso.DONNA, Interessi.UOMINI, Colori_Capelli.CASTANI, Colore_Occhi.AZZURRI, new Foto(Utils.downloadUrl(LINK)),hobbyArrayList);
-        p5.addFoto(new Foto(Utils.downloadUrl(LINK)));
-        p5.addFoto(new Foto(Utils.downloadUrl(LINK)));
-        p5.addFoto(new Foto(Utils.downloadUrl(LINK)));
+        p5.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
+        p5.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
+        p5.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
 
         utenteService.registrazioneCommunityManager(cm1, p5);
 

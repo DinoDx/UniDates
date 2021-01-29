@@ -17,8 +17,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -32,12 +30,9 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.GridLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.vaadin.gatanaso.MultiselectComboBox;
@@ -203,21 +198,32 @@ public class ProfiloPersonale extends VerticalLayout {
         HorizontalLayout listaFoto = new HorizontalLayout();
 
         for(FotoDTO f : studente.getProfilo().getListaFoto()) {
-            StreamResource resource = new StreamResource("fotoprofilo", () -> new ByteArrayInputStream(f.getImg()));
-            Image img = new Image(resource, "");
-            img.getStyle().set("width", "200px");
-            img.getStyle().set("height", "200px");
+            if(!f.isFotoProfilo()) {
+                StreamResource resource = new StreamResource("fotoprofilo", () -> new ByteArrayInputStream(f.getImg()));
+                Image img = new Image(resource, "");
+                img.getStyle().set("width", "200px");
+                img.getStyle().set("height", "200px");
 
-            VerticalLayout singolaFoto = new VerticalLayout();
-            Button deleteFoto = new Button(new Icon(VaadinIcon.CLOSE));
-            deleteFoto.addClickListener(buttonClickEvent -> {
-                gestioneProfiloController.eliminaFoto(f, studente.getEmail());
-                UI.getCurrent().getPage().reload();
-            });
-            singolaFoto.setAlignItems(Alignment.CENTER);
-            singolaFoto.add(img,deleteFoto);
+                VerticalLayout singolaFoto = new VerticalLayout();
+                Button deleteFoto = new Button(new Icon(VaadinIcon.CLOSE));
+                deleteFoto.addClickListener(buttonClickEvent -> {
+                    gestioneProfiloController.eliminaFotoLista(f, studente.getEmail());
+                    UI.getCurrent().getPage().reload();
+                });
 
-            listaFoto.add(singolaFoto);
+                Button setFotoProfilo = new Button(new Icon(VaadinIcon.FIRE));
+                setFotoProfilo.addClickListener(event -> {
+                    gestioneProfiloController.setFotoProfilo( studente.getEmail(), f);
+                    UI.getCurrent().getPage().reload();
+                });
+
+                singolaFoto.setAlignItems(Alignment.CENTER);
+                HorizontalLayout pulsanti = new HorizontalLayout();
+                pulsanti.add(deleteFoto, setFotoProfilo);
+                singolaFoto.add(img,pulsanti );
+
+                listaFoto.add(singolaFoto);
+            }
         }
 
         MemoryBuffer image = new MemoryBuffer();
@@ -239,7 +245,7 @@ public class ProfiloPersonale extends VerticalLayout {
         insertFoto.addClickListener(buttonClickEvent -> {
             if (toadd.getImg() != null) {
                 try {
-                    gestioneProfiloController.aggiungiFoto(studente.getEmail(), toadd);
+                    gestioneProfiloController.aggiungiFotoLista(studente.getEmail(), toadd);
                     UI.getCurrent().getPage().reload();
                 }
                 catch(InvalidPhotoException e){

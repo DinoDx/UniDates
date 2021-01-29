@@ -34,29 +34,29 @@ public class ProfiloService {
     public void modificaProfilo(String email ,Profilo profilo){ // Con modifica profilo modifichi solo le info e non le foto
         Studente studente = (Studente) utenteRepository.findByEmail(email);
         profilo.setId(studente.getProfilo().getId());
-        profilo.setFotoProfilo(studente.getProfilo().getFotoProfilo());
         profilo.setListaFoto(studente.getProfilo().getListaFoto());
         profilo.setStudente(studente);
         profiloRepository.save(profilo);
     }
 
-    public void setFotoProfilo(String email, Foto foto){
-        Studente studente = (Studente) utenteRepository.findByEmail(email);
-        Profilo profilo = studente.getProfilo();
-
-        profilo.addFoto(profilo.getFotoProfilo());
-
-        Foto toAdd = new Foto(foto.getImg());
-        toAdd.setProfilo(profilo);
-
-        profilo.setFotoProfilo(toAdd);
-        profiloRepository.save(profilo);
+    public void setFotoProfilo(String email, Long idNuovaFoto){
+        eliminaFotoProfilo(email);
+        Foto f = fotoRepository.getOne(idNuovaFoto);
+        f.setFotoProfilo(true);
+        fotoRepository.save(f);
     }
 
-    public void aggiungiFoto(String email, Foto foto){
+    public void aggiungiFotoLista(String email, Foto foto){
         Studente studente = (Studente) utenteRepository.findByEmail(email);
         Foto f = new Foto(foto.getImg());
-        studente.getProfilo().addFoto(f);
+        studente.getProfilo().addFoto(f, false);
+        profiloRepository.save(studente.getProfilo());
+    }
+    public void aggiungiFotoProfilo(String email, Foto foto){
+        eliminaFotoProfilo(email);
+        Studente studente = (Studente) utenteRepository.findByEmail(email);
+        Foto f = new Foto(foto.getImg());
+        studente.getProfilo().addFoto(f, true);
         profiloRepository.save(studente.getProfilo());
     }
     public void eliminaFotoLista(String email, Long idFototoDelete){
@@ -65,11 +65,14 @@ public class ProfiloService {
         studente.getProfilo().getListaFoto().remove(f);
         profiloRepository.save(studente.getProfilo());
     }
-    public void eliminaFotoProfilo(String email){
+
+    private void eliminaFotoProfilo(String email){
         Studente studente = (Studente) utenteRepository.findByEmail(email);
-        studente.getProfilo().setFotoProfilo(studente.getProfilo().getListaFoto().remove(0));
-        profiloRepository.save(studente.getProfilo());
+        Foto foto = studente.getProfilo().getFotoProfilo();
+        foto.setFotoProfilo(false);
+        fotoRepository.save(foto);
     }
+
     public Foto findFotoById(Long fotoId) {
         return fotoRepository.findById(fotoId).get();
     }

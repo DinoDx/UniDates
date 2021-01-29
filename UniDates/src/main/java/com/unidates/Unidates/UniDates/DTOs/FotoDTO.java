@@ -10,16 +10,19 @@ public class FotoDTO {
     private List<SegnalazioneDTO> segnalazioneRicevute;
     private byte[] img;
     private boolean isVisible;
+    private boolean isFotoProfilo;
     private LocalDateTime creazione;
 
     public FotoDTO(){
         this.segnalazioneRicevute = new ArrayList<SegnalazioneDTO>();
         this.isVisible = true;
+        isFotoProfilo = false;
     }
     public FotoDTO(byte[] img) {
         this.segnalazioneRicevute = new ArrayList<SegnalazioneDTO>();
         this.img = img;
         this.isVisible = true;
+        isFotoProfilo = false;
     }
 
 
@@ -65,6 +68,14 @@ public class FotoDTO {
 
     public LocalDateTime getCreazione() {
         return creazione;
+    }
+
+    public boolean isFotoProfilo() {
+        return isFotoProfilo;
+    }
+
+    public void setFotoProfilo(boolean fotoProfilo) {
+        isFotoProfilo = fotoProfilo;
     }
 
     public void setCreazione(LocalDateTime creazione) {

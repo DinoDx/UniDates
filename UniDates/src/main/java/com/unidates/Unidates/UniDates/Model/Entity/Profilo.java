@@ -20,10 +20,7 @@ public class Profilo implements Serializable {
     @OneToOne(mappedBy = "profilo", cascade = CascadeType.REMOVE)
     private Studente studente;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
-    private Foto fotoProfilo;
-
-    @OneToMany(cascade ={CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "profilo", cascade ={CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private List<Foto> listaFoto;
 
 
@@ -58,9 +55,8 @@ public class Profilo implements Serializable {
         this.colori_capelli = colori_capelli;
         this.colore_occhi = colore_occhi;
         this.hobbyList = hobbyList;
-        this.fotoProfilo = fotoProfilo;
         this.listaFoto = new ArrayList<Foto>();
-        fotoProfilo.setProfilo(this);
+        addFoto(fotoProfilo, true);
     }
 
     public Long getId() { return id; }
@@ -153,12 +149,10 @@ public class Profilo implements Serializable {
     public void setStudente(Studente studente) { this.studente = studente; }
 
 
-    public void setFotoProfilo(Foto fotoProfilo) {
-        this.fotoProfilo = fotoProfilo;
-    }
-
     public Foto getFotoProfilo() {
-        return fotoProfilo;
+        for(Foto f : listaFoto)
+            if(f.isFotoProfilo()) return f;
+            return null;
     }
 
     public List<Foto> getListaFoto() {
@@ -193,11 +187,11 @@ public class Profilo implements Serializable {
         this.nickInstagram = nickInstagram;
     }
 
-    public void addFoto(Foto foto) {
+    public void addFoto(Foto foto, boolean isProfile) {
+        foto.setFotoProfilo(isProfile);
         foto.setProfilo(this);
         listaFoto.add(foto);
     }
-
 
 
 }
