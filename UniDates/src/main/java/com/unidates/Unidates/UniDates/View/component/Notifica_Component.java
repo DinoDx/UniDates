@@ -66,6 +66,8 @@ public class Notifica_Component extends Div {
         add(internal_card);
     }
 
+    Notification notification = new Notification();
+
     public void createNotificaAmmonimento(){
         HorizontalLayout internal_layout = new HorizontalLayout();
         internal_layout.setAlignItems(FlexComponent.Alignment.CENTER);
@@ -83,21 +85,23 @@ public class Notifica_Component extends Div {
 
         Button mostraAmmonimento = new Button("Apri");
         mostraAmmonimento.addClickListener(buttonClickEvent -> {
-            Notification notification = new Notification();
-            VerticalLayout verticalLayout = new VerticalLayout();
-            Span motivazione = new Span("Motivo ammonimento : " + notifica.getAmmonimento().getMotivazione());
-            Span dettagli = new Span("Dettagli : " + notifica.getAmmonimento().getDettagli());
-            Button annulla = new Button("Chiudi");
-            annulla.addClickListener(buttonClickEvent1 -> {
-                notification.close();
-            });
-            verticalLayout.setWidth("400px");
-            verticalLayout.setHeight("400px");
-            verticalLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-            verticalLayout.add(image,motivazione,dettagli,annulla);
-            notification.add(verticalLayout);
-            notification.setPosition(Notification.Position.MIDDLE);
-            notification.open();
+            if(!notification.isOpened()) {
+                notification = new Notification();
+                VerticalLayout verticalLayout = new VerticalLayout();
+                Span motivazione = new Span("Motivo ammonimento : " + notifica.getAmmonimento().getMotivazione());
+                Span dettagli = new Span("Dettagli : " + notifica.getAmmonimento().getDettagli());
+                Button annulla = new Button("Chiudi");
+                annulla.addClickListener(buttonClickEvent1 -> {
+                    notification.close();
+                });
+                verticalLayout.setWidth("400px");
+                verticalLayout.setHeight("400px");
+                verticalLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+                verticalLayout.add(image, motivazione, dettagli, annulla);
+                notification.add(verticalLayout);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            }
         });
         internal_layout.add(didascalie,mostraAmmonimento);
         add(internal_layout);
