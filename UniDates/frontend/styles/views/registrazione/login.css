@@ -1,26 +1,13 @@
-login-view,
-.layout-esterno{
-    background-size: cover;
-    background: url("./images/backgroundLogin.jpg") center;
-
-}
-#info-boxing{
-    background-color: rgba(0,0,0, 0.6);
-    color: white;
-    border-radius: 40px;
-}
-#info-boxing  h1{
-    color: white;
-}
 
 @media only screen and (max-width: 980px) {
-   .layout-esterno{
-       flex-direction: column;
-       height: auto;
-       align-items: center;
+    .layout-esterno {
+        flex-direction: column;
+        height: auto;
+        align-items: center;
 
-   }
-    #info-boxing{
+    }
+
+    #info-boxing {
         align-items: center;
         justify-content: center;
         margin-left: 10rem;
@@ -28,12 +15,3 @@ login-view,
     }
 }
 
-#link{
-    color: white;
-}
-
-
-#pulsante-registrati{
-    color: black;
-    background: white;
-}

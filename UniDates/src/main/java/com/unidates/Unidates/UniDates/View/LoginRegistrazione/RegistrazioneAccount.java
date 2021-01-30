@@ -7,25 +7,32 @@ import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Route(value = "registrazione", layout = MainViewLogin.class)
+@Route(value = "registrazione")
 @PageTitle("Registrazione")
-@CssImport("./styles/views/registrazione/registrazione.css")
-public class RegistrazioneAccount extends VerticalLayout {
+@Theme(value = Lumo.class, variant = Lumo.DARK)
+@CssImport("./styles/views/registrazione/login.css")
+public class RegistrazioneAccount extends FlexLayout {
 
     private EmailField email;
     private PasswordField password;
     private PasswordField conferma_password;
+
+    public static final String TEXT  = "Iniziamo con alcune informazioni per creare il tuo account personale";
+
 
     @Autowired
     GestioneUtentiController gestioneUtentiController;
@@ -36,29 +43,67 @@ public class RegistrazioneAccount extends VerticalLayout {
 
     public void create(){
         setSizeFull();
-        setId("Layout-registazione");
-        Div formRegistraizioneAccount = createFormRegistrazioneAccount();
-        formRegistraizioneAccount.setId("Div-principale");
+        setClassName("layout-esterno");
+        VerticalLayout layoutDestro = createLayoutDestro();
+        VerticalLayout layoutSinistro = createLayoutSinistro();
+        setJustifyContentMode(JustifyContentMode.CENTER);
         setAlignItems(Alignment.CENTER);
-        add(formRegistraizioneAccount);
+        add(layoutSinistro, layoutDestro);
     }
 
-    public Div createFormRegistrazioneAccount(){
-        Div formRegistrazione = new Div();
+    private VerticalLayout createLayoutSinistro() {
+        VerticalLayout layoutSinistro = new VerticalLayout();
 
-        VerticalLayout formFields = createFormFields();
-        HorizontalLayout buttons = createFormButtons();
-        formFields.add(buttons);
-        buttons.setAlignItems(Alignment.CENTER);
-        formFields.setAlignItems(Alignment.CENTER);
-        H2 titolo = new H2("Inserisci i dati del tuo account!");
-        titolo.setId("titolo-registrazione");
-        formRegistrazione.add(titolo,formFields);
+        VerticalLayout infoInterna = new VerticalLayout();
+        infoInterna.add(new H1("Iniziamo!"));
+        infoInterna.add(new Span(TEXT));
+        infoInterna.setAlignItems(Alignment.CENTER);
+        infoInterna.setJustifyContentMode(JustifyContentMode.CENTER);
+        infoInterna.setId("info-boxing");
+
+        Image image = new Image();
+        image.setId("logo");
+        image.setHeight("250px");
+        image.setWidth("300px");
+        image.setSrc("./images/logos/logo.png");
+        layoutSinistro.add(image,infoInterna);
+        layoutSinistro.setAlignItems(Alignment.CENTER);
+        layoutSinistro.setJustifyContentMode(JustifyContentMode.CENTER);
+        return layoutSinistro;
+    }
+
+    public VerticalLayout createLayoutDestro(){
+        VerticalLayout formRegistrazione = new VerticalLayout();
+
+        FormLayout formFields = createFormFields();
+
+        formRegistrazione.setAlignItems(Alignment.CENTER);
+        formRegistrazione.setJustifyContentMode(JustifyContentMode.CENTER);
+
+        formRegistrazione.add(formFields);
         return formRegistrazione;
     }
 
-    private HorizontalLayout createFormButtons() {
-        HorizontalLayout buttons = new HorizontalLayout();
+    private FormLayout createFormFields() {
+
+        FormLayout formFields = new FormLayout();
+
+        email = new EmailField();
+        email.setPlaceholder("Inserisci email universitaria");
+        email.setLabel("E-mail Universitaria");
+
+        password = new PasswordField();
+        password.setLabel("Password(*):");
+        password.addFocusListener(event -> {
+            new Notification("Inserire una password con un minimo di 8 caratteri, una lettera e un numero.",5000, Notification.Position.MIDDLE).open();
+            event.unregisterListener();
+        });
+        password.setPlaceholder("Inserisci una password");
+
+        conferma_password = new PasswordField();
+        conferma_password.setLabel("Conferma Password:");
+        conferma_password.setPlaceholder("Conferma password inserita");
+
         Button reset = new Button("Reset",buttonClickEvent -> {
             email.setValue("");
             password.setValue("");
@@ -92,30 +137,11 @@ public class RegistrazioneAccount extends VerticalLayout {
                 UI.getCurrent().navigate("registrazione_due");
             }
         });
+        HorizontalLayout buttons = new HorizontalLayout();
+        buttons.add(prosegui, reset);
 
-        buttons.add(prosegui,reset);
-        return buttons;
-    }
 
-    private VerticalLayout createFormFields() {
-        VerticalLayout formFields = new VerticalLayout();
-        email = new EmailField();
-        email.setPlaceholder("Inserisci email universitaria");
-        email.setLabel("E-mail Universitaria");
-
-        password = new PasswordField();
-        password.setLabel("Password(*):");
-        password.addFocusListener(event -> {
-            new Notification("Inserire una password con un minimo di 8 caratteri, una lettera e un numero.",5000, Notification.Position.MIDDLE).open();
-            event.unregisterListener();
-        });
-        password.setPlaceholder("Inserisci una password");
-
-        conferma_password = new PasswordField();
-        conferma_password.setLabel("Conferma Password:");
-        conferma_password.setPlaceholder("Conferma password inserita");
-
-        formFields.add(email,password,conferma_password);
+        formFields.add(email,password,conferma_password,buttons);
         return formFields;
     }
 }

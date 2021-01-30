@@ -6,6 +6,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
@@ -14,15 +15,20 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinServletRequest;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.security.web.WebAttributes;
 
 
-@Route(value = "login", layout = MainViewLogin.class)
+@Route(value = "login")
 @PageTitle("Login")
-@RouteAlias(value = "login", layout = MainViewLogin.class)
+@Theme(value = Lumo.class, variant = Lumo.DARK)
 @CssImport("./styles/views/registrazione/login.css")
-public class Login extends VerticalLayout {
+public class Login extends FlexLayout{
 
+    public static final String TEXT  = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pharetra magna erat, vel finibus ipsum finibus vel. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. " +
+            "Aenean molestie mauris felis, ut convallis mauris bibendum vitae. Etiam mollis sem quis pharetra ullamcorper. Suspendisse faucibus nisi eu libero dapibus tristique." +
+            " Praesent elit neque, mollis eu erat sed, imperdiet aliquam justo. Ut efficitur et mi ut pretium. Quisque fringilla,";
 
     public static final CharSequence ROUTE = "login" ;
     private LoginForm loginForm = new LoginForm();
@@ -30,18 +36,15 @@ public class Login extends VerticalLayout {
     String erroreLogin;
 
     public Login() {
-            addAttachListener(event -> create());
+        setId("layout-principale");
+        addAttachListener(event -> create());
     }
     public void create(){
-        FlexLayout layoutEsterno = new FlexLayout();
-
-        layoutEsterno.addClassName("layout-esterno");
-        layoutEsterno.setSizeFull();
-        layoutEsterno.setAlignItems(Alignment.CENTER);
-        layoutEsterno.setJustifyContentMode(JustifyContentMode.CENTER);
-        layoutEsterno.add(createLayoutSinistro(), createLeyoutDestro());
-
-        add(layoutEsterno);
+        addClassName("layout-esterno");
+        setSizeFull();
+        setAlignItems(Alignment.CENTER);
+        setJustifyContentMode(JustifyContentMode.CENTER);
+        add(createLayoutSinistro(), createLeyoutDestro());
     }
 
     private VerticalLayout createLayoutSinistro(){
@@ -49,12 +52,17 @@ public class Login extends VerticalLayout {
 
         VerticalLayout infoInterna = new VerticalLayout();
         infoInterna.add(new H1("Benvenuto su UniDates!"));
-        infoInterna.add(new Span("L'unica Dating App dedicata completamente agli studenti Universitari! Accedi con la tua mail istituzionale e sei non sei ancora registrato, registrati!"));
+        infoInterna.add(new Span(TEXT));
         infoInterna.setAlignItems(Alignment.CENTER);
         infoInterna.setJustifyContentMode(JustifyContentMode.CENTER);
-
         infoInterna.setId("info-boxing");
-        layoutSinistro.add(infoInterna);
+
+        Image image = new Image();
+        image.setId("logo");
+        image.setHeight("250px");
+        image.setWidth("300px");
+        image.setSrc("./images/logos/logo.png");
+        layoutSinistro.add(image,infoInterna);
         layoutSinistro.setAlignItems(Alignment.CENTER);
         layoutSinistro.setJustifyContentMode(JustifyContentMode.CENTER);
         return layoutSinistro;

@@ -34,6 +34,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinServletRequest;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.gatanaso.MultiselectComboBox;
@@ -50,8 +52,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@Route(value = "registrazione_due", layout = MainViewLogin.class)
+@Route(value = "registrazione_due")
 @PageTitle("Registrazione_2")
+@Theme(value = Lumo.class, variant = Lumo.DARK)
 @CssImport("./styles/views/registrazione/registrazione_due.css")
 public class RegistrazioneProfilo extends VerticalLayout {
 
