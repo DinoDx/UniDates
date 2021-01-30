@@ -212,13 +212,6 @@ public class GestioneUtentiController {
         return "Utente confermato";
     }
 
-    @RequestMapping("/trovaTutti")
-    public List<UtenteDTO> trovaTutti(){
-        List<UtenteDTO> lista = new ArrayList<UtenteDTO>();
-        utenteService.findAll().forEach(utente -> lista.add(EntityToDto.toDTO(utente)));
-        return lista;
-    }
-
     @RequestMapping("/trovaTuttuStudenti")
     public List<StudenteDTO> trovaTuttiStudenti(){
         List<StudenteDTO> lista = new ArrayList<StudenteDTO>();

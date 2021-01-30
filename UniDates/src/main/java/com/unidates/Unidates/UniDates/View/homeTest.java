@@ -9,6 +9,7 @@ import com.unidates.Unidates.UniDates.Service.UtenteService;
 import com.unidates.Unidates.UniDates.Service.Publisher;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
@@ -16,33 +17,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 
 
-@Route("/homeTest")
+@Route("homeTest")
 public class homeTest extends VerticalLayout {
-
-    @Autowired
-    Publisher publisher;
 
     @Autowired
     UtenteService utenteService;
 
-    @Autowired
-    GestioneUtentiController gestioneUtentiController;
-
-    @Autowired
-    GestioneProfiloController gestioneProfiloController;
-
-    @Autowired
-    GestioneInterazioniController gestioneInterazioniController;
-
-    @Autowired
-    GestioneModerazioneController gestioneModerazioneController;
-
-    @Autowired
-    SessionRegistry sessionRegistry;
     public homeTest() {
-        Utente utente = SecurityUtils.getLoggedIn();  // Come prendere l'utente attualmente loggato
-
-
+        Button button = new Button("Ciao", event -> {
+            utenteService.testPython();
+        });
+            add(button);
     }
 
 

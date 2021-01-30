@@ -1,6 +1,6 @@
 #header {
   height: var(--lumo-size-xl);
-  background: #99007c;
+  background: var(--lumo-primary-color-10pct);
 }
 
 #aereo{

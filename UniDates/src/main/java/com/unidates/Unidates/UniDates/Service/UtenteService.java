@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,9 @@ public class UtenteService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UtenteRepository utenteRepository;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Autowired
     private SessionRegistry sessionRegistry;
@@ -119,10 +124,6 @@ public class UtenteService {
         utenteRepository.save(utente);
     }
 
-    public List<Utente> findAll() {
-        return utenteRepository.findAll();
-    }
-
     public List<Studente> findAllStudenti() {
         List<Studente>  listaStudenti = new ArrayList<Studente>();
         utenteRepository.findAll().forEach(s -> listaStudenti.add((Studente) s));
@@ -132,6 +133,13 @@ public class UtenteService {
         Utente toChange = utenteRepository.findByEmail(emailUtente);
         toChange.setPassword(passwordEncoder.encode(nuovaPassword));
         utenteRepository.save(toChange);
+    }
+
+
+    public void testPython(){
+        String result = restTemplate.getForObject("http://localhost:5000/", String.class);
+
+        System.out.println(result);
     }
 
 }
