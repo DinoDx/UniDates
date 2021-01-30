@@ -94,6 +94,7 @@ public class Card_Utente_Home_Component extends Div {
     private Button reportButton(StudenteDTO studente){
         //Notifica Segnalazione
         Notification notifica = new Notification();
+        notifica.setPosition(Notification.Position.MIDDLE);
         VerticalLayout layout_report = new VerticalLayout();
         TextField reporting = new TextField();
         reporting.setPlaceholder("Inserisci moticazione segnalazione");
