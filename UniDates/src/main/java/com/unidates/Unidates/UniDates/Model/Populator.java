@@ -106,16 +106,16 @@ public class Populator implements ApplicationRunner {
 
 
 
-        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione1", "dettagli1"),utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
-        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione2", "dettagli2"),utenteService.trovaStudente(s2.getEmail()).getProfilo().getFotoProfilo().getId());
-        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione3", "dettagli3"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
-        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione4", "dettagli4"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(0).getId());
-        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione5", "dettagli5"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
-        moderazioneService.inviaSegnalazione(new Segnalazione("motivazione6", "dettagli6"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(2).getId());
+        moderazioneService.inviaSegnalazione(new Segnalazione(Motivazione.CONETNUTO_NON_PERTINENTE,  "dettagli1"),utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
+        moderazioneService.inviaSegnalazione(new Segnalazione(Motivazione.NUDITA,  "dettagli2"),utenteService.trovaStudente(s2.getEmail()).getProfilo().getFotoProfilo().getId());
+        moderazioneService.inviaSegnalazione(new Segnalazione(Motivazione.SPAM, "dettagli3"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
+        moderazioneService.inviaSegnalazione(new Segnalazione(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli4"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(0).getId());
+        moderazioneService.inviaSegnalazione(new Segnalazione(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli5"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
+        moderazioneService.inviaSegnalazione(new Segnalazione(Motivazione.VIOLENZA, "dettagli6"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(2).getId());
 
-        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione1", "dettagli1"), m1.getEmail(), s1.getEmail(),utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
-        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
-        moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(0).getId());
+        moderazioneService.inviaAmmonimento(new Ammonimento(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli1"), m1.getEmail(), s1.getEmail(),utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
+        moderazioneService.inviaAmmonimento(new Ammonimento(Motivazione.SPAM, "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
+        moderazioneService.inviaAmmonimento(new Ammonimento(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(0).getId());
        // moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
 
 

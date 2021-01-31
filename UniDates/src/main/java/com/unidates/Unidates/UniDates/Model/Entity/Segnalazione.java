@@ -1,5 +1,7 @@
 package com.unidates.Unidates.UniDates.Model.Entity;
 
+import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
+
 import javax.persistence.*;
 
 @Entity
@@ -17,14 +19,14 @@ public class Segnalazione {
     @JoinColumn(name = "moderatore_id")
     private Moderatore moderatore;
 
-    private String motivazione;
+    private Motivazione motivazione;
 
     private String dettagli;
 
     public Segnalazione(){
     }
 
-    public Segnalazione(String motivazione, String dettagli){
+    public Segnalazione(Motivazione motivazione, String dettagli){
         this.motivazione = motivazione;
         this.dettagli = dettagli;
     }
@@ -53,11 +55,11 @@ public class Segnalazione {
         this.foto = foto;
     }
 
-    public String getMotivazione() {
+    public Motivazione getMotivazione() {
         return motivazione;
     }
 
-    public void setMotivazione(String motivazione) {
+    public void setMotivazione(Motivazione motivazione) {
         this.motivazione = motivazione;
     }
 

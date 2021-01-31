@@ -6,6 +6,7 @@ import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.InvalidReportFormatException;
+import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
@@ -18,6 +19,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.dom.Style;
@@ -96,12 +98,14 @@ public class Card_Utente_Home_Component extends Div {
         Notification notifica = new Notification();
         notifica.setPosition(Notification.Position.MIDDLE);
         VerticalLayout layout_report = new VerticalLayout();
-        TextField reporting = new TextField();
-        reporting.setPlaceholder("Inserisci moticazione segnalazione");
+        Select<String> reporting = new Select<>();
+        Motivazione[] motivaziones =  Motivazione.values();
+        reporting.setItems(motivaziones[0].toString(), motivaziones[1].toString(), motivaziones[2].toString(), motivaziones[3].toString(), motivaziones[4].toString());
+
         TextArea dettagli = new TextArea();
         dettagli.setPlaceholder("Dettagli segnalazione");
         Button invio = new Button("Invia report",buttonClickEvent -> {
-            SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(reporting.getValue(), dettagli.getValue());
+            SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(Motivazione.valueOf(reporting.getValue()), dettagli.getValue());
             try {
                 gestioneModerazioneController.inviaSegnalazione(segnalazioneDTO,studente.getProfilo().getFotoProfilo());
             }catch (InvalidReportFormatException c){

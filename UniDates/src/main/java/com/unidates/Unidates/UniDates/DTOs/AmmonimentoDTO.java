@@ -1,14 +1,16 @@
 package com.unidates.Unidates.UniDates.DTOs;
 
+import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
+
 public class AmmonimentoDTO {
     private Long id;
     private String emailStudente;
     private String emailModeratore;
     private FotoDTO foto;
-    private String motivazione;
+    private Motivazione motivazione;
     private String dettagli;
 
-    public AmmonimentoDTO(String motivazione, String dettagli) {
+    public AmmonimentoDTO(Motivazione motivazione, String dettagli) {
         this.motivazione = motivazione;
         this.dettagli = dettagli;
     }
@@ -49,11 +51,11 @@ public class AmmonimentoDTO {
         this.foto = foto;
     }
 
-    public String getMotivazione() {
+    public Motivazione getMotivazione() {
         return motivazione;
     }
 
-    public void setMotivazione(String motivazione) {
+    public void setMotivazione(Motivazione motivazione) {
         this.motivazione = motivazione;
     }
 

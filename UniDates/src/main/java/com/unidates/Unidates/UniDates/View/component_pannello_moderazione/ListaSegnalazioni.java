@@ -13,6 +13,7 @@ import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.InvalidBanFormatException;
 import com.unidates.Unidates.UniDates.Exception.InvalidReportFormatException;
 import com.unidates.Unidates.UniDates.Exception.InvalidWarningFormatException;
+import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -22,6 +23,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.StreamResource;
@@ -144,8 +146,9 @@ public class ListaSegnalazioni extends VerticalLayout{
         VerticalLayout layoutDettagliSegnalazione = new VerticalLayout();
         layoutDettagliSegnalazione.setAlignItems(Alignment.CENTER);
 
-        TextField motivazione = new TextField();
-        motivazione.setValue(segnalazione.getMotivazione());
+        Select<String> motivazione = new Select<>();
+        Motivazione[] motivaziones =  Motivazione.values();
+        motivazione.setItems(motivaziones[0].toString(), motivaziones[1].toString(), motivaziones[2].toString(), motivaziones[3].toString(), motivaziones[4].toString());
         motivazione.setEnabled(false);
 
         TextField dettagli = new TextField();
@@ -167,8 +170,11 @@ public class ListaSegnalazioni extends VerticalLayout{
 
     private Notification createNotificaInviaACM(FotoDTO fotoSegnalata) {
         Notification inviaCM = new Notification();
-        TextField reporting = new TextField();
-        reporting.setPlaceholder("Inserisci moticazione segnalazione");
+
+        Select<String> reporting = new Select<>();
+        Motivazione[] motivaziones =  Motivazione.values();
+        reporting.setItems(motivaziones[0].toString(), motivaziones[1].toString(), motivaziones[2].toString(), motivaziones[3].toString(), motivaziones[4].toString());
+
         TextArea dettagli = new TextArea();
         dettagli.setPlaceholder("Dettagli segnalazione");
         Button annulla = new Button("Chiudi");
@@ -178,7 +184,7 @@ public class ListaSegnalazioni extends VerticalLayout{
 
         Button invia = new Button("Invia");
         invia.addClickListener(buttonClickEvent1 -> {
-            SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(reporting.getValue(), dettagli.getValue());
+            SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(Motivazione.valueOf(reporting.getValue()), dettagli.getValue());
             try {
                 gestioneModerazioneController.inviaSegnalazioneCommunityManager(segnalazioneDTO, fotoSegnalata);
             } catch (InvalidReportFormatException c) {
@@ -294,8 +300,9 @@ public class ListaSegnalazioni extends VerticalLayout{
         VerticalLayout layoutSinistraInfo = new VerticalLayout();
         layoutSinistraInfo.setAlignItems(FlexComponent.Alignment.CENTER);
 
-        TextField motivazione = new TextField();
-        motivazione.setPlaceholder("Motivazione");
+        Select<String> motivazione = new Select<>();
+        Motivazione[] motivaziones =  Motivazione.values();
+        motivazione.setItems(motivaziones[0].toString(), motivaziones[1].toString(), motivaziones[2].toString(), motivaziones[3].toString(), motivaziones[4].toString());
 
         TextField dettagli = new TextField();
         dettagli.setPlaceholder("Dettagli");
@@ -310,7 +317,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         Button inviaAmmonimento = new Button("Invia Ammonimento");
         inviaAmmonimento.addClickListener(e -> {
             try {
-                AmmonimentoDTO ammonimentoDTO = new AmmonimentoDTO(dettagli.getValue(), motivazione.getValue());
+                AmmonimentoDTO ammonimentoDTO = new AmmonimentoDTO(Motivazione.valueOf(motivazione.getValue()), motivazione.getValue());
                 gestioneModerazioneController.inviaAmmonimento(ammonimentoDTO, moderatore.getEmail(), studenteSegnalato.getEmail(), fotoSegnalata);
             }catch(InvalidWarningFormatException ex1){
                 new Notification("Motivazione e/o dettagli non validi",2000, Notification.Position.MIDDLE).open();

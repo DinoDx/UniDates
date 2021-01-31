@@ -1,5 +1,7 @@
 package com.unidates.Unidates.UniDates.Model.Entity;
 
+import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -25,7 +27,7 @@ public class Ammonimento {
     private Foto foto;
 
     @NotNull
-    private String motivazione;
+    private Motivazione motivazione;
 
     @NotNull
     @Size(min = 2, max = 1000)
@@ -34,7 +36,7 @@ public class Ammonimento {
     public Ammonimento(){
     }
 
-    public Ammonimento(String motivazione, String dettagli){
+    public Ammonimento(Motivazione motivazione, String dettagli){
         this.motivazione = motivazione;
         this.dettagli = dettagli;
     }
@@ -63,11 +65,11 @@ public class Ammonimento {
         this.moderatore = moderatore;
     }
 
-    public String getMotivazione() {
+    public Motivazione getMotivazione() {
         return motivazione;
     }
 
-    public void setMotivazione(String motivazione) {
+    public void setMotivazione(Motivazione motivazione) {
         this.motivazione = motivazione;
     }
 
