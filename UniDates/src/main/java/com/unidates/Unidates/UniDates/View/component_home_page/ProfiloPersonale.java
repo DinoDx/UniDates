@@ -314,6 +314,8 @@ public class ProfiloPersonale extends VerticalLayout {
                 listaBloccati.setPosition(Notification.Position.MIDDLE);
 
                 VerticalLayout utentiBloccati = new VerticalLayout();
+                utentiBloccati.setAlignItems(Alignment.CENTER);
+
                 for(String s : studente.getListaBloccatiEmail()){
                     HorizontalLayout nome = new HorizontalLayout();
                     nome.setAlignItems(Alignment.CENTER);
@@ -322,6 +324,7 @@ public class ProfiloPersonale extends VerticalLayout {
                     Button sblocca = new Button("Sblocca");
                     sblocca.addClickListener(buttonClickEvent1 -> {
                         gestioneUtentiController.sbloccaStudente(studente.getEmail(),s);
+                        UI.getCurrent().getPage().reload();
                         listaBloccati.close();
                     });
                     nome.add(nomeBloccato,sblocca);
