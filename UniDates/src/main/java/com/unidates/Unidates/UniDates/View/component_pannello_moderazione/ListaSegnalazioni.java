@@ -23,6 +23,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -93,19 +94,16 @@ public class ListaSegnalazioni extends VerticalLayout{
 
 
         Button sospensioneCm = new Button("Invia a CM");
+        sospensioneCm.setWidth("250px");
         sospensioneCm.addClickListener(buttonClickEvent -> {
-
-            if(!notifica.isOpened()) {
-                notifica = createNotificaInviaACM(fotoSegnalata);
-                notifica.open();
-            }
-            else notifica.close();
+            gestioneModerazioneController.inviaSegnalazioneCommunityManager(segnalazione,fotoSegnalata);
         });
         
         VerticalLayout InfoEMostraDettagliLayout = new VerticalLayout();
         InfoEMostraDettagliLayout.add(testoInfoSegnalazione, mostraDettagliSegnalazione);
 
         Button apriCardAmmonimento = new Button("Ammonimento");
+        apriCardAmmonimento.setWidth("250px");
         apriCardAmmonimento.addClickListener(e-> {
 
             if(!notificaAmm.isOpened()){
@@ -146,9 +144,8 @@ public class ListaSegnalazioni extends VerticalLayout{
         VerticalLayout layoutDettagliSegnalazione = new VerticalLayout();
         layoutDettagliSegnalazione.setAlignItems(Alignment.CENTER);
 
-        Select<String> motivazione = new Select<>();
-        Motivazione[] motivaziones =  Motivazione.values();
-        motivazione.setItems(motivaziones[0].toString(), motivaziones[1].toString(), motivaziones[2].toString(), motivaziones[3].toString(), motivaziones[4].toString());
+        TextField motivazione = new TextField();
+        motivazione.setValue(segnalazione.getMotivazione().toString());
         motivazione.setEnabled(false);
 
         TextField dettagli = new TextField();
@@ -166,40 +163,6 @@ public class ListaSegnalazioni extends VerticalLayout{
         dettagliSegnalazione.setPosition(Notification.Position.MIDDLE);
 
         return dettagliSegnalazione;
-    }
-
-    private Notification createNotificaInviaACM(FotoDTO fotoSegnalata) {
-        Notification inviaCM = new Notification();
-
-        Select<String> reporting = new Select<>();
-        Motivazione[] motivaziones =  Motivazione.values();
-        reporting.setItems(motivaziones[0].toString(), motivaziones[1].toString(), motivaziones[2].toString(), motivaziones[3].toString(), motivaziones[4].toString());
-
-        TextArea dettagli = new TextArea();
-        dettagli.setPlaceholder("Dettagli segnalazione");
-        Button annulla = new Button("Chiudi");
-        annulla.addClickListener(buttonClickEvent1 -> {
-            inviaCM.close();
-        });
-
-        Button invia = new Button("Invia");
-        invia.addClickListener(buttonClickEvent1 -> {
-            SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(Motivazione.valueOf(reporting.getValue()), dettagli.getValue());
-            try {
-                gestioneModerazioneController.inviaSegnalazioneCommunityManager(segnalazioneDTO, fotoSegnalata);
-            } catch (InvalidReportFormatException c) {
-                new Notification("Motivazione e/o dettagli non validi.", 2000, Notification.Position.MIDDLE).open();
-            }
-            inviaCM.close();
-        });
-
-        VerticalLayout layout_report = new VerticalLayout();
-        layout_report.setAlignItems(Alignment.CENTER);
-        layout_report.add(reporting, dettagli, annulla, invia);
-        inviaCM.add(layout_report);
-        inviaCM.setPosition(Notification.Position.MIDDLE);
-
-        return inviaCM;
     }
 
 
@@ -300,15 +263,19 @@ public class ListaSegnalazioni extends VerticalLayout{
         VerticalLayout layoutSinistraInfo = new VerticalLayout();
         layoutSinistraInfo.setAlignItems(FlexComponent.Alignment.CENTER);
 
-        Select<String> motivazione = new Select<>();
+        RadioButtonGroup<String> motivazione = new RadioButtonGroup<>();
         Motivazione[] motivaziones =  Motivazione.values();
         motivazione.setItems(motivaziones[0].toString(), motivaziones[1].toString(), motivaziones[2].toString(), motivaziones[3].toString(), motivaziones[4].toString());
+
+        VerticalLayout motivazioneVerticalLayou = new VerticalLayout();
+        motivazioneVerticalLayou.setAlignItems(Alignment.CENTER);
+        motivazioneVerticalLayou.add(motivazione);
 
         TextField dettagli = new TextField();
         dettagli.setPlaceholder("Dettagli");
 
         layoutSinistraInfo.add(new Span(profiloSegnalato.getNome()),
-                motivazione, dettagli);
+                motivazioneVerticalLayou, dettagli);
 
 
         //layout destra
@@ -317,7 +284,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         Button inviaAmmonimento = new Button("Invia Ammonimento");
         inviaAmmonimento.addClickListener(e -> {
             try {
-                AmmonimentoDTO ammonimentoDTO = new AmmonimentoDTO(Motivazione.valueOf(motivazione.getValue()), motivazione.getValue());
+                AmmonimentoDTO ammonimentoDTO = new AmmonimentoDTO(Motivazione.valueOf(motivazione.getValue()), dettagli.getValue());
                 gestioneModerazioneController.inviaAmmonimento(ammonimentoDTO, moderatore.getEmail(), studenteSegnalato.getEmail(), fotoSegnalata);
             }catch(InvalidWarningFormatException ex1){
                 new Notification("Motivazione e/o dettagli non validi",2000, Notification.Position.MIDDLE).open();

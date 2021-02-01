@@ -152,8 +152,6 @@ public class ProfiloPersonale extends VerticalLayout {
         cognome.setEnabled(false);
         compleanno.setValue(profilo.getDataDiNascita());
         compleanno.setEnabled(false);
-        email.setValue(studente.getEmail());
-        email.setEnabled(false);
         altezza.setValue(profilo.getAltezza());
         altezza.setEnabled(false);
         info1.add(nome,cognome,compleanno,email,altezza);
@@ -281,6 +279,9 @@ public class ProfiloPersonale extends VerticalLayout {
         H4 testo = new H4("Sezione Contatti");
         contatti.getStyle().set("margin-top","40px");
 
+        email.setValue(studente.getEmail());
+        email.setEnabled(false);
+
         if(studente.getProfilo().getNumeroTelefono() == null)
             numero.setValue("Numero non presente!");
         else numero.setValue(studente.getProfilo().getNumeroTelefono());
@@ -291,14 +292,50 @@ public class ProfiloPersonale extends VerticalLayout {
         else instagram.setValue(studente.getProfilo().getNickInstagram());
 
         instagram.setEnabled(false);
-        contatti.add(testo,numero,instagram);
+        contatti.add(testo,numero,instagram,email);
         return contatti;
     }
 
     public HorizontalLayout Pulsanti(){
         HorizontalLayout pulsanti = new HorizontalLayout();
-        pulsanti.add(Modifica(),Conferma(),CambiaPassword(),DeleteAccount());
+        pulsanti.add(Modifica(),Conferma(),CambiaPassword(),DeleteAccount(),ListaBloccati());
         return pulsanti;
+    }
+
+
+    Notification listaBloccati = new Notification();
+
+    public Button ListaBloccati(){
+        Button lista = new Button("Lista Bloccati");
+        lista.addClickListener(buttonClickEvent -> {
+
+            if(!listaBloccati.isOpened()){
+                listaBloccati = new Notification();
+                listaBloccati.setPosition(Notification.Position.MIDDLE);
+
+                VerticalLayout utentiBloccati = new VerticalLayout();
+                for(String s : studente.getListaBloccatiEmail()){
+                    HorizontalLayout nome = new HorizontalLayout();
+                    nome.setAlignItems(Alignment.CENTER);
+                    ProfiloDTO profiloDTO = gestioneUtentiController.trovaStudente(s).getProfilo();
+                    Span nomeBloccato = new Span(profiloDTO.getNome() +" " +profiloDTO.getCognome());
+                    Button sblocca = new Button("Sblocca");
+                    sblocca.addClickListener(buttonClickEvent1 -> {
+                        gestioneUtentiController.sbloccaStudente(studente.getEmail(),s);
+                        listaBloccati.close();
+                    });
+                    nome.add(nomeBloccato,sblocca);
+                    utentiBloccati.add(nome);
+                }
+                listaBloccati.add(utentiBloccati);
+                if(!studente.getListaBloccatiEmail().isEmpty()){
+                    listaBloccati.open();
+                }
+
+            }else listaBloccati.close();
+
+        });
+        return lista;
     }
 
 
@@ -339,7 +376,10 @@ public class ProfiloPersonale extends VerticalLayout {
                 annulla.addClickListener(buttonClickEvent1 -> {
                     uploadFotoProfilo.close();
                 });
-                uploadFotoProfilo.add(upload, insertFoto, annulla);
+
+                HorizontalLayout pulsanti = new HorizontalLayout();
+                pulsanti.add(insertFoto,annulla);
+                uploadFotoProfilo.add(upload, pulsanti);
                 uploadFotoProfilo.setPosition(Notification.Position.MIDDLE);
 
                 uploadFotoProfilo.open();
@@ -401,7 +441,6 @@ public class ProfiloPersonale extends VerticalLayout {
             nome.setEnabled(true);
             cognome.setEnabled(true);
             compleanno.setEnabled(true);
-            email.setEnabled(true);
             città.setEnabled(true);
             luogo_di_nascita.setEnabled(true);
             occhi.setEnabled(true);
@@ -424,8 +463,6 @@ public class ProfiloPersonale extends VerticalLayout {
                 new Notification("Campo Cognome vuoto",2000).open();
             }else if(compleanno.isEmpty() || (!checkMaggiorenne(compleanno.getValue()))){
                 new Notification("Campo Data di nascita vuoto o non valida",2000).open();
-            }else if(email.isEmpty()){
-                new Notification("Campo Email vuoto",2000).open();
             }else if(altezza.isEmpty()){
                 new Notification("Campo Altezza vuoto",2000).open();
             }else if(città.isEmpty()){
@@ -437,7 +474,6 @@ public class ProfiloPersonale extends VerticalLayout {
                 studente.getProfilo().setNome(nome.getValue());
                 studente.getProfilo().setCognome(cognome.getValue());
                 studente.getProfilo().setDataDiNascita(compleanno.getValue());
-                studente.setEmail(email.getValue());
                 studente.getProfilo().setResidenza(città.getValue());
                 studente.getProfilo().setLuogoNascita(luogo_di_nascita.getValue());
                 if(!(interessi.isEmpty()))
@@ -459,7 +495,6 @@ public class ProfiloPersonale extends VerticalLayout {
                 nome.setEnabled(false);
                 cognome.setEnabled(false);
                 compleanno.setEnabled(false);
-                email.setEnabled(false);
                 città.setEnabled(false);
                 luogo_di_nascita.setEnabled(false);
                 occhi.setEnabled(false);
@@ -469,7 +504,6 @@ public class ProfiloPersonale extends VerticalLayout {
                 interessi.setEnabled(false);
                 numero.setEnabled(false);
                 instagram.setEnabled(false);
-                //VEDERE IMMAGINE
 
                 gestioneProfiloController.modificaProfilo(studente.getEmail(),studente.getProfilo());
                 Page pagina = UI.getCurrent().getPage();

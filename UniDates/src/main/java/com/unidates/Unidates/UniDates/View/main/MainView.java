@@ -4,6 +4,7 @@ import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
 import com.unidates.Unidates.UniDates.DTOs.NotificaDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
@@ -82,8 +83,12 @@ public class MainView extends AppLayout {
         profile.addComponentAsFirst(new Icon(VaadinIcon.USER));
 
         profile.getSubMenu().addItem(horizontalLayout);
-        profile.getSubMenu().addItem(new Anchor("/logout","Logout"));
         profile.getSubMenu().addItem(new Anchor("/profilo-personale","Profilo Personale"));
+        if(studente.getRuolo() == Ruolo.MODERATORE || studente.getRuolo() == Ruolo.COMMUNITY_MANAGER){
+            profile.getSubMenu().addItem(new Anchor("/pannellomoderatore","Sezione Moderazione"));
+        }
+        profile.getSubMenu().addItem(new Anchor("/logout","Logout"));
+
 
         //MenuBar Notifiche
         MenuBar notification = new MenuBar();

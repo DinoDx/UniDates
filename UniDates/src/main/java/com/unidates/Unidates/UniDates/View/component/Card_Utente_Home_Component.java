@@ -3,6 +3,7 @@ package com.unidates.Unidates.UniDates.View.component;
 import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
 import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
 import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.InvalidReportFormatException;
@@ -19,6 +20,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -43,18 +45,40 @@ public class Card_Utente_Home_Component extends Div {
     }
 
 
+
+
     public HorizontalLayout Card(StudenteDTO studente){
+        Image image_profilo = new Image();
+
         //layput padre
         HorizontalLayout contenitore = new HorizontalLayout();
         contenitore.setSpacing(false);
-
         //layout sinistra con foto e pulsanti
         VerticalLayout layout_foto = new VerticalLayout();
         HorizontalLayout pulsanti = new HorizontalLayout();
-        StreamResource resource = new StreamResource("ciao",()-> new ByteArrayInputStream(studente.getProfilo().getFotoProfilo().getImg()));
-        Image image_profilo = new Image(resource,"");
-        image_profilo.getStyle().set("width","250px");
-        image_profilo.getStyle().set("height","250px");
+
+        if(studente.getProfilo().getFotoProfilo().isVisible()) {
+            StreamResource resource = new StreamResource("ciao", () -> new ByteArrayInputStream(studente.getProfilo().getFotoProfilo().getImg()));
+            image_profilo = new Image(resource, "");
+            image_profilo.getStyle().set("width", "250px");
+            image_profilo.getStyle().set("height", "250px");
+        }else {
+            boolean trovato = false;
+            for(FotoDTO f : studente.getProfilo().getListaFoto()) {
+                if(f.isVisible() && !trovato) {
+                    StreamResource resource = new StreamResource("ciao", () -> new ByteArrayInputStream(f.getImg()));
+                    image_profilo = new Image(resource, "");
+                    image_profilo.getStyle().set("width", "250px");
+                    image_profilo.getStyle().set("height", "250px");
+                    trovato = true;
+                }
+            }
+            if(!trovato){
+                image_profilo = new Image("https://www.svaghiamo.it/wp-content/uploads/2016/09/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png", "Non è possibile caricare la foto");
+                image_profilo.getStyle().set("width", "250px");
+                image_profilo.getStyle().set("height", "250px");
+            }
+        }
         Button like = getLikeButton(studente);
         Button report = reportButton(studente);
         pulsanti.add(like,report);
@@ -98,14 +122,21 @@ public class Card_Utente_Home_Component extends Div {
         Notification notifica = new Notification();
         notifica.setPosition(Notification.Position.MIDDLE);
         VerticalLayout layout_report = new VerticalLayout();
-        Select<String> reporting = new Select<>();
-        Motivazione[] motivaziones =  Motivazione.values();
-        reporting.setItems(motivaziones[0].toString(), motivaziones[1].toString(), motivaziones[2].toString(), motivaziones[3].toString(), motivaziones[4].toString());
 
+        //Report motivazione
+        //Select<String> reporting = new Select<>();
+        Motivazione[] motivaziones =  Motivazione.values();
+        RadioButtonGroup<String> radioButtonGroup = new RadioButtonGroup<>();
+        radioButtonGroup.setItems(motivaziones[0].toString(), motivaziones[1].toString(), motivaziones[2].toString(), motivaziones[3].toString(), motivaziones[4].toString());
+
+        //reporting.setItems();
+
+
+        //Report dettagli
         TextArea dettagli = new TextArea();
         dettagli.setPlaceholder("Dettagli segnalazione");
         Button invio = new Button("Invia report",buttonClickEvent -> {
-            SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(Motivazione.valueOf(reporting.getValue()), dettagli.getValue());
+            SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(Motivazione.valueOf(radioButtonGroup.getValue()), dettagli.getValue());
             try {
                 gestioneModerazioneController.inviaSegnalazione(segnalazioneDTO,studente.getProfilo().getFotoProfilo());
             }catch (InvalidReportFormatException c){
@@ -125,8 +156,14 @@ public class Card_Utente_Home_Component extends Div {
         });
 
 
+        Span motivoSpan = new Span("Seleziona un motivo");
+        Span dettagliSpan = new Span("Inserisci i dettagli");
+
+        HorizontalLayout pulsantiSegnalazione = new HorizontalLayout();
+        pulsantiSegnalazione.add(invio,blocca,annulla);
+
         layout_report.setAlignItems(FlexComponent.Alignment.CENTER);
-        layout_report.add(reporting,dettagli,invio,blocca,annulla);
+        layout_report.add(motivoSpan,radioButtonGroup,dettagliSpan,dettagli,pulsantiSegnalazione);
         notifica.add(layout_report);
         //Pulsante Report
         Button report = new Button("Report",new Icon(VaadinIcon.PENCIL),buttonClickEvent->{

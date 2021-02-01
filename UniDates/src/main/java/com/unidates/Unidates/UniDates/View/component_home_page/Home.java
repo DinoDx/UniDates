@@ -58,20 +58,10 @@ public class Home extends VerticalLayout {
         VerticalLayout utenti = new VerticalLayout();
         utenti.setAlignItems(Alignment.CENTER);
 
-        Button pannelloAmministrativo = new Button("Pannello amministrazione");
-        Anchor pannello = new Anchor("/pannellomoderatore");
-        pannello.add(pannelloAmministrativo);
-
-
         UtenteDTO utente = gestioneUtentiController.utenteInSessione();
 
 
         utente = gestioneUtentiController.utenteInSessione();
-
-
-        if(utente.getRuolo() == Ruolo.MODERATORE || utente.getRuolo() == Ruolo.COMMUNITY_MANAGER){
-            utenti.add(pannello);
-        }
 
         for(StudenteDTO studenteDTO: listaStudenti){
             if(!(studenteDTO.getEmail().equals(utente.getEmail())) && !(s.getListaBloccatiEmail().contains(studenteDTO.getEmail())) && !(studenteDTO.isBanned()) && !(studenteDTO.getListaBloccatiEmail().contains(s.getEmail()))) {

@@ -42,9 +42,8 @@ public class infoModeratore extends Div {
    public VerticalLayout segnalazioniMod(){
         VerticalLayout segnalazioni = new VerticalLayout();
         Span segnalazioniRicevute = new Span("Segnalazioni Ricevute : " + moderatore.getSegnalazioneRicevute().size());
-        Span segnalazioniRicevuteNV = new Span("Segnalazioni Ricevute Non Viste : ");
         Span ammonimentiInviati = new Span("Ammonimenti Inviati : " + moderatore.getAmmonimentoInviati().size());
-        segnalazioni.add(segnalazioniRicevute, segnalazioniRicevuteNV, ammonimentiInviati);
+        segnalazioni.add(segnalazioniRicevute, ammonimentiInviati);
         return segnalazioni;
    }
 
