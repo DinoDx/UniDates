@@ -66,10 +66,7 @@ public class RegistrazioneProfilo extends VerticalLayout {
 
 
     private Select<String> interessi = new Select<>();
-    private TextField nome;
-    private TextField residenza;
-    private TextField luogo_di_nascita;
-    private  TextField cognome;
+    private TextField nome, residenza, luogo_di_nascita, cognome, numero, contatto_ig;
     private DatePicker picker = new DatePicker();
     private Select<String> capelli = new Select<>();
     private Select<String> occhi = new Select<>();
@@ -78,10 +75,8 @@ public class RegistrazioneProfilo extends VerticalLayout {
     private MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
     private Checkbox checkbox;
     private MemoryBuffer image;
-    private ArrayList<Foto> foto = new ArrayList<Foto>();
     private FotoDTO toadd;
-    private TextField numero;
-    private TextField contatto_ig;
+
 
     public RegistrazioneProfilo(){
         addAttachListener(event -> create());
@@ -360,10 +355,4 @@ public class RegistrazioneProfilo extends VerticalLayout {
         return new Text(text);
     }
 
-    private void showOutput(String text, Component content, HasComponents outputContainer) {
-        HtmlComponent p = new HtmlComponent(Tag.P);
-        p.getElement().setText(text);
-        outputContainer.add(p);
-        outputContainer.add(content);
-    }
 }

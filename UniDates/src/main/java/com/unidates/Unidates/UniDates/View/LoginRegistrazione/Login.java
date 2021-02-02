@@ -49,6 +49,8 @@ public class Login extends FlexLayout{
 
     private VerticalLayout createLayoutSinistro(){
         VerticalLayout layoutSinistro = new VerticalLayout();
+        layoutSinistro.setId("layout-sinistro");
+        layoutSinistro.setHeight("100%");
 
         VerticalLayout infoInterna = new VerticalLayout();
         infoInterna.add(new H1("Benvenuto su UniDates!"));

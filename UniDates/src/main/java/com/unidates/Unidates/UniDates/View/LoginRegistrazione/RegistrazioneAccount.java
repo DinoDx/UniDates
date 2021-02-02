@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route(value = "registrazione")
 @PageTitle("Registrazione")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
-@CssImport("./styles/views/registrazione/login.css")
+@CssImport("./styles/views/registrazione/registrazione.css")
 public class RegistrazioneAccount extends FlexLayout {
 
     private EmailField email;
@@ -53,6 +53,8 @@ public class RegistrazioneAccount extends FlexLayout {
 
     private VerticalLayout createLayoutSinistro() {
         VerticalLayout layoutSinistro = new VerticalLayout();
+        layoutSinistro.setId("layout-sinistro");
+        layoutSinistro.setHeight("100%");
 
         VerticalLayout infoInterna = new VerticalLayout();
         infoInterna.add(new H1("Iniziamo!"));
@@ -73,21 +75,28 @@ public class RegistrazioneAccount extends FlexLayout {
     }
 
     public VerticalLayout createLayoutDestro(){
-        VerticalLayout formRegistrazione = new VerticalLayout();
+        VerticalLayout layoutDestro = new VerticalLayout();
+        layoutDestro.setHeight("100%");
+
+        VerticalLayout layoutForm = new VerticalLayout();
+        layoutForm.setId("layout-form");
+        layoutForm.setJustifyContentMode(JustifyContentMode.CENTER);
+        layoutForm.setAlignItems(Alignment.CENTER);
 
         FormLayout formFields = createFormFields();
+        formFields.setId("form-registrazione");
+        layoutDestro.setAlignItems(Alignment.CENTER);
+        layoutDestro.setJustifyContentMode(JustifyContentMode.CENTER);
 
-        formRegistrazione.setAlignItems(Alignment.CENTER);
-        formRegistrazione.setJustifyContentMode(JustifyContentMode.CENTER);
-
-        formRegistrazione.add(formFields);
-        return formRegistrazione;
+        layoutForm.add(formFields);
+        layoutDestro.add(layoutForm);
+        return layoutDestro;
     }
 
     private FormLayout createFormFields() {
 
         FormLayout formFields = new FormLayout();
-
+        formFields.setResponsiveSteps(new FormLayout.ResponsiveStep("40em", 1));
         email = new EmailField();
         email.setPlaceholder("Inserisci email universitaria");
         email.setLabel("E-mail Universitaria");
@@ -141,7 +150,7 @@ public class RegistrazioneAccount extends FlexLayout {
         buttons.add(prosegui, reset);
 
 
-        formFields.add(email,password,conferma_password,buttons);
+        formFields.add(email,password,conferma_password,prosegui, reset);
         return formFields;
     }
 }

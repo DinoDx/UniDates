@@ -26,7 +26,7 @@ public class Foto implements Cloneable {
 
     private boolean isFotoProfilo;
 
-    @Column(length = 10000000)
+    @Column(length = 100000000)
     private byte[] img;
 
     private LocalDateTime creazione;

@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.Model.Entity;
 
 import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,7 +24,7 @@ public class Ammonimento {
     @JoinColumn(name = "moderatore_id")
     private Moderatore moderatore;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE )
     private Foto foto;
 
     @NotNull

@@ -13,5 +13,15 @@
         margin-left: 10rem;
         margin-right: 10rem;
     }
+    #logo{
+        max-height: 150px;
+        max-width: 200px;
+    }
+    #form-regristrazione{
+        margin: 5rem 5rem;
+    }
+}
+#layout-sinistro{
+    background: var(--lumo-shade-80pct);
 }
 
