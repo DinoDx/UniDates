@@ -36,7 +36,6 @@ public class  MatchService {
             }
             else{
                 reverse.setLikeByStudent2(true);
-                publisher.publishMatch(riceve, invia);
                 matchRepository.save(reverse);
             }
         }

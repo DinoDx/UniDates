@@ -6,7 +6,10 @@ import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.Service.ModerazioneService;
+import com.unidates.Unidates.UniDates.Service.NotificaService;
+import com.unidates.Unidates.UniDates.Service.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,6 +19,15 @@ public class ModerationControl {
 
     @Autowired
     ModerazioneService moderazioneService;
+
+    @Autowired
+    NotificaService notificaService;
+
+    @Autowired
+    UtenteService utenteService;
+
+    @Autowired
+    SessionRegistry sessionRegistry;
 
 
     @RequestMapping("/inviaSegnalazione")
@@ -36,21 +48,28 @@ public class ModerationControl {
 
     @RequestMapping("/inviaAmmonimento")
     public void inviaAmmonimento(AmmonimentoDTO ammonimentoDTO, String emailModeratore, String emailStudenteAmmonito, FotoDTO fotoDTO) throws InvalidFormatException {
-        if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))){
+       // if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))){
             Ammonimento a = new Ammonimento(ammonimentoDTO.getMotivazione(), ammonimentoDTO.getDettagli());
-            if (checkAmmonimento(a))
-                moderazioneService.inviaAmmonimento(a, emailModeratore, emailStudenteAmmonito, fotoDTO.getId());
+            if (checkAmmonimento(a)) {
+                if(moderazioneService.inviaAmmonimento(a, emailModeratore, emailStudenteAmmonito, fotoDTO.getId())){
+                    moderazioneService.nascondiFoto(fotoDTO.getId());
+                    notificaService.genereateNotificaWarning(emailStudenteAmmonito, fotoDTO.getId());
+                    moderazioneService.checkAmmonimentiStudente(emailStudenteAmmonito);
+                }
+            }
             else throw new InvalidFormatException("Motivazione e/o dettagli non validi");
         }
-        else throw new NotAuthorizedException();
-    }
+      //  else throw new NotAuthorizedException();
+    //}
 
     @RequestMapping("/inviaSospensione")
     public void inviaSospensione(SospensioneDTO sospensioneDTO, String emailSospeso) throws InvalidFormatException {
         if((SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))) {
             Sospensione sp = new Sospensione(sospensioneDTO.getDurata(), sospensioneDTO.getDettagli());
-            if (checkSospensione(sp))
+            if (checkSospensione(sp)) {
                 moderazioneService.inviaSospensione(sp, emailSospeso);
+                SecurityUtils.forceLogout(utenteService.trovaUtente(emailSospeso), sessionRegistry);
+            }
             else throw new InvalidFormatException("Dettagli e/o durata non validi");
         }
         else throw new NotAuthorizedException();

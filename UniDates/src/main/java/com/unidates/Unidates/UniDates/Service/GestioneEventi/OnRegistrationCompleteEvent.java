@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Service.GestioneEventi.EventObject;
+package com.unidates.Unidates.UniDates.Service.GestioneEventi;
 
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.Utente;

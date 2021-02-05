@@ -70,7 +70,7 @@ public class ModerazioneService {
         segnalazioniRepository.save(s);
     }
 
-    public void inviaAmmonimento(Ammonimento a, String emailModeratore, String emailStudenteAmmonito, Long idFoto){
+    public boolean inviaAmmonimento(Ammonimento a, String emailModeratore, String emailStudenteAmmonito, Long idFoto){
         Studente ammonito = (Studente) utenteRepository.findByEmail(emailStudenteAmmonito);
 
         a.setModeratore((Moderatore) utenteRepository.findByEmail(emailModeratore));
@@ -81,9 +81,9 @@ public class ModerazioneService {
             ammonimentiRepository.save(a);
             ammonito.addAmmonimentoattivo();
             utenteRepository.save(ammonito);
-            publisher.publishWarning(a);
+            return true;
         }
-
+        return false;
     }
 
     public void inviaSospensione(Sospensione sp,String emailSospeso){
@@ -93,17 +93,18 @@ public class ModerazioneService {
 
         daSospendere.setBanned(true);
         utenteRepository.save(daSospendere);
-
-        publisher.publishBannedEvent(sp);
     }
 
 
-    public void nascondiFoto(Foto foto){
+    public void nascondiFoto(Long  idFoto){
+        Foto foto = fotoRepository.getOne(idFoto);
         foto.setVisible(false);
         fotoRepository.save(foto);
     }
 
-    public void checkAmmonimentiStudente(Studente studente) {
+    public void checkAmmonimentiStudente(String emailStudente) {
+
+        Studente studente = (Studente) utenteRepository.findByEmail(emailStudente);
         if(studente.getAmmonimentiAttivi() == 3){
             int durataWarningSuspension = 3;
             studente.resetAmmonimentiattivi();

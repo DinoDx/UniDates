@@ -29,10 +29,12 @@ public class InteractionControl {
 
     @RequestMapping("/aggiungiMatch")
     public void aggiungiMatch(@RequestParam String emailStudente1,@RequestParam String emailStudente2){
-        if(SecurityUtils.getLoggedIn().getEmail().equals(emailStudente1)) {
-            matchService.aggiungiMatch(emailStudente1, emailStudente2);
-        }
-        else throw new NotAuthorizedException();
+        //if(SecurityUtils.getLoggedIn().getEmail().equals(emailStudente1)) {
+        matchService.aggiungiMatch(emailStudente1, emailStudente2);
+            if(matchService.isValidMatch(emailStudente1, emailStudente2)) // se il match si è verificato da entrambe le parti
+                notificaService.generateNotificaMatch(emailStudente1, emailStudente2);
+        //}
+        //else throw new NotAuthorizedException();
     }
 
     @RequestMapping("/isValidMatch")
@@ -43,7 +45,13 @@ public class InteractionControl {
     @RequestMapping("/bloccoStudente")
     public boolean bloccaStudente(@RequestParam String emailBloccante, @RequestParam String emailBloccato){
         if(SecurityUtils.getLoggedIn().getEmail().equals(emailBloccante)) {
-            return utenteService.bloccaStudente(emailBloccante, emailBloccato);
+            utenteService.bloccaStudente(emailBloccante, emailBloccato);
+            if(matchService.isValidMatch(emailBloccante, emailBloccato)){
+                matchService.eliminaMatch(emailBloccante, emailBloccato);
+                notificaService.eliminaNoificaMatch(emailBloccante, emailBloccato);
+                return true;
+            }
+            return true;
         }
         else throw new NotAuthorizedException();
     }

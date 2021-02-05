@@ -85,7 +85,6 @@ public class UtenteService {
         Studente studenteBloccato = (Studente) utenteRepository.findByEmail(emailStudenteBloccato);
         studenteBloccante.getListaBloccati().add(studenteBloccato);
         utenteRepository.save(studenteBloccante);
-        publisher.publishBlockedEvent(studenteBloccante, studenteBloccato);
         return true;
     }
 
