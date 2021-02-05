@@ -49,7 +49,7 @@ public class UserManagementControl {
 
 
     @RequestMapping("/registrazioneStudente")
-    public void registrazioneStudente(@RequestBody StudenteDTO studenteDTO, @RequestBody HttpServletRequest request) {
+    public void registrazioneStudente(@RequestBody StudenteDTO studenteDTO, @RequestBody HttpServletRequest request) throws InvalidFormatException {
 
         ProfiloDTO profiloDTO = studenteDTO.getProfilo();
 
@@ -74,7 +74,7 @@ public class UserManagementControl {
             }
             else throw new AlreadyExistUserException();
         }
-        else throw new InvalidRegistrationFormatException();
+        else throw new InvalidFormatException("Uno o piú campi inseriti non rispettano il formato");
     }
 
 

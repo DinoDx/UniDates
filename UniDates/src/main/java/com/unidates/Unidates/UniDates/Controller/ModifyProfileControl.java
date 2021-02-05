@@ -39,13 +39,13 @@ public class ModifyProfileControl {
 
 
     @RequestMapping("/aggiungiFoto")
-    public void aggiungiFotoLista(@RequestParam String emailFotoToAdd, @RequestBody FotoDTO fotoDTO){
+    public void aggiungiFotoLista(@RequestParam String emailFotoToAdd, @RequestBody FotoDTO fotoDTO) throws InvalidFormatException {
         Studente s = (Studente) SecurityUtils.getLoggedIn();
         if(s.getEmail().equals(emailFotoToAdd)) {
             Foto f = new Foto(fotoDTO.getImg());
             if (checkFoto(f))
                 profiloService.aggiungiFotoLista(emailFotoToAdd, f);
-            else throw new InvalidPhotoException();
+            else throw new InvalidFormatException("La foto non rispetta le dimensioni consentite");
         }
         else throw new NotAuthorizedException();
     }
@@ -65,12 +65,12 @@ public class ModifyProfileControl {
     }
 
     @RequestMapping("/aggiungifotoProfilo")
-    public void aggiungiFotoProfilo(@RequestParam String emailFotoToAdd, @RequestBody FotoDTO fotoDTO){
+    public void aggiungiFotoProfilo(@RequestParam String emailFotoToAdd, @RequestBody FotoDTO fotoDTO) throws InvalidFormatException {
         if(SecurityUtils.getLoggedIn().getEmail().equals(emailFotoToAdd)) {
             Foto f = new Foto(fotoDTO.getImg());
             if (checkFoto(f))
                 profiloService.aggiungiFotoProfilo(emailFotoToAdd, f);
-            else throw new InvalidPhotoException();
+            else throw new InvalidFormatException("La foto non rispetta le dimensioni consentite");
         }
         else throw new NotAuthorizedException();
     }
@@ -85,7 +85,7 @@ public class ModifyProfileControl {
 
 
     @RequestMapping("/modificaProfilo")
-    public void modificaProfilo(String emailStudenteToModify, ProfiloDTO profiloDTO){
+    public void modificaProfilo(String emailStudenteToModify, ProfiloDTO profiloDTO) throws InvalidFormatException {
         if(SecurityUtils.getLoggedIn().getEmail().equals(emailStudenteToModify)) {
             Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
                     profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
@@ -98,20 +98,20 @@ public class ModifyProfileControl {
 
             if (checkProfilo(p))
                 profiloService.modificaProfilo(emailStudenteToModify, p);
-            else throw new InvalidModifyFormatException();
+            else throw new InvalidFormatException("Uno o più campi inseriti non hanno un formato valido");
         }
         else throw new NotAuthorizedException();
     }
 
     @RequestMapping("/cambiaPassword")
-    public void cambiaPassword(@RequestParam String emailUtente,@RequestParam  String nuovaPassword,@RequestParam  String vecchiaPassword) {
+    public void cambiaPassword(@RequestParam String emailUtente,@RequestParam  String nuovaPassword,@RequestParam  String vecchiaPassword) throws InvalidFormatException {
         if(SecurityUtils.getLoggedIn().getEmail().equals(emailUtente)) {
             Studente toChange = utenteService.trovaStudente(emailUtente);
             if (checkStudente(new Studente(emailUtente, nuovaPassword))) {
                 if (passwordEncoder.matches(vecchiaPassword, toChange.getPassword())) {
                     utenteService.cambiaPassword(emailUtente, nuovaPassword);
                 } else throw new PasswordMissmatchException();
-            } else throw new InvalidRegistrationFormatException();
+            } else throw new InvalidFormatException("La password inserita non rispetta il formato");
         }
         else throw new NotAuthorizedException();
     }

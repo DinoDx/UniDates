@@ -2,7 +2,7 @@ package com.unidates.Unidates.UniDates.Controller;
 
 import com.unidates.Unidates.UniDates.DTOs.EntityToDto;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
-import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
+import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
 import com.unidates.Unidates.UniDates.Exception.NotAuthorizedException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
@@ -57,7 +57,7 @@ public class InteractionControl {
     }
 
     @RequestMapping("/ricercaStudente")
-    public StudenteDTO ricercaStudente(@RequestParam String email) {
+    public StudenteDTO ricercaStudente(@RequestParam String email){
         if(checkEmail(email)) {
             Studente studente = (Studente) utenteService.trovaUtente(email);
 
@@ -65,7 +65,7 @@ public class InteractionControl {
                 return EntityToDto.toDTO(studente);
             else throw new UserNotFoundException();
         }
-        else throw new InvalidRegistrationFormatException();
+        else throw new UserNotFoundException();
     }
 
     private boolean checkEmail(String email){

@@ -11,8 +11,8 @@ import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
-import com.unidates.Unidates.UniDates.Exception.InvalidBanFormatException;
-import com.unidates.Unidates.UniDates.Exception.InvalidWarningFormatException;
+
+import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
 import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.vaadin.flow.component.UI;
@@ -238,7 +238,7 @@ public class ListaSegnalazioni extends VerticalLayout{
             try {
                 SospensioneDTO sospensioneDTO = new SospensioneDTO(Integer.parseInt(durata.getValue()), dettagli.getValue());
                 moderationControl.inviaSospensione(sospensioneDTO, studenteSegnalato.getEmail());
-            }catch (InvalidBanFormatException ex){
+            }catch (InvalidFormatException ex){
                 new Notification("Dettagli e/o durata non validi",2000, Notification.Position.MIDDLE).open();
             }
             cardSospensione.close();
@@ -286,7 +286,7 @@ public class ListaSegnalazioni extends VerticalLayout{
             try {
                 AmmonimentoDTO ammonimentoDTO = new AmmonimentoDTO(Motivazione.valueOf(motivazione.getValue()), dettagli.getValue());
                 moderationControl.inviaAmmonimento(ammonimentoDTO, moderatore.getEmail(), studenteSegnalato.getEmail(), fotoSegnalata);
-            }catch(InvalidWarningFormatException ex1){
+            }catch(InvalidFormatException ex1){
                 new Notification("Motivazione e/o dettagli non validi",2000, Notification.Position.MIDDLE).open();
             }
             cardAmmonimento.close();

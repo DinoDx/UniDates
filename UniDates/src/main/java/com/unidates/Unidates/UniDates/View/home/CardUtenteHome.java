@@ -6,7 +6,7 @@ import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
-import com.unidates.Unidates.UniDates.Exception.InvalidReportFormatException;
+import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
 import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -137,7 +137,7 @@ public class CardUtenteHome extends Div {
             SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(Motivazione.valueOf(radioButtonGroup.getValue()), dettagli.getValue());
             try {
                 moderationControl.inviaSegnalazione(segnalazioneDTO,studente.getProfilo().getFotoProfilo());
-            }catch (InvalidReportFormatException c){
+            }catch (InvalidFormatException c){
                 new Notification("Motivazione e/o dettagli non validi.",2000, Notification.Position.MIDDLE).open();
             }
 

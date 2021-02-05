@@ -7,7 +7,7 @@ import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
-import com.unidates.Unidates.UniDates.Exception.InvalidPhotoException;
+import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
 import com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException;
 import com.unidates.Unidates.UniDates.Model.Enum.Colore_Occhi;
 import com.unidates.Unidates.UniDates.Model.Enum.Colori_Capelli;
@@ -34,6 +34,7 @@ import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.vaadin.gatanaso.MultiselectComboBox;
@@ -250,8 +251,8 @@ public class ProfiloPersonalePage extends VerticalLayout {
                     modifyProfileControl.aggiungiFotoLista(studente.getEmail(), toadd);
                     UI.getCurrent().getPage().reload();
                 }
-                catch(InvalidPhotoException e){
-                    new Notification("La foto non rispetta le dimensioni", 2000, Notification.Position.MIDDLE).open();
+                catch(InvalidFormatException e){
+                    new Notification("La foto non rispetta le dimensioni, massimo 10MB!", 2000, Notification.Position.MIDDLE).open();
                 }
             }
         });
@@ -373,10 +374,15 @@ public class ProfiloPersonalePage extends VerticalLayout {
 
                 Button insertFoto = new Button("Inserisci");
                 insertFoto.addClickListener(clickEvent -> {
-                    if (nuovaFoto.getImg() != null) {
-                        modifyProfileControl.aggiungiFotoProfilo(studente.getEmail(), nuovaFoto);
-                        UI.getCurrent().getPage().reload();
-                    }
+                    try {
+                        if (nuovaFoto.getImg() != null) {
+                            modifyProfileControl.aggiungiFotoProfilo(studente.getEmail(), nuovaFoto);
+                            UI.getCurrent().getPage().reload();
+                        }
+                        } catch (InvalidFormatException e) {
+                            Notification.show("La foto non rispetta le dimensioni! Massimo 10MB", 2000 , Notification.Position.MIDDLE).open();
+                        }
+
                 });
 
                 Button annulla = new Button("Annulla");
@@ -464,59 +470,64 @@ public class ProfiloPersonalePage extends VerticalLayout {
 
     public Button Conferma(){
         Button conferma = new Button("Conferma", buttonClickEvent -> {
-            if(nome.isEmpty()){
-                new Notification("Campo Nome vuoto",2000).open();
-            }else if(cognome.isEmpty()){
-                new Notification("Campo Cognome vuoto",2000).open();
-            }else if(compleanno.isEmpty() || (!checkMaggiorenne(compleanno.getValue()))){
-                new Notification("Campo Data di nascita vuoto o non valida",2000).open();
-            }else if(altezza.isEmpty()){
-                new Notification("Campo Altezza vuoto",2000).open();
-            }else if(città.isEmpty()){
-                new Notification("Campo vuoto").open();
-            }else if(luogo_di_nascita.isEmpty()){
-                new Notification("Campo Luogo di nascita vuoto",2000).open();
-            }else{
-                studente.getProfilo().setAltezza(altezza.getValue());
-                studente.getProfilo().setNome(nome.getValue());
-                studente.getProfilo().setCognome(cognome.getValue());
-                studente.getProfilo().setDataDiNascita(compleanno.getValue());
-                studente.getProfilo().setResidenza(città.getValue());
-                studente.getProfilo().setLuogoNascita(luogo_di_nascita.getValue());
-                if(!(interessi.isEmpty()))
-                    studente.getProfilo().setInteressi(Interessi.valueOf(interessi.getValue()));
-                if(!(occhi.isEmpty()))
-                    studente.getProfilo().setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
-                if(!(capelli.isEmpty()))
-                    studente.getProfilo().setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
-                if(!(numero.isEmpty()))
-                    studente.getProfilo().setNumeroTelefono(numero.getValue());
-                if(!(instagram.isEmpty()))
-                    studente.getProfilo().setNickInstagram(instagram.getValue());
-                //hobby
-                ArrayList<Hobby> hob = new ArrayList<Hobby>();
-                for (String s : multiselectComboBox.getValue()) hob.add(Hobby.valueOf(s));
-                if(!(multiselectComboBox.isEmpty()))
-                    studente.getProfilo().setHobbyList(hob);
+            try {
+                if (nome.isEmpty()) {
+                    new Notification("Campo Nome vuoto", 2000).open();
+                } else if (cognome.isEmpty()) {
+                    new Notification("Campo Cognome vuoto", 2000).open();
+                } else if (compleanno.isEmpty() || (!checkMaggiorenne(compleanno.getValue()))) {
+                    new Notification("Campo Data di nascita vuoto o non valida", 2000).open();
+                } else if (altezza.isEmpty()) {
+                    new Notification("Campo Altezza vuoto", 2000).open();
+                } else if (città.isEmpty()) {
+                    new Notification("Campo vuoto").open();
+                } else if (luogo_di_nascita.isEmpty()) {
+                    new Notification("Campo Luogo di nascita vuoto", 2000).open();
+                } else {
+                    studente.getProfilo().setAltezza(altezza.getValue());
+                    studente.getProfilo().setNome(nome.getValue());
+                    studente.getProfilo().setCognome(cognome.getValue());
+                    studente.getProfilo().setDataDiNascita(compleanno.getValue());
+                    studente.getProfilo().setResidenza(città.getValue());
+                    studente.getProfilo().setLuogoNascita(luogo_di_nascita.getValue());
+                    if (!(interessi.isEmpty()))
+                        studente.getProfilo().setInteressi(Interessi.valueOf(interessi.getValue()));
+                    if (!(occhi.isEmpty()))
+                        studente.getProfilo().setColore_occhi(Colore_Occhi.valueOf(occhi.getValue()));
+                    if (!(capelli.isEmpty()))
+                        studente.getProfilo().setColori_capelli(Colori_Capelli.valueOf(capelli.getValue()));
+                    if (!(numero.isEmpty()))
+                        studente.getProfilo().setNumeroTelefono(numero.getValue());
+                    if (!(instagram.isEmpty()))
+                        studente.getProfilo().setNickInstagram(instagram.getValue());
+                    //hobby
+                    ArrayList<Hobby> hob = new ArrayList<Hobby>();
+                    for (String s : multiselectComboBox.getValue()) hob.add(Hobby.valueOf(s));
+                    if (!(multiselectComboBox.isEmpty()))
+                        studente.getProfilo().setHobbyList(hob);
 
-                nome.setEnabled(false);
-                cognome.setEnabled(false);
-                compleanno.setEnabled(false);
-                città.setEnabled(false);
-                luogo_di_nascita.setEnabled(false);
-                occhi.setEnabled(false);
-                capelli.setEnabled(false);
-                multiselectComboBox.setEnabled(false);
-                altezza.setEnabled(false);
-                interessi.setEnabled(false);
-                numero.setEnabled(false);
-                instagram.setEnabled(false);
+                    nome.setEnabled(false);
+                    cognome.setEnabled(false);
+                    compleanno.setEnabled(false);
+                    città.setEnabled(false);
+                    luogo_di_nascita.setEnabled(false);
+                    occhi.setEnabled(false);
+                    capelli.setEnabled(false);
+                    multiselectComboBox.setEnabled(false);
+                    altezza.setEnabled(false);
+                    interessi.setEnabled(false);
+                    numero.setEnabled(false);
+                    instagram.setEnabled(false);
 
-                modifyProfileControl.modificaProfilo(studente.getEmail(),studente.getProfilo());
-                Page pagina = UI.getCurrent().getPage();
+                    modifyProfileControl.modificaProfilo(studente.getEmail(), studente.getProfilo());
+                    Page pagina = UI.getCurrent().getPage();
 
-                pagina.reload();
+                    pagina.reload();
 
+                }
+            }
+            catch (InvalidFormatException ex){
+                Notification.show("I dati inseriti non sono validi! Riprovare").open();
             }
 
         });
@@ -545,8 +556,14 @@ public class ProfiloPersonalePage extends VerticalLayout {
                     if(encoder.matches(password_attuale.getValue(),studente.getPassword())){
                         if(prima_password.getValue().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")){
                             if (prima_password.getValue().equals(seconda_password.getValue())) {
-                                modifyProfileControl.cambiaPassword(studente.getEmail(), prima_password.getValue(), password_attuale.getValue());
-                                cambio.close();
+                                try {
+                                    modifyProfileControl.cambiaPassword(studente.getEmail(), prima_password.getValue(), password_attuale.getValue());
+                                }catch (InvalidFormatException ex){
+                                    Notification.show("La password inserita non rispetta il formato! Riprova.", 2000, Notification.Position.MIDDLE);
+                                }
+                                finally {
+                                    cambio.close();
+                                }
                             } else {
                                 Notification errore_password = new Notification("Le password nuove non corrispondono", 3000, Notification.Position.MIDDLE);
                                 errore_password.open();

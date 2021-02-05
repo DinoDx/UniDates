@@ -4,7 +4,6 @@ import com.unidates.Unidates.UniDates.Controller.InteractionControl;
 import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
-import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.View.navbar.Navbar;
 import com.vaadin.flow.component.UI;
@@ -139,10 +138,6 @@ public class RicercaProfiloPage extends VerticalLayout implements HasUrlParamete
             Notification erroreRicerca = new Notification("Utente non trovato!",5000, Notification.Position.MIDDLE);
             erroreRicerca.open();
         }
-        catch(InvalidRegistrationFormatException e){
-
-        }
-
         inSessione = userManagementControl.studenteInSessione();
 
 

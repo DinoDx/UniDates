@@ -7,7 +7,6 @@ import com.unidates.Unidates.UniDates.DTOs.NotificaDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica;
-import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -152,10 +151,6 @@ public class Navbar extends AppLayout {
            }
            catch(UserNotFoundException e){
                Notification erroreRicerca = new Notification("Utente non trovato!",3000, Notification.Position.MIDDLE);
-               erroreRicerca.open();
-           }
-           catch(InvalidRegistrationFormatException e){
-               Notification erroreRicerca = new Notification("Email non valida",3000, Notification.Position.MIDDLE);
                erroreRicerca.open();
            }
        });

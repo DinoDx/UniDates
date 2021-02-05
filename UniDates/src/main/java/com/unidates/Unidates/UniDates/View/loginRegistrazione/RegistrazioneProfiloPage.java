@@ -6,7 +6,7 @@ import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
-import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
+import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
@@ -187,7 +187,7 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
                    new Notification("Email già in uso", 2000, Notification.Position.MIDDLE).open();
 
                 }
-                catch (InvalidRegistrationFormatException e){
+                catch (InvalidFormatException e){
                     new Notification("Uno o più campi non validi", 2000, Notification.Position.MIDDLE).open();
 
                 }
