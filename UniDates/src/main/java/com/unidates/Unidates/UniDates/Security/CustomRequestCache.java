@@ -1,9 +1,8 @@
 package com.unidates.Unidates.UniDates.Security;
 
-import com.unidates.Unidates.UniDates.View.LoginRegistrazione.Login;
+import com.unidates.Unidates.UniDates.View.loginRegistrazione.LoginPage;
 import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.server.VaadinServletResponse;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
@@ -24,7 +23,7 @@ public class CustomRequestCache extends HttpSessionRequestCache {
         if(savedRequest instanceof DefaultSavedRequest) {
             final String requestURI = ((DefaultSavedRequest) savedRequest).getRequestURI(); //
             // check for valid URI and prevent redirecting to the login view
-            if (requestURI != null && !requestURI.isEmpty() && !requestURI.contains(Login.ROUTE)) { //
+            if (requestURI != null && !requestURI.isEmpty() && !requestURI.contains(LoginPage.ROUTE)) { //
                 return requestURI.startsWith("/") ? requestURI.substring(1) : requestURI; //
             }
         }

@@ -1,16 +1,11 @@
 package com.unidates.Unidates.UniDates.Controller;
 
-import com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO;
-import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
-import com.unidates.Unidates.UniDates.DTOs.SospensioneDTO;
-import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
+import com.unidates.Unidates.UniDates.DTOs.*;
 import com.unidates.Unidates.UniDates.Exception.InvalidBanFormatException;
 import com.unidates.Unidates.UniDates.Exception.InvalidReportFormatException;
 import com.unidates.Unidates.UniDates.Exception.InvalidWarningFormatException;
 import com.unidates.Unidates.UniDates.Exception.NotAuthorizedException;
-import com.unidates.Unidates.UniDates.Model.Entity.Ammonimento;
-import com.unidates.Unidates.UniDates.Model.Entity.Sospensione;
-import com.unidates.Unidates.UniDates.Model.Entity.Segnalazione;
+import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.Service.ModerazioneService;
@@ -20,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/api/ModManager")
-public class GestioneModerazioneController {
+public class ModerationControl {
 
     @Autowired
     ModerazioneService moderazioneService;
@@ -62,6 +57,15 @@ public class GestioneModerazioneController {
             if (checkSospensione(sp))
                 moderazioneService.inviaSospensione(sp, emailSospeso);
             else throw new InvalidBanFormatException();
+        }
+        else throw new NotAuthorizedException();
+    }
+
+    @RequestMapping("/moderatoreInSessione")
+    public ModeratoreDTO moderatoreInSessione(){
+        Utente mod = SecurityUtils.getLoggedIn();
+        if( mod != null && (mod.getRuolo().equals(Ruolo.MODERATORE) || mod.getRuolo().equals(Ruolo.COMMUNITY_MANAGER))){
+            return EntityToDto.toDTO((Moderatore) mod);
         }
         else throw new NotAuthorizedException();
     }

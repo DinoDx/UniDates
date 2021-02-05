@@ -1,14 +1,14 @@
-package com.unidates.Unidates.UniDates.View.main;
+package com.unidates.Unidates.UniDates.View.navbar;
 
-import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
-import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Controller.InteractionControl;
+import com.unidates.Unidates.UniDates.Controller.ModifyProfileControl;
+import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.NotificaDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
-import com.unidates.Unidates.UniDates.View.component.Notifica_Component;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -35,20 +35,23 @@ import java.io.ByteArrayInputStream;
 @JsModule("./styles/shared-styles.js")
 @CssImport("./styles/views/main/main-view.css")
 @PWA(name = "My Project", shortName = "My Project", enableInstallPrompt = false)
-public class MainView extends AppLayout {
+public class Navbar extends AppLayout {
 
     private H1 viewTitle;
 
     @Autowired
-    GestioneUtentiController gestioneUtentiController;
+    UserManagementControl userManagementControl;
 
     @Autowired
-    GestioneProfiloController profiloController;
+    ModifyProfileControl profiloController;
+
+    @Autowired
+    InteractionControl interactionControl;
 
     StudenteDTO studente;
 
 
-    public MainView() {
+    public Navbar() {
         addAttachListener(event -> create());
     }
 
@@ -59,7 +62,7 @@ public class MainView extends AppLayout {
 
     private Component createHeaderContent() {
 
-        studente = gestioneUtentiController.utenteInSessione();
+        studente = userManagementControl.studenteInSessione();
 
 
         //MenuBar Profilo Personale
@@ -97,9 +100,9 @@ public class MainView extends AppLayout {
         notifiche.addComponentAsFirst(new Icon(VaadinIcon.BELL));
         for(NotificaDTO n : studente.getListaNotifica()){
             if(n.getTipo_notifica().equals(Tipo_Notifica.MATCH)){
-                if(!gestioneUtentiController.trovaStudente(n.getEmailToMatchWith()).isBanned()) notifiche.getSubMenu().addComponentAtIndex(0,new Notifica_Component(n,profiloController));
+                if(!interactionControl.ricercaStudente(n.getEmailToMatchWith()).isBanned()) notifiche.getSubMenu().addComponentAtIndex(0,new CardNotifica(n,profiloController));
             }
-            else notifiche.getSubMenu().addComponentAtIndex(0,new Notifica_Component(n,profiloController));
+            else notifiche.getSubMenu().addComponentAtIndex(0,new CardNotifica(n,profiloController));
 
            // else if(n.getTipo_notifica().equals(Tipo_Notifica.AMMONIMENTO))
               //  notifiche.getSubMenu().addComponentAtIndex(0,new Ammonimento_Notifica(n));
@@ -140,8 +143,8 @@ public class MainView extends AppLayout {
        Button searchIcon = new Button(new Icon(VaadinIcon.SEARCH));
        searchIcon.addClickListener(buttonClickEvent -> {
            try {
-               StudenteDTO daCercare = gestioneUtentiController.trovaStudente(searchField.getValue());
-               if (gestioneUtentiController.trovaUtente(searchField.getValue()) != null) {
+               StudenteDTO daCercare = interactionControl.ricercaStudente(searchField.getValue());
+               if (interactionControl.ricercaStudente(searchField.getValue()) != null) {
                    if(!daCercare.isBanned())
                     UI.getCurrent().navigate("ricercaprofilo/"+ searchField.getValue());
                    else  new Notification("L'utente attualmente cercato risulta sospeso!",3000, Notification.Position.MIDDLE).open();

@@ -1,7 +1,6 @@
-package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
+package com.unidates.Unidates.UniDates.View.loginRegistrazione;
 
 
-import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
@@ -24,7 +23,7 @@ import org.springframework.security.web.WebAttributes;
 @PageTitle("Login")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @CssImport("./styles/views/registrazione/login.css")
-public class Login extends FlexLayout{
+public class LoginPage extends FlexLayout{
 
     public static final String TEXT  = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pharetra magna erat, vel finibus ipsum finibus vel. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. " +
             "Aenean molestie mauris felis, ut convallis mauris bibendum vitae. Etiam mollis sem quis pharetra ullamcorper. Suspendisse faucibus nisi eu libero dapibus tristique." +
@@ -35,7 +34,7 @@ public class Login extends FlexLayout{
 
     String erroreLogin;
 
-    public Login() {
+    public LoginPage() {
         setId("layout-principale");
         addAttachListener(event -> create());
     }

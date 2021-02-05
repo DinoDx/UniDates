@@ -1,12 +1,11 @@
-package com.unidates.Unidates.UniDates.View.component;
+package com.unidates.Unidates.UniDates.View.navbar;
 
 
-import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
-import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Controller.ModifyProfileControl;
+import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.NotificaDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
-import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -23,15 +22,15 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
 import java.io.ByteArrayInputStream;
 
-public class Notifica_Component extends Div {
+public class CardNotifica extends Div {
 
     NotificaDTO notifica;
     ProfiloDTO profilo;
     FotoDTO foto;
-    GestioneProfiloController profiloController;
-    GestioneUtentiController gestioneUtentiController;
+    ModifyProfileControl profiloController;
+    UserManagementControl userManagementControl;
 
-    public Notifica_Component(NotificaDTO notifica,GestioneProfiloController controller){
+    public CardNotifica(NotificaDTO notifica, ModifyProfileControl controller){
         this.notifica = notifica;
         this.profiloController = controller;
 

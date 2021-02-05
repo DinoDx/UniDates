@@ -1,8 +1,8 @@
-package com.unidates.Unidates.UniDates.View.component;
+package com.unidates.Unidates.UniDates.View.home;
 
-import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
-import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
-import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Controller.InteractionControl;
+import com.unidates.Unidates.UniDates.Controller.ModerationControl;
+import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
@@ -21,25 +21,23 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.server.StreamResource;
 
 import java.io.ByteArrayInputStream;
 
 
-public class Card_Utente_Home_Component extends Div {
+public class CardUtenteHome extends Div {
 
-    GestioneInterazioniController gestioneInterazioniController;
-    GestioneModerazioneController gestioneModerazioneController;
-    GestioneUtentiController gestioneUtentiController;
+    InteractionControl interactionControl;
+    ModerationControl moderationControl;
+    UserManagementControl userManagementControl;
 
-    public Card_Utente_Home_Component(GestioneUtentiController gestioneUtentiController, GestioneInterazioniController gestioneInterazioniController, StudenteDTO studenteDTO, GestioneModerazioneController gestioneModerazioneController){
-        this.gestioneInterazioniController = gestioneInterazioniController;
-        this.gestioneUtentiController = gestioneUtentiController;
-        this.gestioneModerazioneController = gestioneModerazioneController;
+    public CardUtenteHome(UserManagementControl userManagementControl, InteractionControl interactionControl, StudenteDTO studenteDTO, ModerationControl moderationControl){
+        this.interactionControl = interactionControl;
+        this.userManagementControl = userManagementControl;
+        this.moderationControl = moderationControl;
         HorizontalLayout tot = Card(studenteDTO);
         add(tot);
     }
@@ -109,7 +107,7 @@ public class Card_Utente_Home_Component extends Div {
             Style style = buttonClickEvent.getSource().getStyle();
             if(style.get("color").equals("white")) {
                 buttonClickEvent.getSource().getStyle().set("color", "red");
-                gestioneInterazioniController.aggiungiMatch(gestioneUtentiController.utenteInSessione().getEmail(), studente.getEmail());
+                interactionControl.aggiungiMatch(userManagementControl.studenteInSessione().getEmail(), studente.getEmail());
             }else {
                 style.set("color","white");
             }
@@ -138,7 +136,7 @@ public class Card_Utente_Home_Component extends Div {
         Button invio = new Button("Invia report",buttonClickEvent -> {
             SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(Motivazione.valueOf(radioButtonGroup.getValue()), dettagli.getValue());
             try {
-                gestioneModerazioneController.inviaSegnalazione(segnalazioneDTO,studente.getProfilo().getFotoProfilo());
+                moderationControl.inviaSegnalazione(segnalazioneDTO,studente.getProfilo().getFotoProfilo());
             }catch (InvalidReportFormatException c){
                 new Notification("Motivazione e/o dettagli non validi.",2000, Notification.Position.MIDDLE).open();
             }
@@ -150,7 +148,7 @@ public class Card_Utente_Home_Component extends Div {
         });
         Button blocca = new Button("Blocca");
         blocca.addClickListener(buttonClickEvent -> {
-            gestioneUtentiController.bloccaStudente(gestioneUtentiController.utenteInSessione().getEmail(),studente.getEmail() );
+            interactionControl.bloccaStudente(userManagementControl.studenteInSessione().getEmail(),studente.getEmail() );
             notifica.close();
             UI.getCurrent().getPage().reload();
         });

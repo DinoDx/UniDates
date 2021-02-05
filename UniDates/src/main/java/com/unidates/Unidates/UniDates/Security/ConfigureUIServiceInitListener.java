@@ -2,9 +2,9 @@ package com.unidates.Unidates.UniDates.Security;
 
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.Utente;
-import com.unidates.Unidates.UniDates.View.LoginRegistrazione.Login;
-import com.unidates.Unidates.UniDates.View.LoginRegistrazione.RegistrazioneAccount;
-import com.unidates.Unidates.UniDates.View.LoginRegistrazione.RegistrazioneProfilo;
+import com.unidates.Unidates.UniDates.View.loginRegistrazione.LoginPage;
+import com.unidates.Unidates.UniDates.View.loginRegistrazione.RegistrazioneAccountPage;
+import com.unidates.Unidates.UniDates.View.loginRegistrazione.RegistrazioneProfiloPage;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.server.ServiceInitEvent;
@@ -36,8 +36,8 @@ public class ConfigureUIServiceInitListener implements VaadinServiceInitListener
 
         else {
             //Utente non loggato - Pagine permesse: login, registrazione,
-            if (!Login.class.equals(beforeEnterEvent.getNavigationTarget()) && !RegistrazioneAccount.class.equals(beforeEnterEvent.getNavigationTarget()) && !RegistrazioneProfilo.class.equals(beforeEnterEvent.getNavigationTarget())){
-                beforeEnterEvent.rerouteTo(Login.class);
+            if (!LoginPage.class.equals(beforeEnterEvent.getNavigationTarget()) && !RegistrazioneAccountPage.class.equals(beforeEnterEvent.getNavigationTarget()) && !RegistrazioneProfiloPage.class.equals(beforeEnterEvent.getNavigationTarget())){
+                beforeEnterEvent.rerouteTo(LoginPage.class);
             }
         }
     }

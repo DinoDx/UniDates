@@ -1,9 +1,8 @@
-package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
+package com.unidates.Unidates.UniDates.View.loginRegistrazione;
 
 
-import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
-import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -25,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @PageTitle("Registrazione")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @CssImport("./styles/views/registrazione/registrazione.css")
-public class RegistrazioneAccount extends FlexLayout {
+public class RegistrazioneAccountPage extends FlexLayout {
 
     private EmailField email;
     private PasswordField password;
@@ -35,9 +34,9 @@ public class RegistrazioneAccount extends FlexLayout {
 
 
     @Autowired
-    GestioneUtentiController gestioneUtentiController;
+    UserManagementControl userManagementControl;
 
-    private RegistrazioneAccount(){
+    private RegistrazioneAccountPage(){
       addAttachListener(e -> create());
     }
 
@@ -126,7 +125,7 @@ public class RegistrazioneAccount extends FlexLayout {
             if(email.isEmpty() || !email.getValue().matches("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"))
                 new Notification("Inserire una email valida!",1000, Notification.Position.MIDDLE).open();
 
-            else if(gestioneUtentiController.isPresentEmail(email.getValue())){
+            else if(userManagementControl.isAlreadyRegistered(email.getValue())){
                 new Notification("Email già in uso", 2000, Notification.Position.MIDDLE).open();
             }
             else if(password.isEmpty() || conferma_password.isEmpty()){

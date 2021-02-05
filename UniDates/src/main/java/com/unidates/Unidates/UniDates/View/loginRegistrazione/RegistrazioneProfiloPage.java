@@ -1,15 +1,13 @@
-package com.unidates.Unidates.UniDates.View.LoginRegistrazione;
+package com.unidates.Unidates.UniDates.View.loginRegistrazione;
 
-import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
-import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Controller.ModifyProfileControl;
+import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
-import com.unidates.Unidates.UniDates.Model.Entity.Foto;
-import com.unidates.Unidates.UniDates.View.main.MainViewLogin;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -56,13 +54,13 @@ import java.util.List;
 @PageTitle("Registrazione_2")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @CssImport("./styles/views/registrazione/registrazione_due.css")
-public class RegistrazioneProfilo extends VerticalLayout {
+public class RegistrazioneProfiloPage extends VerticalLayout {
 
     @Autowired
-    GestioneUtentiController gestioneUtentiController;
+    UserManagementControl userManagementControl;
 
     @Autowired
-    GestioneProfiloController gestioneProfiloController;
+    ModifyProfileControl modifyProfileControl;
 
 
     private Select<String> interessi = new Select<>();
@@ -78,7 +76,7 @@ public class RegistrazioneProfilo extends VerticalLayout {
     private FotoDTO toadd;
 
 
-    public RegistrazioneProfilo(){
+    public RegistrazioneProfiloPage(){
         addAttachListener(event -> create());
     }
 
@@ -183,7 +181,7 @@ public class RegistrazioneProfilo extends VerticalLayout {
                 StudenteDTO studenteDTO = new StudenteDTO(da_registrare.getEmail(),da_registrare.getPassword(), profiloDTO);
 
                 try {
-                    gestioneUtentiController.registrazioneStudente(studenteDTO, VaadinServletRequest.getCurrent());
+                    userManagementControl.registrazioneStudente(studenteDTO, VaadinServletRequest.getCurrent());
                 }
                 catch (AlreadyExistUserException e){
                    new Notification("Email già in uso", 2000, Notification.Position.MIDDLE).open();

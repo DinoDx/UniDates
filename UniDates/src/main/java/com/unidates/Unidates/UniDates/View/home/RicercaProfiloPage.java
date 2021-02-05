@@ -1,12 +1,12 @@
-package com.unidates.Unidates.UniDates.View.component;
+package com.unidates.Unidates.UniDates.View.home;
 
-import com.unidates.Unidates.UniDates.Controller.GestioneInterazioniController;
-import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Controller.InteractionControl;
+import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.InvalidRegistrationFormatException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
-import com.unidates.Unidates.UniDates.View.main.MainView;
+import com.unidates.Unidates.UniDates.View.navbar.Navbar;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Image;
@@ -20,13 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayInputStream;
 
-@Route(value = "ricercaprofilo",layout = MainView.class)
-public class ProfiloView extends VerticalLayout implements HasUrlParameter<String> {
+@Route(value = "ricercaprofilo",layout = Navbar.class)
+public class RicercaProfiloPage extends VerticalLayout implements HasUrlParameter<String> {
 
     @Autowired
-    GestioneInterazioniController gestioneInterazioniController;
+    InteractionControl interactionControl;
     @Autowired
-    GestioneUtentiController gestioneUtentiController;
+    UserManagementControl userManagementControl;
 
     VerticalLayout tot;
     StudenteDTO daCercare;
@@ -45,7 +45,7 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
     Span numero = new Span();
     Span instagram = new Span();
 
-    public ProfiloView(){
+    public RicercaProfiloPage(){
     }
 
     public VerticalLayout Page() {
@@ -64,13 +64,13 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
         if(inSessione.getListaBloccatiEmail().contains(daCercare.getEmail())){
             bloccaSblocca = new Button("Sblocca");
             bloccaSblocca.addClickListener(buttonClickEvent -> {
-                gestioneUtentiController.sbloccaStudente(inSessione.getEmail(), daCercare.getEmail());
+                interactionControl.sbloccaStudente(inSessione.getEmail(), daCercare.getEmail());
                 UI.getCurrent().getPage().reload();
             });
         }else {
             bloccaSblocca = new Button("Blocca");
             bloccaSblocca.addClickListener(buttonClickEvent -> {
-                gestioneUtentiController.bloccaStudente(inSessione.getEmail(), daCercare.getEmail());
+                interactionControl.bloccaStudente(inSessione.getEmail(), daCercare.getEmail());
                 UI.getCurrent().getPage().reload();
             });
         }
@@ -116,7 +116,7 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
         }
 
 
-        if(gestioneInterazioniController.isValidMatch(inSessione.getEmail(), daCercare.getEmail())){
+        if(interactionControl.isValidMatch(inSessione.getEmail(), daCercare.getEmail())){
             VerticalLayout info_layout = new VerticalLayout();
             info_layout.add(nome_cognome, topics, interessi, città,contatti, caratteristiche);
             horizontal.add(image_layout, info_layout);
@@ -133,7 +133,7 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
     @Override
     public void setParameter(BeforeEvent beforeEvent, String s) {
         try{
-            daCercare = gestioneUtentiController.trovaStudente(s);
+            daCercare = interactionControl.ricercaStudente(s);
         }
         catch(UserNotFoundException e){
             Notification erroreRicerca = new Notification("Utente non trovato!",5000, Notification.Position.MIDDLE);
@@ -143,7 +143,7 @@ public class ProfiloView extends VerticalLayout implements HasUrlParameter<Strin
 
         }
 
-        inSessione = gestioneUtentiController.utenteInSessione();
+        inSessione = userManagementControl.studenteInSessione();
 
 
         if (tot != null)

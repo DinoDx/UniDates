@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.View.component_pannello_moderazione;
+package com.unidates.Unidates.UniDates.View.moderazione;
 
 import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
 import com.vaadin.flow.component.html.Div;
@@ -10,10 +10,10 @@ import com.vaadin.flow.server.StreamResource;
 
 import java.io.ByteArrayInputStream;
 
-public class infoModeratore extends Div {
+public class InfoModeratoreCard extends Div {
 
     ModeratoreDTO moderatore;
-    public infoModeratore(ModeratoreDTO mod){
+    public InfoModeratoreCard(ModeratoreDTO mod){
         moderatore = mod;
         HorizontalLayout horizontal = new HorizontalLayout();
         horizontal.add(immagineMod(),infoMod(),segnalazioniMod());

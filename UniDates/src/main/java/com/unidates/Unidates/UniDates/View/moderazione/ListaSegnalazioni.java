@@ -1,8 +1,9 @@
-package com.unidates.Unidates.UniDates.View.component_pannello_moderazione;
+package com.unidates.Unidates.UniDates.View.moderazione;
 
-import com.unidates.Unidates.UniDates.Controller.GestioneModerazioneController;
-import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
-import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Controller.InteractionControl;
+import com.unidates.Unidates.UniDates.Controller.ModerationControl;
+import com.unidates.Unidates.UniDates.Controller.ModifyProfileControl;
+import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO;
 import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.DTOs.SospensioneDTO;
@@ -11,7 +12,6 @@ import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.InvalidBanFormatException;
-import com.unidates.Unidates.UniDates.Exception.InvalidReportFormatException;
 import com.unidates.Unidates.UniDates.Exception.InvalidWarningFormatException;
 import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
@@ -24,8 +24,6 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.StreamResource;
 
@@ -35,29 +33,31 @@ import java.io.ByteArrayInputStream;
 public class ListaSegnalazioni extends VerticalLayout{
 
 
-    GestioneModerazioneController gestioneModerazioneController;
+    ModerationControl moderationControl;
 
 
-    GestioneUtentiController gestioneUtentiController;
+    UserManagementControl userManagementControl;
 
+    ModifyProfileControl modifyProfileControl;
 
-    GestioneProfiloController gestioneProfiloController;
+    InteractionControl interactionControl;
 
     ModeratoreDTO moderatore;
 
-    public ListaSegnalazioni(ModeratoreDTO moderatore, GestioneUtentiController gestioneUtentiController, GestioneModerazioneController gestioneModerazioneController, GestioneProfiloController gestioneProfiloController){
-        this.gestioneModerazioneController = gestioneModerazioneController;
-        this.gestioneUtentiController = gestioneUtentiController;
-        this.gestioneProfiloController = gestioneProfiloController;
+    public ListaSegnalazioni(ModeratoreDTO moderatore, UserManagementControl userManagementControl, ModerationControl moderationControl, ModifyProfileControl modifyProfileControl, InteractionControl interactionControl){
+        this.moderationControl = moderationControl;
+        this.userManagementControl = userManagementControl;
+        this.modifyProfileControl = modifyProfileControl;
+        this.interactionControl = interactionControl;
         this.moderatore = moderatore;
         addAttachListener(event -> createListaSegnalazioni());
     }
     public void createListaSegnalazioni(){
         VerticalLayout layoutListaSegnalazioni = new VerticalLayout();
             for (SegnalazioneDTO segnalazioneDTO : moderatore.getSegnalazioneRicevute()) {
-                FotoDTO fotoSegnalata = gestioneProfiloController.trovaFoto(segnalazioneDTO.getFotoId());
-                ProfiloDTO profiloSegnalato = gestioneProfiloController.trovaProfilo(fotoSegnalata.getProfiloId());
-                StudenteDTO studenteSegnalato =gestioneUtentiController.trovaStudente(profiloSegnalato.getEmailStudente());
+                FotoDTO fotoSegnalata = modifyProfileControl.trovaFoto(segnalazioneDTO.getFotoId());
+                ProfiloDTO profiloSegnalato = modifyProfileControl.trovaProfilo(fotoSegnalata.getProfiloId());
+                StudenteDTO studenteSegnalato = interactionControl.ricercaStudente(profiloSegnalato.getEmailStudente());
                 if(fotoSegnalata.isVisible() && !(studenteSegnalato.isBanned())) //da ricontrollare
                     layoutListaSegnalazioni.addComponentAsFirst(cardSegnalazione(fotoSegnalata, profiloSegnalato, segnalazioneDTO, studenteSegnalato));
         }
@@ -96,7 +96,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         Button sospensioneCm = new Button("Invia a CM");
         sospensioneCm.setWidth("250px");
         sospensioneCm.addClickListener(buttonClickEvent -> {
-            gestioneModerazioneController.inviaSegnalazioneCommunityManager(segnalazione,fotoSegnalata);
+            moderationControl.inviaSegnalazioneCommunityManager(segnalazione,fotoSegnalata);
         });
         
         VerticalLayout InfoEMostraDettagliLayout = new VerticalLayout();
@@ -237,7 +237,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         inviaSospensione.addClickListener(e -> {
             try {
                 SospensioneDTO sospensioneDTO = new SospensioneDTO(Integer.parseInt(durata.getValue()), dettagli.getValue());
-                gestioneModerazioneController.inviaSospensione(sospensioneDTO, studenteSegnalato.getEmail());
+                moderationControl.inviaSospensione(sospensioneDTO, studenteSegnalato.getEmail());
             }catch (InvalidBanFormatException ex){
                 new Notification("Dettagli e/o durata non validi",2000, Notification.Position.MIDDLE).open();
             }
@@ -285,7 +285,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         inviaAmmonimento.addClickListener(e -> {
             try {
                 AmmonimentoDTO ammonimentoDTO = new AmmonimentoDTO(Motivazione.valueOf(motivazione.getValue()), dettagli.getValue());
-                gestioneModerazioneController.inviaAmmonimento(ammonimentoDTO, moderatore.getEmail(), studenteSegnalato.getEmail(), fotoSegnalata);
+                moderationControl.inviaAmmonimento(ammonimentoDTO, moderatore.getEmail(), studenteSegnalato.getEmail(), fotoSegnalata);
             }catch(InvalidWarningFormatException ex1){
                 new Notification("Motivazione e/o dettagli non validi",2000, Notification.Position.MIDDLE).open();
             }

@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.Service.GestioneEventi;
 
 import com.unidates.Unidates.UniDates.Model.Entity.Utente;
+import com.unidates.Unidates.UniDates.Service.GestioneEventi.EventObject.OnRegistrationCompleteEvent;
 import com.unidates.Unidates.UniDates.Service.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

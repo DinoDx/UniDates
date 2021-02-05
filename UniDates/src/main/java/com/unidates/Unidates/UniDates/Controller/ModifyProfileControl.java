@@ -3,18 +3,18 @@ package com.unidates.Unidates.UniDates.Controller;
 import com.unidates.Unidates.UniDates.DTOs.EntityToDto;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
-import com.unidates.Unidates.UniDates.Exception.NotAuthorizedException;
+import com.unidates.Unidates.UniDates.Exception.*;
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.Model.Enum.Interessi;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Enum.Sesso;
-import com.unidates.Unidates.UniDates.Exception.InvalidModifyFormatException;
-import com.unidates.Unidates.UniDates.Exception.InvalidPhotoException;
 import com.unidates.Unidates.UniDates.Model.Entity.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.Profilo;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.Service.ProfiloService;
+import com.unidates.Unidates.UniDates.Service.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,13 +23,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/api/ProfileManager")
-public class GestioneProfiloController {
+public class ModifyProfileControl {
+
+    @Autowired
+    SessionRegistry sessionRegistry;
 
     @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
     ProfiloService profiloService;
+
+    @Autowired
+    UtenteService utenteService;
 
 
     @RequestMapping("/aggiungiFoto")
@@ -78,7 +84,7 @@ public class GestioneProfiloController {
     }
 
 
-    @RequestMapping("/modificaProfile")
+    @RequestMapping("/modificaProfilo")
     public void modificaProfilo(String emailStudenteToModify, ProfiloDTO profiloDTO){
         if(SecurityUtils.getLoggedIn().getEmail().equals(emailStudenteToModify)) {
             Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
@@ -93,6 +99,31 @@ public class GestioneProfiloController {
             if (checkProfilo(p))
                 profiloService.modificaProfilo(emailStudenteToModify, p);
             else throw new InvalidModifyFormatException();
+        }
+        else throw new NotAuthorizedException();
+    }
+
+    @RequestMapping("/cambiaPassword")
+    public void cambiaPassword(@RequestParam String emailUtente,@RequestParam  String nuovaPassword,@RequestParam  String vecchiaPassword) {
+        if(SecurityUtils.getLoggedIn().getEmail().equals(emailUtente)) {
+            Studente toChange = utenteService.trovaStudente(emailUtente);
+            if (checkStudente(new Studente(emailUtente, nuovaPassword))) {
+                if (passwordEncoder.matches(vecchiaPassword, toChange.getPassword())) {
+                    utenteService.cambiaPassword(emailUtente, nuovaPassword);
+                } else throw new PasswordMissmatchException();
+            } else throw new InvalidRegistrationFormatException();
+        }
+        else throw new NotAuthorizedException();
+    }
+
+    @RequestMapping("/cancellaAccountPersonale")
+    public void cancellaAccountPersonale(@RequestParam String email,@RequestParam  String password){
+        if(SecurityUtils.getLoggedIn().getEmail().equals(email)){
+            Studente toDelete = utenteService.trovaStudente(email);
+            if(passwordEncoder.matches(password, toDelete.getPassword())){
+                utenteService.deleteUtente(toDelete);
+                SecurityUtils.forceLogout(toDelete, sessionRegistry);
+            }else throw new PasswordMissmatchException();
         }
         else throw new NotAuthorizedException();
     }
@@ -129,9 +160,9 @@ public class GestioneProfiloController {
 
     @RequestMapping("/trovaFoto")
     public FotoDTO trovaFoto(@RequestParam Long fotoId) {
-        //if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))
+        if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))
             return EntityToDto.toDTO(profiloService.findFotoById(fotoId));
-        //else throw new NotAuthorizedException();
+        else throw new NotAuthorizedException();
     }
 
     @RequestMapping("/trovaProfilo")
@@ -139,5 +170,21 @@ public class GestioneProfiloController {
         //if(SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))
             return EntityToDto.toDTO(profiloService.findProfiloById(profiloId));
         //else throw new NotAuthorizedException();
+    }
+
+    private boolean checkStudente(Studente s) {
+        if(s.getEmail() != null && s.getPassword() != null){
+            if(checkEmail(s.getEmail())){
+                return s.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$");
+            }
+        }
+        return false;
+    }
+
+    private boolean checkEmail(String email){
+        if (email != null && email.matches("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"))
+            return true;
+
+        return false;
     }
 }

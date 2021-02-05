@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Service.GestioneEventi;
+package com.unidates.Unidates.UniDates.Service.GestioneEventi.EventObject;
 
 import com.unidates.Unidates.UniDates.Model.Entity.Sospensione;
 import org.springframework.context.ApplicationEvent;

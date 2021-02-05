@@ -1,5 +1,7 @@
 package com.unidates.Unidates.UniDates.Service.GestioneEventi;
 
+import com.unidates.Unidates.UniDates.Service.GestioneEventi.EventObject.BannedEvent;
+import com.unidates.Unidates.UniDates.Service.GestioneEventi.EventObject.WarningEvent;
 import com.unidates.Unidates.UniDates.Service.NotificaService;
 import com.unidates.Unidates.UniDates.Service.ModerazioneService;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;

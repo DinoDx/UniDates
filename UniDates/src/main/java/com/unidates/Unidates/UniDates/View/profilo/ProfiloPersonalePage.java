@@ -1,8 +1,9 @@
-package com.unidates.Unidates.UniDates.View.component_home_page;
+package com.unidates.Unidates.UniDates.View.profilo;
 
 
-import com.unidates.Unidates.UniDates.Controller.GestioneProfiloController;
-import com.unidates.Unidates.UniDates.Controller.GestioneUtentiController;
+import com.unidates.Unidates.UniDates.Controller.InteractionControl;
+import com.unidates.Unidates.UniDates.Controller.ModifyProfileControl;
+import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
@@ -12,7 +13,7 @@ import com.unidates.Unidates.UniDates.Model.Enum.Colore_Occhi;
 import com.unidates.Unidates.UniDates.Model.Enum.Colori_Capelli;
 import com.unidates.Unidates.UniDates.Model.Enum.Hobby;
 import com.unidates.Unidates.UniDates.Model.Enum.Interessi;
-import com.unidates.Unidates.UniDates.View.main.MainView;
+import com.unidates.Unidates.UniDates.View.navbar.Navbar;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -44,10 +45,10 @@ import java.time.Period;
 import java.util.*;
 
 
-@Route(value = "profilo-personale", layout = MainView.class)
+@Route(value = "profilo-personale", layout = Navbar.class)
 @PageTitle("Profilo")
 @CssImport("./styles/views/home/profilopersonale.css")
-public class ProfiloPersonale extends VerticalLayout {
+public class ProfiloPersonalePage extends VerticalLayout {
 
     FotoDTO foto;
     StudenteDTO studente;
@@ -57,18 +58,21 @@ public class ProfiloPersonale extends VerticalLayout {
     PasswordEncoder encoder;
 
     @Autowired
-    GestioneUtentiController gestioneUtentiController;
+    InteractionControl interactionControl;
 
     @Autowired
-    GestioneProfiloController gestioneProfiloController;
+    UserManagementControl userManagementControl;
 
-    public ProfiloPersonale(){
+    @Autowired
+    ModifyProfileControl modifyProfileControl;
+
+    public ProfiloPersonalePage(){
         addAttachListener(event -> create());
     }
 
 
     public void create(){
-        studente = (StudenteDTO) gestioneUtentiController.utenteInSessione();
+        studente = (StudenteDTO) userManagementControl.studenteInSessione();
         profilo = studente.getProfilo();
 
         multiselectComboBox.setLabel("Seleziona Topic");
@@ -205,13 +209,13 @@ public class ProfiloPersonale extends VerticalLayout {
                 VerticalLayout singolaFoto = new VerticalLayout();
                 Button deleteFoto = new Button(new Icon(VaadinIcon.CLOSE));
                 deleteFoto.addClickListener(buttonClickEvent -> {
-                    gestioneProfiloController.eliminaFotoLista(f, studente.getEmail());
+                    modifyProfileControl.eliminaFotoLista(f, studente.getEmail());
                     UI.getCurrent().getPage().reload();
                 });
 
                 Button setFotoProfilo = new Button("Imposta come foto profilo",new Icon(VaadinIcon.USER));
                 setFotoProfilo.addClickListener(event -> {
-                    gestioneProfiloController.setFotoProfilo( studente.getEmail(), f);
+                    modifyProfileControl.setFotoProfilo( studente.getEmail(), f);
                     UI.getCurrent().getPage().reload();
                 });
 
@@ -243,7 +247,7 @@ public class ProfiloPersonale extends VerticalLayout {
         insertFoto.addClickListener(buttonClickEvent -> {
             if (toadd.getImg() != null) {
                 try {
-                    gestioneProfiloController.aggiungiFotoLista(studente.getEmail(), toadd);
+                    modifyProfileControl.aggiungiFotoLista(studente.getEmail(), toadd);
                     UI.getCurrent().getPage().reload();
                 }
                 catch(InvalidPhotoException e){
@@ -319,11 +323,11 @@ public class ProfiloPersonale extends VerticalLayout {
                 for(String s : studente.getListaBloccatiEmail()){
                     HorizontalLayout nome = new HorizontalLayout();
                     nome.setAlignItems(Alignment.CENTER);
-                    ProfiloDTO profiloDTO = gestioneUtentiController.trovaStudente(s).getProfilo();
+                    ProfiloDTO profiloDTO = interactionControl.ricercaStudente(s).getProfilo();
                     Span nomeBloccato = new Span(profiloDTO.getNome() +" " +profiloDTO.getCognome());
                     Button sblocca = new Button("Sblocca");
                     sblocca.addClickListener(buttonClickEvent1 -> {
-                        gestioneUtentiController.sbloccaStudente(studente.getEmail(),s);
+                        interactionControl.sbloccaStudente(studente.getEmail(),s);
                         UI.getCurrent().getPage().reload();
                         listaBloccati.close();
                     });
@@ -370,7 +374,7 @@ public class ProfiloPersonale extends VerticalLayout {
                 Button insertFoto = new Button("Inserisci");
                 insertFoto.addClickListener(clickEvent -> {
                     if (nuovaFoto.getImg() != null) {
-                        gestioneProfiloController.aggiungiFotoProfilo(studente.getEmail(), nuovaFoto);
+                        modifyProfileControl.aggiungiFotoProfilo(studente.getEmail(), nuovaFoto);
                         UI.getCurrent().getPage().reload();
                     }
                 });
@@ -415,7 +419,7 @@ public class ProfiloPersonale extends VerticalLayout {
                 Button confrema = new Button("Conferma");
                 confrema.addClickListener(buttonClickEvent1 -> {
                     try {
-                        gestioneUtentiController.cancellaAccountPersonale(email.getValue(),passwordField.getValue());
+                        modifyProfileControl.cancellaAccountPersonale(email.getValue(),passwordField.getValue());
                         UI.getCurrent().getPage().reload();
                     }catch (PasswordMissmatchException e){
                         new Notification("La password non corrisponde",3000).open();
@@ -508,7 +512,7 @@ public class ProfiloPersonale extends VerticalLayout {
                 numero.setEnabled(false);
                 instagram.setEnabled(false);
 
-                gestioneProfiloController.modificaProfilo(studente.getEmail(),studente.getProfilo());
+                modifyProfileControl.modificaProfilo(studente.getEmail(),studente.getProfilo());
                 Page pagina = UI.getCurrent().getPage();
 
                 pagina.reload();
@@ -541,7 +545,7 @@ public class ProfiloPersonale extends VerticalLayout {
                     if(encoder.matches(password_attuale.getValue(),studente.getPassword())){
                         if(prima_password.getValue().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")){
                             if (prima_password.getValue().equals(seconda_password.getValue())) {
-                                gestioneUtentiController.cambiaPassword(studente.getEmail(), prima_password.getValue(), password_attuale.getValue());
+                                modifyProfileControl.cambiaPassword(studente.getEmail(), prima_password.getValue(), password_attuale.getValue());
                                 cambio.close();
                             } else {
                                 Notification errore_password = new Notification("Le password nuove non corrispondono", 3000, Notification.Position.MIDDLE);
