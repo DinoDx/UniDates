@@ -29,39 +29,52 @@ public class InteractionControl {
 
     @RequestMapping("/aggiungiMatch")
     public void aggiungiMatch(@RequestParam String emailStudente1,@RequestParam String emailStudente2){
-        //if(SecurityUtils.getLoggedIn().getEmail().equals(emailStudente1)) {
-        matchService.aggiungiMatch(emailStudente1, emailStudente2);
-            if(matchService.isValidMatch(emailStudente1, emailStudente2)) // se il match si è verificato da entrambe le parti
-                notificaService.generateNotificaMatch(emailStudente1, emailStudente2);
-        //}
-        //else throw new NotAuthorizedException();
+        if(SecurityUtils.getLoggedIn().getEmail().equals(emailStudente1)) {
+            if(!emailStudente1.equals(emailStudente2)) {
+                matchService.aggiungiMatch(emailStudente1, emailStudente2);
+                if (matchService.isValidMatch(emailStudente1, emailStudente2)) // se il match si è verificato da entrambe le parti
+                    notificaService.generateNotificaMatch(emailStudente1, emailStudente2);
+            }
+            else throw new NotAuthorizedException("Non puoi inserire un match per te stesso!");
+        }
+        else throw new NotAuthorizedException("Non puoi inserire un match per un altro utente!");
     }
 
     @RequestMapping("/isValidMatch")
     public boolean isValidMatch(@RequestParam String emailStudente1, @RequestParam String emailStudente2){
-       return matchService.isValidMatch(emailStudente1, emailStudente2);
+        if(SecurityUtils.getLoggedIn().equals(emailStudente1)) {
+            if(emailStudente1.equals(emailStudente2))
+                return matchService.isValidMatch(emailStudente1, emailStudente2);
+            else throw new NotAuthorizedException("Non puoi verificare un match per te stesso!");
+        }
+        else throw new NotAuthorizedException("Non puoi verificare un match per un altro studente!");
     }
 
     @RequestMapping("/bloccoStudente")
     public boolean bloccaStudente(@RequestParam String emailBloccante, @RequestParam String emailBloccato){
         if(SecurityUtils.getLoggedIn().getEmail().equals(emailBloccante)) {
-            utenteService.bloccaStudente(emailBloccante, emailBloccato);
-            if(matchService.isValidMatch(emailBloccante, emailBloccato)){
-                matchService.eliminaMatch(emailBloccante, emailBloccato);
-                notificaService.eliminaNoificaMatch(emailBloccante, emailBloccato);
+            if(emailBloccante.equals(emailBloccato)){
+                utenteService.bloccaStudente(emailBloccante, emailBloccato);
+                if(matchService.isValidMatch(emailBloccante, emailBloccato)){
+                    matchService.eliminaMatch(emailBloccante, emailBloccato);
+                    notificaService.eliminaNoificaMatch(emailBloccante, emailBloccato);
+                    return true;
+                }
                 return true;
-            }
-            return true;
+            } else throw new NotAuthorizedException("Non puoi bloccare te stesso");
         }
-        else throw new NotAuthorizedException();
+        else throw new NotAuthorizedException("Non puoi bloccare per un altro studente");
     }
 
     @RequestMapping("/sbloccoStudente")
     public boolean sbloccaStudente(@RequestParam String emailSbloccante, @RequestParam String emailSbloccato){
         if(SecurityUtils.getLoggedIn().getEmail().equals(emailSbloccante)) {
-            return utenteService.sbloccaStudente(emailSbloccante, emailSbloccato);
+            if(emailSbloccante.equals(emailSbloccato)) {
+                return utenteService.sbloccaStudente(emailSbloccante, emailSbloccato);
+            }
+            else throw new NotAuthorizedException("Non puoi sbloccare te stesso");
         }
-        else throw new NotAuthorizedException();
+        else throw new NotAuthorizedException("Non puoi sbloccare per un altro studente");
     }
 
     @RequestMapping("/ricercaStudente")

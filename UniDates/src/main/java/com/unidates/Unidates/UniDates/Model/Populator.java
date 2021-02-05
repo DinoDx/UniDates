@@ -13,13 +13,16 @@ import com.unidates.Unidates.UniDates.Service.MatchService;
 import com.unidates.Unidates.UniDates.Service.ModerazioneService;
 import com.unidates.Unidates.UniDates.Service.ProfiloService;
 import com.unidates.Unidates.UniDates.Service.UtenteService;
-import com.unidates.Unidates.UniDates.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -54,54 +57,57 @@ public class Populator implements ApplicationRunner {
         ;
 
 
-        Profilo p1 = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto(Utils.downloadUrl(LINK)) ,hobbyArrayList);
+        Profilo p1 = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto(downloadUrl(LINK)) ,hobbyArrayList);
         p1.setNumeroTelefono("3333339900");
         p1.setNickInstagram("marco.prova1");
-        p1.addFoto(new Foto(Utils.downloadUrl(LINK)),false);
-        p1.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
-        p1.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
-        Profilo p2 = new Profilo("Paolo", "Prova2", "Napoli", "Napoli", LocalDate.of(1995,7,15), 185, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.ROSSI, Colore_Occhi.VERDI,new Foto(Utils.downloadUrl(LINK)), hobbyArrayList);
+        p1.addFoto(new Foto(downloadUrl(LINK)),false);
+        p1.addFoto(new Foto(downloadUrl(LINK)), false);
+        p1.addFoto(new Foto(downloadUrl(LINK)), false);
+        Profilo p2 = new Profilo("Paolo", "Prova2", "Napoli", "Napoli", LocalDate.of(1995,7,15), 185, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.ROSSI, Colore_Occhi.VERDI,new Foto(downloadUrl(LINK)), hobbyArrayList);
         p2.setNumeroTelefono("3335559900");
         p2.setNickInstagram("PaoloSonoBello.prova2");
-        p2.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
-        p2.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
-        p2.addFoto(new Foto(Utils.downloadUrl(LINK)),false);
-        Profilo p3 = new Profilo("Lucia", "Prova3", "Napoli", "Napoli", LocalDate.of(1991,1,25), 164, Sesso.DONNA, Interessi.ENTRAMBI, Colori_Capelli.CASTANI, Colore_Occhi.CASTANI,new Foto(Utils.downloadUrl(LINK)), hobbyArrayList);
+        p2.addFoto(new Foto(downloadUrl(LINK)), false);
+        p2.addFoto(new Foto(downloadUrl(LINK)), false);
+        p2.addFoto(new Foto(downloadUrl(LINK)),false);
+        Profilo p3 = new Profilo("Lucia", "Prova3", "Napoli", "Napoli", LocalDate.of(1991,1,25), 164, Sesso.DONNA, Interessi.ENTRAMBI, Colori_Capelli.CASTANI, Colore_Occhi.CASTANI,new Foto(downloadUrl(LINK)), hobbyArrayList);
         p3.setNickInstagram("SimpyLucia");
-        p3.addFoto(new Foto(Utils.downloadUrl(LINK)),false);
-        p3.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
-        p3.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
+        p3.addFoto(new Foto(downloadUrl(LINK)),false);
+        p3.addFoto(new Foto(downloadUrl(LINK)), false);
+        p3.addFoto(new Foto(downloadUrl(LINK)), false);
 
         utenteService.registrazioneStudente(s1, p1); //usati solo per skippare l'invio email di conferma
         utenteService.registrazioneStudente(s2, p2);
         utenteService.registrazioneStudente(s3, p3);
 
-        interactionControl.aggiungiMatch(s1.getEmail(), s2.getEmail());
+        /*interactionControl.aggiungiMatch(s1.getEmail(), s2.getEmail());
         interactionControl.aggiungiMatch(s2.getEmail(), s1.getEmail());
         interactionControl.aggiungiMatch(s1.getEmail(), s3.getEmail());
         interactionControl.aggiungiMatch(s3.getEmail(), s1.getEmail());
 
+         */
+
         //Aggiungo un moderatore
         Moderatore m1 = new Moderatore("moderatore@gmail.com", "moderatore");
-        Profilo p4 = new Profilo("Marcello", "Moderatore", "Napoli", "Napoli", LocalDate.of(1999,6,12), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.GRIGI, Colore_Occhi.AZZURRI,new Foto(Utils.downloadUrl(LINK)),hobbyArrayList );
-        p4.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
-        p4.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
-        p4.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
+        Profilo p4 = new Profilo("Marcello", "Moderatore", "Napoli", "Napoli", LocalDate.of(1999,6,12), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.GRIGI, Colore_Occhi.AZZURRI,new Foto(downloadUrl(LINK)),hobbyArrayList );
+        p4.addFoto(new Foto(downloadUrl(LINK)), false);
+        p4.addFoto(new Foto(downloadUrl(LINK)), false);
+        p4.addFoto(new Foto(downloadUrl(LINK)), false);
 
         utenteService.registrazioneModeratore(m1, p4);
 
         //Aggiungo un communityManager
 
         CommunityManager cm1 = new CommunityManager("communitymanager@gmail.com","communitymanager");
-        Profilo p5 = new Profilo("Francesca", "CM", "Napoli", "Napoli", LocalDate.of(1980,7,12), 170, Sesso.DONNA, Interessi.UOMINI, Colori_Capelli.CASTANI, Colore_Occhi.AZZURRI, new Foto(Utils.downloadUrl(LINK)),hobbyArrayList);
-        p5.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
-        p5.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
-        p5.addFoto(new Foto(Utils.downloadUrl(LINK)), false);
+        Profilo p5 = new Profilo("Francesca", "CM", "Napoli", "Napoli", LocalDate.of(1980,7,12), 170, Sesso.DONNA, Interessi.UOMINI, Colori_Capelli.CASTANI, Colore_Occhi.AZZURRI, new Foto(downloadUrl(LINK)),hobbyArrayList);
+        p5.addFoto(new Foto(downloadUrl(LINK)), false);
+        p5.addFoto(new Foto(downloadUrl(LINK)), false);
+        p5.addFoto(new Foto(downloadUrl(LINK)), false);
 
         utenteService.registrazioneCommunityManager(cm1, p5);
 
-
+        /*
         try {
+
             moderationControl.inviaSegnalazione(new SegnalazioneDTO(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli1"),EntityToDto.toDTO(utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo()));
             moderationControl.inviaSegnalazione(new SegnalazioneDTO(Motivazione.NUDITA, "dettagli2"),EntityToDto.toDTO(utenteService.trovaStudente(s2.getEmail()).getProfilo().getFotoProfilo()));
             moderationControl.inviaSegnalazione(new SegnalazioneDTO(Motivazione.VIOLENZA , "dettagli3"),EntityToDto.toDTO(utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo()));
@@ -116,12 +122,29 @@ public class Populator implements ApplicationRunner {
         } catch (InvalidFormatException ex){
             ex.printStackTrace();
         }
+         */
 
        // moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
 
 
 
 
+    }
+    public static byte[] downloadUrl(String stringDownload) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            URL toDownload = new URL(stringDownload);
+            byte[] chunk = new byte[4096];
+            int bytesRead;
+            InputStream stream = toDownload.openStream();
+            while ((bytesRead = stream.read(chunk)) > 0) {
+                outputStream.write(chunk, 0, bytesRead);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return outputStream.toByteArray();
     }
 
 }

@@ -17,18 +17,4 @@ public class CustomRequestCache extends HttpSessionRequestCache {
             super.saveRequest(request,response);
         }
     }
-
-    public String resolveRedirectUrl() {
-        SavedRequest savedRequest = getRequest(VaadinServletRequest.getCurrent().getHttpServletRequest(), VaadinServletResponse.getCurrent().getHttpServletResponse());
-        if(savedRequest instanceof DefaultSavedRequest) {
-            final String requestURI = ((DefaultSavedRequest) savedRequest).getRequestURI(); //
-            // check for valid URI and prevent redirecting to the login view
-            if (requestURI != null && !requestURI.isEmpty() && !requestURI.contains(LoginPage.ROUTE)) { //
-                return requestURI.startsWith("/") ? requestURI.substring(1) : requestURI; //
-            }
-        }
-
-        // if everything fails, redirect to the main view
-        return "";
-    }
 }
