@@ -1,21 +1,17 @@
 package com.unidates.Unidates.UniDates.Service;
 
-import com.unidates.Unidates.UniDates.Exception.BannedUserException;
-import com.unidates.Unidates.UniDates.Exception.NotConfirmedAccountException;
-import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
+import com.unidates.Unidates.UniDates.Exception.AlreadyExistException;
+import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.*;
-import com.unidates.Unidates.UniDates.Repository.FotoRepository;
-import com.unidates.Unidates.UniDates.Repository.NotificaRepository;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
 import com.unidates.Unidates.UniDates.Repository.VerificationTokenRepository;
-import com.unidates.Unidates.UniDates.Security.SecurityUtils;
+import com.unidates.Unidates.UniDates.Service.Registrazione.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,53 +33,55 @@ public class UtenteService {
     @Autowired
     Publisher publisher;
 
-
-
     public boolean isPresent(String email){
         return utenteRepository.findByEmail(email) != null;
     }
 
-    public boolean isBanned(Studente s){
-        return s.isBanned();
+    public boolean registrazioneStudente(Studente s, Profilo p) throws AlreadyExistException {
+        if(!isPresent(s.getEmail())) {
+            s.setProfilo(p);
+            s.setPassword(passwordEncoder.encode(s.getPassword()));
+            utenteRepository.save(s);
+            return true;
+        }
+        else throw new AlreadyExistException("Utente giá registrato con questa email!!");
     }
 
-    public boolean isActive(Studente s){
-        return s.isActive();
+    public void registrazioneModeratore(Moderatore m, Profilo p) throws AlreadyExistException {
+        if(!isPresent(m.getEmail())) {
+            m.setProfilo(p);
+            m.setPassword(passwordEncoder.encode(m.getPassword()));
+            utenteRepository.save(m);
+        }
+        else throw new AlreadyExistException("Utente giá registrato con questa email!!");
     }
 
-    public void registrazioneStudente(Studente s, Profilo p){
-        s.setProfilo(p);
-        s.setPassword(passwordEncoder.encode(s.getPassword()));
-        utenteRepository.save(s);
-    }
-
-    public void registrazioneModeratore(Moderatore m, Profilo p){
-        m.setProfilo(p);
-        m.setPassword(passwordEncoder.encode(m.getPassword()));
-        utenteRepository.save(m);
-    }
-
-    public void registrazioneCommunityManager(CommunityManager cm, Profilo p){
+    public void registrazioneCommunityManager(CommunityManager cm, Profilo p) throws AlreadyExistException {
+        if(!isPresent(cm.getEmail())) {
         cm.setProfilo(p);
         cm.setPassword(passwordEncoder.encode(cm.getPassword()));
         utenteRepository.save(cm);
+        }
+        else throw new AlreadyExistException("Utente giá registrato con questa email!!");
     }
 
-    public Utente trovaUtente(String email) {
-        return utenteRepository.findByEmail(email);
+    public Utente trovaUtente(String email) throws EntityNotFoundException {
+        Utente utente = utenteRepository.findByEmail(email);
+        if(utente == null) throw new EntityNotFoundException("Utente non trovato");
+        else return utente;
     }
 
-    public Studente trovaStudente(String email) {
+    public Studente trovaStudente(String email) throws EntityNotFoundException {
         Studente studente = (Studente) utenteRepository.findByEmail(email);
         if(studente != null) return studente;
-        else return null;
+         else throw new EntityNotFoundException("Studente non trovato!");
     }
 
 
     public boolean bloccaStudente(String emailStudenteBloccante, String emailStudenteBloccato) {
         Studente studenteBloccante = (Studente) utenteRepository.findByEmail(emailStudenteBloccante);
         Studente studenteBloccato = (Studente) utenteRepository.findByEmail(emailStudenteBloccato);
-        studenteBloccante.getListaBloccati().add(studenteBloccato);
+        studenteBloccante.addBloccato(studenteBloccato);
         utenteRepository.save(studenteBloccante);
         return true;
     }
@@ -91,7 +89,7 @@ public class UtenteService {
     public boolean sbloccaStudente(String emailStudenteSbloccante, String emailStudenteSbloccato) {
         Studente studenteSbloccante = (Studente) utenteRepository.findByEmail(emailStudenteSbloccante);
         Studente studentesBloccato = (Studente) utenteRepository.findByEmail(emailStudenteSbloccato);
-        studenteSbloccante.getListaBloccati().remove(studentesBloccato);
+        studenteSbloccante.removeBloccato(studentesBloccato);
         utenteRepository.save(studenteSbloccante);
         return true;
     }

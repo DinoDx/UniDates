@@ -9,7 +9,7 @@ import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Service.UtenteService;
 
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
-import com.unidates.Unidates.UniDates.Service.Publisher;
+import com.unidates.Unidates.UniDates.Service.Registrazione.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,10 +42,9 @@ public class UserManagementControl {
 
 
     @RequestMapping("/registrazioneStudente")
-    public void registrazioneStudente(@RequestBody StudenteDTO studenteDTO, @RequestBody HttpServletRequest request) throws InvalidFormatException {
+    public void registrazioneStudente(@RequestBody StudenteDTO studenteDTO, @RequestBody HttpServletRequest request) throws InvalidFormatException, AlreadyExistException {
 
         ProfiloDTO profiloDTO = studenteDTO.getProfilo();
-
         Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
         profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
         new Foto(profiloDTO.getFotoProfilo().getImg()),profiloDTO.getHobbyList());
@@ -54,46 +53,38 @@ public class UserManagementControl {
         if(profiloDTO.getNickInstagram() != null)
             p.setNumeroTelefono(profiloDTO.getNumeroTelefono());
 
-
         Studente s = new Studente(studenteDTO.getEmail(), studenteDTO.getPassword());
-
         s.setProfilo(p);
-
-        if(checkStudente(s) && checkProfilo(p)) {
-            if(!utenteService.isPresent(s.getEmail())){
-                utenteService.registrazioneStudente(s, p);
+        if(checkStudente(studenteDTO) && checkProfilo(profiloDTO)) {
+            if(utenteService.registrazioneStudente(s, p)){
                 String appUrl = request.getContextPath();
                 publisher.publishOnRegistrationEvent(s, request.getLocale(), appUrl);
             }
-            else throw new AlreadyExistUserException();
-        }
-        else throw new InvalidFormatException("Uno o piú campi inseriti non rispettano il formato");
+        }else throw new InvalidFormatException("Uno o piú campi inseriti non rispettano il formato");
     }
 
 
 
     @RequestMapping("/isAlreadyRegistered")
     public boolean isAlreadyRegistered(@RequestParam String email){
-        return utenteService.isPresent(email);
+        if(checkEmail(email)){
+            return utenteService.isPresent(email);
+        }else throw new InvalidFormatException("Formato email non valido!");
     }
 
     @RequestMapping("/studenteInSessione")
     public StudenteDTO studenteInSessione(){
-        if(SecurityUtils.getLoggedIn() != null)
-            return EntityToDto.toDTO((Studente) SecurityUtils.getLoggedIn());
-        else throw new NotAuthorizedException();
+        return EntityToDto.toDTO((Studente) SecurityUtils.getLoggedIn());
     }
 
 
     @GetMapping("/registrationConfirm")
     public String confermaRegistrazione(@RequestParam("token") String token) {
-
         VerificationToken verificationToken = utenteService.getVerificationToken(token);
         System.out.println(token);
         if (verificationToken == null) {
             return "Token non valido";
         }
-
         Utente utente = utenteService.getUtenteByVerificationToken(token);
         Calendar cal = Calendar.getInstance();
 
@@ -121,7 +112,7 @@ public class UserManagementControl {
 
         return false;
     }
-    private boolean checkProfilo(Profilo p) {
+    private boolean checkProfilo(ProfiloDTO p) {
         if (p.getNome() != null && p.getCognome() != null && p.getLuogoNascita() != null && p.getResidenza() != null && p.getDataDiNascita() != null && p.getAltezza() != 0 && p.getSesso() != null && p.getInteressi() != null && p.getColori_capelli() != null && p.getColore_occhi() != null && p.getHobbyList().size() > 0){
             if (p.getNome().length() > 0 && p.getCognome().length() > 0 && p.getLuogoNascita().length() > 0 && p.getResidenza().length() > 0){
                 if(p.getSesso() == Sesso.UOMO || p.getSesso() == Sesso.DONNA || p.getSesso() == Sesso.ALTRO){
@@ -136,7 +127,7 @@ public class UserManagementControl {
 
         return false;
     }
-    private boolean checkStudente(Studente s) {
+    private boolean checkStudente(StudenteDTO s) {
         if(s.getEmail() != null && s.getPassword() != null){
             if(checkEmail(s.getEmail())){
                 return s.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$");

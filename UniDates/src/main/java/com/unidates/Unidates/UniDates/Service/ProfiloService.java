@@ -62,7 +62,7 @@ public class ProfiloService {
     public void eliminaFotoLista(String email, Long idFototoDelete){
         Studente studente = (Studente) utenteRepository.findByEmail(email);
         Foto f = fotoRepository.getOne(idFototoDelete);
-        studente.getProfilo().getListaFoto().remove(f);
+        studente.getProfilo().removeFoto(f);
         profiloRepository.save(studente.getProfilo());
     }
 

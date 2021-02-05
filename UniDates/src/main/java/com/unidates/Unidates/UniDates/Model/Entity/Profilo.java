@@ -192,6 +192,8 @@ public class Profilo implements Serializable {
         foto.setProfilo(this);
         listaFoto.add(foto);
     }
-
+    public void removeFoto(Foto foto){
+        listaFoto.remove(foto);
+    }
 
 }

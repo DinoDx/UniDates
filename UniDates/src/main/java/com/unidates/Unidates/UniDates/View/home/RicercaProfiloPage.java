@@ -4,7 +4,7 @@ import com.unidates.Unidates.UniDates.Control.InteractionControl;
 import com.unidates.Unidates.UniDates.Control.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
-import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
+import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
 import com.unidates.Unidates.UniDates.View.navbar.Navbar;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -134,7 +134,7 @@ public class RicercaProfiloPage extends VerticalLayout implements HasUrlParamete
         try{
             daCercare = interactionControl.ricercaStudente(s);
         }
-        catch(UserNotFoundException e){
+        catch(EntityNotFoundException e){
             Notification erroreRicerca = new Notification("Utente non trovato!",5000, Notification.Position.MIDDLE);
             erroreRicerca.open();
         }

@@ -7,7 +7,7 @@ import com.unidates.Unidates.UniDates.DTOs.NotificaDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica;
-import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
+import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -102,7 +102,6 @@ public class Navbar extends AppLayout {
                 if(!interactionControl.ricercaStudente(n.getEmailToMatchWith()).isBanned()) notifiche.getSubMenu().addComponentAtIndex(0,new CardNotifica(n,profiloController));
             }
             else notifiche.getSubMenu().addComponentAtIndex(0,new CardNotifica(n,profiloController));
-
            // else if(n.getTipo_notifica().equals(Tipo_Notifica.AMMONIMENTO))
               //  notifiche.getSubMenu().addComponentAtIndex(0,new Ammonimento_Notifica(n));
         }
@@ -149,7 +148,7 @@ public class Navbar extends AppLayout {
                    else  new Notification("L'utente attualmente cercato risulta sospeso!",3000, Notification.Position.MIDDLE).open();
                }
            }
-           catch(UserNotFoundException e){
+           catch(EntityNotFoundException e){
                Notification erroreRicerca = new Notification("Utente non trovato!",3000, Notification.Position.MIDDLE);
                erroreRicerca.open();
            }

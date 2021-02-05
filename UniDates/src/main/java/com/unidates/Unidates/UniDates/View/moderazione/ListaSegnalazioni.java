@@ -12,7 +12,9 @@ import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 
+import com.unidates.Unidates.UniDates.Exception.AlreadyExistException;
 import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
+import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.vaadin.flow.component.UI;
@@ -52,14 +54,19 @@ public class ListaSegnalazioni extends VerticalLayout{
         this.moderatore = moderatore;
         addAttachListener(event -> createListaSegnalazioni());
     }
-    public void createListaSegnalazioni(){
+    public void createListaSegnalazioni() {
         VerticalLayout layoutListaSegnalazioni = new VerticalLayout();
             for (SegnalazioneDTO segnalazioneDTO : moderatore.getSegnalazioneRicevute()) {
                 FotoDTO fotoSegnalata = modifyProfileControl.trovaFoto(segnalazioneDTO.getFotoId());
                 ProfiloDTO profiloSegnalato = modifyProfileControl.trovaProfilo(fotoSegnalata.getProfiloId());
-                StudenteDTO studenteSegnalato = interactionControl.ricercaStudente(profiloSegnalato.getEmailStudente());
-                if(fotoSegnalata.isVisible() && !(studenteSegnalato.isBanned())) //da ricontrollare
-                    layoutListaSegnalazioni.addComponentAsFirst(cardSegnalazione(fotoSegnalata, profiloSegnalato, segnalazioneDTO, studenteSegnalato));
+                try {
+                    StudenteDTO studenteSegnalato = interactionControl.ricercaStudente(profiloSegnalato.getEmailStudente());
+                    if(fotoSegnalata.isVisible() && !(studenteSegnalato.isBanned())) //da ricontrollare
+                        layoutListaSegnalazioni.addComponentAsFirst(cardSegnalazione(fotoSegnalata, profiloSegnalato, segnalazioneDTO, studenteSegnalato));
+                }catch (EntityNotFoundException entityNotFoundException){
+                    entityNotFoundException.printStackTrace();
+                }
+
         }
         add(layoutListaSegnalazioni);
     }
@@ -96,7 +103,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         Button sospensioneCm = new Button("Invia a CM");
         sospensioneCm.setWidth("250px");
         sospensioneCm.addClickListener(buttonClickEvent -> {
-            moderationControl.inviaSegnalazioneCommunityManager(segnalazione,fotoSegnalata);
+            moderationControl.inviaSegnalazioneCommunityManager(segnalazione,fotoSegnalata.getId());
         });
         
         VerticalLayout InfoEMostraDettagliLayout = new VerticalLayout();
@@ -238,8 +245,8 @@ public class ListaSegnalazioni extends VerticalLayout{
             try {
                 SospensioneDTO sospensioneDTO = new SospensioneDTO(Integer.parseInt(durata.getValue()), dettagli.getValue());
                 moderationControl.inviaSospensione(sospensioneDTO, studenteSegnalato.getEmail());
-            }catch (InvalidFormatException ex){
-                new Notification("Dettagli e/o durata non validi",2000, Notification.Position.MIDDLE).open();
+            }catch (InvalidFormatException | EntityNotFoundException ex){
+                new Notification(ex.getMessage(),2000, Notification.Position.MIDDLE).open();
             }
             cardSospensione.close();
             UI.getCurrent().getPage().reload();
@@ -286,8 +293,8 @@ public class ListaSegnalazioni extends VerticalLayout{
             try {
                 AmmonimentoDTO ammonimentoDTO = new AmmonimentoDTO(Motivazione.valueOf(motivazione.getValue()), dettagli.getValue());
                 moderationControl.inviaAmmonimento(ammonimentoDTO, moderatore.getEmail(), studenteSegnalato.getEmail(), fotoSegnalata);
-            }catch(InvalidFormatException ex1){
-                new Notification("Motivazione e/o dettagli non validi",2000, Notification.Position.MIDDLE).open();
+            }catch(InvalidFormatException | AlreadyExistException ex1){
+                new Notification(ex1.getMessage(),2000, Notification.Position.MIDDLE).open();
             }
             cardAmmonimento.close();
             UI.getCurrent().getPage().reload();

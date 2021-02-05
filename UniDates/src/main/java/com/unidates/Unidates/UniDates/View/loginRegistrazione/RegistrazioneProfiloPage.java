@@ -5,7 +5,7 @@ import com.unidates.Unidates.UniDates.Control.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
-import com.unidates.Unidates.UniDates.Exception.AlreadyExistUserException;
+import com.unidates.Unidates.UniDates.Exception.AlreadyExistException;
 import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.vaadin.flow.component.*;
@@ -183,12 +183,8 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
                 try {
                     userManagementControl.registrazioneStudente(studenteDTO, VaadinServletRequest.getCurrent());
                 }
-                catch (AlreadyExistUserException e){
-                   new Notification("Email già in uso", 2000, Notification.Position.MIDDLE).open();
-
-                }
-                catch (InvalidFormatException e){
-                    new Notification("Uno o più campi non validi", 2000, Notification.Position.MIDDLE).open();
+                catch (AlreadyExistException | InvalidFormatException e){
+                   new Notification(e.getMessage(), 2000, Notification.Position.MIDDLE).open();
 
                 }
 

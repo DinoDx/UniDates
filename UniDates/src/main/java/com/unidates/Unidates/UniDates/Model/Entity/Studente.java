@@ -122,22 +122,8 @@ public class Studente extends Utente{
     public void addBloccato(Studente studente){
         listaBloccati.add(studente);
     }
+    public void removeBloccato(Studente studentesBloccato) { listaBloccati.remove(studentesBloccato); }
 
-    public void addSospensione(Sospensione sospensione){
-        listaSospensioni.add(sospensione);
-    }
-
-    public void addAmmonimento(Ammonimento ammonimento){
-        listaAmmonimenti.add(ammonimento);
-    }
-
-    public void addMatch(Match match){
-        listaMatch.add(match);
-    }
-
-    public void addMatchRicevuto(Match match){
-        listaMatchRicevuti.add(match);
-    }
 
     public void addAmmonimentoattivo(){
         this.ammonimentiAttivi++;
@@ -185,4 +171,6 @@ public class Studente extends Utente{
                 ", listAmmonimenti=" + listaAmmonimenti +
                 '}';
     }
+
+
 }

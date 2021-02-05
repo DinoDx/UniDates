@@ -7,6 +7,7 @@ import com.unidates.Unidates.UniDates.Control.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
 import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
 import com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException;
 import com.unidates.Unidates.UniDates.Model.Enum.Colore_Occhi;
@@ -209,13 +210,13 @@ public class ProfiloPersonalePage extends VerticalLayout {
                 VerticalLayout singolaFoto = new VerticalLayout();
                 Button deleteFoto = new Button(new Icon(VaadinIcon.CLOSE));
                 deleteFoto.addClickListener(buttonClickEvent -> {
-                    modifyProfileControl.eliminaFotoLista(f, studente.getEmail());
-                    UI.getCurrent().getPage().reload();
+                        modifyProfileControl.eliminaFotoLista(f.getId(), studente.getEmail());
+                        UI.getCurrent().getPage().reload();
                 });
 
                 Button setFotoProfilo = new Button("Imposta come foto profilo",new Icon(VaadinIcon.USER));
                 setFotoProfilo.addClickListener(event -> {
-                    modifyProfileControl.setFotoProfilo( studente.getEmail(), f);
+                    modifyProfileControl.setFotoProfilo( studente.getEmail(), f.getId());
                     UI.getCurrent().getPage().reload();
                 });
 
@@ -323,7 +324,12 @@ public class ProfiloPersonalePage extends VerticalLayout {
                 for(String s : studente.getListaBloccatiEmail()){
                     HorizontalLayout nome = new HorizontalLayout();
                     nome.setAlignItems(Alignment.CENTER);
-                    ProfiloDTO profiloDTO = interactionControl.ricercaStudente(s).getProfilo();
+                    ProfiloDTO profiloDTO = null;
+                    try {
+                        profiloDTO = interactionControl.ricercaStudente(s).getProfilo();
+                    } catch (EntityNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     Span nomeBloccato = new Span(profiloDTO.getNome() +" " +profiloDTO.getCognome());
                     Button sblocca = new Button("Sblocca");
                     sblocca.addClickListener(buttonClickEvent1 -> {

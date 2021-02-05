@@ -4,7 +4,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.Match;
 import com.unidates.Unidates.UniDates.Repository.MatchRepository;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
-import com.unidates.Unidates.UniDates.Service.Publisher;
+import com.unidates.Unidates.UniDates.Service.Registrazione.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

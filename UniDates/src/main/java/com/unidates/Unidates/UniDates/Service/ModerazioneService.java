@@ -1,5 +1,6 @@
 package com.unidates.Unidates.UniDates.Service;
 
+import com.unidates.Unidates.UniDates.Exception.AlreadyExistException;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Model.Entity.Ammonimento;
 import com.unidates.Unidates.UniDates.Model.Entity.Segnalazione;
@@ -14,7 +15,7 @@ import com.unidates.Unidates.UniDates.Repository.SegnalazioniRepository;
 import com.unidates.Unidates.UniDates.Repository.SospensioniRepository;
 import com.unidates.Unidates.UniDates.Repository.FotoRepository;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
-import com.unidates.Unidates.UniDates.Service.Publisher;
+import com.unidates.Unidates.UniDates.Service.Registrazione.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,7 +71,7 @@ public class ModerazioneService {
         segnalazioniRepository.save(s);
     }
 
-    public boolean inviaAmmonimento(Ammonimento a, String emailModeratore, String emailStudenteAmmonito, Long idFoto){
+    public void inviaAmmonimento(Ammonimento a, String emailModeratore, String emailStudenteAmmonito, Long idFoto) throws AlreadyExistException {
         Studente ammonito = (Studente) utenteRepository.findByEmail(emailStudenteAmmonito);
 
         a.setModeratore((Moderatore) utenteRepository.findByEmail(emailModeratore));
@@ -81,9 +82,8 @@ public class ModerazioneService {
             ammonimentiRepository.save(a);
             ammonito.addAmmonimentoattivo();
             utenteRepository.save(ammonito);
-            return true;
         }
-        return false;
+        else throw new AlreadyExistException("Ammonimento per la stessa foto giá presente!");
     }
 
     public void inviaSospensione(Sospensione sp,String emailSospeso){
@@ -96,7 +96,7 @@ public class ModerazioneService {
     }
 
 
-    public void nascondiFoto(Long  idFoto){
+    public void nascondiFoto(Long idFoto){
         Foto foto = fotoRepository.getOne(idFoto);
         foto.setVisible(false);
         fotoRepository.save(foto);

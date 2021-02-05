@@ -1,7 +1,5 @@
 package com.unidates.Unidates.UniDates.Model.Entity;
 
-import org.apache.tomcat.jni.Local;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -30,7 +28,6 @@ public class Foto implements Cloneable {
     private byte[] img;
 
     private LocalDateTime creazione;
-
 
     private boolean isVisible;
 

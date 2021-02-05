@@ -47,7 +47,8 @@ public class CardUtenteHome extends Div {
 
     public HorizontalLayout Card(StudenteDTO studente){
         Image image_profilo = new Image();
-
+        FotoDTO fotoCard = new FotoDTO();
+        boolean trovato = false;
         //layput padre
         HorizontalLayout contenitore = new HorizontalLayout();
         contenitore.setSpacing(false);
@@ -56,14 +57,18 @@ public class CardUtenteHome extends Div {
         HorizontalLayout pulsanti = new HorizontalLayout();
 
         if(studente.getProfilo().getFotoProfilo().isVisible()) {
+            trovato = true;
+            fotoCard = studente.getProfilo().getFotoProfilo();
             StreamResource resource = new StreamResource("ciao", () -> new ByteArrayInputStream(studente.getProfilo().getFotoProfilo().getImg()));
             image_profilo = new Image(resource, "");
             image_profilo.getStyle().set("width", "250px");
             image_profilo.getStyle().set("height", "250px");
-        }else {
-            boolean trovato = false;
+        }
+        else {
+
             for(FotoDTO f : studente.getProfilo().getListaFoto()) {
                 if(f.isVisible() && !trovato) {
+                    fotoCard = f;
                     StreamResource resource = new StreamResource("ciao", () -> new ByteArrayInputStream(f.getImg()));
                     image_profilo = new Image(resource, "");
                     image_profilo.getStyle().set("width", "250px");
@@ -71,31 +76,28 @@ public class CardUtenteHome extends Div {
                     trovato = true;
                 }
             }
-            if(!trovato){
-                image_profilo = new Image("https://www.svaghiamo.it/wp-content/uploads/2016/09/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png", "Non è possibile caricare la foto");
-                image_profilo.getStyle().set("width", "250px");
-                image_profilo.getStyle().set("height", "250px");
-            }
         }
-        Button like = getLikeButton(studente);
-        Button report = reportButton(studente);
-        pulsanti.add(like,report);
-        layout_foto.add(image_profilo,pulsanti);
+        if(trovato) {
+            Button like = getLikeButton(studente);
+            Button report = reportButton(studente, fotoCard);
+            pulsanti.add(like, report);
+            layout_foto.add(image_profilo, pulsanti);
 
-        //layout destra con nome interessi e topics
-        VerticalLayout layout_info = new VerticalLayout();
-        HorizontalLayout nome_cognome = new HorizontalLayout();
+            //layout destra con nome interessi e topics
+            VerticalLayout layout_info = new VerticalLayout();
+            HorizontalLayout nome_cognome = new HorizontalLayout();
 
-        Anchor profilo  = new Anchor("ricercaprofilo/"+studente.getEmail());
-        Span nome = new Span(studente.getProfilo().getNome() + " " + studente.getProfilo().getCognome());
-        profilo.add(nome);
-        nome_cognome.add(profilo);
+            Anchor profilo = new Anchor("ricercaprofilo/" + studente.getEmail());
+            Span nome = new Span(studente.getProfilo().getNome() + " " + studente.getProfilo().getCognome());
+            profilo.add(nome);
+            nome_cognome.add(profilo);
 
-        Span topics = new Span(studente.getProfilo().getHobbyList().toString());
-        Span interessi = new Span("Interessato a:"+studente.getProfilo().getInteressi().toString());
-        layout_info.add(nome_cognome,topics,interessi);
+            Span topics = new Span(studente.getProfilo().getHobbyList().toString());
+            Span interessi = new Span("Interessato a:" + studente.getProfilo().getInteressi().toString());
+            layout_info.add(nome_cognome, topics, interessi);
 
-        contenitore.add(layout_foto,layout_info);
+            contenitore.add(layout_foto, layout_info);
+        }
         return contenitore;
     }
 
@@ -107,7 +109,13 @@ public class CardUtenteHome extends Div {
             Style style = buttonClickEvent.getSource().getStyle();
             if(style.get("color").equals("white")) {
                 buttonClickEvent.getSource().getStyle().set("color", "red");
-                interactionControl.aggiungiMatch(userManagementControl.studenteInSessione().getEmail(), studente.getEmail());
+                try {
+                    interactionControl.aggiungiMatch(userManagementControl.studenteInSessione().getEmail(), studente.getEmail());
+                }
+                catch (InvalidFormatException invalidFormatException){
+                    invalidFormatException.printStackTrace();
+                }
+
             }else {
                 style.set("color","white");
             }
@@ -115,7 +123,7 @@ public class CardUtenteHome extends Div {
         return like;
     }
 
-    private Button reportButton(StudenteDTO studente){
+    private Button reportButton(StudenteDTO studente, FotoDTO fotoDTO){
         //Notifica Segnalazione
         Notification notifica = new Notification();
         notifica.setPosition(Notification.Position.MIDDLE);
@@ -136,9 +144,9 @@ public class CardUtenteHome extends Div {
         Button invio = new Button("Invia report",buttonClickEvent -> {
             SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(Motivazione.valueOf(radioButtonGroup.getValue()), dettagli.getValue());
             try {
-                moderationControl.inviaSegnalazione(segnalazioneDTO,studente.getProfilo().getFotoProfilo());
+                moderationControl.inviaSegnalazione(segnalazioneDTO,fotoDTO.getId()); // se la foto mostrata in home non é la foto del profilo, viene mos
             }catch (InvalidFormatException c){
-                new Notification("Motivazione e/o dettagli non validi.",2000, Notification.Position.MIDDLE).open();
+                new Notification(c.getMessage(),2000, Notification.Position.MIDDLE).open();
             }
 
             notifica.close();

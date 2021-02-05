@@ -86,10 +86,8 @@ public class NotificaService {
 
 
     public void eliminaNoificaMatch(String emailBloccante, String emailBloccato){
-
         Studente bloccante = (Studente) utenteRepository.findByEmail(emailBloccante);
         Studente bloccato = (Studente) utenteRepository.findByEmail(emailBloccato);
-
 
         Notifica notifica1 = notificaRepository.findByUtenteAndEmailToMatchWith(bloccante, bloccato.getEmail());
         Notifica notifica2 = notificaRepository.findByUtenteAndEmailToMatchWith(bloccato, bloccante.getEmail());
