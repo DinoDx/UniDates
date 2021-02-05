@@ -1,7 +1,7 @@
 package com.unidates.Unidates.UniDates.View.home;
 
-import com.unidates.Unidates.UniDates.Controller.InteractionControl;
-import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
+import com.unidates.Unidates.UniDates.Control.InteractionControl;
+import com.unidates.Unidates.UniDates.Control.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;

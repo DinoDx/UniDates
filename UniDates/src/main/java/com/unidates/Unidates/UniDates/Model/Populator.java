@@ -1,22 +1,13 @@
 package com.unidates.Unidates.UniDates.Model;
 
-import com.unidates.Unidates.UniDates.Controller.InteractionControl;
-import com.unidates.Unidates.UniDates.Controller.ModerationControl;
-import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
-import com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO;
-import com.unidates.Unidates.UniDates.DTOs.EntityToDto;
-import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
-import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
+import com.unidates.Unidates.UniDates.Control.InteractionControl;
+import com.unidates.Unidates.UniDates.Control.ModerationControl;
 import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
-import com.unidates.Unidates.UniDates.Service.MatchService;
-import com.unidates.Unidates.UniDates.Service.ModerazioneService;
-import com.unidates.Unidates.UniDates.Service.ProfiloService;
 import com.unidates.Unidates.UniDates.Service.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;

@@ -1,9 +1,7 @@
 package com.unidates.Unidates.UniDates.Service;
 
-import com.unidates.Unidates.UniDates.Model.Entity.Ammonimento;
-import com.unidates.Unidates.UniDates.Model.Entity.Sospensione;
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
-import com.unidates.Unidates.UniDates.Service.GestioneEventi.OnRegistrationCompleteEvent;
+import com.unidates.Unidates.UniDates.Service.Registrazione.OnRegistrationCompleteEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 

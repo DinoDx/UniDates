@@ -1,9 +1,9 @@
 package com.unidates.Unidates.UniDates.View.moderazione;
 
-import com.unidates.Unidates.UniDates.Controller.InteractionControl;
-import com.unidates.Unidates.UniDates.Controller.ModerationControl;
-import com.unidates.Unidates.UniDates.Controller.ModifyProfileControl;
-import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
+import com.unidates.Unidates.UniDates.Control.InteractionControl;
+import com.unidates.Unidates.UniDates.Control.ModerationControl;
+import com.unidates.Unidates.UniDates.Control.ModifyProfileControl;
+import com.unidates.Unidates.UniDates.Control.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO;
 import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.DTOs.SospensioneDTO;

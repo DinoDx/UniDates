@@ -1,8 +1,8 @@
 package com.unidates.Unidates.UniDates.View.navbar;
 
-import com.unidates.Unidates.UniDates.Controller.InteractionControl;
-import com.unidates.Unidates.UniDates.Controller.ModifyProfileControl;
-import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
+import com.unidates.Unidates.UniDates.Control.InteractionControl;
+import com.unidates.Unidates.UniDates.Control.ModifyProfileControl;
+import com.unidates.Unidates.UniDates.Control.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.NotificaDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;

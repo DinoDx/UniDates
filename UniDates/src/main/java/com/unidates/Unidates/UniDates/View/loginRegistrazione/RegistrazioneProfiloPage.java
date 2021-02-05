@@ -1,7 +1,7 @@
 package com.unidates.Unidates.UniDates.View.loginRegistrazione;
 
-import com.unidates.Unidates.UniDates.Controller.ModifyProfileControl;
-import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
+import com.unidates.Unidates.UniDates.Control.ModifyProfileControl;
+import com.unidates.Unidates.UniDates.Control.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;

@@ -1,8 +1,7 @@
-package com.unidates.Unidates.UniDates.Controller;
+package com.unidates.Unidates.UniDates.Control;
 
 import com.unidates.Unidates.UniDates.DTOs.EntityToDto;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
-import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
 import com.unidates.Unidates.UniDates.Exception.NotAuthorizedException;
 import com.unidates.Unidates.UniDates.Exception.UserNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;

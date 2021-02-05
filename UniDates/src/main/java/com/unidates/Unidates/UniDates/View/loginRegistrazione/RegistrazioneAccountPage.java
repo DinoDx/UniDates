@@ -1,7 +1,7 @@
 package com.unidates.Unidates.UniDates.View.loginRegistrazione;
 
 
-import com.unidates.Unidates.UniDates.Controller.UserManagementControl;
+import com.unidates.Unidates.UniDates.Control.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;

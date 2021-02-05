@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Controller;
+package com.unidates.Unidates.UniDates.Control;
 
 import com.unidates.Unidates.UniDates.DTOs.*;
 import com.unidates.Unidates.UniDates.Exception.*;
