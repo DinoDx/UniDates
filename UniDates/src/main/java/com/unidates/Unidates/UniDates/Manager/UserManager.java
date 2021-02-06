@@ -97,9 +97,12 @@ public class UserManager {
     }
 
     public Utente getUtenteByVerificationToken(String verificationToken) {
-        Utente utente = verificationTokenRepository.findByToken(verificationToken).getUtente();
-        if(utente != null) return utente;
-        else throw new EntityNotFoundException("Untente non trovato!");
+        VerificationToken token = verificationTokenRepository.findByToken(verificationToken);
+        if(token != null) {
+            Utente utente = verificationTokenRepository.findByToken(verificationToken).getUtente();
+            if (utente != null) return utente;
+            else throw new EntityNotFoundException("Utente non trovato!");
+        }else throw new EntityNotFoundException("Token non trovato!");
     }
 
 
