@@ -76,7 +76,7 @@ public class NotificaManager {
 
 
 
-    public void eliminaNoificaMatch(String emailBloccante, String emailBloccato){
+    public void eliminaNotificaMatch(String emailBloccante, String emailBloccato){
         Studente bloccante = (Studente) utenteRepository.findByEmail(emailBloccante);
         Studente bloccato = (Studente) utenteRepository.findByEmail(emailBloccato);
 

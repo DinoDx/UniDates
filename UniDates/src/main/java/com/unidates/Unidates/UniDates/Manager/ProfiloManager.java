@@ -52,6 +52,7 @@ public class ProfiloManager {
             }else throw new AlreadyExistException("Foto già inserita!");
         }else throw new EntityNotFoundException("Studente non trovato!");
     }
+
     public void aggiungiFotoProfilo(String email, Foto foto){
         eliminaFotoProfilo(email);
         Studente studente = (Studente) utenteRepository.findByEmail(email);

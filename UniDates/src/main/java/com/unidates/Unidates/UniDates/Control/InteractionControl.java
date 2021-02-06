@@ -60,7 +60,7 @@ public class InteractionControl {
                     userManager.bloccaStudente(emailBloccante, emailBloccato);
                     if (matchManager.isValidMatch(emailBloccante, emailBloccato)) {
                         matchManager.eliminaMatch(emailBloccante, emailBloccato);
-                        notificaManager.eliminaNoificaMatch(emailBloccante, emailBloccato);
+                        notificaManager.eliminaNotificaMatch(emailBloccante, emailBloccato);
                         return true;
                     }
                     return true;

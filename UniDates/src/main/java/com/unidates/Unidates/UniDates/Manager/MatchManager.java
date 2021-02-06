@@ -75,6 +75,8 @@ public class MatchManager {
         if(invia != null && riceve != null) {
             matchRepository.deleteById(trovaMatch(emailStudente1, emailStudente2).getId());
         }
+        else throw new EntityNotFoundException("Studente non trovato!");
+
     }
 }
 
