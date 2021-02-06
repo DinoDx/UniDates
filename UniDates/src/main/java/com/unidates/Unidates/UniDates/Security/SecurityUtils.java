@@ -1,7 +1,7 @@
 package com.unidates.Unidates.UniDates.Security;
 
 import com.unidates.Unidates.UniDates.Model.Entity.Utente;
-import com.unidates.Unidates.UniDates.Service.UtenteService;
+import com.unidates.Unidates.UniDates.Manager.UserManager;
 import com.vaadin.flow.server.ServletHelper;
 import com.vaadin.flow.shared.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +23,11 @@ public class SecurityUtils {
 
 
     @Autowired
-    private static UtenteService utenteService;
+    private static UserManager userManager;
 
 
-    public SecurityUtils(UtenteService utenteService) {
-        this.utenteService = utenteService;
+    public SecurityUtils(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     static boolean isFrameworkInternalRequest(HttpServletRequest request){
@@ -48,9 +48,9 @@ public class SecurityUtils {
         Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Utente utente;
         if(o instanceof UserDetails) {
-            utente = utenteService.trovaUtente(((UserDetails) o).getUsername());
+            utente = userManager.trovaUtente(((UserDetails) o).getUsername());
         } else {
-            utente = utenteService.trovaUtente(o.toString());
+            utente = userManager.trovaUtente(o.toString());
         }
         return utente;
     }

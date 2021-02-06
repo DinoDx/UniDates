@@ -1,4 +1,4 @@
-package com.unidates.Unidates.UniDates.Service.Registrazione;
+package com.unidates.Unidates.UniDates.Manager.Registrazione;
 
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.Utente;

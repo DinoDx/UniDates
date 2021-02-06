@@ -5,7 +5,7 @@ import com.unidates.Unidates.UniDates.Control.ModerationControl;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistException;
 import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
-import com.unidates.Unidates.UniDates.Service.UtenteService;
+import com.unidates.Unidates.UniDates.Manager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class Populator implements ApplicationRunner {
 
     @Autowired
-    private UtenteService utenteService;
+    private UserManager userManager;
 
     @Autowired
     private ModerationControl moderationControl;
@@ -96,12 +96,12 @@ public class Populator implements ApplicationRunner {
         p5.addFoto(new Foto(img), false);
 
         try {
-            utenteService.registrazioneStudente(s1, p1); //usati solo per skippare l'invio email di conferma
-            utenteService.registrazioneStudente(s2, p2);
-            utenteService.registrazioneStudente(s3, p3);
+            userManager.registrazioneStudente(s1, p1); //usati solo per skippare l'invio email di conferma
+            userManager.registrazioneStudente(s2, p2);
+            userManager.registrazioneStudente(s3, p3);
 
-            utenteService.registrazioneCommunityManager(cm1, p5);
-            utenteService.registrazioneModeratore(m1, p4);
+            userManager.registrazioneCommunityManager(cm1, p5);
+            userManager.registrazioneModeratore(m1, p4);
 
             System.out.println("Populator eseguito correttamente!");
         }

@@ -1,7 +1,7 @@
-package com.unidates.Unidates.UniDates.Service.Registrazione;
+package com.unidates.Unidates.UniDates.Manager.Registrazione;
 
 import com.unidates.Unidates.UniDates.Model.Entity.Utente;
-import com.unidates.Unidates.UniDates.Service.UtenteService;
+import com.unidates.Unidates.UniDates.Manager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
     @Autowired
-    private UtenteService service;
+    private UserManager service;
 
 
     @Autowired

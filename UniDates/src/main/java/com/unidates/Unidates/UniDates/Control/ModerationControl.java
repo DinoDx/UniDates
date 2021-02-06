@@ -5,9 +5,9 @@ import com.unidates.Unidates.UniDates.Exception.*;
 import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
-import com.unidates.Unidates.UniDates.Service.ModerazioneService;
-import com.unidates.Unidates.UniDates.Service.NotificaService;
-import com.unidates.Unidates.UniDates.Service.UtenteService;
+import com.unidates.Unidates.UniDates.Manager.ModerazioneManager;
+import com.unidates.Unidates.UniDates.Manager.NotificaManager;
+import com.unidates.Unidates.UniDates.Manager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ModerationControl {
 
     @Autowired
-    ModerazioneService moderazioneService;
+    ModerazioneManager moderazioneManager;
 
     @Autowired
-    NotificaService notificaService;
+    NotificaManager notificaManager;
 
     @Autowired
-    UtenteService utenteService;
+    UserManager userManager;
 
     @Autowired
     SessionRegistry sessionRegistry;
@@ -35,7 +35,7 @@ public class ModerationControl {
         if(fotoId != null) {
             Segnalazione s = new Segnalazione(segnalazioneDTO.getMotivazione(), segnalazioneDTO.getDettagli());
             if (checkSegnalazione(s))
-                moderazioneService.inviaSegnalazione(s, fotoId);
+                moderazioneManager.inviaSegnalazione(s, fotoId);
             else throw new InvalidFormatException("Motivazione e/o dettagli non validi");
         } else throw new InvalidFormatException("Id non valido!");
     }
@@ -45,7 +45,7 @@ public class ModerationControl {
             Segnalazione s = new Segnalazione(segnalazioneDTO.getMotivazione(), segnalazioneDTO.getDettagli());
             if(checkSegnalazione(s)) {
                 if (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE)) {
-                    moderazioneService.inviaSegnalazioneCommunityManager(s, fotoId);
+                    moderazioneManager.inviaSegnalazioneCommunityManager(s, fotoId);
                 } else throw new NotAuthorizedException("Non puoi inviare una segnalazione al CM!");
             }else throw new InvalidFormatException("Motivazione e/o dettagli non validi");
         } else throw new InvalidFormatException("Id foto non valido");
@@ -57,10 +57,10 @@ public class ModerationControl {
             if (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))) {
                 Ammonimento a = new Ammonimento(ammonimentoDTO.getMotivazione(), ammonimentoDTO.getDettagli());
                 if (checkAmmonimento(a)) {
-                        moderazioneService.inviaAmmonimento(a, emailModeratore, emailStudenteAmmonito, fotoDTO.getId());
-                        moderazioneService.nascondiFoto(fotoDTO.getId());
-                        notificaService.genereateNotificaWarning(emailStudenteAmmonito, fotoDTO.getId());
-                        moderazioneService.checkAmmonimentiStudente(emailStudenteAmmonito);
+                        moderazioneManager.inviaAmmonimento(a, emailModeratore, emailStudenteAmmonito, fotoDTO.getId());
+                        moderazioneManager.nascondiFoto(fotoDTO.getId());
+                        notificaManager.genereateNotificaWarning(emailStudenteAmmonito, fotoDTO.getId());
+                        moderazioneManager.checkAmmonimentiStudente(emailStudenteAmmonito);
                 } else throw new InvalidFormatException("Motivazione e/o dettagli non validi");
             } else throw new NotAuthorizedException("Non puoi inviare un ammonimento!");
         }else throw new InvalidFormatException("Formato email non valido!");
@@ -72,8 +72,8 @@ public class ModerationControl {
             if ((SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))) {
                 Sospensione sp = new Sospensione(sospensioneDTO.getDurata(), sospensioneDTO.getDettagli());
                 if (checkSospensione(sp)) {
-                    moderazioneService.inviaSospensione(sp, emailSospeso);
-                    SecurityUtils.forceLogout(utenteService.trovaUtente(emailSospeso), sessionRegistry);
+                    moderazioneManager.inviaSospensione(sp, emailSospeso);
+                    SecurityUtils.forceLogout(userManager.trovaUtente(emailSospeso), sessionRegistry);
                 } else throw new InvalidFormatException("Dettagli e/o durata non validi");
             } else throw new NotAuthorizedException("Non puoi inviare una sospensione!");
         }else throw new InvalidFormatException("Formato email non valido");

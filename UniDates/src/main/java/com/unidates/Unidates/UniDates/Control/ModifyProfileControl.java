@@ -12,8 +12,8 @@ import com.unidates.Unidates.UniDates.Model.Enum.Sesso;
 import com.unidates.Unidates.UniDates.Model.Entity.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.Profilo;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
-import com.unidates.Unidates.UniDates.Service.ProfiloService;
-import com.unidates.Unidates.UniDates.Service.UtenteService;
+import com.unidates.Unidates.UniDates.Manager.ProfiloManager;
+import com.unidates.Unidates.UniDates.Manager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,10 +33,10 @@ public class ModifyProfileControl {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    ProfiloService profiloService;
+    ProfiloManager profiloManager;
 
     @Autowired
-    UtenteService utenteService;
+    UserManager userManager;
 
 
     @RequestMapping("/aggiungiFoto")
@@ -45,7 +45,7 @@ public class ModifyProfileControl {
         if (checkEmail(emailFotoToAdd)) {
             if (s.getEmail().equals(emailFotoToAdd)) {
                 if (checkFoto(fotoDTO))
-                    profiloService.aggiungiFotoLista(emailFotoToAdd, new Foto(fotoDTO.getImg()));
+                    profiloManager.aggiungiFotoLista(emailFotoToAdd, new Foto(fotoDTO.getImg()));
                 else throw new InvalidFormatException("La foto non rispetta le dimensioni consentite");
             } else throw new NotAuthorizedException("Non puoi inserire una foto per un altro utente");
         } else throw new InvalidFormatException("Formato email non valido!");
@@ -57,10 +57,10 @@ public class ModifyProfileControl {
         if (checkEmail(email) && idFoto != null) {
             if (utente.getRuolo().equals(Ruolo.STUDENTE)) {
                 if(utente.getEmail().equals(email)) {
-                    profiloService.eliminaFotoLista(email, idFoto);
+                    profiloManager.eliminaFotoLista(email, idFoto);
                 } else throw new NotAuthorizedException("Non puoi rimuovere la foto di un altro utente");
             } else {
-                profiloService.eliminaFotoLista(email, idFoto);
+                profiloManager.eliminaFotoLista(email, idFoto);
             }
         }else throw new  InvalidFormatException("Formato email e/o id foto non valido! ");
     }
@@ -72,7 +72,7 @@ public class ModifyProfileControl {
             if (SecurityUtils.getLoggedIn().getEmail().equals(emailFotoToAdd)) {
                 Foto f = new Foto(fotoDTO.getImg());
                 if (checkFoto(fotoDTO))
-                    profiloService.aggiungiFotoProfilo(emailFotoToAdd, f);
+                    profiloManager.aggiungiFotoProfilo(emailFotoToAdd, f);
                 else throw new InvalidFormatException("La foto non rispetta le dimensioni consentite");
             } else throw new NotAuthorizedException("Non puoi aggiungere foto ad un altro profilo");
         }else throw new InvalidFormatException("Formato email non valido!");
@@ -82,7 +82,7 @@ public class ModifyProfileControl {
     public void setFotoProfilo(@RequestParam String emailStudenteToModify, @RequestBody Long fotoId){
         if(checkEmail(emailStudenteToModify) || fotoId == null) {
             if (SecurityUtils.getLoggedIn().getEmail().equals(emailStudenteToModify)) {
-                profiloService.setFotoProfilo(emailStudenteToModify, fotoId);
+                profiloManager.setFotoProfilo(emailStudenteToModify, fotoId);
             } else throw new NotAuthorizedException("Non puoi settare la foto di un altro profilo");
         }else throw new InvalidFormatException("Formato email e/o id foto non validi!");
     }
@@ -102,7 +102,7 @@ public class ModifyProfileControl {
                     p.setNumeroTelefono(profiloDTO.getNumeroTelefono());
 
                 if (checkProfilo(p))
-                    profiloService.modificaProfilo(emailStudenteToModify, p);
+                    profiloManager.modificaProfilo(emailStudenteToModify, p);
                 else throw new InvalidFormatException("Uno o più campi inseriti non hanno un formato valido");
             } else throw new NotAuthorizedException("Non puoi modificare il profilo di un altro studente!");
         }else throw new InvalidFormatException("Formato email non valido!");
@@ -111,10 +111,10 @@ public class ModifyProfileControl {
     @RequestMapping("/cambiaPassword")
     public void cambiaPassword(@RequestParam String emailUtente,@RequestParam  String nuovaPassword,@RequestParam  String vecchiaPassword) throws InvalidFormatException, EntityNotFoundException {
         if(SecurityUtils.getLoggedIn().getEmail().equals(emailUtente)) {
-            Studente toChange = utenteService.trovaStudente(emailUtente);
+            Studente toChange = userManager.trovaStudente(emailUtente);
             if (checkPassword(nuovaPassword)){
                 if (passwordEncoder.matches(vecchiaPassword, toChange.getPassword())) {
-                    utenteService.cambiaPassword(emailUtente, nuovaPassword);
+                    userManager.cambiaPassword(emailUtente, nuovaPassword);
                 } else throw new PasswordMissmatchException();
             } else throw new InvalidFormatException("La password inserita non rispetta il formato");
         } else throw new NotAuthorizedException("Non puoi cambiare la password di un altro utente!");
@@ -123,9 +123,9 @@ public class ModifyProfileControl {
     @RequestMapping("/cancellaAccountPersonale")
     public void cancellaAccountPersonale(@RequestParam String email,@RequestParam  String password) throws EntityNotFoundException {
         if(SecurityUtils.getLoggedIn().getEmail().equals(email)){
-            Studente toDelete = utenteService.trovaStudente(email);
+            Studente toDelete = userManager.trovaStudente(email);
             if(passwordEncoder.matches(password, toDelete.getPassword())){
-                utenteService.deleteUtente(toDelete);
+                userManager.deleteUtente(toDelete);
                 SecurityUtils.forceLogout(toDelete, sessionRegistry);
             }else throw new PasswordMissmatchException();
         }
@@ -136,7 +136,7 @@ public class ModifyProfileControl {
     public FotoDTO trovaFoto(@RequestParam Long fotoId) {
         if(fotoId != null) {
             if (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))
-                return EntityToDto.toDTO(profiloService.findFotoById(fotoId));
+                return EntityToDto.toDTO(profiloManager.findFotoById(fotoId));
             else throw new NotAuthorizedException("Non puoi cercare le foto di altri utenti!");
         }else throw new InvalidFormatException("Id foto non valido");
     }
@@ -145,7 +145,7 @@ public class ModifyProfileControl {
     public ProfiloDTO trovaProfilo(@RequestParam Long profiloId) {
         if(profiloId != null) {
             if (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))
-                return EntityToDto.toDTO(profiloService.findProfiloById(profiloId));
+                return EntityToDto.toDTO(profiloManager.findProfiloById(profiloId));
             else throw new NotAuthorizedException("Non puoi cercare i profili di altri utenti!");
         }else throw new InvalidFormatException("Id profilo non valido!");
     }

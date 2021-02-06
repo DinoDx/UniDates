@@ -6,10 +6,10 @@ import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.*;
 import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
-import com.unidates.Unidates.UniDates.Service.UtenteService;
+import com.unidates.Unidates.UniDates.Manager.UserManager;
 
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
-import com.unidates.Unidates.UniDates.Service.Registrazione.Publisher;
+import com.unidates.Unidates.UniDates.Manager.Registrazione.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,7 +35,7 @@ public class UserManagementControl {
     Publisher publisher;
 
     @Autowired
-    UtenteService utenteService;
+    UserManager userManager;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -56,7 +56,7 @@ public class UserManagementControl {
         Studente s = new Studente(studenteDTO.getEmail(), studenteDTO.getPassword());
         s.setProfilo(p);
         if(checkStudente(studenteDTO) && checkProfilo(profiloDTO)) {
-            if(utenteService.registrazioneStudente(s, p)){
+            if(userManager.registrazioneStudente(s, p)){
                 String appUrl = request.getContextPath();
                 publisher.publishOnRegistrationEvent(s, request.getLocale(), appUrl);
             }
@@ -68,7 +68,7 @@ public class UserManagementControl {
     @RequestMapping("/isAlreadyRegistered")
     public boolean isAlreadyRegistered(@RequestParam String email){
         if(checkEmail(email)){
-            return utenteService.isPresent(email);
+            return userManager.isPresent(email);
         }else throw new InvalidFormatException("Formato email non valido!");
     }
 
@@ -80,28 +80,28 @@ public class UserManagementControl {
 
     @GetMapping("/registrationConfirm")
     public String confermaRegistrazione(@RequestParam("token") String token) {
-        VerificationToken verificationToken = utenteService.getVerificationToken(token);
+        VerificationToken verificationToken = userManager.getVerificationToken(token);
         System.out.println(token);
         if (verificationToken == null) {
             return "Token non valido";
         }
-        Utente utente = utenteService.getUtenteByVerificationToken(token);
+        Utente utente = userManager.getUtenteByVerificationToken(token);
         Calendar cal = Calendar.getInstance();
 
         if((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            utenteService.deleteUtente(utente);
+            userManager.deleteUtente(utente);
             return "Token scaduto";
         }
         System.out.println("Utente attivato: " + utente);
         utente.setActive(true);
-        utenteService.salvaUtenteRegistrato(utente);
+        userManager.salvaUtenteRegistrato(utente);
         return "Utente confermato";
     }
 
     @RequestMapping("/trovaTuttuStudenti")
     public List<StudenteDTO> trovaTuttiStudenti(){
         List<StudenteDTO> lista = new ArrayList<StudenteDTO>();
-        utenteService.findAllStudenti().forEach(studente -> lista.add(EntityToDto.toDTO(studente)));
+        userManager.findAllStudenti().forEach(studente -> lista.add(EntityToDto.toDTO(studente)));
         return lista;
     }
 

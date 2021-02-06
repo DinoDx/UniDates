@@ -1,22 +1,19 @@
-package com.unidates.Unidates.UniDates.Service;
+package com.unidates.Unidates.UniDates.Manager;
 
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistException;
 import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
 import com.unidates.Unidates.UniDates.Repository.VerificationTokenRepository;
-import com.unidates.Unidates.UniDates.Service.Registrazione.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UtenteService {
+public class UserManager {
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
     @Autowired
@@ -24,18 +21,14 @@ public class UtenteService {
     @Autowired
     private UtenteRepository utenteRepository;
 
-    @Autowired
+   /* @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
     private SessionRegistry sessionRegistry;
+    */
 
-    @Autowired
-    Publisher publisher;
 
-    public boolean isPresent(String email){
-        return utenteRepository.findByEmail(email) != null;
-    }
 
     public boolean registrazioneStudente(Studente s, Profilo p) throws AlreadyExistException {
         if(!isPresent(s.getEmail())) {
@@ -67,43 +60,53 @@ public class UtenteService {
 
     public Utente trovaUtente(String email) throws EntityNotFoundException {
         Utente utente = utenteRepository.findByEmail(email);
-        if(utente == null) throw new EntityNotFoundException("Utente non trovato");
-        else return utente;
+        if(utente != null) return utente;
+        else throw new EntityNotFoundException("Utente non trovato");
     }
 
     public Studente trovaStudente(String email) throws EntityNotFoundException {
         Studente studente = (Studente) utenteRepository.findByEmail(email);
         if(studente != null) return studente;
-         else throw new EntityNotFoundException("Studente non trovato!");
+        else throw new EntityNotFoundException("Studente non trovato!");
     }
 
 
-    public boolean bloccaStudente(String emailStudenteBloccante, String emailStudenteBloccato) {
+    public void bloccaStudente(String emailStudenteBloccante, String emailStudenteBloccato) {
         Studente studenteBloccante = (Studente) utenteRepository.findByEmail(emailStudenteBloccante);
         Studente studenteBloccato = (Studente) utenteRepository.findByEmail(emailStudenteBloccato);
-        studenteBloccante.addBloccato(studenteBloccato);
-        utenteRepository.save(studenteBloccante);
-        return true;
+        if(studenteBloccante != null && studenteBloccato != null) {
+            if(studenteBloccante.getListaBloccati().contains(studenteBloccato)) {
+                studenteBloccante.addBloccato(studenteBloccato);
+                utenteRepository.save(studenteBloccante);
+            }else throw new AlreadyExistException("L'utente è già stato bloccato!");
+        }else throw new EntityNotFoundException("Studente non trovato");
     }
 
-    public boolean sbloccaStudente(String emailStudenteSbloccante, String emailStudenteSbloccato) {
+    public void sbloccaStudente(String emailStudenteSbloccante, String emailStudenteSbloccato) {
         Studente studenteSbloccante = (Studente) utenteRepository.findByEmail(emailStudenteSbloccante);
         Studente studentesBloccato = (Studente) utenteRepository.findByEmail(emailStudenteSbloccato);
-        studenteSbloccante.removeBloccato(studentesBloccato);
-        utenteRepository.save(studenteSbloccante);
-        return true;
+        if(studenteSbloccante != null && studentesBloccato != null) {
+            studenteSbloccante.removeBloccato(studentesBloccato);
+            utenteRepository.save(studenteSbloccante);
+        }else throw new EntityNotFoundException("Studente non trovato");
+
     }
 
-    //Da inserire nell'SDD
+    public boolean isPresent(String email){
+        return utenteRepository.findByEmail(email) != null;
+    }
 
     public Utente getUtenteByVerificationToken(String verificationToken) {
         Utente utente = verificationTokenRepository.findByToken(verificationToken).getUtente();
-        return utente;
+        if(utente != null) return utente;
+        else throw new EntityNotFoundException("Untente non trovato!");
     }
 
 
     public VerificationToken getVerificationToken(String token) {
-        return verificationTokenRepository.findByToken(token);
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+        if(verificationToken != null) return verificationToken;
+        else throw new EntityNotFoundException("VerificationTokern non trovato!");
     }
 
     public void createVerificationToken(Utente utente, String token) {
@@ -114,7 +117,9 @@ public class UtenteService {
     }
 
     public void deleteUtente(Utente utente) {
-        utenteRepository.delete(utente);
+        if(utenteRepository.findByEmail(utente.getEmail()) != null)
+            utenteRepository.delete(utente);
+        else throw new EntityNotFoundException("Utente non trovato!");
     }
 
     public void salvaUtenteRegistrato(Utente utente) {
@@ -128,16 +133,18 @@ public class UtenteService {
     }
     public void cambiaPassword(String emailUtente, String nuovaPassword) {
         Utente toChange = utenteRepository.findByEmail(emailUtente);
-        toChange.setPassword(passwordEncoder.encode(nuovaPassword));
-        utenteRepository.save(toChange);
+        if(toChange != null) {
+            toChange.setPassword(passwordEncoder.encode(nuovaPassword));
+            utenteRepository.save(toChange);
+        } else throw new EntityNotFoundException("Utente non trovato!");
     }
 
 
-    public void testPython(){
+    /* public void testPython(){
         String result = restTemplate.getForObject("http://localhost:5000/", String.class);
 
         System.out.println(result);
-    }
+    }*/
 
 }
 
