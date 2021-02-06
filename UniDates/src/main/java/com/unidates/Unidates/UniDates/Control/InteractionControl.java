@@ -56,7 +56,7 @@ public class InteractionControl {
     public boolean bloccaStudente(@RequestParam String emailBloccante, @RequestParam String emailBloccato){
         if(checkEmail(emailBloccante) && checkEmail(emailBloccato)) {
             if (SecurityUtils.getLoggedIn().getEmail().equals(emailBloccante)) {
-                if (emailBloccante.equals(emailBloccato)) {
+                if (!(emailBloccante.equals(emailBloccato))) {
                     userManager.bloccaStudente(emailBloccante, emailBloccato);
                     if (matchManager.isValidMatch(emailBloccante, emailBloccato)) {
                         matchManager.eliminaMatch(emailBloccante, emailBloccato);
@@ -73,7 +73,7 @@ public class InteractionControl {
     public boolean sbloccaStudente(@RequestParam String emailSbloccante, @RequestParam String emailSbloccato) {
         if (checkEmail(emailSbloccante) && checkEmail(emailSbloccato)) {
             if (SecurityUtils.getLoggedIn().getEmail().equals(emailSbloccante)) {
-                if (emailSbloccante.equals(emailSbloccato)) {
+                if (!(emailSbloccante.equals(emailSbloccato))) {
                      userManager.sbloccaStudente(emailSbloccante, emailSbloccato);
                      return true;
                 } else throw new NotAuthorizedException("Non puoi sbloccare te stesso");
