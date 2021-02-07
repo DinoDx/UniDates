@@ -56,10 +56,9 @@ public class UserManagementControl {
         Studente s = new Studente(studenteDTO.getEmail(), studenteDTO.getPassword());
         s.setProfilo(p);
         if(checkStudente(studenteDTO) && checkProfilo(profiloDTO)) {
-            if(userManager.registrazioneStudente(s, p)){
+                userManager.registrazioneStudente(s, p);
                 String appUrl = request.getContextPath();
                 publisher.publishOnRegistrationEvent(s, request.getLocale(), appUrl);
-            }
         }else throw new InvalidFormatException("Uno o piú campi inseriti non rispettano il formato");
     }
 
@@ -89,12 +88,11 @@ public class UserManagementControl {
         Calendar cal = Calendar.getInstance();
 
         if((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            userManager.deleteUtente(utente);
+            userManager.deleteUtente(utente.getEmail());
             return "Token scaduto";
         }
         System.out.println("Utente attivato: " + utente);
-        utente.setActive(true);
-        userManager.salvaUtenteRegistrato(utente);
+        userManager.attivaUtenteRegistrato(utente.getEmail());
         return "Utente confermato";
     }
 

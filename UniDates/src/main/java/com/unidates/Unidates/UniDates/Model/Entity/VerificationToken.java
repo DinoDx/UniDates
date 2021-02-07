@@ -3,6 +3,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class VerificationToken {
@@ -67,4 +68,13 @@ public class VerificationToken {
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof VerificationToken)) return false;
+        VerificationToken that = (VerificationToken) o;
+        return id.equals(that.id);
+    }
+
 }

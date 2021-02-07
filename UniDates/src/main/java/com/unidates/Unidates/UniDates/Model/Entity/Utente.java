@@ -10,8 +10,6 @@ import java.util.List;
 @Table(name = "Utente")
 public abstract class Utente implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     private String email;
     private String password;
     private Ruolo ruolo;
@@ -32,13 +30,6 @@ public abstract class Utente implements Serializable {
         this.setActive(false);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return email;
@@ -76,7 +67,6 @@ public abstract class Utente implements Serializable {
     @Override
     public String toString() {
         return "Utente{" +
-                "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", ruolo=" + ruolo +

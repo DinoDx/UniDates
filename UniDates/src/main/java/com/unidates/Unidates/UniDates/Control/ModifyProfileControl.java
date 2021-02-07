@@ -125,7 +125,7 @@ public class ModifyProfileControl {
         if(SecurityUtils.getLoggedIn().getEmail().equals(email)){
             Studente toDelete = userManager.trovaStudente(email);
             if(passwordEncoder.matches(password, toDelete.getPassword())){
-                userManager.deleteUtente(toDelete);
+                userManager.deleteUtente(toDelete.getEmail());
                 SecurityUtils.forceLogout(toDelete, sessionRegistry);
             }else throw new PasswordMissmatchException();
         }

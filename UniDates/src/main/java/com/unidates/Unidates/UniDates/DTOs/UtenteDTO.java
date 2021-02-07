@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public  class UtenteDTO {
-    private Long id;
     private String email;
     private String password;
     private Ruolo ruolo;
@@ -20,13 +19,6 @@ public  class UtenteDTO {
         this.ruolo = ruolo;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return email;
@@ -56,7 +48,6 @@ public  class UtenteDTO {
     @Override
     public String toString() {
         return "UtenteDTO{" +
-                "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", ruolo=" + ruolo +

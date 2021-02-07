@@ -30,30 +30,32 @@ public class UserManager {
 
 
 
-    public boolean registrazioneStudente(Studente s, Profilo p) throws AlreadyExistException {
+    public Studente registrazioneStudente(Studente s, Profilo p) throws AlreadyExistException {
         if(!isPresent(s.getEmail())) {
             s.setProfilo(p);
             s.setPassword(passwordEncoder.encode(s.getPassword()));
             utenteRepository.save(s);
-            return true;
+            return s;
         }
         else throw new AlreadyExistException("Utente giá registrato con questa email!!");
     }
 
-    public void registrazioneModeratore(Moderatore m, Profilo p) throws AlreadyExistException {
+    public Moderatore registrazioneModeratore(Moderatore m, Profilo p) throws AlreadyExistException {
         if(!isPresent(m.getEmail())) {
             m.setProfilo(p);
             m.setPassword(passwordEncoder.encode(m.getPassword()));
             utenteRepository.save(m);
+            return m;
         }
         else throw new AlreadyExistException("Utente giá registrato con questa email!!");
     }
 
-    public void registrazioneCommunityManager(CommunityManager cm, Profilo p) throws AlreadyExistException {
+    public CommunityManager registrazioneCommunityManager(CommunityManager cm, Profilo p) throws AlreadyExistException {
         if(!isPresent(cm.getEmail())) {
-        cm.setProfilo(p);
-        cm.setPassword(passwordEncoder.encode(cm.getPassword()));
-        utenteRepository.save(cm);
+            cm.setProfilo(p);
+            cm.setPassword(passwordEncoder.encode(cm.getPassword()));
+            utenteRepository.save(cm);
+            return cm;
         }
         else throw new AlreadyExistException("Utente giá registrato con questa email!!");
     }
@@ -71,23 +73,25 @@ public class UserManager {
     }
 
 
-    public void bloccaStudente(String emailStudenteBloccante, String emailStudenteBloccato) {
+    public boolean bloccaStudente(String emailStudenteBloccante, String emailStudenteBloccato) {
         Studente studenteBloccante = (Studente) utenteRepository.findByEmail(emailStudenteBloccante);
         Studente studenteBloccato = (Studente) utenteRepository.findByEmail(emailStudenteBloccato);
         if(studenteBloccante != null && studenteBloccato != null) {
-            if(studenteBloccante.getListaBloccati().contains(studenteBloccato)) {
+            if(!studenteBloccante.getListaBloccati().contains(studenteBloccato)) {
                 studenteBloccante.addBloccato(studenteBloccato);
                 utenteRepository.save(studenteBloccante);
+                return true;
             }else throw new AlreadyExistException("L'utente è già stato bloccato!");
         }else throw new EntityNotFoundException("Studente non trovato");
     }
 
-    public void sbloccaStudente(String emailStudenteSbloccante, String emailStudenteSbloccato) {
+    public boolean sbloccaStudente(String emailStudenteSbloccante, String emailStudenteSbloccato) {
         Studente studenteSbloccante = (Studente) utenteRepository.findByEmail(emailStudenteSbloccante);
         Studente studentesBloccato = (Studente) utenteRepository.findByEmail(emailStudenteSbloccato);
         if(studenteSbloccante != null && studentesBloccato != null) {
             studenteSbloccante.removeBloccato(studentesBloccato);
             utenteRepository.save(studenteSbloccante);
+            return true;
         }else throw new EntityNotFoundException("Studente non trovato");
 
     }
@@ -99,7 +103,7 @@ public class UserManager {
     public Utente getUtenteByVerificationToken(String verificationToken) {
         VerificationToken token = verificationTokenRepository.findByToken(verificationToken);
         if(token != null) {
-            Utente utente = verificationTokenRepository.findByToken(verificationToken).getUtente();
+            Utente utente = token.getUtente();
             if (utente != null) return utente;
             else throw new EntityNotFoundException("Utente non trovato!");
         }else throw new EntityNotFoundException("Token non trovato!");
@@ -112,21 +116,30 @@ public class UserManager {
         else throw new EntityNotFoundException("VerificationTokern non trovato!");
     }
 
-    public void createVerificationToken(Utente utente, String token) {
+    public VerificationToken createVerificationToken(Utente utente, String token) {
         VerificationToken myToken = new VerificationToken();
         myToken.setToken(token);
         myToken.setUtente(utente);
         verificationTokenRepository.save(myToken);
+        return myToken;
     }
 
-    public void deleteUtente(Utente utente) {
-        if(utenteRepository.findByEmail(utente.getEmail()) != null)
-            utenteRepository.delete(utente);
+    public Utente deleteUtente(String email) {
+        Utente u = utenteRepository.findByEmail(email);
+        if(  u != null) {
+            utenteRepository.delete(u);
+            return u;
+        }
         else throw new EntityNotFoundException("Utente non trovato!");
     }
 
-    public void salvaUtenteRegistrato(Utente utente) {
-        utenteRepository.save(utente);
+    public Utente attivaUtenteRegistrato(String email) {
+        Utente u = utenteRepository.findByEmail(email);
+        if(u!= null) {
+            u.setActive(true);
+            return utenteRepository.save(u);
+        }
+        else throw new EntityNotFoundException("Utente non trovato!");
     }
 
     public List<Studente> findAllStudenti() {
@@ -134,11 +147,12 @@ public class UserManager {
         utenteRepository.findAll().forEach(s -> listaStudenti.add((Studente) s));
         return listaStudenti;
     }
-    public void cambiaPassword(String emailUtente, String nuovaPassword) {
+    public boolean cambiaPassword(String emailUtente, String nuovaPassword) {
         Utente toChange = utenteRepository.findByEmail(emailUtente);
         if(toChange != null) {
             toChange.setPassword(passwordEncoder.encode(nuovaPassword));
             utenteRepository.save(toChange);
+            return true;
         } else throw new EntityNotFoundException("Utente non trovato!");
     }
 

@@ -59,7 +59,6 @@ public class EntityToDto {
         sdto.setPassword(studenteDTO.getPassword());
         sdto.setListaNotifica(studenteDTO.getListaNotifica());
         sdto.setRuolo(studenteDTO.getRuolo());
-        sdto.setId(studenteDTO.getId());
         sdto.setAmmonimentiAttivi(studenteDTO.getAmmonimentiAttivi());
         sdto.setBanned(studenteDTO.isBanned());
         sdto.setListaAmmonimenti(studenteDTO.getListaAmmonimenti());
@@ -86,7 +85,6 @@ public class EntityToDto {
         sdto.setPassword(utenteDTO.getPassword());
 
         sdto.setRuolo(utenteDTO.getRuolo());
-        sdto.setId(utenteDTO.getId());
 
         sdto.setAmmonimentiAttivi(s.getAmmonimentiAttivi());
         sdto.setBanned(s.isBanned());

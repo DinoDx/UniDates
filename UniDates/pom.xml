@@ -70,6 +70,23 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 			<version>2.2.5.RELEASE</version>
 		</dependency>
+
+		<!-- TEST -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>compile</scope>
+		</dependency>
 	<!--Icone -->
         <dependency>
             <groupId>com.vaadin</groupId>
