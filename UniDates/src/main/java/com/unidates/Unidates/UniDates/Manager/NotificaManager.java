@@ -56,7 +56,7 @@ public class NotificaManager {
     public void genereateNotificaWarning(String studenteEmail, Long removedFotoId){ //DA RICONTROLLARE PER MODERAZIONE
 
         Studente studente1 = (Studente) utenteRepository.findByEmail(studenteEmail);
-        Foto removedfoto =  fotoRepository.findById(removedFotoId).orElse(null);
+        Foto removedfoto =  fotoRepository.findFotoById(removedFotoId);
         if(studente1 != null) {
             if(removedfoto != null) {
                 Ammonimento ammonimento = ammonimentiRepository.findByFoto(removedfoto);
