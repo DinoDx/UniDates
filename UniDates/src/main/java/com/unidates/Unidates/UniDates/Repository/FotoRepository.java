@@ -4,4 +4,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.Foto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FotoRepository extends JpaRepository<Foto, Long> {
+
+    Foto findFotoById(Long Id);
+
 }

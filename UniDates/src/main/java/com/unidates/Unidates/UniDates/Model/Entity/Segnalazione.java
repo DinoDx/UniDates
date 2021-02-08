@@ -3,6 +3,7 @@ package com.unidates.Unidates.UniDates.Model.Entity;
 import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Segnalazioni")
@@ -69,5 +70,18 @@ public class Segnalazione {
 
     public void setDettagli(String dettagli) {
         this.dettagli = dettagli;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Segnalazione that = (Segnalazione) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

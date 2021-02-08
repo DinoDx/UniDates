@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -44,35 +45,37 @@ public class ModerazioneManager {
     Publisher publisher;
 
 
-    public void inviaSegnalazione(Segnalazione s, Long idFoto){
+    public Segnalazione inviaSegnalazione(Segnalazione s, Long idFoto){
         List<Utente> moderatores = utenteRepository.findAllByRuolo(Ruolo.MODERATORE);
         Moderatore moderatore = (Moderatore) moderatores.get(new Random().nextInt(moderatores.size()));
-        Foto segnalata = fotoRepository.findById(idFoto).orElse(null);
+        Foto segnalata = fotoRepository.findFotoById(idFoto);
         if(segnalata != null){
             s.setModeratore(moderatore); //Moderatore scelto casualmente tra tutti i moderatori
             s.setFoto(segnalata);
             if (segnalazioniRepository.findByModeratoreAndFoto(moderatore, segnalata) == null) { //Non si può inviare la stessa segnalazione allo stesso moderatore!
                 segnalazioniRepository.save(s);
+                return s;
             }else throw new AlreadyExistException("Segnalazione già esistente!");
         } else throw new EntityNotFoundException("Foto non trovata!");
 
     }
 
-    public void inviaSegnalazioneCommunityManager(Segnalazione s, Long idFoto){
+    public Segnalazione inviaSegnalazioneCommunityManager(Segnalazione s, Long idFoto){
         List<Utente> cms =  utenteRepository.findAllByRuolo(Ruolo.COMMUNITY_MANAGER);
         CommunityManager cm = (CommunityManager) cms.get(new Random().nextInt(cms.size()));
         s.setModeratore(cm);
-        Foto f = fotoRepository.findById(idFoto).orElse(null);
+        Foto f = fotoRepository.findFotoById(idFoto);
         if(f != null){
             s.setFoto(f);
             if (segnalazioniRepository.findByModeratoreAndFoto(cm, f) == null) { // viene mandata una segnalazione se giá non ne esiste una associata a quella foto
                 segnalazioniRepository.save(s);
+                return s;
             }else throw new AlreadyExistException("Segnalazione già esistente!");
         }else throw new EntityNotFoundException("Foto non trovata!");
 
     }
 
-    public void inviaAmmonimento(Ammonimento a, String emailModeratore, String emailStudenteAmmonito, Long idFoto) throws AlreadyExistException {
+    public Ammonimento inviaAmmonimento(Ammonimento a, String emailModeratore, String emailStudenteAmmonito, Long idFoto) throws AlreadyExistException {
         Studente ammonito = (Studente) utenteRepository.findByEmail(emailStudenteAmmonito);
         if(ammonito != null) {
             a.setModeratore((Moderatore) utenteRepository.findByEmail(emailModeratore));
@@ -83,17 +86,19 @@ public class ModerazioneManager {
                 ammonimentiRepository.save(a);
                 ammonito.addAmmonimentoattivo();
                 utenteRepository.save(ammonito);
+                return a;
             } else throw new AlreadyExistException("Ammonimento già presente!");
         } else throw new EntityNotFoundException("Studente non trovato!");
     }
 
-    public void inviaSospensione(Sospensione sp,String emailSospeso){
+    public Sospensione inviaSospensione(Sospensione sp,String emailSospeso){
         Studente daSospendere = (Studente) utenteRepository.findByEmail(emailSospeso);
         if(daSospendere != null) {
             sp.setStudente(daSospendere);
             sospensioniRepository.save(sp);
             daSospendere.setBanned(true);
             utenteRepository.save(daSospendere);
+            return sp;
         }else throw new EntityNotFoundException("Studente non trovato!");
     }
 
