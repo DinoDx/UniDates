@@ -22,33 +22,39 @@ public class ProfiloManager {
     @Autowired
     private FotoRepository fotoRepository;
 
-    public void modificaProfilo(String email ,Profilo profilo){ // Con modifica profilo modifichi solo le info e non le foto
+    //
+    public Profilo modificaProfilo(String email ,Profilo profilo){ // Con modifica profilo modifichi solo le info e non le foto
         Studente studente = (Studente) utenteRepository.findByEmail(email);
         if(studente != null){
             profilo.setId(studente.getProfilo().getId());
             profilo.setListaFoto(studente.getProfilo().getListaFoto());
             profilo.setStudente(studente);
             profiloRepository.save(profilo);
+            return profilo;
         } else throw new EntityNotFoundException("Studente non trovato!");
     }
 
-    public void setFotoProfilo(String email, Long idNuovaFoto){
+
+    public Foto setFotoProfilo(String email, Long idNuovaFoto){
         eliminaFotoProfilo(email);
         Foto f = fotoRepository.findById(idNuovaFoto).orElse(null);
         if(f != null) {
             f.setFotoProfilo(true);
             fotoRepository.save(f);
+            return f;
         }
         else throw new EntityNotFoundException("Foto non trovata!");
     }
 
-    public void aggiungiFotoLista(String email, Foto foto){
+
+    public Foto aggiungiFotoLista(String email, Foto foto){
         Studente studente = (Studente) utenteRepository.findByEmail(email);
         if(studente != null) {
-            Foto f = new Foto(foto.getImg());
+            Foto f = foto;
             if(!studente.getProfilo().getListaFoto().contains(f)) {
                 studente.getProfilo().addFoto(f, false);
                 profiloRepository.save(studente.getProfilo());
+                return f;
             }else throw new AlreadyExistException("Foto già inserita!");
         }else throw new EntityNotFoundException("Studente non trovato!");
     }
@@ -64,36 +70,44 @@ public class ProfiloManager {
             }else throw new AlreadyExistException("Foto già inserita!");
         }else throw new EntityNotFoundException("Studente non trovato!");
     }
-    public void eliminaFotoLista(String email, Long idFototoDelete){
+
+    //
+    public Foto eliminaFotoLista(String email, Long idFototoDelete){
         Studente studente = (Studente) utenteRepository.findByEmail(email);
         if(studente != null) {
-            Foto f = fotoRepository.findById(idFototoDelete).orElse(null);
+            Foto f = fotoRepository.findFotoById(idFototoDelete);
             if(f != null) {
                 studente.getProfilo().removeFoto(f);
                 profiloRepository.save(studente.getProfilo());
+                return f;
             }else throw new EntityNotFoundException("Foto non trovata!");
         }else throw new EntityNotFoundException("Studente non trovato!");
     }
 
-    private void eliminaFotoProfilo(String email){
+
+    //
+    public Studente eliminaFotoProfilo(String email){
         Studente studente = (Studente) utenteRepository.findByEmail(email);
         if(studente != null) {
             Foto foto = studente.getProfilo().getFotoProfilo();
             if(foto != null) {
                 foto.setFotoProfilo(false);
                 fotoRepository.save(foto);
+                return studente;
             }else throw new EntityNotFoundException("Foto profilo non trovata!");
         } else throw new EntityNotFoundException("Studente non trovato!");
     }
 
+    //
     public Foto findFotoById(Long fotoId) {
-        Foto f = fotoRepository.findById(fotoId).orElse(null);
+        Foto f = fotoRepository.findFotoById(fotoId);
         if(f != null) return f;
         else throw new EntityNotFoundException("Foto non trovata!");
     }
 
+    //
     public Profilo findProfiloById(Long profiloId) {
-        Profilo p = profiloRepository.findById(profiloId).orElse(null);
+        Profilo p = profiloRepository.findProfiloById(profiloId);
         if(p != null) return p;
         else throw new EntityNotFoundException("Profilo non trovato!");
     }
