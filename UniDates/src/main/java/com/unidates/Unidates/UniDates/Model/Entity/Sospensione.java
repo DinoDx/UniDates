@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.Model.Entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Sospensioni")
@@ -57,4 +58,13 @@ public class Sospensione {
     public void setDettagli(String dettagli) {
         this.dettagli = dettagli;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sospensione that = (Sospensione) o;
+        return Objects.equals(id, that.id);
+    }
+
 }

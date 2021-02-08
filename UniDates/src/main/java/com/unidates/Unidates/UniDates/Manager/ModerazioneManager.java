@@ -80,7 +80,7 @@ public class ModerazioneManager {
         if(ammonito != null) {
             a.setModeratore((Moderatore) utenteRepository.findByEmail(emailModeratore));
             a.setStudente(ammonito);
-            a.setFoto(fotoRepository.findById(idFoto).get());
+            a.setFoto(fotoRepository.findFotoById(idFoto));
 
             if (!ammonito.getListaAmmonimenti().contains(a)) { //Utente ammonito solo nel caso non abbia già un ammonimento per la stessa foto
                 ammonimentiRepository.save(a);
@@ -103,15 +103,16 @@ public class ModerazioneManager {
     }
 
 
-    public void nascondiFoto(Long idFoto){
-        Foto foto = fotoRepository.findById(idFoto).orElse(null);
+    public Boolean nascondiFoto(Long idFoto){
+        Foto foto = fotoRepository.findFotoById(idFoto);
         if(foto != null) {
             foto.setVisible(false);
             fotoRepository.save(foto);
+            return true;
         } else throw new EntityNotFoundException("Foto non trovata!");
     }
 
-    public void checkAmmonimentiStudente(String emailStudente) {
+    public Boolean checkAmmonimentiStudente(String emailStudente) {
         Studente studente = (Studente) utenteRepository.findByEmail(emailStudente);
         if(studente != null) {
             if (studente.getAmmonimentiAttivi() == 3) {
@@ -120,7 +121,10 @@ public class ModerazioneManager {
                 Sospensione toSend = new Sospensione(durataWarningSuspension, "Sei stato ammonito per 3 volte di seguito. Hai ricevuto una sospensione di " + durataWarningSuspension + " giorni");
                 inviaSospensione(toSend, studente.getEmail());
             }
+
         }else throw new EntityNotFoundException("Studente non trovato!");
+
+        return true;
     }
 
 }
