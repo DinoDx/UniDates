@@ -10,7 +10,7 @@ public class Foto implements Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name="profilo_id")
@@ -47,11 +47,11 @@ public class Foto implements Cloneable {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        id = id;
     }
 
     public Profilo getProfilo() {
