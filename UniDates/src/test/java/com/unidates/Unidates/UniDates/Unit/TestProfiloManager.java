@@ -105,7 +105,7 @@ public class TestProfiloManager {
         });
 
         Foto f = new Foto();
-        f.setId(2L);
+        f.setId(1L);
         assertEquals(f,profiloManager.aggiungiFotoLista("email",new Foto()));
     }
 

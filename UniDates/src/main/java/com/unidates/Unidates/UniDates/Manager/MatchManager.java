@@ -17,7 +17,8 @@ public class MatchManager {
     @Autowired
     private MatchRepository matchRepository;
 
-    public void aggiungiMatch(String emailStudente1, String emailStudente2){
+    //
+    public boolean aggiungiMatch(String emailStudente1, String emailStudente2){
 
         Studente invia = (Studente) utenteRepository.findByEmail(emailStudente1);
         Studente riceve = (Studente) utenteRepository.findByEmail(emailStudente2);
@@ -36,6 +37,7 @@ public class MatchManager {
                 }
             }
         } else throw new EntityNotFoundException("Studente non trovato!");
+        return true;
     }
 
     public Match trovaMatch(String emailStudente1, String  emailStudente2){
@@ -69,14 +71,14 @@ public class MatchManager {
     }
 
 
-    public void eliminaMatch(String  emailStudente1, String emailStudente2){
+    public boolean eliminaMatch(String  emailStudente1, String emailStudente2){
         Studente invia = (Studente) utenteRepository.findByEmail(emailStudente1);
         Studente riceve = (Studente) utenteRepository.findByEmail(emailStudente2);
         if(invia != null && riceve != null) {
             matchRepository.deleteById(trovaMatch(emailStudente1, emailStudente2).getId());
+            return true;
         }
         else throw new EntityNotFoundException("Studente non trovato!");
-
     }
 }
 
