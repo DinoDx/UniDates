@@ -42,7 +42,7 @@ public class TestMatchManager {
 
     @Test
     public void aggiungiMatch_valid(){
-        Mockito.when(utenteRepository.findByEmail("prova1")).thenReturn(new Studente());
+        Mockito.when(utenteRepository.findByEmail("marcobello@")).thenReturn(new Studente());
         Mockito.when(utenteRepository.findByEmail("prova2")).thenReturn(new Studente());
         assertTrue(matchManager.aggiungiMatch("prova1","prova2"));
     }
@@ -73,24 +73,19 @@ public class TestMatchManager {
 
     @Test
     public void trovaMatch_matchNonTrovato(){
-        Studente prova1 = new Studente();
-        Studente prova2 = new Studente();
-        prova1.setEmail("prova1");
-        prova2.setEmail("prova2");
 
-        Mockito.when(utenteRepository.findByEmail("prova1")).thenReturn(prova1);
-        Mockito.when(utenteRepository.findByEmail("prova2")).thenReturn(prova2);
-        Mockito.when(matchRepository.findAllByStudente1AndStudente2(prova1,prova2)).thenReturn(null);
-        Mockito.when(matchRepository.findAllByStudente1AndStudente2(prova2,prova1)).thenReturn(null);
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> {
+            Studente s = new Studente(invocation.getArgument(0, String.class), "paassword");
+            return s;
+        });
+        Mockito.when(matchRepository.findAllByStudente1AndStudente2(any(Studente.class),any(Studente.class))).thenReturn(null);
 
-        assertThrows(EntityNotFoundException.class,()-> matchManager.trovaMatch("prova1","prova2"));
+        assertThrows(EntityNotFoundException.class,()-> matchManager.trovaMatch("prova1@gmail.com","prova2@gmail.com"));
     }
 
     @Test
     public void trovaMatch_studenteNonTrovato(){
-        Mockito.when(utenteRepository.findByEmail("prova1")).thenReturn(null);
-        Mockito.when(utenteRepository.findByEmail("prova2")).thenReturn(null);
-
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
         assertThrows(EntityNotFoundException.class,()-> matchManager.trovaMatch("prova1","prova2"));
     }
 

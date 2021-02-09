@@ -1,6 +1,7 @@
 package com.unidates.Unidates.UniDates.Model.Entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "match")
@@ -73,10 +74,16 @@ public class Match {
     public String toString() {
         return "Match{" +
                 "id=" + id +
-                ", studente1=" + studente1.getEmail() +
-                ", studente2=" + studente2.getEmail() +
                 ", likedByStudent1=" + likedByStudent1 +
                 ", likeByStudent2=" + likeByStudent2 +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Match)) return false;
+        Match match = (Match) o;
+        return this.id.equals(match.getId());
     }
 }

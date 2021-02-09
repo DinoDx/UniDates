@@ -34,7 +34,7 @@ public class UserManager {
         if(!isPresent(s.getEmail())) {
             s.setProfilo(p);
             s.setPassword(passwordEncoder.encode(s.getPassword()));
-            utenteRepository.save(s);
+            utenteRepository.save(s); //
             return s;
         }
         else throw new AlreadyExistException("Utente giá registrato con questa email!!");
@@ -137,7 +137,8 @@ public class UserManager {
         Utente u = utenteRepository.findByEmail(email);
         if(u!= null) {
             u.setActive(true);
-            return utenteRepository.save(u);
+            utenteRepository.save(u);
+            return u;
         }
         else throw new EntityNotFoundException("Utente non trovato!");
     }
@@ -147,12 +148,12 @@ public class UserManager {
         utenteRepository.findAll().forEach(s -> listaStudenti.add((Studente) s));
         return listaStudenti;
     }
-    public boolean cambiaPassword(String emailUtente, String nuovaPassword) {
+    public Utente cambiaPassword(String emailUtente, String nuovaPassword) {
         Utente toChange = utenteRepository.findByEmail(emailUtente);
         if(toChange != null) {
             toChange.setPassword(passwordEncoder.encode(nuovaPassword));
             utenteRepository.save(toChange);
-            return true;
+            return toChange;
         } else throw new EntityNotFoundException("Utente non trovato!");
     }
 

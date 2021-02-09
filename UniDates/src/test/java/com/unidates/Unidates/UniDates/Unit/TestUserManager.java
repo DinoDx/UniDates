@@ -6,6 +6,7 @@ import com.unidates.Unidates.UniDates.Exception.AlreadyExistException;
 import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
 import com.unidates.Unidates.UniDates.Manager.UserManager;
 import com.unidates.Unidates.UniDates.Model.Entity.*;
+import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
 import com.unidates.Unidates.UniDates.Repository.VerificationTokenRepository;
 import org.junit.jupiter.api.Test;
@@ -15,8 +16,12 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -28,6 +33,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 public class TestUserManager {
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
     UserManager userManager;
 
     @MockBean
@@ -38,30 +45,110 @@ public class TestUserManager {
 
     @Test
     public void registrazioneStudente_valid(){
+        Studente s = new Studente("marcoprova1@gmail.com","ciao");
+        ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+
+        hobbyArrayList.add(Hobby.ARTE);
+        hobbyArrayList.add(Hobby.ANIME);
+        hobbyArrayList.add(Hobby.CALCIO);
+
+        Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto() ,hobbyArrayList);
+
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertEquals(new Studente("email", "password"), userManager.registrazioneStudente(new Studente("email", "password"), new Profilo()));
+
+        Studente registrato = userManager.registrazioneStudente(s, p);
+        assertFalse(registrato.isActive());
+        assertTrue(passwordEncoder.matches("ciao", registrato.getPassword()));
     }
 
     @Test
     public void registrazioneStudente_esiste(){
-        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(new Studente());
-        assertThrows(AlreadyExistException.class, () -> userManager.registrazioneStudente(new Studente("ciao", "ciao"), new Profilo()));
+        Studente s = new Studente("marcoprova1@gmail.com","ciao");
+        ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+
+        hobbyArrayList.add(Hobby.ARTE);
+        hobbyArrayList.add(Hobby.ANIME);
+        hobbyArrayList.add(Hobby.CALCIO);
+
+        Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto() ,hobbyArrayList);
+
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(new Studente("marcoprova1@gmail.com", "password"));
+        assertThrows(AlreadyExistException.class, () -> userManager.registrazioneStudente(s, p));
     }
 
     @Test
     public void registrazioneModeratore_valid(){
+
+        Moderatore m = new Moderatore("moderatore@gmail.com","ciao");
+        ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+
+        hobbyArrayList.add(Hobby.ARTE);
+        hobbyArrayList.add(Hobby.ANIME);
+        hobbyArrayList.add(Hobby.CALCIO);
+
+        Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto() ,hobbyArrayList);
+
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertEquals( new Moderatore("ciao", "ciao"),userManager.registrazioneModeratore(new Moderatore("ciao", "ciao"), new Profilo()));
+
+        Moderatore registrato = userManager.registrazioneModeratore(m, p);
+
+        assertTrue(registrato.isActive());
+        assertTrue(passwordEncoder.matches("ciao", registrato.getPassword()));
     }
 
     @Test
     public void registrazioneModeratore_esiste(){
-        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(new Moderatore());
-        assertThrows(AlreadyExistException.class, () -> userManager.registrazioneModeratore(new Moderatore("ciao", "ciao"), new Profilo()));
+        Moderatore m = new Moderatore("moderatore@gmail.com","ciao");
+        ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+
+        hobbyArrayList.add(Hobby.ARTE);
+        hobbyArrayList.add(Hobby.ANIME);
+        hobbyArrayList.add(Hobby.CALCIO);
+
+        Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto() ,hobbyArrayList);
+
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(new Moderatore("moderatore@gmail.com", "password"));
+
+        assertThrows(AlreadyExistException.class, () -> userManager.registrazioneModeratore(m,p));
     }
 
     @Test
+    public void registrazioneCommunityManager_valid(){
+            CommunityManager m = new CommunityManager("cmmanager@gmail.com","ciao");
+            ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+
+            hobbyArrayList.add(Hobby.ARTE);
+            hobbyArrayList.add(Hobby.ANIME);
+            hobbyArrayList.add(Hobby.CALCIO);
+
+            Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto() ,hobbyArrayList);
+
+            Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
+
+            CommunityManager registrato = userManager.registrazioneCommunityManager(m, p);
+
+            assertTrue(registrato.isActive());
+            assertTrue(passwordEncoder.matches("ciao", registrato.getPassword()));
+    }
+
+    @Test
+    public void registrazioneCommunityManager_esiste(){
+        CommunityManager m = new CommunityManager("cmmanager@gmail.com","ciao");
+        ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+
+        hobbyArrayList.add(Hobby.ARTE);
+        hobbyArrayList.add(Hobby.ANIME);
+        hobbyArrayList.add(Hobby.CALCIO);
+
+        Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto() ,hobbyArrayList);
+
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(new CommunityManager("cmmanger@gmail.com", "password"));
+
+        assertThrows(AlreadyExistException.class, () -> userManager.registrazioneModeratore(m,p));
+    }
+    @Test
     public void trovaUtente_valid(){
+
         Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> {
             String email = invocation.getArgument(0, String.class);
             Utente u = new Studente();
@@ -69,15 +156,15 @@ public class TestUserManager {
             return u;
         });
 
-        Utente u = new Studente();
-        u.setEmail("prova");
-        assertEquals(u, userManager.trovaUtente("prova"));
+        Utente s = new Studente("marcoprova1@gmail.com","ciao");
+
+        assertEquals(s, userManager.trovaUtente("marcoprova1@gmail.com"));
     }
 
     @Test
     public void trovaUtente_nontrovato(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertThrows(EntityNotFoundException.class, () -> userManager.trovaUtente("pippo"));
+        assertThrows(EntityNotFoundException.class, () -> userManager.trovaUtente("pippo@gmail.com"));
     }
 
     @Test
@@ -89,70 +176,75 @@ public class TestUserManager {
             return s;
         });
 
-        Studente s  = new Studente();
-        s.setEmail("pippo");
-        assertEquals(s, userManager.trovaStudente("pippo"));
+        Studente s  = new Studente("paolobelli@gmail.com", "paoloprovapasword00@@");;
+        assertEquals(s, userManager.trovaStudente("paolobelli@gmail.com"));
     }
 
     @Test
     public void trovaStudente_nontrovato(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertThrows(EntityNotFoundException.class, () -> userManager.trovaStudente("pippo"));
+
+        assertThrows(EntityNotFoundException.class, () -> userManager.trovaStudente("paolobelli@gmail.com"));
     }
 
     @Test
     public void bloccaStudente_valid(){
-        Mockito.when(utenteRepository.findByEmail("pippo")).thenReturn(new Studente("pippo", "pippo"));
-        Mockito.when(utenteRepository.findByEmail("pluto")).thenReturn(new Studente("pluto", "pluto"));
-        assertTrue(userManager.bloccaStudente("pippo", "pluto"));
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> new Studente(invocation.getArgument(0, String.class), "password123456!!"));
+        assertTrue(userManager.bloccaStudente("paoloprova1@gmail.com", "marcoprova2@gmail.com"));
     }
 
     @Test
     public void bloccaStudente_nontrovati(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertThrows(EntityNotFoundException.class, ()-> userManager.bloccaStudente("pippo", "pluto"));
+        assertThrows(EntityNotFoundException.class, ()-> userManager.bloccaStudente("paoloprova1@gmail.com", "marcoprova2@gmail.com"));
     }
 
     @Test
     public void bloccaStudente_giabloccato(){
-        Studente s = new Studente("pippo", "pippo");
-        ArrayList<Studente> listaBloccati = new ArrayList<>();
-        listaBloccati.add(new Studente("pluto", "pluto"));
-        s.setListaBloccati(listaBloccati);
 
-        Mockito.when(utenteRepository.findByEmail("pippo")).thenReturn(s);
-        Mockito.when(utenteRepository.findByEmail("pluto")).thenReturn(new Studente("pluto", "pluto"));
-        assertThrows(AlreadyExistException.class, () -> userManager.bloccaStudente("pippo", "pluto"));
+
+        Mockito.when(utenteRepository.findByEmail("marcoprova1@gmail.com")).thenAnswer(invocation -> {
+            Studente s = new Studente(invocation.getArgument(0, String.class), "password123456@");
+            ArrayList<Studente> listaBloccati = new ArrayList<>();
+            listaBloccati.add(new Studente("paoloprova2@gmail.com", "plutoplutopluto"));
+            s.setListaBloccati(listaBloccati);
+            return s;
+        });
+        Mockito.when(utenteRepository.findByEmail("paoloprova2@gmail.com")).thenReturn(new Studente("paoloprova2@gmail.com", "plutoplutopluto"));
+        assertThrows(AlreadyExistException.class, () -> userManager.bloccaStudente("marcoprova1@gmail.com", "paoloprova2@gmail.com"));
+
     }
 
     @Test
     public void sbloccaStudente_valid(){
-        Studente s = new Studente("pippo", "pippo");
-        ArrayList<Studente> listaBloccati = new ArrayList<>();
-        listaBloccati.add(new Studente("pluto", "pluto"));
-        s.setListaBloccati(listaBloccati);
+        Mockito.when(utenteRepository.findByEmail("marcoprova1@gmail.com")).thenAnswer(invocation -> {
+            Studente s = new Studente(invocation.getArgument(0, String.class), "password123456@");
+            ArrayList<Studente> listaBloccati = new ArrayList<>();
+            listaBloccati.add(new Studente("paoloprova2@gmail.com", "plutoplutopluto"));
+            s.setListaBloccati(listaBloccati);
+            return s;
+        });
+        Mockito.when(utenteRepository.findByEmail("paoloprova2@gmail.com")).thenReturn(new Studente("paoloprova2@gmail.com", "plutoplutopluto"));
 
-        Mockito.when(utenteRepository.findByEmail("pippo")).thenReturn(s);
-        Mockito.when(utenteRepository.findByEmail("pluto")).thenReturn(new Studente("pluto", "pluto"));
-        assertTrue(userManager.sbloccaStudente("pippo", "pluto"));
+        assertTrue(userManager.sbloccaStudente("marcoprova1@gmail.com", "paoloprova2@gmail.com"));
     }
 
     @Test
     public void sbloccaStudente_nontrovato(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertThrows(EntityNotFoundException.class, () -> userManager.sbloccaStudente("pippo", "pluto"));
+        assertThrows(EntityNotFoundException.class, () -> userManager.sbloccaStudente("marcoprova1@gmail.com", "paoloprova2@gmail.com"));
     }
 
     @Test
     public void isPresent_true(){
-        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(new Studente());
-        assertTrue(userManager.isPresent("pluto"));
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> new Studente(invocation.getArgument(0, String.class), "password123456!"));
+        assertTrue(userManager.isPresent("marcoprova1@gmail.com"));
     }
 
     @Test
     public void isPresent_false(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertFalse(userManager.isPresent("pluto"));
+        assertFalse(userManager.isPresent("marcoprova1@gmail.com"));
     }
 
     @Test
@@ -162,20 +254,20 @@ public class TestUserManager {
             VerificationToken token = new VerificationToken();
             token.setToken(invocation.getArgument(0, String.class));
             Utente u = new Studente();
-            u.setEmail("pippo");
+            u.setEmail("marcoprova1@gmail.com");
             token.setUtente(u);
             return token;
 
         });
 
-        VerificationToken token = new VerificationToken();
-        token.setToken("token");
+        VerificationToken oracolo = new VerificationToken();
+        oracolo.setToken("token");
         Utente u = new Studente();
-        u.setEmail("pippo");
-        token.setUtente(u);
+        u.setEmail("marcoprova1@gmail.com");
+        oracolo.setUtente(u);
 
 
-        assertEquals(token.getUtente().getEmail(), userManager.getUtenteByVerificationToken("pippo").getEmail());
+        assertEquals(oracolo.getUtente().getEmail(), userManager.getUtenteByVerificationToken("token").getEmail());
     }
 
     @Test
@@ -209,31 +301,64 @@ public class TestUserManager {
         VerificationToken oracle = new VerificationToken();
         oracle.setId(1L);
 
-        assertEquals(oracle, userManager.createVerificationToken(new Studente(), "pluto"));
+        assertEquals(oracle, userManager.createVerificationToken(new Studente("marcoprova1@gmail.com","ciao"), "pluto"));
     }
 
     @Test
     public void deleteUtente_valid(){
-        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> {
-            Utente u = new Studente();
-            u.setEmail(invocation.getArgument(0, String.class));
-            return u;
-        });
-
-        Utente u = new Studente();
-        u.setEmail("pippo");
-
-        assertEquals(u, userManager.deleteUtente("pippo"));
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> new Studente(invocation.getArgument(0, String.class),"iltestingdiunitaébello"));
+        Utente oracolo = new Studente("paoloprova1@gmail.com","iltestingdiunitaébello");
+        assertEquals(oracolo, userManager.deleteUtente("paoloprova1@gmail.com"));
     }
 
     @Test
     public void deleteUtente_nontrovato(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertThrows(EntityNotFoundException.class, () -> userManager.deleteUtente("pippo"));
+        assertThrows(EntityNotFoundException.class, () -> userManager.deleteUtente("paoloprova1@gmail.com"));
     }
 
-    // testare attiva utente registrato
 
+    @Test
+    public void attivaUtenteRegistrato_valid(){
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(
+                invocation -> new Studente(invocation.getArgument(0, String.class), "passwordbrutta!!")
+        );
+
+        assertTrue(userManager.attivaUtenteRegistrato("paolodaRegistrare@gmail.com").isActive());
+    }
+
+    @Test
+    public void attivaUtenteRegistrato_nontrovato(){
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
+        assertThrows(EntityNotFoundException.class , () -> userManager.attivaUtenteRegistrato("paolodaRegistrare@gmail.com"));
+    }
+
+    @Test
+    public void findAllStudenti_valid(){
+        Mockito.when(utenteRepository.findAll()).thenAnswer(invocation -> {
+            List<Studente> lista = new ArrayList<>();
+            lista.add(new Studente("sonolunicostudente@gmail.com", "passworddiunpoveraccio"));
+            return lista;
+        });
+
+        List<Studente> oracolo = new ArrayList<>();
+        oracolo.add(new Studente("sonolunicostudente@gmail.com", "passworddiunpoveraccio"));
+
+        assertEquals(oracolo, userManager.findAllStudenti());
+    }
+
+    @Test
+    public void cambiaPassword_valid(){
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> new Studente(invocation.getArgument(0, String.class), "passwordDaCambiare"));
+        Utente passwordCambiata = userManager.cambiaPassword("marcopasswordDaCambiare", "plutoseipropriobello");
+        assertTrue(passwordEncoder.matches("plutoseipropriobello", passwordCambiata.getPassword()));
+    }
+
+    @Test
+    public void cambiaPassword_nontrovato(){
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
+        assertThrows(EntityNotFoundException.class, () -> userManager.cambiaPassword("marcopasswordDaCambiare", "plutoseipropriobello"));
+    }
     //testare find all studenti
 
     // testare cambia password

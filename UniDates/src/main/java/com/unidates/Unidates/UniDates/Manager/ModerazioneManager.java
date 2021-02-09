@@ -46,10 +46,19 @@ public class ModerazioneManager {
 
 
     public Segnalazione inviaSegnalazione(Segnalazione s, Long idFoto){
-        List<Utente> moderatores = utenteRepository.findAllByRuolo(Ruolo.MODERATORE);
-        Moderatore moderatore = (Moderatore) moderatores.get(new Random().nextInt(moderatores.size()));
         Foto segnalata = fotoRepository.findFotoById(idFoto);
         if(segnalata != null){
+            List<Utente> moderatori;
+            Moderatore moderatore;
+            if(segnalata.getProfilo().getStudente().getRuolo().equals(Ruolo.STUDENTE)) {
+                moderatori= utenteRepository.findAllByRuolo(Ruolo.MODERATORE);
+                moderatore = (Moderatore) moderatori.get(new Random().nextInt(moderatori.size()));
+            }
+            else {
+                moderatori = utenteRepository.findAllByRuolo(Ruolo.COMMUNITY_MANAGER);
+                moderatore = (Moderatore) moderatori.get(new Random().nextInt(moderatori.size()));
+            }
+
             s.setModeratore(moderatore); //Moderatore scelto casualmente tra tutti i moderatori
             s.setFoto(segnalata);
             if (segnalazioniRepository.findByModeratoreAndFoto(moderatore, segnalata) == null) { //Non si può inviare la stessa segnalazione allo stesso moderatore!
