@@ -34,10 +34,10 @@ public class ProfiloManager {
         } else throw new EntityNotFoundException("Studente non trovato!");
     }
 
-
+    //
     public Foto setFotoProfilo(String email, Long idNuovaFoto){
         eliminaFotoProfilo(email);
-        Foto f = fotoRepository.findById(idNuovaFoto).orElse(null);
+        Foto f = fotoRepository.findFotoById(idNuovaFoto);
         if(f != null) {
             f.setFotoProfilo(true);
             fotoRepository.save(f);
@@ -46,28 +46,27 @@ public class ProfiloManager {
         else throw new EntityNotFoundException("Foto non trovata!");
     }
 
-
+    //
     public Foto aggiungiFotoLista(String email, Foto foto){
         Studente studente = (Studente) utenteRepository.findByEmail(email);
         if(studente != null) {
             Foto f = foto;
-            if(!studente.getProfilo().getListaFoto().contains(f)) {
                 studente.getProfilo().addFoto(f, false);
                 profiloRepository.save(studente.getProfilo());
                 return f;
-            }else throw new AlreadyExistException("Foto già inserita!");
         }else throw new EntityNotFoundException("Studente non trovato!");
     }
 
-    public void aggiungiFotoProfilo(String email, Foto foto){
+
+    public Foto aggiungiFotoProfilo(String email, Foto foto){
         eliminaFotoProfilo(email);
         Studente studente = (Studente) utenteRepository.findByEmail(email);
         if(studente != null ){
-            Foto f = new Foto(foto.getImg());
-            if(!studente.getProfilo().getListaFoto().contains(foto)) {
+                Foto f = new Foto(foto.getImg());
                 studente.getProfilo().addFoto(f, true);
-                profiloRepository.save(studente.getProfilo());
-            }else throw new AlreadyExistException("Foto già inserita!");
+                Profilo p = studente.getProfilo();
+                profiloRepository.save(p).getFotoProfilo();
+                return f;
         }else throw new EntityNotFoundException("Studente non trovato!");
     }
 

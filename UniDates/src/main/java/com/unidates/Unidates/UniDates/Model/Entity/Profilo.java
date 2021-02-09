@@ -201,7 +201,7 @@ public class Profilo implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Profilo profilo = (Profilo) o;
-        return id.equals(profilo.id);
+        return Double.compare(profilo.altezza, altezza) == 0 && id.equals(profilo.id) && studente.equals(profilo.studente) && listaFoto.equals(profilo.listaFoto) && nome.equals(profilo.nome) && cognome.equals(profilo.cognome) && luogoNascita.equals(profilo.luogoNascita) && residenza.equals(profilo.residenza) && dataDiNascita.equals(profilo.dataDiNascita) && sesso == profilo.sesso && interessi == profilo.interessi && colori_capelli == profilo.colori_capelli && colore_occhi == profilo.colore_occhi && numeroTelefono.equals(profilo.numeroTelefono) && nickInstagram.equals(profilo.nickInstagram) && hobbyList.equals(profilo.hobbyList);
     }
 
     @Override

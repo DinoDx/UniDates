@@ -6,6 +6,7 @@ import com.unidates.Unidates.UniDates.Manager.ProfiloManager;
 import com.unidates.Unidates.UniDates.Model.Entity.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
+import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Repository.FotoRepository;
 import com.unidates.Unidates.UniDates.Repository.ProfiloRepository;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.parameters.P;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -44,19 +46,34 @@ public class TestProfiloManager {
     @Test
     public void modificaProfilo_valid(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
-            ArrayList<Foto> foto = new ArrayList<Foto>();
-            foto.add(new Foto());
 
-            Studente studente = new Studente();
-            Profilo profilo = new Profilo();
+            ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+            hobbyArrayList.add(Hobby.ARTE);
+            hobbyArrayList.add(Hobby.ANIME);
+            hobbyArrayList.add(Hobby.CALCIO);
+
+
+            byte[] img = {1,2,3,4};
+            Foto foto = new Foto(img);
+            foto.setId(1L);
+
+
+            Studente studente = new Studente(invocationOnMock.getArgument(0,String.class),"password");
+            Profilo profilo = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
             profilo.setId(1L);
-            profilo.setListaFoto(foto);
-            profilo.setStudente(studente);
             studente.setProfilo(profilo);
             return studente;
         });
 
-        Profilo p = new Profilo();
+
+        byte[] img = {1,2,3,4};
+        Foto foto = new Foto(img);
+        ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+        hobbyArrayList.add(Hobby.ARTE);
+        hobbyArrayList.add(Hobby.ANIME);
+        hobbyArrayList.add(Hobby.CALCIO);
+
+        Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto ,hobbyArrayList);
         p.setId(1L);
 
         assertEquals(p,profiloManager.modificaProfilo("email",p));
@@ -65,13 +82,43 @@ public class TestProfiloManager {
     @Test
     public void modificaProfilo_notValid(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertThrows(EntityNotFoundException.class, ()-> profiloManager.modificaProfilo("email",new Profilo()));
+
+        ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+        hobbyArrayList.add(Hobby.ARTE);
+        hobbyArrayList.add(Hobby.ANIME);
+        hobbyArrayList.add(Hobby.CALCIO);
+
+        assertThrows(EntityNotFoundException.class, ()-> profiloManager.modificaProfilo("email", new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto() ,hobbyArrayList)));
     }
 
 
     @Test
     public void setFotoProfilo_valid(){
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
 
+            ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+            hobbyArrayList.add(Hobby.ARTE);
+            hobbyArrayList.add(Hobby.ANIME);
+            hobbyArrayList.add(Hobby.CALCIO);
+
+            Studente studente = new Studente(invocationOnMock.getArgument(0,String.class),"password");
+
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
+            foto.setFotoProfilo(true);
+
+            Profilo profilo = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
+
+            studente.setProfilo(profilo);
+            return studente;
+        });
+
+        Mockito.when(fotoRepository.findFotoById(anyLong())).thenAnswer(invocationOnMock -> {
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
+            return foto;
+        });
+        assertTrue(profiloManager.setFotoProfilo("provastudente@gmaill.com",1L).isFotoProfilo());
     }
 
 
@@ -82,31 +129,31 @@ public class TestProfiloManager {
     }
 
 
-    //da controllare
+
     @Test
     public void aggiungiFotoLista_valid(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
-            ArrayList<Foto> foto = new ArrayList<>();
 
-            Studente studente = new Studente();
-            studente.setEmail(invocationOnMock.getArgument(0,String.class));
+            ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+            hobbyArrayList.add(Hobby.ARTE);
+            hobbyArrayList.add(Hobby.ANIME);
+            hobbyArrayList.add(Hobby.CALCIO);
 
-            Profilo profilo = new Profilo();
-            //Foto f = new Foto();
-            //byte[] img = {1,2,3,4};
-            //f.setImg(img);
-            Foto f = new Foto();
-            f.setId(1L);
+            Studente studente = new Studente(invocationOnMock.getArgument(0,String.class),"password");
 
-            foto.add(f);
-            profilo.setListaFoto(foto);
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
+
+            Profilo profilo = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
+
             studente.setProfilo(profilo);
             return studente;
         });
 
-        Foto f = new Foto();
-        f.setId(1L);
-        assertEquals(f,profiloManager.aggiungiFotoLista("email",new Foto()));
+
+        byte[] img = {1,2,3};
+        Foto foto = new Foto(img);
+        assertEquals(foto,profiloManager.aggiungiFotoLista("email",foto));
     }
 
 
@@ -119,53 +166,70 @@ public class TestProfiloManager {
 
     //da controllare
     @Test
-    public void aggiungiFotoLista_FotoGiaPresente(){
+    public void aggiungiFotoProfilo_valid(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
-            ArrayList<Foto> foto = new ArrayList<>();
 
-            Studente studente = new Studente();
-            studente.setEmail(invocationOnMock.getArgument(0,String.class));
+            ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+            hobbyArrayList.add(Hobby.ARTE);
+            hobbyArrayList.add(Hobby.ANIME);
+            hobbyArrayList.add(Hobby.CALCIO);
 
-            Profilo profilo = new Profilo();
-            Foto f = new Foto();
-            byte[] img = {1,2,3,4};
-            f.setImg(img);
-            f.setId(1L);
+            Studente studente = new Studente(invocationOnMock.getArgument(0,String.class),"password");
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
+            foto.setFotoProfilo(true);
 
-            foto.add(f);
-            profilo.setListaFoto(foto);
+            Profilo profilo = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
+
             studente.setProfilo(profilo);
             return studente;
         });
-        assertThrows(EntityNotFoundException.class, ()-> profiloManager.aggiungiFotoLista("email",new Foto()));
+
+
+        byte[] img = {1,2,3,4};
+        Foto foto = new Foto(img);
+        foto.setId(1L);
+
+        Foto f = profiloManager.aggiungiFotoProfilo("sudenteprova1@gmail.com",foto);
+        assertTrue(f.isFotoProfilo());
     }
 
+    @Test
+    public void aggiungiFotoProfilo_studenteNonTrovato(){
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
+        byte[] img = {1,2,3};
+        assertThrows(EntityNotFoundException.class, ()-> profiloManager.aggiungiFotoProfilo("email",new Foto(img)));
+    }
 
     @Test
     public void eliminaFotoLista_valid(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
-            ArrayList<Foto> foto = new ArrayList<>();
-            Studente studente = new Studente();
-            studente.setEmail(invocationOnMock.getArgument(0,String.class));
-            Profilo profilo = new Profilo();
-            Foto f = new Foto();
-            f.setId(1L);
+            ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+            hobbyArrayList.add(Hobby.ARTE);
+            hobbyArrayList.add(Hobby.ANIME);
+            hobbyArrayList.add(Hobby.CALCIO);
 
-            foto.add(f);
-            profilo.setListaFoto(foto);
+            Studente studente = new Studente(invocationOnMock.getArgument(0,String.class),"password");
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
+
+            Profilo profilo = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
+
             studente.setProfilo(profilo);
             return studente;
         });
 
         Mockito.when(fotoRepository.findFotoById(1L)).thenAnswer(invocationOnMock -> {
-           Foto f = new Foto();
-           f.setId(invocationOnMock.getArgument(0,Long.class));
-           return f;
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
+            foto.setId(invocationOnMock.getArgument(0,Long.class));
+            return foto;
         });
 
-        Foto f = new Foto();
-        f.setId(1L);
-        assertEquals(f,profiloManager.eliminaFotoLista("email",1L));
+        byte[] img = {1,2,3};
+        Foto foto = new Foto(img);
+        foto.setId(1L);
+        assertEquals(foto,profiloManager.eliminaFotoLista("email",1L));
     }
 
     @Test
@@ -177,15 +241,17 @@ public class TestProfiloManager {
     @Test
     public void eliminaFotoLista_nonTrovataFoto(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
-            ArrayList<Foto> foto = new ArrayList<>();
-            Studente studente = new Studente();
-            studente.setEmail(invocationOnMock.getArgument(0,String.class));
-            Profilo profilo = new Profilo();
-            Foto f = new Foto();
-            f.setId(1L);
+            ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+            hobbyArrayList.add(Hobby.ARTE);
+            hobbyArrayList.add(Hobby.ANIME);
+            hobbyArrayList.add(Hobby.CALCIO);
 
-            foto.add(f);
-            profilo.setListaFoto(foto);
+            Studente studente = new Studente(invocationOnMock.getArgument(0,String.class),"password");
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
+
+            Profilo profilo = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
+
             studente.setProfilo(profilo);
             return studente;
         });
@@ -196,23 +262,25 @@ public class TestProfiloManager {
     @Test
     public void elimnaFotoProfilo_valid(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
-            ArrayList<Foto> foto = new ArrayList<>();
-            Studente studente = new Studente();
-            studente.setEmail(invocationOnMock.getArgument(0,String.class));
-            Profilo profilo = new Profilo();
-            Foto f = new Foto();
-            f.setFotoProfilo(true);
 
-            foto.add(f);
-            profilo.setListaFoto(foto);
+            ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+            hobbyArrayList.add(Hobby.ARTE);
+            hobbyArrayList.add(Hobby.ANIME);
+            hobbyArrayList.add(Hobby.CALCIO);
+
+            Studente studente = new Studente(invocationOnMock.getArgument(0,String.class),"password");
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
+            foto.setFotoProfilo(true);
+
+            Profilo profilo = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
+
             studente.setProfilo(profilo);
             return studente;
         });
 
-        Studente s = new Studente();
-        s.setEmail("email");
-
-        assertEquals(s,profiloManager.eliminaFotoProfilo("email"));
+        Studente s = new Studente("studenteprova1@gmail.com","password");
+        assertEquals(s,profiloManager.eliminaFotoProfilo("studenteprova1@gmail.com"));
     }
 
 
@@ -222,21 +290,26 @@ public class TestProfiloManager {
         assertThrows(EntityNotFoundException.class, ()-> profiloManager.eliminaFotoProfilo("email"));
     }
 
+    //da controllare
     @Test
     public void eliminaFotoProfilo_nonTrovatoFoto(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
-            ArrayList<Foto> foto = new ArrayList<>();
-            Studente studente = new Studente();
-            studente.setEmail(invocationOnMock.getArgument(0,String.class));
-            Profilo profilo = new Profilo();
-            Foto f = new Foto();
-            f.setFotoProfilo(false);
 
-            foto.add(f);
-            profilo.setListaFoto(foto);
+            ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+            hobbyArrayList.add(Hobby.ARTE);
+            hobbyArrayList.add(Hobby.ANIME);
+            hobbyArrayList.add(Hobby.CALCIO);
+
+            Studente studente = new Studente(invocationOnMock.getArgument(0,String.class),"password");
+
+            Foto foto = new Foto();
+            foto.setFotoProfilo(false);
+
+            Profilo profilo = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
             studente.setProfilo(profilo);
             return studente;
         });
+
         assertThrows(EntityNotFoundException.class, ()-> profiloManager.eliminaFotoProfilo("email"));
     }
 
@@ -244,12 +317,14 @@ public class TestProfiloManager {
     @Test
     public void findFotoById_valid(){
         Mockito.when(fotoRepository.findFotoById(anyLong())).thenAnswer(invocationOnMock -> {
-            Foto foto = new Foto();
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
             foto.setId(invocationOnMock.getArgument(0,Long.class));
             return foto;
         });
 
-        Foto f = new Foto();
+        byte[] img = {1,2,3};
+        Foto f = new Foto(img);
         f.setId(1L);
 
         assertEquals(f,profiloManager.findFotoById(1L));
@@ -263,15 +338,30 @@ public class TestProfiloManager {
     }
 
 
+    //da controllare
     @Test
     public void findProfiloById_valid(){
         Mockito.when(profiloRepository.findProfiloById(anyLong())).thenAnswer(invocationOnMock -> {
-            Profilo p = new Profilo();
+            ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+            hobbyArrayList.add(Hobby.ARTE);
+            hobbyArrayList.add(Hobby.ANIME);
+            hobbyArrayList.add(Hobby.CALCIO);
+
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
+            Profilo p= new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
             p.setId(invocationOnMock.getArgument(0,Long.class));
             return p;
         });
 
-        Profilo p = new Profilo();
+        ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+        hobbyArrayList.add(Hobby.ARTE);
+        hobbyArrayList.add(Hobby.ANIME);
+        hobbyArrayList.add(Hobby.CALCIO);
+
+        byte[] img = {1,2,3};
+        Foto foto = new Foto(img);
+        Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
         p.setId(1L);
 
         assertEquals(p,profiloManager.findProfiloById(1L));
