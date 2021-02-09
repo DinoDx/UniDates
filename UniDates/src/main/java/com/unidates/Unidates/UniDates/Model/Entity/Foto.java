@@ -51,7 +51,7 @@ public class Foto implements Cloneable {
     }
 
     public void setId(Long id) {
-        id = id;
+        this.id = id;
     }
 
     public Profilo getProfilo() {
