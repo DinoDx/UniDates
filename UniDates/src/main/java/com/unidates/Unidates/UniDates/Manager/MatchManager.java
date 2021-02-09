@@ -17,7 +17,6 @@ public class MatchManager {
     @Autowired
     private MatchRepository matchRepository;
 
-    //
     public boolean aggiungiMatch(String emailStudente1, String emailStudente2){
 
         Studente invia = (Studente) utenteRepository.findByEmail(emailStudente1);
@@ -35,9 +34,11 @@ public class MatchManager {
                     reverse.setLikeByStudent2(true);
                     matchRepository.save(reverse);
                 }
+                return true;
             }
-        } else throw new EntityNotFoundException("Studente non trovato!");
-        return true;
+        }
+        else throw new EntityNotFoundException("Studente non trovato!");
+        return false;
     }
 
     public Match trovaMatch(String emailStudente1, String  emailStudente2){

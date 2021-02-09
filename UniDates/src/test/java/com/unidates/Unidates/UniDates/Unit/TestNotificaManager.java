@@ -71,17 +71,13 @@ public class TestNotificaManager {
 
     @Test
     public void eliminaNotificaMatch_valid() {
-        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
-            Studente s= new Studente(invocationOnMock.getArgument(0, String.class), "password");
-            return s;
-        });
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> new Studente(invocationOnMock.getArgument(0, String.class), "password"));
 
         Mockito.when(notificaRepository.findByUtenteAndEmailToMatchWith(any(Studente.class),anyString())).thenAnswer(invocationOnMock -> {
            byte[]img= {1,2,3};
             Foto s=new Foto(img);
             s.setId(1L);
-            Notifica n= new Notifica(invocationOnMock.getArgument(0, Studente.class), "testoNotifica", Tipo_Notifica.MATCH, s);
-            return n;
+            return new Notifica(invocationOnMock.getArgument(0, Studente.class), "testoNotifica", Tipo_Notifica.MATCH, s);
         });
         assertDoesNotThrow(() -> notificaManager.eliminaNotificaMatch("pippo@gmail.com", "pluto@gmail.com"));
 
@@ -133,7 +129,7 @@ public class TestNotificaManager {
             a.setFoto(invocationOnMock.getArgument(0, Foto.class));
             return a;
         });
-        assertDoesNotThrow(() -> notificaManager.genereateNotificaWarning("pippo@gmail.com",Long.valueOf(1L)));
+        assertDoesNotThrow(() -> notificaManager.genereateNotificaWarning("pippo@gmail.com", 1L));
 
     }
 
@@ -145,10 +141,7 @@ public class TestNotificaManager {
 
     @Test
     public void generateNotificaWarning_NotValidAmmonimento(){
-        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
-            Studente s=new Studente(invocationOnMock.getArgument(0,String.class), "password");
-            return s;
-        });
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> new Studente(invocationOnMock.getArgument(0,String.class), "password"));
 
         Mockito.when(fotoRepository.findFotoById(anyLong())).thenAnswer(invocationOnMock -> {
         byte[]img= {1,2,3};
@@ -163,10 +156,7 @@ public class TestNotificaManager {
 
     @Test
     public void generateNotificaWarning_NotValidFoto(){
-        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
-            Studente s= new Studente(invocationOnMock.getArgument(0, String.class), "password");
-            return s;
-        });
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> new Studente(invocationOnMock.getArgument(0, String.class), "password"));
 
         Mockito.when(fotoRepository.findFotoById(anyLong())).thenReturn(null);
         assertThrows(EntityNotFoundException.class, () -> notificaManager.genereateNotificaWarning("pluto@gmail.com", 2L));

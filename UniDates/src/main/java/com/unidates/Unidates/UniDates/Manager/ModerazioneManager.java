@@ -52,12 +52,11 @@ public class ModerazioneManager {
             Moderatore moderatore;
             if(segnalata.getProfilo().getStudente().getRuolo().equals(Ruolo.STUDENTE)) {
                 moderatori= utenteRepository.findAllByRuolo(Ruolo.MODERATORE);
-                moderatore = (Moderatore) moderatori.get(new Random().nextInt(moderatori.size()));
             }
             else {
                 moderatori = utenteRepository.findAllByRuolo(Ruolo.COMMUNITY_MANAGER);
-                moderatore = (Moderatore) moderatori.get(new Random().nextInt(moderatori.size()));
             }
+            moderatore = (Moderatore) moderatori.get(new Random().nextInt(moderatori.size()));
 
             s.setModeratore(moderatore); //Moderatore scelto casualmente tra tutti i moderatori
             s.setFoto(segnalata);

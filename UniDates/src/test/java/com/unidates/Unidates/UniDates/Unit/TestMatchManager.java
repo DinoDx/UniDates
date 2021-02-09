@@ -42,33 +42,32 @@ public class TestMatchManager {
 
     @Test
     public void aggiungiMatch_valid(){
-        Mockito.when(utenteRepository.findByEmail("marcobello@")).thenReturn(new Studente());
-        Mockito.when(utenteRepository.findByEmail("prova2")).thenReturn(new Studente());
-        assertTrue(matchManager.aggiungiMatch("prova1","prova2"));
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> {
+           return new Studente(invocation.getArgument(0, String.class), "questoétestingblackbox?");
+        });
+        assertTrue(matchManager.aggiungiMatch("studenteprova1@gmail.com","studenteprova2@gmail.com"));
     }
 
     @Test
     public void aggiungiMatch_utenteNonTrovato(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertThrows(EntityNotFoundException.class, ()-> matchManager.aggiungiMatch("email1","email2"));
+        assertThrows(EntityNotFoundException.class, ()-> matchManager.aggiungiMatch("email1bella@gmail.com","email2bella@gmail.com"));
     }
 
     @Test
     public void trovaMatch_valid(){
-        Studente prova1 = new Studente();
-        Studente prova2 = new Studente();
-        prova1.setEmail("prova1");
-        prova2.setEmail("prova2");
 
-        Match match = new Match(prova1,prova2);
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> new Studente(invocation.getArgument(0, String.class), "password"));
+        Mockito.when(matchRepository.findAllByStudente1AndStudente2(any(Studente.class), any(Studente.class))).thenAnswer(invocation -> {
+            Match match = new Match();
+            match.setStudente1(invocation.getArgument(0, Studente.class));
+            match.setStudente2(invocation.getArgument(1, Studente.class));
+            return match;
+        });
 
-        Mockito.when(utenteRepository.findByEmail("prova1")).thenReturn(prova1);
-        Mockito.when(utenteRepository.findByEmail("prova2")).thenReturn(prova2);
-        Mockito.when(matchRepository.findAllByStudente1AndStudente2(prova1,prova2)).thenReturn(match);
-        Mockito.when(matchRepository.findAllByStudente1AndStudente2(prova2,prova1)).thenReturn(match);
-
-        assertEquals(match,matchManager.trovaMatch("prova1","prova2"));
+        Match trovato = matchManager.trovaMatch("paoloprova1@gmail.com", "marcobello1@gmail.com");
+        assertEquals(trovato.getStudente1().getEmail(),"paoloprova1@gmail.com");
+        assertEquals(trovato.getStudente2().getEmail(),"marcobello1@gmail.com");
     }
 
     @Test
@@ -86,74 +85,75 @@ public class TestMatchManager {
     @Test
     public void trovaMatch_studenteNonTrovato(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertThrows(EntityNotFoundException.class,()-> matchManager.trovaMatch("prova1","prova2"));
+        assertThrows(EntityNotFoundException.class,()-> matchManager.trovaMatch("prova1@gmail.com","prova2@gmail.com"));
     }
 
     @Test
-    public void isValidMatch_valid(){
-        Studente prova1 = new Studente();
-        Studente prova2 = new Studente();
-        prova1.setEmail("prova1");
-        prova2.setEmail("prova2");
+    public void isValidMatch_true(){
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> new Studente(invocation.getArgument(0, String.class), "password"));
 
-        Match match = new Match(prova1,prova2);
-        match.setLikedByStudent1(true);
-        match.setLikeByStudent2(true);
+        Mockito.when(matchRepository.findAllByStudente1AndStudente2(any(Studente.class), any(Studente.class))).thenAnswer(invocation -> {
+            Match match = new Match();
+            match.setStudente1(invocation.getArgument(0, Studente.class));
+            match.setStudente1(invocation.getArgument(1, Studente.class));
+            match.setLikedByStudent1(true);
+            match.setLikeByStudent2(true);
+            return match;
+        });
 
-        Mockito.when(utenteRepository.findByEmail("prova1")).thenReturn(prova1);
-        Mockito.when(utenteRepository.findByEmail("prova2")).thenReturn(prova2);
-        Mockito.when(matchRepository.findAllByStudente1AndStudente2(prova1,prova2)).thenReturn(match);
-        Mockito.when(matchRepository.findAllByStudente1AndStudente2(prova2,prova1)).thenReturn(match);
+        assertTrue(matchManager.isValidMatch("antoniobestfrontendeveloper@gmail.com","dinonondorme@gmail.com"));
 
-        assertTrue(matchManager.isValidMatch("prova1","prova2"));
+    }
+
+    @Test
+    public void isValidMatch_false(){
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> new Studente(invocation.getArgument(0, String.class), "password"));
+
+        Mockito.when(matchRepository.findAllByStudente1AndStudente2(any(Studente.class), any(Studente.class))).thenAnswer(invocation -> {
+            Match match = new Match();
+            match.setStudente1(invocation.getArgument(0, Studente.class));
+            match.setStudente1(invocation.getArgument(1, Studente.class));
+            match.setLikedByStudent1(true);
+            match.setLikeByStudent2(false);
+            return match;
+        });
+
+        assertFalse(matchManager.isValidMatch("antoniobestfrontendeveloper@gmail.com","dinonondorme@gmail.com"));
 
     }
 
     @Test
     public void isValidMatch_nonTrovatoMatch(){
-        Studente prova1 = new Studente();
-        Studente prova2 = new Studente();
-        prova1.setEmail("prova1");
-        prova2.setEmail("prova2");
-
-        Mockito.when(utenteRepository.findByEmail("prova1")).thenReturn(prova1);
-        Mockito.when(utenteRepository.findByEmail("prova2")).thenReturn(prova2);
-        Mockito.when(matchRepository.findAllByStudente1AndStudente2(prova1,prova2)).thenReturn(null);
-        Mockito.when(matchRepository.findAllByStudente1AndStudente2(prova2,prova1)).thenReturn(null);
-
-        assertThrows(EntityNotFoundException.class,()-> matchManager.isValidMatch("prova1","prova2"));
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> new Studente(invocation.getArgument(0, String.class), "password"));
+        Mockito.when(matchRepository.findAllByStudente1AndStudente2(any(Studente.class), any(Studente.class))).thenReturn(null);
+        assertThrows(EntityNotFoundException.class,()-> matchManager.isValidMatch("nonhofantasia@gmail.com","hosonno@live.it"));
     }
 
     @Test
     public void isValidMatch_nonTrovatoStudente(){
-        Mockito.when(utenteRepository.findByEmail("prova1")).thenReturn(null);
-        Mockito.when(utenteRepository.findByEmail("prova2")).thenReturn(null);
-
-        assertThrows(EntityNotFoundException.class,()-> matchManager.isValidMatch("prova1","prova2"));
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
+        assertThrows(EntityNotFoundException.class,()-> matchManager.isValidMatch("épropriounabellaserata@live.it","macistailcovid@gmail.com"));
     }
 
 
     //da controlalre
     @Test
     public void eliminaMacth_valid(){
-        Studente prova1 = new Studente();
-        Studente prova2 = new Studente();
-        prova1.setEmail("prova1");
-        prova2.setEmail("prova2");
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> new Studente(invocation.getArgument(0, String.class), "password"));
+        Mockito.when(matchRepository.findAllByStudente1AndStudente2(any(Studente.class), any(Studente.class))).thenAnswer(invocation -> {
+            Match match = new Match();
+            match.setStudente1(invocation.getArgument(0, Studente.class));
+            match.setStudente1(invocation.getArgument(1, Studente.class));
+            return match;
+        });
 
-        Match matchuno = new Match(prova1,prova2);
-        Match matchdue = new Match(prova2,prova1);
-
-        Mockito.when(utenteRepository.findByEmail("prova1")).thenReturn(prova1);
-        Mockito.when(utenteRepository.findByEmail("prova2")).thenReturn(prova2);
-        assertTrue(matchManager.eliminaMatch("prova1","prova2"));
+        assertTrue(matchManager.eliminaMatch("copio@gmail.com","eincollo@live.it"));
     }
 
     @Test
-    public void eliminaMatch_notValid(){
-        Mockito.when(utenteRepository.findByEmail("prova1")).thenReturn(null);
-        Mockito.when(utenteRepository.findByEmail("prova2")).thenReturn(null);
-        assertThrows(EntityNotFoundException.class,()-> matchManager.eliminaMatch("prova1","prova2"));
+    public void eliminaMatch_nonTrovato(){
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
+        assertThrows(EntityNotFoundException.class,()-> matchManager.eliminaMatch("épropriounabellaserata@live.it","macistailcovid@gmail.com"));
     }
 
 

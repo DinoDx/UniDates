@@ -287,7 +287,7 @@ public class TestProfiloManager {
     @Test
     public void eliminaFotoProfilo_nonTrovatoStudente(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertThrows(EntityNotFoundException.class, ()-> profiloManager.eliminaFotoProfilo("email"));
+        assertThrows(EntityNotFoundException.class, ()-> profiloManager.eliminaFotoProfilo("unemailmoltobella@pippo.org"));
     }
 
     //da controllare
@@ -306,11 +306,12 @@ public class TestProfiloManager {
             foto.setFotoProfilo(false);
 
             Profilo profilo = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
+            profilo.removeFoto(foto);
             studente.setProfilo(profilo);
             return studente;
         });
 
-        assertThrows(EntityNotFoundException.class, ()-> profiloManager.eliminaFotoProfilo("email"));
+        assertThrows(EntityNotFoundException.class, ()-> profiloManager.eliminaFotoProfilo("unemailmoltobella@pippo.org"));
     }
 
 
@@ -349,6 +350,7 @@ public class TestProfiloManager {
 
             byte[] img = {1,2,3};
             Foto foto = new Foto(img);
+            foto.setId(1L);
             Profilo p= new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
             p.setId(invocationOnMock.getArgument(0,Long.class));
             return p;
@@ -361,10 +363,12 @@ public class TestProfiloManager {
 
         byte[] img = {1,2,3};
         Foto foto = new Foto(img);
-        Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
-        p.setId(1L);
+        foto.setId(1L);
+        Profilo oracolo = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
+        oracolo.setId(1L);
 
-        assertEquals(p,profiloManager.findProfiloById(1L));
+        Profilo trovato = profiloManager.findProfiloById(1L);
+        assertEquals(oracolo.getId(),trovato.getId());
 
     }
 
