@@ -9,16 +9,12 @@ import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
 import com.unidates.Unidates.UniDates.Repository.*;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.provider.EnumSource;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.nio.charset.MalformedInputException;
 import java.util.ArrayList;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -49,26 +45,44 @@ public class TestModerazioneManager {
     public void inviaSegnalazione_valid(){
         Mockito.when(utenteRepository.findAllByRuolo(Ruolo.MODERATORE)).thenAnswer(invocationOnMock -> {
             ArrayList<Moderatore> mods = new ArrayList<>();
-            Moderatore mod = new Moderatore("email", "password");
+            Moderatore mod = new Moderatore("email@gmail.com", "password");
             mods.add(mod);
             return mods;
         });
 
-        Mockito.when(fotoRepository.findFotoById(anyLong())).thenReturn(new Foto());
+        Mockito.when(fotoRepository.findFotoById(anyLong())).thenAnswer(invocationOnMock -> {
+            byte[] img = {1,2,3};
+            Foto f = new Foto(img);
+            f.setId(invocationOnMock.getArgument(0, Long.class));
+            Studente s = new Studente("emailS@gmail.com", "password");
+            Profilo p = new Profilo();
+            p.setStudente(s);
+            f.setProfilo(p);
+            return f;
+        });
+
         Mockito.when(segnalazioniRepository.findByModeratoreAndFoto(any(Moderatore.class), any(Foto.class))).thenReturn(null);
-        assertEquals(new Segnalazione(Motivazione.VIOLENZA, "prova"), moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.VIOLENZA, "prova"), 1L));
+
+        Segnalazione oracolo = new Segnalazione(Motivazione.VIOLENZA, "dettagli");
+        byte[] img = {1,2,3};
+        Foto f = new Foto(img);
+        f.setId(1L);
+        oracolo.setFoto(f);
+
+        assertEquals(oracolo.getFoto().getId(), moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.VIOLENZA, "prova"), 1L).getFoto().getId());
     }
 
     @Test
     public void inviaSegnalazione_fotoNonTrovata() {
         Mockito.when(utenteRepository.findAllByRuolo(Ruolo.MODERATORE)).thenAnswer(invocationOnMock -> {
             ArrayList<Moderatore> mods = new ArrayList<>();
-            Moderatore mod = new Moderatore("email", "password");
+            Moderatore mod = new Moderatore("email@gmail.com", "password");
             mods.add(mod);
             return mods;
         });
 
-        Mockito.when(fotoRepository.findFotoById(1L)).thenReturn(null);
+        Mockito.when(fotoRepository.findFotoById(anyLong())).thenReturn(null);
+
         assertThrows(EntityNotFoundException.class, () -> moderazioneManager.inviaSegnalazione(new Segnalazione(), 1L));
     }
 
@@ -76,39 +90,76 @@ public class TestModerazioneManager {
     public void inviaSegnalazione_giàSegnalata() {
         Mockito.when(utenteRepository.findAllByRuolo(Ruolo.MODERATORE)).thenAnswer(invocationOnMock -> {
             ArrayList<Moderatore> mods = new ArrayList<>();
-            Moderatore mod = new Moderatore("email", "password");
+            Moderatore mod = new Moderatore("email@gmail.com", "password");
             mods.add(mod);
             return mods;
         });
-        Mockito.when(fotoRepository.findFotoById(anyLong())).thenReturn(new Foto());
-        Mockito.when(segnalazioniRepository.findByModeratoreAndFoto(any(Moderatore.class), any(Foto.class))).thenReturn(new Segnalazione());
-        assertThrows(AlreadyExistException.class, () -> moderazioneManager.inviaSegnalazione(new Segnalazione(), 1L));
+
+        Mockito.when(fotoRepository.findFotoById(anyLong())).thenAnswer(invocationOnMock -> {
+            byte[] img = {1,2,3};
+            Foto f = new Foto(img);
+            f.setId(invocationOnMock.getArgument(0, Long.class));
+            Studente s = new Studente("emailS@gmail.com", "password");
+            Profilo p = new Profilo();
+            p.setStudente(s);
+            f.setProfilo(p);
+            return f;
+        });
+
+        Mockito.when(segnalazioniRepository.findByModeratoreAndFoto(any(Moderatore.class), any(Foto.class))).thenAnswer(invocationOnMock -> {
+            Segnalazione oracolo = new Segnalazione(Motivazione.VIOLENZA, "dettagli");
+            byte[] img = {1,2,3};
+            Foto f = new Foto(img);
+            f.setId(1L);
+            oracolo.setFoto(f);
+            return oracolo;
+        });
+
+        assertThrows(AlreadyExistException.class, () -> moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.VIOLENZA, "dettagli"), 1L));
     }
 
     @Test
     public void inviaSegnalazioneCommunityManager_valid(){
         Mockito.when(utenteRepository.findAllByRuolo(Ruolo.COMMUNITY_MANAGER)).thenAnswer(invocationOnMock -> {
             ArrayList<Moderatore> cms = new ArrayList<>();
-            Moderatore cm = new CommunityManager("email", "password");
+            Moderatore cm = new CommunityManager("email@gmail.com", "password");
             cms.add(cm);
             return cms;
         });
 
-        Mockito.when(fotoRepository.findFotoById(anyLong())).thenReturn(new Foto());
+        Mockito.when(fotoRepository.findFotoById(anyLong())).thenAnswer(invocationOnMock -> {
+            byte[] img = {1,2,3};
+            Foto f = new Foto(img);
+            f.setId(invocationOnMock.getArgument(0, Long.class));
+            Studente s = new Studente("emailS@gmail.com", "password");
+            Profilo p = new Profilo();
+            p.setStudente(s);
+            f.setProfilo(p);
+            return f;
+        });
+
         Mockito.when(segnalazioniRepository.findByModeratoreAndFoto(any(Moderatore.class), any(Foto.class))).thenReturn(null);
-        assertEquals(new Segnalazione(Motivazione.VIOLENZA, "prova"), moderazioneManager.inviaSegnalazioneCommunityManager(new Segnalazione(Motivazione.VIOLENZA, "prova"), 1L));
+
+        Segnalazione oracolo = new Segnalazione(Motivazione.VIOLENZA, "dettagli");
+        byte[] img = {1,2,3};
+        Foto f = new Foto(img);
+        f.setId(1L);
+        oracolo.setFoto(f);
+
+        assertEquals(oracolo.getFoto().getId(), moderazioneManager.inviaSegnalazioneCommunityManager(new Segnalazione(Motivazione.VIOLENZA, "prova"), 1L).getFoto().getId());
     }
 
     @Test
     public void inviaSegnalazioneCommunityManager_fotoNonTrovata(){
         Mockito.when(utenteRepository.findAllByRuolo(Ruolo.COMMUNITY_MANAGER)).thenAnswer(invocationOnMock -> {
             ArrayList<Moderatore> cms = new ArrayList<>();
-            Moderatore cm = new CommunityManager("email", "password");
+            Moderatore cm = new CommunityManager("email@gmail.com", "password");
             cms.add(cm);
             return cms;
         });
 
         Mockito.when(fotoRepository.findFotoById(anyLong())).thenReturn(null);
+
         assertThrows(EntityNotFoundException.class, () -> moderazioneManager.inviaSegnalazioneCommunityManager(new Segnalazione(), 1L));
     }
 
@@ -121,37 +172,49 @@ public class TestModerazioneManager {
             return cms;
         });
 
-        Mockito.when(fotoRepository.findFotoById(anyLong())).thenReturn(new Foto());
-        Mockito.when(segnalazioniRepository.findByModeratoreAndFoto(any(Moderatore.class), any(Foto.class))).thenReturn(new Segnalazione());
-        assertThrows(AlreadyExistException.class, () -> moderazioneManager.inviaSegnalazioneCommunityManager(new Segnalazione(), 1L));
+        Mockito.when(fotoRepository.findFotoById(anyLong())).thenAnswer(invocationOnMock -> {
+            byte[] img = {1,2,3};
+            Foto f = new Foto(img);
+            f.setId(invocationOnMock.getArgument(0, Long.class));
+            Studente s = new Studente("emailS@gmail.com", "password");
+            Profilo p = new Profilo();
+            p.setStudente(s);
+            f.setProfilo(p);
+            return f;
+        });
+
+        Mockito.when(segnalazioniRepository.findByModeratoreAndFoto(any(Moderatore.class), any(Foto.class))).thenAnswer(invocationOnMock -> {
+            Segnalazione oracolo = new Segnalazione(Motivazione.VIOLENZA, "dettagli");
+            byte[] img = {1,2,3};
+            Foto f = new Foto(img);
+            f.setId(1L);
+            oracolo.setFoto(f);
+            return oracolo;
+        });
+
+        assertThrows(AlreadyExistException.class, () -> moderazioneManager.inviaSegnalazioneCommunityManager(new Segnalazione(Motivazione.VIOLENZA, "dettagli"), 1L));
     }
 
     @Test
     public void inviaAmmonimento_valid(){
-        Mockito.when(utenteRepository.findByEmail("provastudente")).thenAnswer(invocationOnMock -> {
-            Studente s = new Studente();
-            Foto f = new Foto();
-            f.setId(2L);
-            ArrayList<Ammonimento> ammonimenti = new ArrayList<>();
-            Ammonimento a = new Ammonimento(Motivazione.VIOLENZA, "dettagli");
-            a.setFoto(f);
-            ammonimenti.add(a);
-            s.setListaAmmonimenti(ammonimenti);
-            return s;
-        });
-        Mockito.when(utenteRepository.findByEmail("provamod")).thenReturn(new Moderatore());
-        Mockito.when(fotoRepository.findFotoById(1L)).thenAnswer(invocationOnMock -> {
-            Foto foto = new Foto();
+        Mockito.when(utenteRepository.findByEmail("studente@gmail.com")).thenReturn(new Studente("studente@gmail.com", "password"));
+
+        Mockito.when(utenteRepository.findByEmail("mod@gmail.com")).thenReturn(new Moderatore("mod@gmail.com", "password"));
+
+        Mockito.when(fotoRepository.findFotoById(anyLong())).thenAnswer(invocationOnMock -> {
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
             foto.setId(1L);
             return foto;
         });
 
-        Ammonimento b = new Ammonimento();
-        Foto foto = new Foto();
+        Ammonimento oracolo = new Ammonimento(Motivazione.VIOLENZA, "dettagli");
+        byte[] img = {1,2,3};
+        Foto foto = new Foto(img);
         foto.setId(1L);
-        b.setFoto(foto);
+        oracolo.setFoto(foto);
 
-        assertEquals(b, moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.VIOLENZA, "dettagli"), "provamod", "provastudente",1L));
+        assertEquals(oracolo.getFoto().getId(), moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.VIOLENZA, "dettagli"), "mod@gmail.com", "studente@gmail.com",1L).getFoto().getId());
 
     }
 
@@ -159,48 +222,63 @@ public class TestModerazioneManager {
     public void inviaAmmonimento_studenteNonTrovato(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
 
-        assertThrows(EntityNotFoundException.class, () -> moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.VIOLENZA, "prova"), "provamod", "provastudente",1L));
+        assertThrows(EntityNotFoundException.class, () -> moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.VIOLENZA, "dettagli"), "mod@gmail.com", "studente@gmail.com",1L));
     }
 
     @Test
     public void inviaAmmonimento_giàAmmonito(){
-        Studente s = new Studente();
-        Foto f = new Foto();
-        f.setId(1L);
-        ArrayList<Ammonimento> ammonimenti = new ArrayList<>();
-        Ammonimento a = new Ammonimento(Motivazione.VIOLENZA, "dettagli");
-        a.setFoto(f);
-        ammonimenti.add(a);
-        s.setListaAmmonimenti(ammonimenti);
+        Mockito.when(utenteRepository.findByEmail("studente@gmail.com")).thenAnswer(invocationOnMock -> {
+            Studente s = new Studente();
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
+            foto.setId(1L);
+            ArrayList<Ammonimento> ammonimenti = new ArrayList<>();
+            Ammonimento a = new Ammonimento(Motivazione.VIOLENZA, "dettagli");
+            a.setFoto(foto);
+            ammonimenti.add(a);
+            s.setListaAmmonimenti(ammonimenti);
+            return s;
+        });
 
-        Mockito.when(utenteRepository.findByEmail("provastudente")).thenReturn(s);
-        Mockito.when(utenteRepository.findByEmail("provamod")).thenReturn(new Moderatore());
-        Mockito.when(fotoRepository.findFotoById(1L)).thenAnswer(invocationOnMock -> {
-            Foto foto = new Foto();
+        Mockito.when(utenteRepository.findByEmail("mod@gmail.com")).thenReturn(new Moderatore());
+
+        Mockito.when(fotoRepository.findFotoById(anyLong())).thenAnswer(invocationOnMock -> {
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
             foto.setId(1L);
             return foto;
         });
 
-        assertThrows(AlreadyExistException.class, () -> moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.VIOLENZA, "prova"), "provamod", "provastudente",1L));
+        assertThrows(AlreadyExistException.class, () -> moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.VIOLENZA, "dettagli"), "mod@gmail.com", "studente@gmail.com",1L));
     }
 
     @Test
     public void inviaSospensione_valid(){
-        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(new Studente());
+        Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(new Studente("email@gmail.com", "password"));
 
-        assertEquals(new Sospensione(1, "prova"), moderazioneManager.inviaSospensione(new Sospensione(1, "prova"), "prova"));
+        Sospensione oracolo = new Sospensione(1, "prova");
+        oracolo.setStudente(new Studente("email@gmail.com", "password"));
+
+        assertEquals(oracolo.getStudente(), moderazioneManager.inviaSospensione(new Sospensione(1, "prova"), "email@gmail.com").getStudente());
 
     }
 
     @Test
     public void inviaSospensione_studenteNonTrovato(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
-        assertThrows(EntityNotFoundException.class, () -> moderazioneManager.inviaSospensione(new Sospensione(1, "prova"), "prova"));
+
+        assertThrows(EntityNotFoundException.class, () -> moderazioneManager.inviaSospensione(new Sospensione(1, "prova"), "email@gmail.com"));
     }
 
     @Test
     public void nascondiFoto_valid(){
-        Mockito.when(fotoRepository.findFotoById(anyLong())).thenReturn(new Foto());
+        Mockito.when(fotoRepository.findFotoById(anyLong())).thenAnswer(invocationOnMock -> {
+            byte[] img = {1,2,3};
+            Foto foto = new Foto(img);
+            foto.setId(1L);
+            return foto;
+        });
+
         assertTrue(moderazioneManager.nascondiFoto(1L));
     }
 
@@ -226,7 +304,7 @@ public class TestModerazioneManager {
             return s;
         });
 
-        assertTrue(moderazioneManager.checkAmmonimentiStudente("prova"));
+        assertTrue(moderazioneManager.checkAmmonimentiStudente("prova@gmail.com"));
 
     }
 
@@ -234,7 +312,7 @@ public class TestModerazioneManager {
     public void checkAmmonimentiStudente_studenteNonTrovato(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
 
-        assertThrows(EntityNotFoundException.class, ()-> moderazioneManager.checkAmmonimentiStudente("prova"));
+        assertThrows(EntityNotFoundException.class, ()-> moderazioneManager.checkAmmonimentiStudente("prova@gmail.com"));
     }
 }
 
