@@ -40,56 +40,63 @@ public class ModifyProfileControl {
 
 
     @RequestMapping("/aggiungiFoto")
-    public void aggiungiFotoLista(@RequestParam String emailFotoToAdd, @RequestBody FotoDTO fotoDTO) throws InvalidFormatException {
+    public FotoDTO aggiungiFotoLista(@RequestParam String emailFotoToAdd, @RequestBody FotoDTO fotoDTO) throws InvalidFormatException {
         Studente s = (Studente) SecurityUtils.getLoggedIn();
         if (checkEmail(emailFotoToAdd)) {
             if (s.getEmail().equals(emailFotoToAdd)) {
-                if (checkFoto(fotoDTO))
-                    profiloManager.aggiungiFotoLista(emailFotoToAdd, new Foto(fotoDTO.getImg()));
+                if (checkFoto(fotoDTO)) {
+                    Foto f = profiloManager.aggiungiFotoLista(emailFotoToAdd, new Foto(fotoDTO.getImg()));
+                    return  EntityToDto.toDTO(f);
+                }
                 else throw new InvalidFormatException("La foto non rispetta le dimensioni consentite");
             } else throw new NotAuthorizedException("Non puoi inserire una foto per un altro utente");
         } else throw new InvalidFormatException("Formato email non valido!");
     }
 
     @RequestMapping("/eliminaFoto")
-    public void eliminaFotoLista(@RequestBody Long idFoto, @RequestParam String email) {
+    public FotoDTO eliminaFotoLista(@RequestBody Long idFoto, @RequestParam String email) {
         Utente utente = SecurityUtils.getLoggedIn();
         if (checkEmail(email) && idFoto != null) {
             if (utente.getRuolo().equals(Ruolo.STUDENTE)) {
                 if(utente.getEmail().equals(email)) {
-                    profiloManager.eliminaFotoLista(email, idFoto);
+                    Foto f = profiloManager.eliminaFotoLista(email, idFoto);
+                    return EntityToDto.toDTO(f);
                 } else throw new NotAuthorizedException("Non puoi rimuovere la foto di un altro utente");
             } else {
-                profiloManager.eliminaFotoLista(email, idFoto);
+                Foto f = profiloManager.eliminaFotoLista(email, idFoto);
+                return EntityToDto.toDTO(f);
             }
         }else throw new  InvalidFormatException("Formato email e/o id foto non valido! ");
     }
 
 
     @RequestMapping("/aggiungifotoProfilo")
-    public void aggiungiFotoProfilo(@RequestParam String emailFotoToAdd, @RequestBody FotoDTO fotoDTO) throws InvalidFormatException {
+    public FotoDTO aggiungiFotoProfilo(@RequestParam String emailFotoToAdd, @RequestBody FotoDTO fotoDTO) throws InvalidFormatException {
         if (checkEmail(emailFotoToAdd)) {
             if (SecurityUtils.getLoggedIn().getEmail().equals(emailFotoToAdd)) {
                 Foto f = new Foto(fotoDTO.getImg());
-                if (checkFoto(fotoDTO))
-                    profiloManager.aggiungiFotoProfilo(emailFotoToAdd, f);
+                if (checkFoto(fotoDTO)) {
+                    Foto foto = profiloManager.aggiungiFotoProfilo(emailFotoToAdd, f);
+                    return EntityToDto.toDTO(foto);
+                }
                 else throw new InvalidFormatException("La foto non rispetta le dimensioni consentite");
             } else throw new NotAuthorizedException("Non puoi aggiungere foto ad un altro profilo");
         }else throw new InvalidFormatException("Formato email non valido!");
     }
 
     @RequestMapping("/setFotoProfilo")
-    public void setFotoProfilo(@RequestParam String emailStudenteToModify, @RequestBody Long fotoId){
-        if(checkEmail(emailStudenteToModify) || fotoId == null) {
+    public FotoDTO setFotoProfilo(@RequestParam String emailStudenteToModify, @RequestBody Long fotoId){
+        if(checkEmail(emailStudenteToModify) && fotoId != null) {
             if (SecurityUtils.getLoggedIn().getEmail().equals(emailStudenteToModify)) {
-                profiloManager.setFotoProfilo(emailStudenteToModify, fotoId);
+                Foto f = profiloManager.setFotoProfilo(emailStudenteToModify, fotoId);
+                return EntityToDto.toDTO(f);
             } else throw new NotAuthorizedException("Non puoi settare la foto di un altro profilo");
         }else throw new InvalidFormatException("Formato email e/o id foto non validi!");
     }
 
 
     @RequestMapping("/modificaProfilo")
-    public void modificaProfilo(String emailStudenteToModify, ProfiloDTO profiloDTO) throws InvalidFormatException {
+    public boolean modificaProfilo(String emailStudenteToModify, ProfiloDTO profiloDTO) throws InvalidFormatException {
         if(checkEmail(emailStudenteToModify)) {
             if (SecurityUtils.getLoggedIn().getEmail().equals(emailStudenteToModify)) {
                 Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
@@ -101,8 +108,10 @@ public class ModifyProfileControl {
                 if (profiloDTO.getNickInstagram() != null)
                     p.setNumeroTelefono(profiloDTO.getNumeroTelefono());
 
-                if (checkProfilo(p))
+                if (checkProfilo(p)) {
                     profiloManager.modificaProfilo(emailStudenteToModify, p);
+                    return true;
+                }
                 else throw new InvalidFormatException("Uno o più campi inseriti non hanno un formato valido");
             } else throw new NotAuthorizedException("Non puoi modificare il profilo di un altro studente!");
         }else throw new InvalidFormatException("Formato email non valido!");

@@ -52,8 +52,8 @@ public class ProfiloManager {
         if(studente != null) {
             Foto f = foto;
                 studente.getProfilo().addFoto(f, false);
-                profiloRepository.save(studente.getProfilo());
-                return f;
+                Profilo p = profiloRepository.save(studente.getProfilo());
+                return p.getListaFoto().get(p.getListaFoto().size()-1);
         }else throw new EntityNotFoundException("Studente non trovato!");
     }
 
