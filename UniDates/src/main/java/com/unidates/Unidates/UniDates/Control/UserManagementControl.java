@@ -42,7 +42,7 @@ public class UserManagementControl {
 
 
     @RequestMapping("/registrazioneStudente")
-    public void registrazioneStudente(@RequestBody StudenteDTO studenteDTO, @RequestBody HttpServletRequest request) throws InvalidFormatException, AlreadyExistException {
+    public StudenteDTO registrazioneStudente(@RequestBody StudenteDTO studenteDTO, @RequestBody HttpServletRequest request) throws InvalidFormatException, AlreadyExistException {
 
         ProfiloDTO profiloDTO = studenteDTO.getProfilo();
         Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
@@ -55,11 +55,13 @@ public class UserManagementControl {
 
         Studente s = new Studente(studenteDTO.getEmail(), studenteDTO.getPassword());
         s.setProfilo(p);
-        if(checkStudente(studenteDTO) && checkProfilo(profiloDTO)) {
-                userManager.registrazioneStudente(s, p);
+        if(checkStudente(studenteDTO)) {
+            if(checkProfilo(profiloDTO)) {
                 String appUrl = request.getContextPath();
                 publisher.publishOnRegistrationEvent(s, request.getLocale(), appUrl);
-        }else throw new InvalidFormatException("Uno o piú campi inseriti non rispettano il formato");
+               return EntityToDto.toDTO(userManager.registrazioneStudente(s, p));
+            } else throw new InvalidFormatException("Uno o piú campi del profilo non risultano validi");
+        }else throw new InvalidFormatException("Email o password inderiti non rispettano il formato");
     }
 
 
@@ -105,10 +107,7 @@ public class UserManagementControl {
 
 
     private boolean checkEmail(String email){
-        if (email != null && email.matches("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"))
-            return true;
-
-        return false;
+        return email != null && email.matches("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$");
     }
     private boolean checkProfilo(ProfiloDTO p) {
         if (p.getNome() != null && p.getCognome() != null && p.getLuogoNascita() != null && p.getResidenza() != null && p.getDataDiNascita() != null && p.getAltezza() != 0 && p.getSesso() != null && p.getInteressi() != null && p.getColori_capelli() != null && p.getColore_occhi() != null && p.getHobbyList().size() > 0){
@@ -126,10 +125,8 @@ public class UserManagementControl {
         return false;
     }
     private boolean checkStudente(StudenteDTO s) {
-        if(s.getEmail() != null && s.getPassword() != null){
-            if(checkEmail(s.getEmail())){
-                return s.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$");
-            }
+        if(checkEmail(s.getEmail()) && s.getPassword() != null){
+            return s.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$");
         }
          return false;
     }
