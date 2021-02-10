@@ -104,6 +104,9 @@ public class Populator implements ApplicationRunner {
             utenteService.registrazioneCommunityManager(cm1, p5);
             utenteService.registrazioneModeratore(m1, p4);
 
+
+
+
             matchManager.aggiungiMatch(s1.getEmail(), s2.getEmail());
             matchManager.aggiungiMatch(s2.getEmail(), s1.getEmail());
             notificaManager.generateNotificaMatch(s1.getEmail(), s2.getEmail());

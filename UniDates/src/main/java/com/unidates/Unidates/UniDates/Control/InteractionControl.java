@@ -1,10 +1,12 @@
 package com.unidates.Unidates.UniDates.Control;
 
 import com.unidates.Unidates.UniDates.DTOs.EntityToDto;
+import com.unidates.Unidates.UniDates.DTOs.MatchDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
 import com.unidates.Unidates.UniDates.Exception.NotAuthorizedException;
 import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
+import com.unidates.Unidates.UniDates.Model.Entity.Match;
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.Manager.MatchManager;
@@ -28,13 +30,14 @@ public class InteractionControl {
     private NotificaManager notificaManager;
 
     @RequestMapping("/aggiungiMatch")
-    public void aggiungiMatch(@RequestParam String emailStudente1,@RequestParam String emailStudente2){
+    public boolean aggiungiMatch(@RequestParam String emailStudente1, @RequestParam String emailStudente2){
         if (checkEmail(emailStudente1) && checkEmail(emailStudente2)) {
             if (SecurityUtils.getLoggedIn().getEmail().equals(emailStudente1)) {
                 if (!emailStudente1.equals(emailStudente2)) {
                     matchManager.aggiungiMatch(emailStudente1, emailStudente2);
                     if (matchManager.isValidMatch(emailStudente1, emailStudente2)) // se il match si è verificato da entrambe le parti
                         notificaManager.generateNotificaMatch(emailStudente1, emailStudente2);
+                    return true;
                 } else throw new NotAuthorizedException("Non puoi inserire un match per te stesso!");
             } else throw new NotAuthorizedException("Non puoi inserire un match per un altro utente!");
         }else throw new InvalidFormatException("Formato email non valido");
