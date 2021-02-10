@@ -31,28 +31,32 @@ public class ModerationControl {
 
 
     @RequestMapping("/inviaSegnalazione")
-    public void inviaSegnalazione(SegnalazioneDTO segnalazioneDTO, Long fotoId) throws InvalidFormatException {
+    public SegnalazioneDTO inviaSegnalazione(SegnalazioneDTO segnalazioneDTO, Long fotoId) throws InvalidFormatException {
         if(fotoId != null) {
             Segnalazione s = new Segnalazione(segnalazioneDTO.getMotivazione(), segnalazioneDTO.getDettagli());
-            if (checkSegnalazione(s))
+            if (checkSegnalazione(s)) {
                 moderazioneManager.inviaSegnalazione(s, fotoId);
+                return EntityToDto.toDTO(s);
+            }
             else throw new InvalidFormatException("Motivazione e/o dettagli non validi");
         } else throw new InvalidFormatException("Id non valido!");
     }
+
     @RequestMapping("/inviaSegnalazioneManager")
-    public void inviaSegnalazioneCommunityManager(SegnalazioneDTO segnalazioneDTO, Long fotoId)  {
+    public SegnalazioneDTO inviaSegnalazioneCommunityManager(SegnalazioneDTO segnalazioneDTO, Long fotoId)  {
         if(fotoId != null) {
             Segnalazione s = new Segnalazione(segnalazioneDTO.getMotivazione(), segnalazioneDTO.getDettagli());
             if(checkSegnalazione(s)) {
                 if (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE)) {
                     moderazioneManager.inviaSegnalazioneCommunityManager(s, fotoId);
+                    return EntityToDto.toDTO(s);
                 } else throw new NotAuthorizedException("Non puoi inviare una segnalazione al CM!");
             }else throw new InvalidFormatException("Motivazione e/o dettagli non validi");
         } else throw new InvalidFormatException("Id foto non valido");
     }
 
     @RequestMapping("/inviaAmmonimento")
-    public void inviaAmmonimento(AmmonimentoDTO ammonimentoDTO, String emailModeratore, String emailStudenteAmmonito, FotoDTO fotoDTO) throws InvalidFormatException, AlreadyExistException {
+    public AmmonimentoDTO inviaAmmonimento(AmmonimentoDTO ammonimentoDTO, String emailModeratore, String emailStudenteAmmonito, FotoDTO fotoDTO) throws InvalidFormatException, AlreadyExistException {
         if(checkEmail(emailModeratore) && checkEmail(emailStudenteAmmonito)) {
             if (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))) {
                 Ammonimento a = new Ammonimento(ammonimentoDTO.getMotivazione(), ammonimentoDTO.getDettagli());
@@ -61,19 +65,21 @@ public class ModerationControl {
                         moderazioneManager.nascondiFoto(fotoDTO.getId());
                         notificaManager.genereateNotificaWarning(emailStudenteAmmonito, fotoDTO.getId());
                         moderazioneManager.checkAmmonimentiStudente(emailStudenteAmmonito);
+                        return EntityToDto.toDTO(a);
                 } else throw new InvalidFormatException("Motivazione e/o dettagli non validi");
             } else throw new NotAuthorizedException("Non puoi inviare un ammonimento!");
         }else throw new InvalidFormatException("Formato email non valido!");
     }
 
     @RequestMapping("/inviaSospensione")
-    public void inviaSospensione(SospensioneDTO sospensioneDTO, String emailSospeso) throws InvalidFormatException, EntityNotFoundException {
+    public SospensioneDTO inviaSospensione(SospensioneDTO sospensioneDTO, String emailSospeso) throws InvalidFormatException, EntityNotFoundException {
         if (checkEmail(emailSospeso)) {
             if ((SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))) {
                 Sospensione sp = new Sospensione(sospensioneDTO.getDurata(), sospensioneDTO.getDettagli());
                 if (checkSospensione(sp)) {
                     moderazioneManager.inviaSospensione(sp, emailSospeso);
                     SecurityUtils.forceLogout(userManager.trovaUtente(emailSospeso), sessionRegistry);
+                    return EntityToDto.toDTO(sp);
                 } else throw new InvalidFormatException("Dettagli e/o durata non validi");
             } else throw new NotAuthorizedException("Non puoi inviare una sospensione!");
         }else throw new InvalidFormatException("Formato email non valido");
@@ -88,7 +94,7 @@ public class ModerationControl {
     }
 
 
-    public Boolean checkSegnalazione(Segnalazione s){
+    private Boolean checkSegnalazione(Segnalazione s){
         if(s.getMotivazione() != null && s.getDettagli() != null) {
             if(s.getDettagli().length() > 0 && s.getDettagli().length() < 250){
                 return true;
@@ -97,7 +103,7 @@ public class ModerationControl {
         return false;
     }
 
-    public Boolean checkAmmonimento(Ammonimento a){
+    private Boolean checkAmmonimento(Ammonimento a){
         if(a.getMotivazione() != null && a.getDettagli() != null) {
             if(a.getDettagli().length() > 0 && a.getDettagli().length() < 250){
                 return true;
@@ -106,7 +112,7 @@ public class ModerationControl {
         return false;
     }
 
-    public boolean checkSospensione(Sospensione sp){
+    private boolean checkSospensione(Sospensione sp){
         if(sp.getDurata() != 0 && sp.getDettagli() != null){
             if(sp.getDettagli().length() > 0 && sp.getDettagli().length() < 250){
                 return true;
