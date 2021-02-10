@@ -5,12 +5,13 @@ import com.unidates.Unidates.UniDates.DTOs.EntityToDto;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
 import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
-import com.unidates.Unidates.UniDates.Model.Entity.Foto;
-import com.unidates.Unidates.UniDates.Model.Entity.Profilo;
-import com.unidates.Unidates.UniDates.Model.Entity.Studente;
+import com.unidates.Unidates.UniDates.Manager.UserManager;
+import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
+import com.unidates.Unidates.UniDates.Repository.VerificationTokenRepository;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.SecurityTestConfig;
 import com.unidates.Unidates.UniDates.UniDatesApplication;
@@ -34,6 +35,12 @@ import static org.junit.Assert.*;
 public class TestUserManagementControl {
 
     //gli studenti vengono creati dalla classe populator
+
+    @Autowired
+    VerificationTokenRepository verificationTokenRepository;
+
+    @Autowired
+    UserManager userManager;
 
     @Autowired
     UtenteRepository utenteRepository;
@@ -110,4 +117,51 @@ public class TestUserManagementControl {
         assertThrows(InvalidFormatException.class, () -> userManagementControl.registrazioneStudente(s1, httpServletRequest));
 
     }
+
+    @Test
+    public void isAlreadyRegistered_true(){
+        assertTrue(userManagementControl.isAlreadyRegistered("studenteprova1@gmail.com"));
+    }
+
+    @Test
+    public void isAlreadyRegistered_false(){
+        assertFalse(userManagementControl.isAlreadyRegistered("studenteprova4@gmail.com"));
+    }
+
+    @Test
+    public void isAlreadyRegistered_emailnonvalida(){
+        assertThrows(InvalidFormatException.class, () -> userManagementControl.isAlreadyRegistered("studenteprova1"));
+    }
+
+    @Test
+    @WithUserDetails("studenteprova1@gmail.com")
+    public void studenteInSessione(){
+        Studente studente = (Studente) utenteRepository.findByEmail("studenteprova1@gmail.com");
+        assertEquals(studente.getEmail(), userManagementControl.studenteInSessione().getEmail());
+
+    }
+
+    @Test
+    public void confermaRegistrazione_valid(){
+        userManager.createVerificationToken(userManager.trovaUtente("studenteprova3@gmail.com"), "token");
+        assertTrue(userManagementControl.confermaRegistrazione("token"));
+    }
+
+    @Test
+    public void confermaRegistrazione_tokenNonTrovato(){
+        assertThrows(EntityNotFoundException.class, () -> userManagementControl.confermaRegistrazione("token"));
+    }
+
+    @Test
+    public void confermaRegistrazione_tokenNonValido(){
+        Utente utente = userManager.trovaUtente("studenteprova3@gmail.com");
+        userManager.createVerificationToken(utente, "token");
+        VerificationToken verificationToken = verificationTokenRepository.findByUtente(utente);
+        //verificationToken.setExpiryDate();
+        assertThrows(EntityNotFoundException.class, () -> userManagementControl.confermaRegistrazione("token"));
+    }
+
+
+
+
 }

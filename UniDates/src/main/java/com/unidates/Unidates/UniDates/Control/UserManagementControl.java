@@ -80,22 +80,22 @@ public class UserManagementControl {
 
 
     @GetMapping("/registrationConfirm")
-    public String confermaRegistrazione(@RequestParam("token") String token) {
+    public boolean confermaRegistrazione(@RequestParam("token") String token) {
         VerificationToken verificationToken = userManager.getVerificationToken(token);
         System.out.println(token);
         if (verificationToken == null) {
-            return "Token non valido";
+            throw new EntityNotFoundException("Token non valido!");
         }
         Utente utente = userManager.getUtenteByVerificationToken(token);
         Calendar cal = Calendar.getInstance();
 
         if((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             userManager.deleteUtente(utente.getEmail());
-            return "Token scaduto";
+            throw new EntityNotFoundException("Token non piú valido!");
         }
         System.out.println("Utente attivato: " + utente);
         userManager.attivaUtenteRegistrato(utente.getEmail());
-        return "Utente confermato";
+        return true;
     }
 
     @RequestMapping("/trovaTuttuStudenti")
