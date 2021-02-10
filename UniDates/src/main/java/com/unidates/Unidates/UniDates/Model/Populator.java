@@ -1,8 +1,11 @@
 package com.unidates.Unidates.UniDates.Model;
 
-import com.unidates.Unidates.UniDates.Control.InteractionControl;
-import com.unidates.Unidates.UniDates.Control.ModerationControl;
+import com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO;
+import com.unidates.Unidates.UniDates.DTOs.EntityToDto;
+import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistException;
+import com.unidates.Unidates.UniDates.Manager.MatchManager;
+import com.unidates.Unidates.UniDates.Manager.ModerazioneManager;
 import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Manager.UserManager;
@@ -21,14 +24,15 @@ import java.util.ArrayList;
 @Component
 public class Populator implements ApplicationRunner {
 
-    @Autowired
-    private UserManager userManager;
 
     @Autowired
-    private ModerationControl moderationControl;
+    private UserManager utenteService;
 
     @Autowired
-    private InteractionControl interactionControl;
+    private ModerazioneManager moderazioneManager;
+
+    @Autowired
+    private MatchManager matchManager;
 
     private final String LINK = "https://source.unsplash.com/random";
 
@@ -70,13 +74,6 @@ public class Populator implements ApplicationRunner {
 
 
 
-        /*interactionControl.aggiungiMatch(s1.getEmail(), s2.getEmail());
-        interactionControl.aggiungiMatch(s2.getEmail(), s1.getEmail());
-        interactionControl.aggiungiMatch(s1.getEmail(), s3.getEmail());
-        interactionControl.aggiungiMatch(s3.getEmail(), s1.getEmail());
-
-         */
-
         //Aggiungo un moderatore
         Moderatore m1 = new Moderatore("moderatore@gmail.com", "moderatore");
         Profilo p4 = new Profilo("Marcello", "Moderatore", "Napoli", "Napoli", LocalDate.of(1999,6,12), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.GRIGI, Colore_Occhi.AZZURRI,new Foto(img),hobbyArrayList );
@@ -96,12 +93,26 @@ public class Populator implements ApplicationRunner {
         p5.addFoto(new Foto(img), false);
 
         try {
-            userManager.registrazioneStudente(s1, p1); //usati solo per skippare l'invio email di conferma
-            userManager.registrazioneStudente(s2, p2);
-            userManager.registrazioneStudente(s3, p3);
+            utenteService.registrazioneStudente(s1, p1); //usati solo per skippare l'invio email di conferma
+            utenteService.registrazioneStudente(s2, p2);
+            utenteService.registrazioneStudente(s3, p3);
 
-            userManager.registrazioneCommunityManager(cm1, p5);
-            userManager.registrazioneModeratore(m1, p4);
+            utenteService.registrazioneCommunityManager(cm1, p5);
+            utenteService.registrazioneModeratore(m1, p4);
+
+            matchManager.aggiungiMatch(s1.getEmail(), s2.getEmail());
+            matchManager.aggiungiMatch(s2.getEmail(), s1.getEmail());
+            matchManager.aggiungiMatch(s1.getEmail(), s3.getEmail());
+            matchManager.aggiungiMatch(s3.getEmail(), s1.getEmail());
+
+            moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli1"),utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
+            moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.NUDITA, "dettagli2"),utenteService.trovaStudente(s2.getEmail()).getProfilo().getFotoProfilo().getId());
+            moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.VIOLENZA , "dettagli3"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
+            moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.NUDITA, "dettagli5"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
+            moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.VIOLENZA, "dettagli6"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(2).getId());
+
+            moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli1"), m1.getEmail(), s1.getEmail(), utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
+            moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.SPAM, "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
 
             System.out.println("Populator eseguito correttamente!");
         }
@@ -110,24 +121,7 @@ public class Populator implements ApplicationRunner {
         }
 
 
-        /*
-        try {
 
-            moderationControl.inviaSegnalazione(new SegnalazioneDTO(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli1"),EntityToDto.toDTO(utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo()));
-            moderationControl.inviaSegnalazione(new SegnalazioneDTO(Motivazione.NUDITA, "dettagli2"),EntityToDto.toDTO(utenteService.trovaStudente(s2.getEmail()).getProfilo().getFotoProfilo()));
-            moderationControl.inviaSegnalazione(new SegnalazioneDTO(Motivazione.VIOLENZA , "dettagli3"),EntityToDto.toDTO(utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo()));
-            moderationControl.inviaSegnalazione(new SegnalazioneDTO(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli4"),EntityToDto.toDTO(utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(0)));
-            moderationControl.inviaSegnalazione(new SegnalazioneDTO(Motivazione.NUDITA, "dettagli5"),EntityToDto.toDTO(utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1)));
-            moderationControl.inviaSegnalazione(new SegnalazioneDTO(Motivazione.VIOLENZA, "dettagli6"),EntityToDto.toDTO(utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(2)));
-
-            moderationControl.inviaAmmonimento(new AmmonimentoDTO(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli1"), m1.getEmail(), s1.getEmail(), EntityToDto.toDTO(utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo()));
-            moderationControl.inviaAmmonimento(new AmmonimentoDTO(Motivazione.SPAM, "dettagli3"), m1.getEmail(), s3.getEmail(),EntityToDto.toDTO(utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo()));
-            moderationControl.inviaAmmonimento(new AmmonimentoDTO(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli3"), m1.getEmail(), s3.getEmail(),EntityToDto.toDTO(utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(0)));
-
-        } catch (InvalidFormatException ex){
-            ex.printStackTrace();
-        }
-         */
 
        // moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
 
