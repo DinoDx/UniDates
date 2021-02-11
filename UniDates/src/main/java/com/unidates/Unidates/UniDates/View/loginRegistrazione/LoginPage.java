@@ -74,15 +74,19 @@ public class LoginPage extends FlexLayout{
         if(erroreLogin != null) {
             switch (erroreLogin){
                 case "usernotfound":
+                    loginForm.setError(true);
                     Notification.show("E-mail o password non validi, é pregato di riprovare!", 3000, Notification.Position.MIDDLE).open();
                     break;
                 case "notactiveuser":
+                    loginForm.setError(true);
                     Notification.show("L'utente con cui si sta provando ad accedere non é stato ancora attivato!", 3000, Notification.Position.MIDDLE).open();
                     break;
                 case "banneduser":
+                    loginForm.setError(true);
                     Notification.show("L'utente con cui si sta provando ad accedere risulta al momento sospeso!", 3000, Notification.Position.MIDDLE).open();
                     break;
                 default:
+                    loginForm.setError(true);
                     Notification.show("Errore generico, riprovare piú tardi!", 3000, Notification.Position.MIDDLE).open();
                     break;
             }

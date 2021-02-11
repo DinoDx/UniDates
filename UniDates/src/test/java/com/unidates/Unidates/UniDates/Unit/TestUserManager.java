@@ -1,7 +1,6 @@
 package com.unidates.Unidates.UniDates.Unit;
 
 
-import com.helger.commons.system.ENewLineMode;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistException;
 import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
 import com.unidates.Unidates.UniDates.Manager.UserManager;
@@ -10,19 +9,15 @@ import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
 import com.unidates.Unidates.UniDates.Repository.VerificationTokenRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers.*;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
