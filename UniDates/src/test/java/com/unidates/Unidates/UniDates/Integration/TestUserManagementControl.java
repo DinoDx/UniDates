@@ -1,32 +1,30 @@
 package com.unidates.Unidates.UniDates.Integration;
 
 import com.unidates.Unidates.UniDates.Control.UserManagementControl;
-import com.unidates.Unidates.UniDates.DTOs.EntityToDto;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
 import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
 import com.unidates.Unidates.UniDates.Manager.UserManager;
-import com.unidates.Unidates.UniDates.Model.Entity.*;
+import com.unidates.Unidates.UniDates.Model.Entity.Foto;
+import com.unidates.Unidates.UniDates.Model.Entity.Profilo;
+import com.unidates.Unidates.UniDates.Model.Entity.Studente;
+import com.unidates.Unidates.UniDates.Model.Entity.VerificationToken;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
 import com.unidates.Unidates.UniDates.Repository.VerificationTokenRepository;
-import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.SecurityTestConfig;
 import com.unidates.Unidates.UniDates.UniDatesApplication;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -34,9 +32,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.Assert.*;
 
 @SpringBootTest(classes = {UniDatesApplication.class, SecurityTestConfig.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -154,7 +152,7 @@ public class TestUserManagementControl {
     @Test
     public void confermaRegistrazione_valid(){
         userManager.createVerificationToken(userManager.trovaUtente("studenteprova3@gmail.com"), "token");
-        assertTrue(userManagementControl.confermaRegistrazione("token"));
+        assertEquals("", userManagementControl.confermaRegistrazione("token"));
     }
 
     @Test

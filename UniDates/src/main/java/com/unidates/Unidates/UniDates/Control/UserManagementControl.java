@@ -84,7 +84,7 @@ public class UserManagementControl {
 
 
     @GetMapping("/registrationConfirm")
-    public boolean confermaRegistrazione(@RequestParam("token") String token) {
+    public String confermaRegistrazione(@RequestParam("token") String token) {
         VerificationToken verificationToken = userManager.getVerificationToken(token);
         System.out.println(token);
         if (verificationToken == null) {
@@ -100,7 +100,7 @@ public class UserManagementControl {
         }
         System.out.println("Utente attivato: " + utente);
         userManager.attivaUtenteRegistrato(utente.getEmail());
-        return true;
+        return "";
     }
 
     @RequestMapping("/trovaTuttuStudenti")
