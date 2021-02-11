@@ -137,8 +137,7 @@ public class ModifyProfileControl {
                 userManager.deleteUtente(toDelete.getEmail());
                 SecurityUtils.forceLogout(toDelete, sessionRegistry);
             }else throw new PasswordMissmatchException();
-        }
-        else throw new NotAuthorizedException();
+        }else throw new NotAuthorizedException();
     }
 
     @RequestMapping("/trovaFoto")

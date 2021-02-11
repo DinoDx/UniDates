@@ -63,6 +63,12 @@ public class TestModerazioneManager {
 
         Mockito.when(segnalazioniRepository.findByModeratoreAndFoto(any(Moderatore.class), any(Foto.class))).thenReturn(null);
 
+        Mockito.when(segnalazioniRepository.save(any(Segnalazione.class))).thenAnswer(invocation -> {
+            Segnalazione s = invocation.getArgument(0, Segnalazione.class);
+            s.setId(1L);
+            return s;
+        });
+
         Segnalazione oracolo = new Segnalazione(Motivazione.VIOLENZA, "dettagli");
         byte[] img = {1,2,3};
         Foto f = new Foto(img);
@@ -140,6 +146,12 @@ public class TestModerazioneManager {
 
         Mockito.when(segnalazioniRepository.findByModeratoreAndFoto(any(Moderatore.class), any(Foto.class))).thenReturn(null);
 
+        Mockito.when(segnalazioniRepository.save(any(Segnalazione.class))).thenAnswer(invocation -> {
+            Segnalazione s = invocation.getArgument(0, Segnalazione.class);
+            s.setId(1L);
+            return s;
+        });
+
         Segnalazione oracolo = new Segnalazione(Motivazione.VIOLENZA, "dettagli");
         byte[] img = {1,2,3};
         Foto f = new Foto(img);
@@ -214,6 +226,12 @@ public class TestModerazioneManager {
         foto.setId(1L);
         oracolo.setFoto(foto);
 
+        Mockito.when(ammonimentiRepository.save(any(Ammonimento.class))).thenAnswer(invocation -> {
+            Ammonimento s = invocation.getArgument(0, Ammonimento.class);
+            //s.setId(1L);
+            return s;
+        });
+
         assertEquals(oracolo.getFoto().getId(), moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.VIOLENZA, "dettagli"), "mod@gmail.com", "studente@gmail.com",1L).getFoto().getId());
 
     }
@@ -258,6 +276,12 @@ public class TestModerazioneManager {
 
         Sospensione oracolo = new Sospensione(1, "prova");
         oracolo.setStudente(new Studente("email@gmail.com", "password"));
+
+        Mockito.when(sospensioniRepository.save(any(Sospensione.class))).thenAnswer(invocation -> {
+            Sospensione s = invocation.getArgument(0, Sospensione.class);
+            s.setId(1L);
+            return s;
+        });
 
         assertEquals(oracolo.getStudente(), moderazioneManager.inviaSospensione(new Sospensione(1, "prova"), "email@gmail.com").getStudente());
 

@@ -8,6 +8,7 @@ import com.unidates.Unidates.UniDates.Model.Entity.*;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Manager.UserManager;
 
+import com.unidates.Unidates.UniDates.Repository.VerificationTokenRepository;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
 import com.unidates.Unidates.UniDates.Manager.Registrazione.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,12 @@ public class UserManagementControl {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    VerificationTokenRepository verificationTokenRepository;
+
 
     @RequestMapping("/registrazioneStudente")
-    public StudenteDTO registrazioneStudente(@RequestBody StudenteDTO studenteDTO, @RequestBody HttpServletRequest request) throws InvalidFormatException, AlreadyExistException {
+    public void registrazioneStudente(@RequestBody StudenteDTO studenteDTO, @RequestBody HttpServletRequest request) throws InvalidFormatException, AlreadyExistException {
 
         ProfiloDTO profiloDTO = studenteDTO.getProfilo();
         Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
@@ -57,9 +61,9 @@ public class UserManagementControl {
         s.setProfilo(p);
         if(checkStudente(studenteDTO)) {
             if(checkProfilo(profiloDTO)) {
+                userManager.registrazioneStudente(s, p);
                 String appUrl = request.getContextPath();
                 publisher.publishOnRegistrationEvent(s, request.getLocale(), appUrl);
-               return EntityToDto.toDTO(userManager.registrazioneStudente(s, p));
             } else throw new InvalidFormatException("Uno o piú campi del profilo non risultano validi");
         }else throw new InvalidFormatException("Email o password inderiti non rispettano il formato");
     }
@@ -90,6 +94,7 @@ public class UserManagementControl {
         Calendar cal = Calendar.getInstance();
 
         if((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+            verificationTokenRepository.delete(verificationToken);
             userManager.deleteUtente(utente.getEmail());
             throw new EntityNotFoundException("Token non piú valido!");
         }

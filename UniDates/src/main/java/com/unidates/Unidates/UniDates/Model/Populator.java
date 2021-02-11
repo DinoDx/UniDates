@@ -22,8 +22,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-@Component
-public class Populator implements ApplicationRunner {
+public class Populator {
 
 
     @Autowired
@@ -40,7 +39,7 @@ public class Populator implements ApplicationRunner {
 
     private final String LINK = "https://source.unsplash.com/random";
 
-    @Override
+
     public void run(ApplicationArguments args) throws Exception {
         //Aggiungo 3 utenti
         Studente s1 = new Studente("studenteprova1@gmail.com","studenteprova1");

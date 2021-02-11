@@ -34,8 +34,7 @@ public class UserManager {
         if(!isPresent(s.getEmail())) {
             s.setProfilo(p);
             s.setPassword(passwordEncoder.encode(s.getPassword()));
-            utenteRepository.save(s); //
-            return s;
+           return utenteRepository.saveAndFlush(s); //
         }
         else throw new AlreadyExistException("Utente giá registrato con questa email!!");
     }

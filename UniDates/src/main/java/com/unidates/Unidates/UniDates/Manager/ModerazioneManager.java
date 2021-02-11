@@ -61,8 +61,7 @@ public class ModerazioneManager {
             s.setModeratore(moderatore); //Moderatore scelto casualmente tra tutti i moderatori
             s.setFoto(segnalata);
             if (segnalazioniRepository.findByModeratoreAndFoto(moderatore, segnalata) == null) { //Non si può inviare la stessa segnalazione allo stesso moderatore!
-                segnalazioniRepository.save(s);
-                return s;
+                return segnalazioniRepository.save(s);
             }else throw new AlreadyExistException("Segnalazione già esistente!");
         } else throw new EntityNotFoundException("Foto non trovata!");
 
@@ -76,8 +75,7 @@ public class ModerazioneManager {
         if(f != null){
             s.setFoto(f);
             if (segnalazioniRepository.findByModeratoreAndFoto(cm, f) == null) { // viene mandata una segnalazione se giá non ne esiste una associata a quella foto
-                segnalazioniRepository.save(s);
-                return s;
+                return segnalazioniRepository.save(s);
             }else throw new AlreadyExistException("Segnalazione già esistente!");
         }else throw new EntityNotFoundException("Foto non trovata!");
 
@@ -91,10 +89,9 @@ public class ModerazioneManager {
             a.setFoto(fotoRepository.findFotoById(idFoto));
 
             if (!ammonito.getListaAmmonimenti().contains(a)) { //Utente ammonito solo nel caso non abbia già un ammonimento per la stessa foto
-                ammonimentiRepository.save(a);
                 ammonito.addAmmonimentoattivo();
                 utenteRepository.save(ammonito);
-                return a;
+                return ammonimentiRepository.save(a);
             } else throw new AlreadyExistException("Ammonimento già presente!");
         } else throw new EntityNotFoundException("Studente non trovato!");
     }
@@ -103,10 +100,9 @@ public class ModerazioneManager {
         Studente daSospendere = (Studente) utenteRepository.findByEmail(emailSospeso);
         if(daSospendere != null) {
             sp.setStudente(daSospendere);
-            sospensioniRepository.save(sp);
             daSospendere.setBanned(true);
             utenteRepository.save(daSospendere);
-            return sp;
+            return sospensioniRepository.save(sp);
         }else throw new EntityNotFoundException("Studente non trovato!");
     }
 

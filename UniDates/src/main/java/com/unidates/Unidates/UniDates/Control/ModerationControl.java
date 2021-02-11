@@ -35,8 +35,7 @@ public class ModerationControl {
         if(fotoId != null) {
             Segnalazione s = new Segnalazione(segnalazioneDTO.getMotivazione(), segnalazioneDTO.getDettagli());
             if (checkSegnalazione(s)) {
-                moderazioneManager.inviaSegnalazione(s, fotoId);
-                return EntityToDto.toDTO(s);
+                return EntityToDto.toDTO(moderazioneManager.inviaSegnalazione(s, fotoId));
             }
             else throw new InvalidFormatException("Motivazione e/o dettagli non validi");
         } else throw new InvalidFormatException("Id non valido!");
@@ -48,8 +47,7 @@ public class ModerationControl {
             Segnalazione s = new Segnalazione(segnalazioneDTO.getMotivazione(), segnalazioneDTO.getDettagli());
             if(checkSegnalazione(s)) {
                 if (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE)) {
-                    moderazioneManager.inviaSegnalazioneCommunityManager(s, fotoId);
-                    return EntityToDto.toDTO(s);
+                    return EntityToDto.toDTO(moderazioneManager.inviaSegnalazioneCommunityManager(s, fotoId));
                 } else throw new NotAuthorizedException("Non puoi inviare una segnalazione al CM!");
             }else throw new InvalidFormatException("Motivazione e/o dettagli non validi");
         } else throw new InvalidFormatException("Id foto non valido");
@@ -61,11 +59,11 @@ public class ModerationControl {
             if (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.MODERATORE) || (SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))) {
                 Ammonimento a = new Ammonimento(ammonimentoDTO.getMotivazione(), ammonimentoDTO.getDettagli());
                 if (checkAmmonimento(a)) {
-                        moderazioneManager.inviaAmmonimento(a, emailModeratore, emailStudenteAmmonito, fotoDTO.getId());
+                        Ammonimento toReturn = moderazioneManager.inviaAmmonimento(a, emailModeratore, emailStudenteAmmonito, fotoDTO.getId());
                         moderazioneManager.nascondiFoto(fotoDTO.getId());
                         notificaManager.genereateNotificaWarning(emailStudenteAmmonito, fotoDTO.getId());
                         moderazioneManager.checkAmmonimentiStudente(emailStudenteAmmonito);
-                        return EntityToDto.toDTO(a);
+                        return EntityToDto.toDTO(toReturn);
                 } else throw new InvalidFormatException("Motivazione e/o dettagli non validi");
             } else throw new NotAuthorizedException("Non puoi inviare un ammonimento!");
         }else throw new InvalidFormatException("Formato email non valido!");
@@ -77,9 +75,8 @@ public class ModerationControl {
             if ((SecurityUtils.getLoggedIn().getRuolo().equals(Ruolo.COMMUNITY_MANAGER))) {
                 Sospensione sp = new Sospensione(sospensioneDTO.getDurata(), sospensioneDTO.getDettagli());
                 if (checkSospensione(sp)) {
-                    moderazioneManager.inviaSospensione(sp, emailSospeso);
                     SecurityUtils.forceLogout(userManager.trovaUtente(emailSospeso), sessionRegistry);
-                    return EntityToDto.toDTO(sp);
+                    return EntityToDto.toDTO(moderazioneManager.inviaSospensione(sp, emailSospeso));
                 } else throw new InvalidFormatException("Dettagli e/o durata non validi");
             } else throw new NotAuthorizedException("Non puoi inviare una sospensione!");
         }else throw new InvalidFormatException("Formato email non valido");
