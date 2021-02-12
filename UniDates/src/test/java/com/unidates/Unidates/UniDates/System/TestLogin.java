@@ -33,6 +33,9 @@ import java.util.Calendar;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class TestLogin extends TestBenchTestCase {
 
+    //Necessaria la licenza di TestBench
+    //Settare i webDriver nella cartella corretta
+
     @Autowired
     UtenteRepository utenteRepository;
 
@@ -105,6 +108,7 @@ public class TestLogin extends TestBenchTestCase {
 
     @BeforeEach
     public void populateDB(){
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\WebDriver\\chromedriver.exe");
         setDriver(new ChromeDriver());
         getDriver().get("http://localhost:8080/" );
         ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();

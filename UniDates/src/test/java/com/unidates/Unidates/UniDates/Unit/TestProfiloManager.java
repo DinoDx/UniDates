@@ -11,19 +11,16 @@ import com.unidates.Unidates.UniDates.Repository.FotoRepository;
 import com.unidates.Unidates.UniDates.Repository.ProfiloRepository;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.parameters.P;
-
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 
@@ -150,6 +147,9 @@ public class TestProfiloManager {
             return studente;
         });
 
+        Mockito.when(profiloRepository.save(any(Profilo.class))).thenAnswer(invocation -> {
+            return invocation.getArgument(0, Profilo.class);
+        });
 
         byte[] img = {1,2,3};
         Foto foto = new Foto(img);

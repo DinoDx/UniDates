@@ -18,16 +18,19 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     @Autowired
     private UserManager service;
 
+    @Autowired
+    private ConfermaRegistrazione confermaRegistrazione;
+
 
     @Autowired
     private JavaMailSender mailSender;
 
     @Override
     public void onApplicationEvent(OnRegistrationCompleteEvent event) {
-        this.confirmRegistration(event);
+        confermaRegistrazione.confermaRegistrazione(event);
     }
 
-    private void confirmRegistration(OnRegistrationCompleteEvent event) {
+    private SimpleMailMessage confirmRegistration(OnRegistrationCompleteEvent event) {
         Utente utente = event.getUtente();
         String token = UUID.randomUUID().toString();
         service.createVerificationToken(utente, token);
@@ -42,6 +45,17 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         email.setText("http://localhost:8080" + link);
         System.out.println("http://localhost:8080" + link);
         mailSender.send(email);
+        return email;
+    }
+
+    @Bean
+    public ConfermaRegistrazione confermaRegistrazione() {
+        return new ConfermaRegistrazione() {
+            @Override
+            public SimpleMailMessage confermaRegistrazione(OnRegistrationCompleteEvent event) {
+                return confirmRegistration(event);
+            }
+        };
     }
 
     @Bean

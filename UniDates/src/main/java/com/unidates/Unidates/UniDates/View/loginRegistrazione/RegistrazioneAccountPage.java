@@ -3,6 +3,7 @@ package com.unidates.Unidates.UniDates.View.loginRegistrazione;
 
 import com.unidates.Unidates.UniDates.Control.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
+import com.unidates.Unidates.UniDates.Model.Entity.Notifica;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -14,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
@@ -26,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @CssImport("./styles/views/registrazione/registrazione.css")
 public class RegistrazioneAccountPage extends FlexLayout {
 
-    private EmailField email;
+    private TextField email;
     private PasswordField password;
     private PasswordField conferma_password;
 
@@ -96,11 +98,13 @@ public class RegistrazioneAccountPage extends FlexLayout {
 
         FormLayout formFields = new FormLayout();
         formFields.setResponsiveSteps(new FormLayout.ResponsiveStep("40em", 1));
-        email = new EmailField();
+        email = new TextField();
+        email.setId("email-registrazione");
         email.setPlaceholder("Inserisci email universitaria");
         email.setLabel("E-mail Universitaria");
 
         password = new PasswordField();
+        password.setId("password-registrazione");
         password.setLabel("Password(*):");
         password.addFocusListener(event -> {
             new Notification("Inserire una password con un minimo di 8 caratteri, una lettera e un numero.",5000, Notification.Position.MIDDLE).open();
@@ -109,6 +113,7 @@ public class RegistrazioneAccountPage extends FlexLayout {
         password.setPlaceholder("Inserisci una password");
 
         conferma_password = new PasswordField();
+        conferma_password.setId("conferma-password-registrazione");
         conferma_password.setLabel("Conferma Password:");
         conferma_password.setPlaceholder("Conferma password inserita");
 
@@ -121,30 +126,42 @@ public class RegistrazioneAccountPage extends FlexLayout {
         //MESSAGGIO DI ERRORE
 
         Button prosegui = new Button("Continua con la registrazione",buttonClickEvent -> {
-
-            if(email.isEmpty() || !email.getValue().matches("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"))
-                new Notification("Inserire una email valida!",1000, Notification.Position.MIDDLE).open();
+            Notification notification;
+            if (email.isEmpty() || !email.getValue().matches("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$")){
+                notification = new Notification("Inserire una email valida!", 1000, Notification.Position.MIDDLE);
+                notification.setId("notifica-errore");
+                notification.open();
+            }
 
             else if(userManagementControl.isAlreadyRegistered(email.getValue())){
-                new Notification("Email già in uso", 2000, Notification.Position.MIDDLE).open();
+                notification = new Notification("Email già in uso", 2000, Notification.Position.MIDDLE);
+                notification.setId("notifica-errore");
+                notification.open();
             }
             else if(password.isEmpty() || conferma_password.isEmpty()){
-                new Notification("Inserire una password!",1000, Notification.Position.MIDDLE).open();
+                notification = new Notification("Inserire una password!",1000, Notification.Position.MIDDLE);
+                notification.setId("notifica-errore");
+                notification.open();
             }
             else if(!password.getValue().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")){
-                new Notification("La password inserita non rispetta il formato. \n Inserire una password con un minimo di 8 caratteri, una lettera e un numero!",5000, Notification.Position.MIDDLE).open();
+                notification = new Notification("La password inserita non rispetta il formato. \n Inserire una password con un minimo di 8 caratteri, una lettera e un numero!",5000, Notification.Position.MIDDLE);
+                notification.setId("notifica-errore");
+                notification.open();
             }
             else if(!password.getValue().equals(conferma_password.getValue())){
-                new Notification("Le password non corrispondono!",2000, Notification.Position.MIDDLE).open();
+                notification = new Notification("Le password non corrispondono!",2000, Notification.Position.MIDDLE);
+                notification.setId("notifica-errore");
+                notification.open();
             }
             else {
                 StudenteDTO studente = new StudenteDTO();
                 studente.setEmail(email.getValue());
                 studente.setPassword(password.getValue());
                 UI.getCurrent().getSession().setAttribute("utente_reg", studente);
-                UI.getCurrent().navigate("registrazione_due");
+                UI.getCurrent().navigate("registrazioneProfilo");
             }
         });
+        prosegui.setId("prosegui-button");
         HorizontalLayout buttons = new HorizontalLayout();
         buttons.add(prosegui, reset);
 

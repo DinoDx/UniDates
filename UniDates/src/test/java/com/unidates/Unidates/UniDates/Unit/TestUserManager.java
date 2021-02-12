@@ -29,6 +29,7 @@ public class TestUserManager {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
     @Autowired
     UserManager userManager;
 
@@ -50,6 +51,10 @@ public class TestUserManager {
         Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto() ,hobbyArrayList);
 
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
+
+        Mockito.when(utenteRepository.saveAndFlush(any(Studente.class))).thenAnswer(invocation -> {
+            return invocation.getArgument(0, Studente.class);
+        });
 
         Studente registrato = userManager.registrazioneStudente(s, p);
         assertFalse(registrato.isActive());

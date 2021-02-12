@@ -11,6 +11,7 @@ import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.*;
@@ -46,11 +47,9 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-@Route(value = "registrazione_due")
+@Route(value = "registrazioneProfilo")
 @PageTitle("Registrazione_2")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @CssImport("./styles/views/registrazione/registrazione_due.css")
@@ -70,7 +69,7 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
     private Select<String> occhi = new Select<>();
     private NumberField altezza;
     private RadioButtonGroup<String> sessi = new RadioButtonGroup<>();
-    private MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
+    private CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
     private Checkbox checkbox;
     private MemoryBuffer image;
     private FotoDTO toadd;
@@ -100,77 +99,104 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
         VerticalLayout destra = new VerticalLayout(secondo());
 
         HorizontalLayout topics = new HorizontalLayout();
-        multiselectComboBox.setLabel("Seleziona Topic");
-        multiselectComboBox.setPlaceholder("Scelti...");
+        checkboxGroup.setId("topic-regTe");
+        checkboxGroup.setLabel("Seleziona Topic:");
+        //multiselectComboBox.setLabel("Seleziona Topic");
+        //multiselectComboBox.setPlaceholder("Scelti...");
         Hobby [] topic = Hobby.values();
-        List<String> topiclist = new ArrayList<String>();
-        for(Hobby h : topic) topiclist.add(h.toString());
-        multiselectComboBox.setItems(topiclist);
+        Set<String> hobbies =  new HashSet<>();
+        for (Hobby h: topic) {
+            hobbies.add(h.toString());
+        }
+        checkboxGroup.setItems(hobbies);
+        //multiselectComboBox.setItems(topiclist);
 
-        topics.add(multiselectComboBox);
+        topics.add(checkboxGroup);
 
         verticals.add(sinistra,destra);
 
         checkbox = new Checkbox();
+        checkbox.setId("trattamento-reg");
         checkbox.setLabel("Acconsenti il trattamento dei dati");
 
         Button conferma = new Button("Conferma",buttonClickEvent -> {
+            Notification errore;
             //Sessione
             if(nome.isEmpty()){
-                Notification nome_errore = new Notification("Inserisci il campo Nome",3000, Notification.Position.MIDDLE);
-                nome_errore.open();
+                errore = new Notification("Inserisci il campo Nome",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
             }
             else if(cognome.isEmpty()){
-                Notification cognome_errore = new Notification("Inserisci il campo Cognome",3000, Notification.Position.MIDDLE);
-                cognome_errore.open();
+                errore = new Notification("Inserisci il campo Cognome",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
             }
             else if(picker.isEmpty() || !checkMaggiorenne(picker.getValue())){
-                Notification picker_errore = new Notification("Devi essere maggiorenne per registrarti",3000, Notification.Position.MIDDLE);
-                picker_errore.open();
+                errore = new Notification("Devi essere maggiorenne per registrarti",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
             }
             else if(luogo_di_nascita.isEmpty()){
-                Notification luogo_di_nascita_errore = new Notification("Inserisci il campo Luogo di nascita",3000, Notification.Position.MIDDLE);
-                luogo_di_nascita_errore.open();
+                errore = new Notification("Inserisci il campo Luogo di nascita",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
             }
             else if(residenza.isEmpty()){
-                Notification residenza_errore = new Notification("Inserisci il campo Residenza",3000, Notification.Position.MIDDLE);
-                residenza_errore.open();
+                errore = new Notification("Inserisci il campo Residenza",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
             }
             else if(sessi.isEmpty()){
-                Notification sessi_errore = new Notification("Inserisci il campo Sessi",3000, Notification.Position.MIDDLE);
-                sessi_errore.open();
+                errore = new Notification("Inserisci il campo Sessi",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
             }
             else if(interessi.isEmpty()){
-                Notification interessi_errore = new Notification("Inserisci il campo Interessi",3000, Notification.Position.MIDDLE);
-                interessi_errore.open();
+                errore = new Notification("Inserisci il campo Interessi",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
             }
             else if(capelli.isEmpty()){
-                Notification capelli_errore = new Notification("Inserisci il campo Capelli",3000, Notification.Position.MIDDLE);
-                capelli_errore.open();
+                errore = new Notification("Inserisci il campo Capelli",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
 
             }
             else if(occhi.isEmpty()){
-                Notification occhi_errore = new Notification("Inserisci il campo Occhi",3000, Notification.Position.MIDDLE);
-                occhi_errore.open();
+                errore = new Notification("Inserisci il campo Occhi",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
             }
             else if(altezza.isEmpty()){
-                Notification altezza_errore = new Notification("Inserisci il campo Altezza",3000, Notification.Position.MIDDLE);
-                altezza_errore.open();
+                errore = new Notification("Inserisci il campo Altezza",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
             }
-            else if(multiselectComboBox.isEmpty()){
-                Notification topic_errore = new Notification("Inserisci il campo Topic",3000, Notification.Position.MIDDLE);
-                topic_errore.open();
+            else if(checkboxGroup.isEmpty()){
+                errore = new Notification("Inserisci il campo Topic",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
+            }
+            else if(!numero.isEmpty() && !numero.getValue().matches(" /\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/")){
+                errore = new Notification("Numero di telefono inserito non valido!",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
+            }
+            else if(!contatto_ig.isEmpty() && contatto_ig.getValue().length() > 100){
+                errore = new Notification("Nickname instagram non valido!",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
             }
             else if(checkbox.isEmpty()){
-                Notification dati_errore = new Notification("Acconsenti al trattamento dati",3000, Notification.Position.MIDDLE);
-                dati_errore.open();
+                errore = new Notification("Acconsenti al trattamento dati",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
             }
 
             else {
                 ArrayList<Hobby> hobby = new ArrayList<Hobby>();
-                for (String s : multiselectComboBox.getValue()) hobby.add(Hobby.valueOf(s));
-
-
+                for (String s : checkboxGroup.getValue()) hobby.add(Hobby.valueOf(s));
 
                 ProfiloDTO  profiloDTO = new ProfiloDTO(nome.getValue(),cognome.getValue(),luogo_di_nascita.getValue(),residenza.getValue(),picker.getValue(),
                         altezza.getValue(),Sesso.valueOf(sessi.getValue()),Interessi.valueOf(interessi.getValue()),Colori_Capelli.valueOf(capelli.getValue()),
@@ -191,6 +217,7 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
                 //NOTIFICA DI SUCCESSO REGISTRAZIONE
                 Notification successo_registrazione = new Notification();
                 successo_registrazione.setPosition(Notification.Position.MIDDLE);
+                successo_registrazione.setId("successo-reg");
                 H5 notifica = new H5("La registrazione è andata a buon fine. Confermare l'email di validazione prima di accedere al sistama");
                 Button ricevuto = new Button("OK");
                 ricevuto.addClickListener(buttonClickEvent1 -> {
@@ -204,6 +231,8 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
                 successo_registrazione.open();
             }
         });
+
+        conferma.setId("conferma-reg");
 
 
         Span star = new Span("I campi (*) non sono obbligatori");
@@ -222,12 +251,18 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
         VerticalLayout sinistra = new VerticalLayout();
         sinistra.setId("layout-sinistra");
         nome = new TextField("Nome");
+        nome.setId("nome-reg");
         cognome = new TextField("Cognome");
+        cognome.setId("cognome-reg");
         picker = new DatePicker("Data di nascita");
+        picker.setId("picker-reg");
         luogo_di_nascita = new TextField("Luogo di nascita");
+        luogo_di_nascita.setId("luogo-reg");
         residenza = new TextField("Residenza");
+        residenza.setId("residenza-reg");
 
         sessi.setLabel("Il tuo sesso:");
+        sessi.setId("sessi-reg");
         Sesso[] sess = Sesso.values();
         sessi.setItems(sess[0].toString(),sess[1].toString(),sess[2].toString());
         sessi.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
@@ -244,25 +279,31 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
 
         numero = new TextField();
         numero.setLabel("Numero di telefono (*)");
+        numero.setId("numero-reg");
 
         contatto_ig = new TextField();
         contatto_ig.setLabel("Contatto instagram (*)");
+        contatto_ig.setId("contatto-reg");
 
         interessi.setLabel("Interessi");
+        interessi.setId("interessi-reg");
         Interessi [] interess = Interessi.values();
         interessi.setItems(interess[0].toString(),interess[1].toString(),interess[2].toString(),interess[3].toString());
 
         capelli.setLabel("Capelli");
+        capelli.setId("capelli-reg");
         capelli.setPlaceholder("Colore capelli");
         Colori_Capelli [] colore_cap = Colori_Capelli.values();
         capelli.setItems(colore_cap[0].toString(),colore_cap[1].toString(),colore_cap[2].toString(),colore_cap[3].toString(),colore_cap[4].toString(),colore_cap[5].toString(),colore_cap[6].toString());
 
         occhi.setLabel("Occhi");
+        occhi.setId("occhi-reg");
         occhi.setPlaceholder("Colore occhi");
         Colore_Occhi [] colore_occhi = Colore_Occhi.values();
         occhi.setItems(colore_occhi[0].toString(),colore_occhi[1].toString(),colore_occhi[2].toString(),colore_occhi[3].toString(),colore_occhi[4].toString(),colore_occhi[5].toString(),colore_occhi[6].toString());
 
         altezza = new NumberField("Altezza (cm)");
+        altezza.setId("altezza-reg");
         altezza.setHasControls(true);
         altezza.setStep(1);
         altezza.setMin(150.00);
@@ -270,6 +311,7 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
         image = new MemoryBuffer();
         Span dropIcon = new Span("Inserisci una foto profilo!");
         Upload upload = new Upload(image);
+        upload.setId("upload-reg");
         upload.setDropLabel(dropIcon);
         upload.setMaxFiles(1);
         Div output = new Div();
