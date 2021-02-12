@@ -44,7 +44,7 @@ public class TestInviaSospensione extends TestBenchTestCase {
 
     @Test
     public void inviaSospensione_valid(){
-        ButtonElement apriSospensione = $(ButtonElement.class).id("open-sospensione");
+        ButtonElement apriSospensione = $(ButtonElement.class).id("open-sospensione-studenteprova2@gmail.com");
         apriSospensione.click();
 
         waitUntil(ExpectedConditions.presenceOfElementLocated(By.id("sospensione")));
@@ -59,7 +59,7 @@ public class TestInviaSospensione extends TestBenchTestCase {
 
     @Test
     public void inviaSospensione_durataNonValida(){
-        ButtonElement apriSospensione = $(ButtonElement.class).id("open-sospensione");
+        ButtonElement apriSospensione = $(ButtonElement.class).id("open-sospensione-studenteprova2@gmail.com");
         apriSospensione.click();
 
         waitUntil(ExpectedConditions.presenceOfElementLocated(By.id("sospensione")));
@@ -79,7 +79,7 @@ public class TestInviaSospensione extends TestBenchTestCase {
 
     @Test
     public void inviaSospensione_dettagliNonValidi(){
-        ButtonElement apriSospensione = $(ButtonElement.class).id("open-sospensione");
+        ButtonElement apriSospensione = $(ButtonElement.class).id("open-sospensione-studenteprova2@gmail.com");
         apriSospensione.click();
 
         waitUntil(ExpectedConditions.presenceOfElementLocated(By.id("sospensione")));

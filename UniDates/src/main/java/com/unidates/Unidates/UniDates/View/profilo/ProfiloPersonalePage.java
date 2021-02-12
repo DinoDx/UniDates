@@ -331,10 +331,12 @@ public class ProfiloPersonalePage extends VerticalLayout {
 
     public Button ListaBloccati(){
         Button lista = new Button("Lista Bloccati");
+        lista.setId("lista-bloccati");
         lista.addClickListener(buttonClickEvent -> {
 
             if(!listaBloccati.isOpened()){
                 listaBloccati = new Notification();
+                listaBloccati.setId("bloccati-notification");
                 listaBloccati.setPosition(Notification.Position.MIDDLE);
 
                 VerticalLayout utentiBloccati = new VerticalLayout();
@@ -351,6 +353,7 @@ public class ProfiloPersonalePage extends VerticalLayout {
                     }
                     Span nomeBloccato = new Span(profiloDTO.getNome() +" " +profiloDTO.getCognome());
                     Button sblocca = new Button("Sblocca");
+                    sblocca.setId("sblocca-"+ profiloDTO.getEmailStudente());
                     sblocca.addClickListener(buttonClickEvent1 -> {
                         interactionControl.sbloccaStudente(studente.getEmail(),s);
                         UI.getCurrent().getPage().reload();

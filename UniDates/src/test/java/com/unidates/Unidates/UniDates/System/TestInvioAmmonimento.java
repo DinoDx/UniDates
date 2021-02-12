@@ -52,7 +52,7 @@ public class TestInvioAmmonimento extends TestBenchTestCase {
 
     @Test
     public void invioAmmonimento_valid(){
-        ButtonElement apriAmmonimento = $(ButtonElement.class).id("open-ammonimento");
+        ButtonElement apriAmmonimento = $(ButtonElement.class).id("open-ammonimento-studenteprova2@gmail.com");
         apriAmmonimento.click();
 
         waitUntil(ExpectedConditions.presenceOfElementLocated(By.id("notifica-ammonimento")));
@@ -68,7 +68,7 @@ public class TestInvioAmmonimento extends TestBenchTestCase {
 
     @Test
     public void invioAmmonimento_motivazioneNonValida(){
-        ButtonElement apriAmmonimento = $(ButtonElement.class).id("open-ammonimento");
+        ButtonElement apriAmmonimento = $(ButtonElement.class).id("open-ammonimento-studenteprova2@gmail.com");
         apriAmmonimento.click();
 
         waitUntil(ExpectedConditions.presenceOfElementLocated(By.id("notifica-ammonimento")));
@@ -88,7 +88,7 @@ public class TestInvioAmmonimento extends TestBenchTestCase {
 
     @Test
     public void invioAmmonimento_dettagliNonValidi(){
-        ButtonElement apriAmmonimento = $(ButtonElement.class).id("open-ammonimento");
+        ButtonElement apriAmmonimento = $(ButtonElement.class).id("open-ammonimento-studenteprova2@gmail.com");
         apriAmmonimento.click();
 
         waitUntil(ExpectedConditions.presenceOfElementLocated(By.id("notifica-ammonimento")));

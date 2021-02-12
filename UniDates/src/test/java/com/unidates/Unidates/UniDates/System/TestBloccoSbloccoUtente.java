@@ -6,12 +6,15 @@ import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
 import com.vaadin.flow.component.button.testbench.ButtonElement;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.textfield.testbench.PasswordFieldElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchTestCase;
+import elemental.html.AnchorElement;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +28,7 @@ import java.util.Arrays;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class TestBloccoUtente extends TestBenchTestCase {
+public class TestBloccoSbloccoUtente extends TestBenchTestCase {
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -35,7 +38,21 @@ public class TestBloccoUtente extends TestBenchTestCase {
 
     @Test
     public void bloccaUtente_valid(){
+        ButtonElement blocca = $(ButtonElement.class).id("blocca-sblocca");
+        blocca.click();
+    }
 
+    @Test
+    public void sbloccaUtente_valid(){
+        ButtonElement blocca = $(ButtonElement.class).id("blocca-sblocca");
+        blocca.click();
+
+        getDriver().get("http://localhost:8080/profilo-personale");
+        ButtonElement listaBloccati = $(ButtonElement.class).id("lista-bloccati");
+        listaBloccati.click();
+
+        ButtonElement sblocca = $(ButtonElement.class).id("sblocca-studenteprova2@gmail.com");
+        sblocca.click();
     }
 
     @BeforeEach
@@ -76,8 +93,6 @@ public class TestBloccoUtente extends TestBenchTestCase {
 
         searchField.setValue("studenteprova2@gmail.com");
         searchButton.click();
-
-        waitUntil(ExpectedConditions.urlContains("ricercaprofilo"));
     }
 
     @AfterEach

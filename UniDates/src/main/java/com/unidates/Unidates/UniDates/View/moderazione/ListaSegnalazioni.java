@@ -110,7 +110,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         InfoEMostraDettagliLayout.add(testoInfoSegnalazione, mostraDettagliSegnalazione);
 
         Button apriCardAmmonimento = new Button("Ammonimento");
-        apriCardAmmonimento.setId("open-ammonimento");
+        apriCardAmmonimento.setId("open-ammonimento-"+ studenteSegnalato.getEmail());
         apriCardAmmonimento.setWidth("250px");
         apriCardAmmonimento.addClickListener(e-> {
 
@@ -128,7 +128,7 @@ public class ListaSegnalazioni extends VerticalLayout{
 
         if(moderatore.getRuolo() == Ruolo.COMMUNITY_MANAGER){
             Button apriCardSospensione = new Button("Sospensione");
-            apriCardSospensione.setId("open-sospensione");
+            apriCardSospensione.setId("open-sospensione-"+ studenteSegnalato.getEmail());
             apriCardSospensione.setWidth("230px");
             Notification notificaSos = notificaSospensione(fotoSegnalata, profiloSegnalato, studenteSegnalato);
             notificaSos.setId("sospensione");

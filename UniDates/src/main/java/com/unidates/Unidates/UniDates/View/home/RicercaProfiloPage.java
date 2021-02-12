@@ -62,12 +62,14 @@ public class RicercaProfiloPage extends VerticalLayout implements HasUrlParamete
         Button bloccaSblocca;
         if(inSessione.getListaBloccatiEmail().contains(daCercare.getEmail())){
             bloccaSblocca = new Button("Sblocca");
+            bloccaSblocca.setId("blocca-sblocca");
             bloccaSblocca.addClickListener(buttonClickEvent -> {
                 interactionControl.sbloccaStudente(inSessione.getEmail(), daCercare.getEmail());
                 UI.getCurrent().getPage().reload();
             });
         }else {
             bloccaSblocca = new Button("Blocca");
+            bloccaSblocca.setId("blocca-sblocca");
             bloccaSblocca.addClickListener(buttonClickEvent -> {
                 interactionControl.bloccaStudente(inSessione.getEmail(), daCercare.getEmail());
                 UI.getCurrent().getPage().reload();
