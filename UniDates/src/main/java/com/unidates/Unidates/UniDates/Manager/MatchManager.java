@@ -66,7 +66,7 @@ public class MatchManager {
             } else if (reverse != null) {
                 return reverse.isLikedByStudent1() && reverse.isLikeByStudent2();
             } else {
-                throw new EntityNotFoundException("Match non trovato!");
+                return false;
             }
         }else throw new EntityNotFoundException("Studente non trovato!");
     }
