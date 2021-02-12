@@ -123,13 +123,6 @@ public class TestMatchManager {
     }
 
     @Test
-    public void isValidMatch_nonTrovatoMatch(){
-        Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> new Studente(invocation.getArgument(0, String.class), "password"));
-        Mockito.when(matchRepository.findAllByStudente1AndStudente2(any(Studente.class), any(Studente.class))).thenReturn(null);
-        assertThrows(EntityNotFoundException.class,()-> matchManager.isValidMatch("nonhofantasia@gmail.com","hosonno@live.it"));
-    }
-
-    @Test
     public void isValidMatch_nonTrovatoStudente(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenReturn(null);
         assertThrows(EntityNotFoundException.class,()-> matchManager.isValidMatch("épropriounabellaserata@live.it","macistailcovid@gmail.com"));
