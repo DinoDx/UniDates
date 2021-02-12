@@ -136,9 +136,11 @@ public class Navbar extends AppLayout {
 
        //componenti ricerca
        TextField searchField = new TextField();
+       searchField.setId("ricerca-field");
        searchField.setPlaceholder("Inserisci email dell'utente da cercare");
 
        Button searchIcon = new Button(new Icon(VaadinIcon.SEARCH));
+       searchIcon.setId("ricerca-button");
        searchIcon.addClickListener(buttonClickEvent -> {
            try {
                StudenteDTO daCercare = interactionControl.ricercaStudente(searchField.getValue());
@@ -150,6 +152,7 @@ public class Navbar extends AppLayout {
            }
            catch(EntityNotFoundException e){
                Notification erroreRicerca = new Notification("Utente non trovato!",3000, Notification.Position.MIDDLE);
+               erroreRicerca.setId("errore-ricerca");
                erroreRicerca.open();
            }
        });
