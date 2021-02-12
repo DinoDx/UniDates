@@ -178,7 +178,7 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
                 errore.setId("errore-reg");
                 errore.open();
             }
-            else if(!numero.isEmpty() && !numero.getValue().matches(" /\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/")){
+            else if(!numero.isEmpty() && numero.getValue().length() != 10){
                 errore = new Notification("Numero di telefono inserito non valido!",3000, Notification.Position.MIDDLE);
                 errore.setId("errore-reg");
                 errore.open();
@@ -190,6 +190,11 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
             }
             else if(checkbox.isEmpty()){
                 errore = new Notification("Acconsenti al trattamento dati",3000, Notification.Position.MIDDLE);
+                errore.setId("errore-reg");
+                errore.open();
+            }
+            else if(toadd == null){
+                errore = new Notification("Inserisci una foto!",3000, Notification.Position.MIDDLE);
                 errore.setId("errore-reg");
                 errore.open();
             }
