@@ -435,6 +435,7 @@ public class ProfiloPersonalePage extends VerticalLayout {
 
     public Button DeleteAccount(){
         Button delete = new Button("Cancella Account");
+        delete.setId("cancella-account");
         delete.addClickListener(buttonClickEvent -> {
             if(!cancellazione.isOpened()){
                 cancellazione = new Notification();
@@ -445,14 +446,18 @@ public class ProfiloPersonalePage extends VerticalLayout {
                 Span attenzione = new Span("ATTENZIONE!!!");
                 Span testo = new Span("Il sistema avvisa che confermando la richiesta, i dati allegati al profilo verranno eliminati definitivamente dalla piattaforma UniDates.");
                 PasswordField passwordField = new PasswordField("Password");
+                passwordField.setId("cancella-account-pw");
 
                 Button confrema = new Button("Conferma");
+                confrema.setId("conferma-cancellazione");
                 confrema.addClickListener(buttonClickEvent1 -> {
                     try {
                         modifyProfileControl.cancellaAccountPersonale(email.getValue(),passwordField.getValue());
                         UI.getCurrent().getPage().reload();
                     }catch (PasswordMissmatchException e){
-                        new Notification("La password non corrisponde",3000).open();
+                        Notification errore = new Notification("La password non corrisponde",3000);
+                        errore.setId("errore-mod");
+                        errore.open();
                     }
                     cancellazione.close();
                 });
