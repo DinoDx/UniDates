@@ -17,6 +17,7 @@ import com.unidates.Unidates.UniDates.Model.Enum.Interessi;
 import com.unidates.Unidates.UniDates.View.navbar.Navbar;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H4;
@@ -37,7 +38,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.vaadin.gatanaso.MultiselectComboBox;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -71,18 +71,35 @@ public class ProfiloPersonalePage extends VerticalLayout {
         addAttachListener(event -> create());
     }
 
+    public TextField nome = new TextField("Nome");
+    public TextField cognome = new TextField("Cognome");
+    public DatePicker compleanno = new DatePicker("Data di nascita");
+    public EmailField email = new EmailField("Email");
+
+    public NumberField altezza = new NumberField("Altezza (cm)");
+    public TextField città = new TextField("Città");
+    private Select<String> interessi = new Select<>();
+    public TextField luogo_di_nascita = new TextField("Luogo di nascita");
+
+
+    private Select<String> capelli = new Select<>();
+    private Select<String> occhi = new Select<>();
+    private CheckboxGroup<String> topicBoxes = new CheckboxGroup<>();
+
+    public TextField numero = new TextField("Numero cellulare");
+    public TextField instagram = new TextField("Contatto Instagram");;
+
 
     public void create(){
         studente = (StudenteDTO) userManagementControl.studenteInSessione();
         profilo = studente.getProfilo();
 
-        multiselectComboBox.setLabel("Seleziona Topic");
-        multiselectComboBox.setPlaceholder("Scelti...");
+        topicBoxes.setLabel("Seleziona Topic");
+        topicBoxes.setId("topic-mod");
         Hobby [] topic = Hobby.values();
-        List<String> topiclist = new ArrayList<String>();
+        Set<String> topiclist = new HashSet<>();
         for(Hobby h : topic) topiclist.add(h.toString());
-        multiselectComboBox.setItems(topiclist);
-        multiselectComboBox.getStyle().set("margin-bottom","30px");
+        topicBoxes.setItems(topiclist);
 
 
         VerticalLayout padre = new VerticalLayout();
@@ -101,7 +118,7 @@ public class ProfiloPersonalePage extends VerticalLayout {
                 sotto_padre,
                 Pulsanti(),
                 textfield,
-                multiselectComboBox,
+                topicBoxes,
                 Info4());
         add(padre);
     }
@@ -130,35 +147,22 @@ public class ProfiloPersonalePage extends VerticalLayout {
     }
 
 
-
-    public TextField nome = new TextField("Nome");
-    public TextField cognome = new TextField("Cognome");
-    public DatePicker compleanno = new DatePicker("Data di nascita");
-    public EmailField email = new EmailField("Email");
-
-    public NumberField altezza = new NumberField("Altezza (cm)");
-    public TextField città = new TextField("Città");
-    private Select<String> interessi = new Select<>();
-    public TextField luogo_di_nascita = new TextField("Luogo di nascita");
-
-
-    private Select<String> capelli = new Select<>();
-    private Select<String> occhi = new Select<>();
-    private MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
-
-    public TextField numero = new TextField("Numero cellulare");
-    public TextField instagram = new TextField("Contatto Instagram");;
+    ;
 
     public VerticalLayout Info1(){
         VerticalLayout info1 = new VerticalLayout();
         nome.setValue(profilo.getNome());
+        nome.setId("nome-mod");
         nome.setEnabled(false);
         cognome.setValue(profilo.getCognome());
         cognome.setEnabled(false);
+        cognome.setId("cognome-mod");
         compleanno.setValue(profilo.getDataDiNascita());
         compleanno.setEnabled(false);
+        compleanno.setId("compleanno-mod");
         altezza.setValue(profilo.getAltezza());
         altezza.setEnabled(false);
+        altezza.setId("altezza-mod");
         info1.add(nome,cognome,compleanno,email,altezza);
         return info1;
     }
@@ -167,24 +171,29 @@ public class ProfiloPersonalePage extends VerticalLayout {
         VerticalLayout info2 = new VerticalLayout();
 
         città.setValue(profilo.getResidenza());
+        città.setId("citta-mod");
         città.setEnabled(false);
         luogo_di_nascita.setValue(profilo.getLuogoNascita());
+        luogo_di_nascita.setId("luogo-mod");
         luogo_di_nascita.setEnabled(false);
 
         interessi.setLabel("Interessi");
         interessi.setValue(studente.getProfilo().getInteressi().toString());
-        Interessi [] interess = Interessi.values();
-        interessi.setItems(interess[0].toString(),interess[1].toString(),interess[2].toString(),interess[3].toString());
+        Interessi [] arrayInteressi = Interessi.values();
+        interessi.setItems(arrayInteressi[0].toString(),arrayInteressi[1].toString(),arrayInteressi[2].toString(),arrayInteressi[3].toString());
         interessi.setEnabled(false);
+        interessi.setId("interessi-mod");
 
 
         capelli.setLabel("Capelli");
         capelli.setPlaceholder("Colore capelli");
         capelli.setEnabled(false);
+        capelli.setId("capelli-mod");
         Colori_Capelli [] colore_cap = Colori_Capelli.values();
         capelli.setItems(colore_cap[0].toString(),colore_cap[1].toString(),colore_cap[2].toString(),colore_cap[3].toString(),colore_cap[4].toString(),colore_cap[5].toString(),colore_cap[6].toString());
 
         occhi.setLabel("Occhi");
+        occhi.setId("occhi-mod");
         occhi.setPlaceholder("Colore occhi");
         occhi.setEnabled(false);
         Colore_Occhi [] colore_occhi = Colore_Occhi.values();
@@ -233,18 +242,21 @@ public class ProfiloPersonalePage extends VerticalLayout {
         Span dropIcon = new Span("Inserisci una nuova foto!");
         Upload upload = new Upload(image);
         upload.setDropLabel(dropIcon);
+        upload.setId("upload-mod");
         upload.setMaxFiles(1);
 
         FotoDTO toadd = new FotoDTO();
         upload.addSucceededListener(event -> {
             try {
                 toadd.setImg(image.getInputStream().readAllBytes());
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
     });
 
         Button insertFoto = new Button("Inserisci");
+        insertFoto.setId("insert-button-mod");
         insertFoto.addClickListener(buttonClickEvent -> {
             if (toadd.getImg() != null) {
                 try {
@@ -254,6 +266,11 @@ public class ProfiloPersonalePage extends VerticalLayout {
                 catch(InvalidFormatException e){
                     new Notification("La foto non rispetta le dimensioni, massimo 10MB!", 2000, Notification.Position.MIDDLE).open();
                 }
+            }
+            else {
+                Notification errore = new Notification("Formato foto o dimensioni non valide!", 2000);
+                errore.setId("errore-mod");
+                errore.open();
             }
         });
 
@@ -287,11 +304,13 @@ public class ProfiloPersonalePage extends VerticalLayout {
         email.setValue(studente.getEmail());
         email.setEnabled(false);
 
+        numero.setId("numero-mod");
         if(studente.getProfilo().getNumeroTelefono() == null)
             numero.setValue("Numero non presente!");
         else numero.setValue(studente.getProfilo().getNumeroTelefono());
         numero.setEnabled(false);
 
+        instagram.setId("contatto-mod");
         if(studente.getProfilo().getNickInstagram() == null)
             instagram.setValue("Nickname instagram non presente!");
         else instagram.setValue(studente.getProfilo().getNickInstagram());
@@ -463,32 +482,56 @@ public class ProfiloPersonalePage extends VerticalLayout {
             luogo_di_nascita.setEnabled(true);
             occhi.setEnabled(true);
             capelli.setEnabled(true);
-            multiselectComboBox.setEnabled(true);
+            topicBoxes.setEnabled(true);
             altezza.setEnabled(true);
             interessi.setEnabled(true);
             numero.setEnabled(true);
             instagram.setEnabled(true);
-            multiselectComboBox.setEnabled(true);
+            topicBoxes.setEnabled(true);
         });
+        modifica.setId("modifica-button-mod");
         return modifica;
     }
 
     public Button Conferma(){
         Button conferma = new Button("Conferma", buttonClickEvent -> {
+            Notification errore;
             try {
                 if (nome.isEmpty()) {
-                    new Notification("Campo Nome vuoto", 2000).open();
+                    errore = new Notification("Campo Nome vuoto", 2000);
+                    errore.setId("errore-mod");
+                    errore.open();
                 } else if (cognome.isEmpty()) {
-                    new Notification("Campo Cognome vuoto", 2000).open();
+                    errore = new Notification("Campo Cognome vuoto", 2000);
+                    errore.setId("errore-mod");
+                    errore.open();
                 } else if (compleanno.isEmpty() || (!checkMaggiorenne(compleanno.getValue()))) {
-                    new Notification("Campo Data di nascita vuoto o non valida", 2000).open();
+                    errore = new Notification("Campo Data di nascita vuoto o non valida", 2000);
+                    errore.setId("errore-mod");
+                    errore.open();
                 } else if (altezza.isEmpty()) {
-                    new Notification("Campo Altezza vuoto", 2000).open();
+                    errore = new Notification("Campo Altezza vuoto", 2000);
+                    errore.setId("errore-mod");
+                    errore.open();
                 } else if (città.isEmpty()) {
-                    new Notification("Campo vuoto").open();
+                    errore = new Notification("Campo vuoto");
+                    errore.setId("errore-mod");
+                    errore.open();
                 } else if (luogo_di_nascita.isEmpty()) {
-                    new Notification("Campo Luogo di nascita vuoto", 2000).open();
-                } else {
+                    errore = new Notification("Campo Luogo di nascita vuoto", 2000);
+                    errore.setId("errore-mod");
+                    errore.open();
+                }else if(!instagram.isEmpty() && instagram.getValue().length() > 100){
+                    errore = new Notification("Nickname instagram non valido!", 2000);
+                    errore.setId("errore-mod");
+                    errore.open();
+                }else if(!numero.isEmpty() && numero.getValue().length() != 10) {
+                    errore = new Notification("Numero di telefono inserito non valido!", 3000, Notification.Position.MIDDLE);
+                    errore.setId("errore-mod");
+                    errore.open();
+                }
+
+                else{
                     studente.getProfilo().setAltezza(altezza.getValue());
                     studente.getProfilo().setNome(nome.getValue());
                     studente.getProfilo().setCognome(cognome.getValue());
@@ -507,8 +550,8 @@ public class ProfiloPersonalePage extends VerticalLayout {
                         studente.getProfilo().setNickInstagram(instagram.getValue());
                     //hobby
                     ArrayList<Hobby> hob = new ArrayList<Hobby>();
-                    for (String s : multiselectComboBox.getValue()) hob.add(Hobby.valueOf(s));
-                    if (!(multiselectComboBox.isEmpty()))
+                    for (String s : topicBoxes.getValue()) hob.add(Hobby.valueOf(s));
+                    if (!(topicBoxes.isEmpty()))
                         studente.getProfilo().setHobbyList(hob);
 
                     nome.setEnabled(false);
@@ -518,7 +561,7 @@ public class ProfiloPersonalePage extends VerticalLayout {
                     luogo_di_nascita.setEnabled(false);
                     occhi.setEnabled(false);
                     capelli.setEnabled(false);
-                    multiselectComboBox.setEnabled(false);
+                    topicBoxes.setEnabled(false);
                     altezza.setEnabled(false);
                     interessi.setEnabled(false);
                     numero.setEnabled(false);
@@ -536,6 +579,7 @@ public class ProfiloPersonalePage extends VerticalLayout {
             }
 
         });
+        conferma.setId("conferma-mod-button");
         return conferma;
     }
 

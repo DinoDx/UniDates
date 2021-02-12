@@ -100,7 +100,7 @@ public class UserManagementControl {
         }
         System.out.println("Utente attivato: " + utente);
         userManager.attivaUtenteRegistrato(utente.getEmail());
-        return "";
+        return "home";
     }
 
     @RequestMapping("/trovaTuttuStudenti")
