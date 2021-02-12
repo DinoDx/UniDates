@@ -79,7 +79,9 @@ public class CardUtenteHome extends Div {
         }
         if(trovato) {
             Button like = getLikeButton(studente);
+            like.setId("like-button");
             Button report = reportButton(studente, fotoCard);
+            report.setId("report-button");
             pulsanti.add(like, report);
             layout_foto.add(image_profilo, pulsanti);
 
@@ -126,6 +128,7 @@ public class CardUtenteHome extends Div {
     private Button reportButton(StudenteDTO studente, FotoDTO fotoDTO){
         //Notifica Segnalazione
         Notification notifica = new Notification();
+        notifica.setId("report");
         notifica.setPosition(Notification.Position.MIDDLE);
         VerticalLayout layout_report = new VerticalLayout();
 
@@ -133,6 +136,7 @@ public class CardUtenteHome extends Div {
         //Select<String> reporting = new Select<>();
         Motivazione[] motivaziones =  Motivazione.values();
         RadioButtonGroup<String> radioButtonGroup = new RadioButtonGroup<>();
+        radioButtonGroup.setId("motivi");
         radioButtonGroup.setItems(motivaziones[0].toString(), motivaziones[1].toString(), motivaziones[2].toString(), motivaziones[3].toString(), motivaziones[4].toString());
 
         //reporting.setItems();
@@ -140,17 +144,33 @@ public class CardUtenteHome extends Div {
 
         //Report dettagli
         TextArea dettagli = new TextArea();
+        dettagli.setId("dettagli");
         dettagli.setPlaceholder("Dettagli segnalazione");
         Button invio = new Button("Invia report",buttonClickEvent -> {
-            SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(Motivazione.valueOf(radioButtonGroup.getValue()), dettagli.getValue());
-            try {
-                moderationControl.inviaSegnalazione(segnalazioneDTO,fotoDTO.getId()); // se la foto mostrata in home non é la foto del profilo, viene mos
-            }catch (InvalidFormatException c){
-                new Notification(c.getMessage(),2000, Notification.Position.MIDDLE).open();
+            if(radioButtonGroup.isEmpty()){
+                Notification errore = new Notification("Motivazione non valida",2000, Notification.Position.MIDDLE);
+                errore.setId("errore-report");
+                errore.open();
             }
+            else if(dettagli.isEmpty()){
+                Notification errore = new Notification("Dettagli non validi",2000, Notification.Position.MIDDLE);
+                errore.setId("errore-report");
+                errore.open();
+            }
+            else {
+                SegnalazioneDTO segnalazioneDTO = new SegnalazioneDTO(Motivazione.valueOf(radioButtonGroup.getValue()), dettagli.getValue());
+                try {
+                    moderationControl.inviaSegnalazione(segnalazioneDTO, fotoDTO.getId()); // se la foto mostrata in home non é la foto del profilo, viene mos
+                } catch (InvalidFormatException c) {
+                    Notification errore = new Notification(c.getMessage(), 2000, Notification.Position.MIDDLE);
+                    errore.setId("errore-report");
+                    errore.open();
+                }
 
-            notifica.close();
+                notifica.close();
+            }
         });
+        invio.setId("send-report");
         Button annulla = new Button("Annulla",buttonClickEvent -> {
             notifica.close();
         });

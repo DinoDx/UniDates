@@ -110,11 +110,13 @@ public class ListaSegnalazioni extends VerticalLayout{
         InfoEMostraDettagliLayout.add(testoInfoSegnalazione, mostraDettagliSegnalazione);
 
         Button apriCardAmmonimento = new Button("Ammonimento");
+        apriCardAmmonimento.setId("open-ammonimento");
         apriCardAmmonimento.setWidth("250px");
         apriCardAmmonimento.addClickListener(e-> {
 
             if(!notificaAmm.isOpened()){
                 notificaAmm = createNotificaAmmonimento(fotoSegnalata, profiloSegnalato, segnalazione, studenteSegnalato);
+                notificaAmm.setId("notifica-ammonimento");
                 notificaAmm.open();
             }
             else notificaAmm.close();
@@ -126,8 +128,10 @@ public class ListaSegnalazioni extends VerticalLayout{
 
         if(moderatore.getRuolo() == Ruolo.COMMUNITY_MANAGER){
             Button apriCardSospensione = new Button("Sospensione");
+            apriCardSospensione.setId("open-sospensione");
             apriCardSospensione.setWidth("230px");
             Notification notificaSos = notificaSospensione(fotoSegnalata, profiloSegnalato, studenteSegnalato);
+            notificaSos.setId("sospensione");
             apriCardSospensione.addClickListener( event ->{
                 if(!notificaSos.isOpened())
                            notificaSos.open();
@@ -229,9 +233,11 @@ public class ListaSegnalazioni extends VerticalLayout{
         VerticalLayout layoutSinistraSospensione = new VerticalLayout();
 
         TextField durata = new TextField("(Inserire un numero)");
+        durata.setId("durata");
         durata.setPlaceholder("Durata sospensione");
 
         TextField dettagli = new TextField();
+        dettagli.setId("dettagli");
         dettagli.setPlaceholder("Dettagli");
 
         layoutSinistraSospensione.setAlignItems(FlexComponent.Alignment.CENTER);
@@ -241,15 +247,30 @@ public class ListaSegnalazioni extends VerticalLayout{
         VerticalLayout layoutDestraSospensione = new VerticalLayout();
 
         Button inviaSospensione = new Button("Invia Sospensione");
+        inviaSospensione.setId("invia-sospensione");
         inviaSospensione.addClickListener(e -> {
-            try {
-                SospensioneDTO sospensioneDTO = new SospensioneDTO(Integer.parseInt(durata.getValue()), dettagli.getValue());
-                moderationControl.inviaSospensione(sospensioneDTO, studenteSegnalato.getEmail());
-            }catch (InvalidFormatException | EntityNotFoundException ex){
-                new Notification(ex.getMessage(),2000, Notification.Position.MIDDLE).open();
+            if (durata.isEmpty() || Integer.parseInt(durata.getValue()) <= 0){
+                Notification erroreSospensione = new Notification("Durata non valida", 2000, Notification.Position.MIDDLE);
+                erroreSospensione.setId("errore-sospensione");
+                erroreSospensione.open();
             }
-            cardSospensione.close();
-            UI.getCurrent().getPage().reload();
+            else if(dettagli.isEmpty()){
+                Notification erroreSospensione = new Notification("Dettagli non validi", 2000, Notification.Position.MIDDLE);
+                erroreSospensione.setId("errore-sospensione");
+                erroreSospensione.open();
+            }
+            else {
+                try {
+                    SospensioneDTO sospensioneDTO = new SospensioneDTO(Integer.parseInt(durata.getValue()), dettagli.getValue());
+                    moderationControl.inviaSospensione(sospensioneDTO, studenteSegnalato.getEmail());
+                } catch (InvalidFormatException | EntityNotFoundException ex) {
+                    Notification erroreSospensione = new Notification(ex.getMessage(), 2000, Notification.Position.MIDDLE);
+                    erroreSospensione.setId("errore-sospensione");
+                    erroreSospensione.open();
+                }
+                cardSospensione.close();
+                UI.getCurrent().getPage().reload();
+            }
         });
 
 
@@ -271,6 +292,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         layoutSinistraInfo.setAlignItems(FlexComponent.Alignment.CENTER);
 
         RadioButtonGroup<String> motivazione = new RadioButtonGroup<>();
+        motivazione.setId("motivazione");
         Motivazione[] motivaziones =  Motivazione.values();
         motivazione.setItems(motivaziones[0].toString(), motivaziones[1].toString(), motivaziones[2].toString(), motivaziones[3].toString(), motivaziones[4].toString());
 
@@ -279,6 +301,7 @@ public class ListaSegnalazioni extends VerticalLayout{
         motivazioneVerticalLayou.add(motivazione);
 
         TextField dettagli = new TextField();
+        dettagli.setId("dettagli");
         dettagli.setPlaceholder("Dettagli");
 
         layoutSinistraInfo.add(new Span(profiloSegnalato.getNome()),
@@ -289,17 +312,30 @@ public class ListaSegnalazioni extends VerticalLayout{
         VerticalLayout layoutDestraInfo = new VerticalLayout();
 
         Button inviaAmmonimento = new Button("Invia Ammonimento");
+        inviaAmmonimento.setId("invia-ammonimento");
         inviaAmmonimento.addClickListener(e -> {
+            if (motivazione.isEmpty()) {
+                Notification erroreAmmonimento = new Notification("Motivzaione non valida", 2000, Notification.Position.MIDDLE);
+                erroreAmmonimento.setId("errore-ammonimento");
+                erroreAmmonimento.open();
+            } else if (dettagli.isEmpty()) {
+                Notification erroreAmmonimento = new Notification("Dettagli non validi", 2000, Notification.Position.MIDDLE);
+                erroreAmmonimento.setId("errore-ammonimento");
+                erroreAmmonimento.open();
+            } else {
             try {
-                AmmonimentoDTO ammonimentoDTO = new AmmonimentoDTO(Motivazione.valueOf(motivazione.getValue()), dettagli.getValue());
-                moderationControl.inviaAmmonimento(ammonimentoDTO, moderatore.getEmail(), studenteSegnalato.getEmail(), fotoSegnalata);
-            }catch(InvalidFormatException | AlreadyExistException ex1){
-                new Notification(ex1.getMessage(),2000, Notification.Position.MIDDLE).open();
-            }
-            cardAmmonimento.close();
-            UI.getCurrent().getPage().reload();
+                        AmmonimentoDTO ammonimentoDTO = new AmmonimentoDTO(Motivazione.valueOf(motivazione.getValue()), dettagli.getValue());
+                        moderationControl.inviaAmmonimento(ammonimentoDTO, moderatore.getEmail(), studenteSegnalato.getEmail(), fotoSegnalata);
 
-        });
+                    } catch (InvalidFormatException | AlreadyExistException ex1) {
+                        Notification erroreAmmonimento = new Notification(ex1.getMessage(), 2000, Notification.Position.MIDDLE);
+                        erroreAmmonimento.setId("errore-ammonimento");
+                        erroreAmmonimento.open();
+                    }
+                    cardAmmonimento.close();
+                    UI.getCurrent().getPage().reload();
+                }
+         });
 
         layoutDestraInfo.setAlignItems(FlexComponent.Alignment.CENTER);
         layoutDestraInfo.add(new Span(studenteSegnalato.getEmail()), inviaAmmonimento);

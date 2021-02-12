@@ -82,12 +82,15 @@ public class Navbar extends AppLayout {
 
 
         MenuItem profile = menuBar.addItem("");
+        profile.setId("user-button");
         profile.addComponentAsFirst(new Icon(VaadinIcon.USER));
 
         profile.getSubMenu().addItem(horizontalLayout);
         profile.getSubMenu().addItem(new Anchor("/profilo-personale","Profilo Personale"));
         if(studente.getRuolo() == Ruolo.MODERATORE || studente.getRuolo() == Ruolo.COMMUNITY_MANAGER){
-            profile.getSubMenu().addItem(new Anchor("/pannellomoderatore","Sezione Moderazione"));
+            Anchor pannelloMod = new Anchor("/pannellomoderatore","Sezione Moderazione");
+            pannelloMod.setId("pannello-mod");
+            profile.getSubMenu().addItem(pannelloMod);
         }
         profile.getSubMenu().addItem(new Anchor("/logout","Logout"));
 
