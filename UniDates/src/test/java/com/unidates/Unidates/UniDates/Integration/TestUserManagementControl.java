@@ -152,7 +152,7 @@ public class TestUserManagementControl {
     @Test
     public void confermaRegistrazione_valid(){
         userManager.createVerificationToken(userManager.trovaUtente("studenteprova3@gmail.com"), "token");
-        assertEquals("", userManagementControl.confermaRegistrazione("token"));
+        assertEquals("home", userManagementControl.confermaRegistrazione("token"));
     }
 
     @Test
