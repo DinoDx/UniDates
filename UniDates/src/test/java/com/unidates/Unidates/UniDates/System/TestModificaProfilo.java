@@ -92,9 +92,6 @@ public class TestModificaProfilo extends TestBenchTestCase {
         conferma.click();
 
         waitUntil(ExpectedConditions.urlContains("profilo-personale"));
-
-
-
     }
 
     @Test

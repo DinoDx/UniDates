@@ -38,7 +38,6 @@ public class TestCancellaProfilo extends TestBenchTestCase {
     public void cancellaProfilo_valid(){
         ButtonElement cancella = $(ButtonElement.class).id("cancella-account");
 
-
         cancella.click();
 
         ButtonElement cancellaConferma = $(ButtonElement.class).id("conferma-cancellazione");
@@ -51,7 +50,6 @@ public class TestCancellaProfilo extends TestBenchTestCase {
     @Test
     public void cancellaProfilo_passwordErrata(){
         ButtonElement cancella = $(ButtonElement.class).id("cancella-account");
-
 
         cancella.click();
 
