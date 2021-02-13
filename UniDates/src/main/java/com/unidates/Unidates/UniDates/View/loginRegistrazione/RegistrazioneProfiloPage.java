@@ -178,7 +178,7 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
                 errore.setId("errore-reg");
                 errore.open();
             }
-            else if(!numero.isEmpty() && numero.getValue().trim().matches("^\\d{10}$")){
+            else if(!numero.isEmpty() && !numero.getValue().trim().matches("^\\d{10}$")){
                 errore = new Notification("Numero di telefono inserito non valido!",3000, Notification.Position.MIDDLE);
                 errore.setId("errore-reg");
                 errore.open();

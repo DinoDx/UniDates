@@ -108,7 +108,7 @@ public class TestRegistrazioneAccount extends TestBenchTestCase {
         contatto.setValue("belcontattoooo");
         interessi.selectItemByIndex(1);
         data.setDate(LocalDate.of(1999, 03, 21));
-        capelli.selectItemByIndex(1);
+        capelli.selectItemByIndex(2);
         occhi.selectItemByIndex(1);
         altezza.setValue("180");
         sessi.selectByText("UOMO");
