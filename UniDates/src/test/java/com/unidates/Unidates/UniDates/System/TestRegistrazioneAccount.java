@@ -147,7 +147,7 @@ public class TestRegistrazioneAccount extends TestBenchTestCase {
 
         continua.click();
 
-        waitUntil(ExpectedConditions.presenceOfElementLocated(By.id(" notifica-errore")));
+        waitUntil(ExpectedConditions.presenceOfElementLocated(By.id("notifica-errore")));
 
         NotificationElement errore = $(NotificationElement.class).id("notifica-errore");
         assertTrue(errore.isOpen());
