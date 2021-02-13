@@ -6,9 +6,7 @@ import com.unidates.Unidates.UniDates.DTOs.ProfiloDTO;
 import com.unidates.Unidates.UniDates.Exception.*;
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import com.unidates.Unidates.UniDates.Model.Entity.Utente;
-import com.unidates.Unidates.UniDates.Model.Enum.Interessi;
-import com.unidates.Unidates.UniDates.Model.Enum.Ruolo;
-import com.unidates.Unidates.UniDates.Model.Enum.Sesso;
+import com.unidates.Unidates.UniDates.Model.Enum.*;
 import com.unidates.Unidates.UniDates.Model.Entity.Foto;
 import com.unidates.Unidates.UniDates.Model.Entity.Profilo;
 import com.unidates.Unidates.UniDates.Security.SecurityUtils;
@@ -168,13 +166,16 @@ public class ModifyProfileControl {
         return false;
     }
 
-    private boolean checkProfilo(Profilo p){
+    private boolean checkProfilo(Profilo p) {
         if (p.getNome() != null && p.getCognome() != null && p.getLuogoNascita() != null && p.getResidenza() != null && p.getDataDiNascita() != null && p.getAltezza() != 0 && p.getSesso() != null && p.getInteressi() != null && p.getColori_capelli() != null && p.getColore_occhi() != null && p.getHobbyList().size() > 0){
             if (p.getNome().length() > 0 && p.getCognome().length() > 0 && p.getLuogoNascita().length() > 0 && p.getResidenza().length() > 0){
                 if(p.getSesso() == Sesso.UOMO || p.getSesso() == Sesso.DONNA || p.getSesso() == Sesso.ALTRO){
                     if(p.getInteressi() == Interessi.UOMINI || p.getInteressi() == Interessi.DONNE || p.getInteressi() == Interessi.ENTRAMBI || p.getInteressi() == Interessi.ALTRO){
-                        // Controlli su colore occhi e capelli
-                        if(p.getHobbyList().size()>0) return true;
+                        if(p.getColore_occhi() == Colore_Occhi.AMBRA || p.getColore_occhi() == Colore_Occhi.AZZURRI || p.getColore_occhi() == Colore_Occhi.CASTANI || p.getColore_occhi() == Colore_Occhi.GRIGI || p.getColore_occhi() == Colore_Occhi.NERI || p.getColore_occhi() == Colore_Occhi.ROSSI || p.getColore_occhi() == Colore_Occhi.VERDI) {
+                            if (p.getColori_capelli() == Colori_Capelli.AMBRA || p.getColori_capelli() == Colori_Capelli.BIONDI  || p.getColori_capelli() == Colori_Capelli.ALTRO  || p.getColori_capelli() == Colori_Capelli.CASTANI || p.getColori_capelli() == Colori_Capelli.GRIGI  ||p.getColori_capelli() == Colori_Capelli.ROSSI || p.getColori_capelli() == Colori_Capelli.NERI ) {
+                                if(p.getHobbyList().size() > 0) return true;
+                            }
+                        }
                     }
                 }
             }

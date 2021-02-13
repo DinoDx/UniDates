@@ -204,8 +204,4 @@ public class Profilo implements Serializable {
         return Double.compare(profilo.altezza, altezza) == 0 && id.equals(profilo.id) && listaFoto.equals(profilo.listaFoto) && nome.equals(profilo.nome) && cognome.equals(profilo.cognome) && luogoNascita.equals(profilo.luogoNascita) && residenza.equals(profilo.residenza) && dataDiNascita.equals(profilo.dataDiNascita) && sesso == profilo.sesso && interessi == profilo.interessi && colori_capelli == profilo.colori_capelli && colore_occhi == profilo.colore_occhi && numeroTelefono.equals(profilo.numeroTelefono) && nickInstagram.equals(profilo.nickInstagram) && hobbyList.equals(profilo.hobbyList);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

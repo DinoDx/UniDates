@@ -119,9 +119,11 @@ public class UserManagementControl {
             if (p.getNome().length() > 0 && p.getCognome().length() > 0 && p.getLuogoNascita().length() > 0 && p.getResidenza().length() > 0){
                 if(p.getSesso() == Sesso.UOMO || p.getSesso() == Sesso.DONNA || p.getSesso() == Sesso.ALTRO){
                     if(p.getInteressi() == Interessi.UOMINI || p.getInteressi() == Interessi.DONNE || p.getInteressi() == Interessi.ENTRAMBI || p.getInteressi() == Interessi.ALTRO){
-                        // Controlli su colore occhi e capelli
-                        //if(!p.getHobbyList().contains(null))
-                        return true;
+                       if(p.getColore_occhi() == Colore_Occhi.AMBRA || p.getColore_occhi() == Colore_Occhi.AZZURRI || p.getColore_occhi() == Colore_Occhi.CASTANI || p.getColore_occhi() == Colore_Occhi.GRIGI || p.getColore_occhi() == Colore_Occhi.NERI || p.getColore_occhi() == Colore_Occhi.ROSSI || p.getColore_occhi() == Colore_Occhi.VERDI) {
+                           if (p.getColori_capelli() == Colori_Capelli.AMBRA || p.getColori_capelli() == Colori_Capelli.BIONDI  || p.getColori_capelli() == Colori_Capelli.ALTRO  || p.getColori_capelli() == Colori_Capelli.CASTANI || p.getColori_capelli() == Colori_Capelli.GRIGI  ||p.getColori_capelli() == Colori_Capelli.ROSSI || p.getColori_capelli() == Colori_Capelli.NERI ) {
+                                if(p.getHobbyList().size() > 0) return true;
+                           }
+                       }
                     }
                 }
             }
