@@ -14,6 +14,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.notification.Notification;
@@ -50,7 +51,7 @@ import java.time.Period;
 import java.util.*;
 
 @Route(value = "registrazioneProfilo")
-@PageTitle("Registrazione_2")
+@PageTitle("Registrazione Profilo")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @CssImport("./styles/views/registrazione/registrazione_due.css")
 public class RegistrazioneProfiloPage extends VerticalLayout {
@@ -99,6 +100,8 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
         VerticalLayout destra = new VerticalLayout(secondo());
 
         HorizontalLayout topics = new HorizontalLayout();
+        topics.setAlignItems(Alignment.CENTER);
+        topics.setJustifyContentMode(JustifyContentMode.CENTER);
         checkboxGroup.setId("topic-regTe");
         checkboxGroup.setLabel("Seleziona Topic:");
         //multiselectComboBox.setLabel("Seleziona Topic");
@@ -115,9 +118,26 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
 
         verticals.add(sinistra,destra);
 
+        VerticalLayout trattamentoRegolamento = new VerticalLayout();
+        trattamentoRegolamento.add(new Paragraph("Regolamento della piattaforma: "));
+        trattamentoRegolamento.add(new Paragraph("1. I dati personali non verranno utilizzati a scopi promozionali."));
+        trattamentoRegolamento.add(new Paragraph("2. Per registrarsi é necessario avere almeno 18 anni."));
+        trattamentoRegolamento.add(new Paragraph("3. Il caricamento di foto che possano urtare la sensibilitá degli utenti, verrá punito con l'eliminazione delle suddette e con un ammonimento."));
+        trattamentoRegolamento.add(new Paragraph("4. Il raggiungimento di 3 ammonimenti comporterá la sospensione del profilo dalla piattaforma."));
+        Dialog dialog = new Dialog();
+        dialog.add(trattamentoRegolamento);
+        dialog.setCloseOnOutsideClick(true);
+        dialog.setCloseOnEsc(true);
         checkbox = new Checkbox();
         checkbox.setId("trattamento-reg");
-        checkbox.setLabel("Acconsenti il trattamento dei dati");
+        checkbox.setLabel("Acconsenti al regolamento della piattaforma e al trattamento dei dati");
+
+        Button mostraRegolamento = new Button("Mostra regolamento", buttonClickEvent -> {
+            if(!dialog.isOpened())
+                dialog.open();
+            else dialog.close();
+        });
+        HorizontalLayout trattamento = new HorizontalLayout(checkbox, mostraRegolamento );
 
         Button conferma = new Button("Conferma",buttonClickEvent -> {
             Notification errore;
@@ -244,7 +264,7 @@ public class RegistrazioneProfiloPage extends VerticalLayout {
         H2 titolo = new H2("Inserisci i dati del profilo!");
         titolo.setId("titolo-registrazione");
 
-        padre.add(titolo,verticals,topics,checkbox,star,conferma);
+        padre.add(titolo,verticals,topics,trattamento,star,conferma);
         add(padre);
     }
 
