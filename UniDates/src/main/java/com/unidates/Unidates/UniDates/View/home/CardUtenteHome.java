@@ -8,8 +8,10 @@ import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
 import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -24,6 +26,8 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
 
 import java.io.ByteArrayInputStream;
 
@@ -46,12 +50,17 @@ public class CardUtenteHome extends Div {
 
 
     public HorizontalLayout Card(StudenteDTO studente){
+
         Image image_profilo = new Image();
         FotoDTO fotoCard = new FotoDTO();
         boolean trovato = false;
         //layput padre
         HorizontalLayout contenitore = new HorizontalLayout();
         contenitore.setSpacing(false);
+        contenitore.getStyle().set("background-color",  "var(--lumo-tint-30pct)");
+        contenitore.getStyle().set("border", "1px solid var(--lumo-tint-80pct) ");
+        contenitore.getStyle().set("border-radius", "5px");
+
         //layout sinistra con foto e pulsanti
         VerticalLayout layout_foto = new VerticalLayout();
         HorizontalLayout pulsanti = new HorizontalLayout();
@@ -94,9 +103,19 @@ public class CardUtenteHome extends Div {
             profilo.add(nome);
             nome_cognome.add(profilo);
 
-            Span topics = new Span(studente.getProfilo().getHobbyList().toString());
-            Span interessi = new Span("Interessato a:" + studente.getProfilo().getInteressi().toString());
-            layout_info.add(nome_cognome, topics, interessi);
+            VerticalLayout layoutTopic = new VerticalLayout();
+            layoutTopic.add(new Span("Topic:"));
+            studente.getProfilo().getHobbyList().forEach( topic -> {
+
+                Button topicSingolo = new Button(topic.toString().toLowerCase());
+                topicSingolo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+                topicSingolo.setEnabled(false);
+                layoutTopic.add(topicSingolo);
+
+
+            });
+            Span interessi = new Span("Interessato a: " + studente.getProfilo().getInteressi().toString().toLowerCase());
+            layout_info.add(nome_cognome, layoutTopic, interessi);
 
             contenitore.add(layout_foto, layout_info);
         }

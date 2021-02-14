@@ -85,19 +85,19 @@ public class RicercaProfiloPage extends VerticalLayout implements HasUrlParamete
         cognome = new Span(daCercare.getProfilo().getCognome());
         nome_cognome.add(nome, cognome);
 
-        topics = new Span("Topics:" + daCercare.getProfilo().getHobbyList().toString());
-        interessi = new Span("Interessato a:" + daCercare.getProfilo().getInteressi().toString());
+        topics = new Span("Topics: " + daCercare.getProfilo().getHobbyList().toString());
+        interessi = new Span("Interessato a: " + daCercare.getProfilo().getInteressi().toString());
 
         HorizontalLayout città = new HorizontalLayout();
-        residenza = new Span("Residenza:" + daCercare.getProfilo().getResidenza());
-        nascita = new Span("Città di nascita:" + daCercare.getProfilo().getLuogoNascita());
+        residenza = new Span("Residenza: " + daCercare.getProfilo().getResidenza());
+        nascita = new Span("Città di nascita: " + daCercare.getProfilo().getLuogoNascita());
         città.add(residenza, nascita);
 
         HorizontalLayout caratteristiche = new HorizontalLayout();
-        colore_occhi = new Span("Colore occhi" + daCercare.getProfilo().getColore_occhi());
-        colore_capelli = new Span("Colore capelli:" + daCercare.getProfilo().getColori_capelli());
-        altezza = new Span("Altezza:" + daCercare.getProfilo().getAltezza());
-        compleanno = new Span("Data di nascita:" + daCercare.getProfilo().getDataDiNascita());
+        colore_occhi = new Span("Colore occhi: " + daCercare.getProfilo().getColore_occhi());
+        colore_capelli = new Span("Colore capelli: " + daCercare.getProfilo().getColori_capelli());
+        altezza = new Span("Altezza: " + daCercare.getProfilo().getAltezza());
+        compleanno = new Span("Data di nascita: " + daCercare.getProfilo().getDataDiNascita());
         caratteristiche.add(colore_capelli, colore_occhi, altezza, compleanno);
 
         HorizontalLayout contatti = new HorizontalLayout();

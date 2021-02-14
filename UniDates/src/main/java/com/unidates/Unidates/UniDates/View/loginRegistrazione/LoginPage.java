@@ -25,9 +25,7 @@ import org.springframework.security.web.WebAttributes;
 @CssImport("./styles/views/registrazione/login.css")
 public class LoginPage extends FlexLayout{
 
-    public static final String TEXT  = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pharetra magna erat, vel finibus ipsum finibus vel. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. " +
-            "Aenean molestie mauris felis, ut convallis mauris bibendum vitae. Etiam mollis sem quis pharetra ullamcorper. Suspendisse faucibus nisi eu libero dapibus tristique." +
-            " Praesent elit neque, mollis eu erat sed, imperdiet aliquam justo. Ut efficitur et mi ut pretium. Quisque fringilla,";
+    public static final String TEXT  = "Benvenuto su UniDates, la prima (forse) piattaforma di Dating dedicata agli studenti Universitari! Effettua l'accesso o iscriviti subito!";
 
     public static final CharSequence ROUTE = "login" ;
     private LoginForm loginForm = new LoginForm();
