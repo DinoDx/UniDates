@@ -45,17 +45,14 @@ public class TestProfiloManager {
     @Test
     public void modificaProfilo_valid(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
-
             ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
             hobbyArrayList.add(Hobby.ARTE);
             hobbyArrayList.add(Hobby.ANIME);
             hobbyArrayList.add(Hobby.CALCIO);
 
-
             byte[] img = {1,2,3,4};
             Foto foto = new Foto(img);
             foto.setId(1L);
-
 
             Studente studente = new Studente(invocationOnMock.getArgument(0,String.class),"password");
             Profilo profilo = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto,hobbyArrayList);
@@ -64,7 +61,6 @@ public class TestProfiloManager {
             return studente;
         });
 
-
         byte[] img = {1,2,3,4};
         Foto foto = new Foto(img);
         ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
@@ -72,10 +68,10 @@ public class TestProfiloManager {
         hobbyArrayList.add(Hobby.ANIME);
         hobbyArrayList.add(Hobby.CALCIO);
 
-        Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto ,hobbyArrayList);
-        p.setId(1L);
+        Profilo oracolo = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,foto ,hobbyArrayList);
+        oracolo.setId(1L);
 
-        assertEquals(p,profiloManager.modificaProfilo("email",p));
+        assertEquals(oracolo,profiloManager.modificaProfilo("email",oracolo));
     }
 
     @Test

@@ -45,7 +45,7 @@ public class TestMatchManager {
     @Test
     public void aggiungiMatch_valid(){
         Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> {
-           return new Studente(invocation.getArgument(0, String.class), "questoétestingblackbox?");
+           return new Studente(invocation.getArgument(0, String.class), "password");
         });
         assertTrue(matchManager.aggiungiMatch("studenteprova1@gmail.com","studenteprova2@gmail.com"));
     }
