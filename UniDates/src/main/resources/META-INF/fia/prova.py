@@ -7,6 +7,7 @@ app.config["DEBUG"] = True
 
 
 @app.route('/', methods=['GET'])
+
 def home():
     query_parameters = request.args
     email = query_parameters.get('email')
