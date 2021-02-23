@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Profile("!test")
 @Component
@@ -76,6 +78,12 @@ public class Populator implements ApplicationRunner {
         p3.addFoto(new Foto(downloadUrl(LINK)),false);
         p3.addFoto(new Foto(downloadUrl(LINK)), false);
         p3.addFoto(new Foto(downloadUrl(LINK)), false);
+
+        ArrayList<Hobby> hobbies;
+        hobbies = new ArrayList<>(Arrays.asList(new Hobby[]{
+                Hobby.MUSICA,Hobby.SERIE_TV,Hobby.TV,Hobby.VIDEOGIOCHI,Hobby.VIAGGI,Hobby.STORIA,Hobby.CUCINA,Hobby.NATURA,Hobby.FOTOGRAFIA
+        }));
+        createStudente("marcellabello@gmail.com","Marcella9900@","Marcella","Bello","Napoli","Milano",LocalDate.of(2000,01,01),1.70,Sesso.DONNA,Interessi.UOMINI, Colori_Capelli.CASTANI,Colore_Occhi.CASTANI, new Foto(downloadUrl(LINK)),hobbies);
 
 
 
@@ -139,9 +147,18 @@ public class Populator implements ApplicationRunner {
        // moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
 
 
-
-
     }
+
+
+    public Studente createStudente(String email, String password, String nome, String cognome, String luogodinasciata, String residenza, LocalDate compleanno, Double altezza, Sesso sesso, Interessi interessi, Colori_Capelli capelli, Colore_Occhi occhi, Foto foto, ArrayList<Hobby> hobby){
+        Studente studenteCluster = new Studente(email, password);
+        studenteCluster.setActive(true);
+        Profilo profiloCluster = new Profilo(nome,cognome,luogodinasciata,residenza,compleanno,altezza,sesso,interessi,capelli,occhi,foto,hobby);
+        studenteCluster.setProfilo(profiloCluster);
+        return studenteCluster;
+    }
+
+
     public static byte[] downloadUrl(String stringDownload) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
