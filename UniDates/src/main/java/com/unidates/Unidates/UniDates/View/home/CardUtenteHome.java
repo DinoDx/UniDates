@@ -7,11 +7,13 @@ import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
+import com.unidates.Unidates.UniDates.Model.Enum.Hobby;
 import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -30,6 +32,8 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CardUtenteHome extends Div {
@@ -42,24 +46,27 @@ public class CardUtenteHome extends Div {
         this.interactionControl = interactionControl;
         this.userManagementControl = userManagementControl;
         this.moderationControl = moderationControl;
-        HorizontalLayout tot = Card(studenteDTO);
+        VerticalLayout tot = Card(studenteDTO);
         add(tot);
     }
 
 
 
 
-    public HorizontalLayout Card(StudenteDTO studente){
+    public VerticalLayout Card(StudenteDTO studente){
+
 
         Image image_profilo = new Image();
         FotoDTO fotoCard = new FotoDTO();
         boolean trovato = false;
         //layput padre
-        HorizontalLayout contenitore = new HorizontalLayout();
+        VerticalLayout contenitore = new VerticalLayout();
         contenitore.setSpacing(false);
         contenitore.getStyle().set("background-color",  "var(--lumo-tint-30pct)");
         contenitore.getStyle().set("border", "1px solid var(--lumo-tint-80pct) ");
         contenitore.getStyle().set("border-radius", "5px");
+        contenitore.getStyle().set("width","640px");
+        contenitore.getStyle().set("height","725px");
 
         //layout sinistra con foto e pulsanti
         VerticalLayout layout_foto = new VerticalLayout();
@@ -70,8 +77,8 @@ public class CardUtenteHome extends Div {
             fotoCard = studente.getProfilo().getFotoProfilo();
             StreamResource resource = new StreamResource("ciao", () -> new ByteArrayInputStream(studente.getProfilo().getFotoProfilo().getImg()));
             image_profilo = new Image(resource, "");
-            image_profilo.getStyle().set("width", "250px");
-            image_profilo.getStyle().set("height", "250px");
+            image_profilo.getStyle().set("width", "350px");
+            image_profilo.getStyle().set("height", "350px");
         }
         else {
 
@@ -80,8 +87,8 @@ public class CardUtenteHome extends Div {
                     fotoCard = f;
                     StreamResource resource = new StreamResource("ciao", () -> new ByteArrayInputStream(f.getImg()));
                     image_profilo = new Image(resource, "");
-                    image_profilo.getStyle().set("width", "250px");
-                    image_profilo.getStyle().set("height", "250px");
+                    image_profilo.getStyle().set("width", "350px");
+                    image_profilo.getStyle().set("height", "350px");
                     trovato = true;
                 }
             }
@@ -93,31 +100,72 @@ public class CardUtenteHome extends Div {
             report.setId("report-button");
             pulsanti.add(like, report);
             layout_foto.add(image_profilo, pulsanti);
+            layout_foto.setAlignItems(FlexComponent.Alignment.CENTER);
 
             //layout destra con nome interessi e topics
             VerticalLayout layout_info = new VerticalLayout();
+            layout_info.setSpacing(false);
             HorizontalLayout nome_cognome = new HorizontalLayout();
+            nome_cognome.setSpacing(false);
 
             Anchor profilo = new Anchor("ricercaprofilo/" + studente.getEmail());
             Span nome = new Span(studente.getProfilo().getNome() + " " + studente.getProfilo().getCognome());
             profilo.add(nome);
             nome_cognome.add(profilo);
 
-            VerticalLayout layoutTopic = new VerticalLayout();
-            layoutTopic.add(new Span("Topic:"));
+
+            VerticalLayout layoutTotalTopic = new VerticalLayout();
+            layoutTotalTopic.setSpacing(false);
+            HorizontalLayout layoutTopicUno = new HorizontalLayout();
+            HorizontalLayout layoutTopicDue = new HorizontalLayout();
+            HorizontalLayout layoutTopicTre = new HorizontalLayout();
+            HorizontalLayout layoutTopicQuattro = new HorizontalLayout();
+            HorizontalLayout layoutTopicCinque = new HorizontalLayout();
+
+            HorizontalLayout titleTopic = new HorizontalLayout(new Span("Topic:"));
+            titleTopic.setSpacing(false);
+
             studente.getProfilo().getHobbyList().forEach( topic -> {
+                if(layoutTopicUno.getComponentCount() < 5){
+                    Button topicSingolo = new Button(topic.toString().toLowerCase());
+                    topicSingolo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+                    topicSingolo.setEnabled(false);
+                    layoutTopicUno.add(topicSingolo);
+                }else if(layoutTopicDue.getComponentCount() <5){
+                    Button topicSingolo = new Button(topic.toString().toLowerCase());
+                    topicSingolo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+                    topicSingolo.setEnabled(false);
+                    layoutTopicDue.add(topicSingolo);
+                }else if(layoutTopicTre.getComponentCount() <5) {
+                    Button topicSingolo = new Button(topic.toString().toLowerCase());
+                    topicSingolo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+                    topicSingolo.setEnabled(false);
+                    layoutTopicTre.add(topicSingolo);
+                }else if(layoutTopicQuattro.getComponentCount() <5) {
+                    Button topicSingolo = new Button(topic.toString().toLowerCase());
+                    topicSingolo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+                    topicSingolo.setEnabled(false);
+                    layoutTopicQuattro.add(topicSingolo);
+                }else if(layoutTopicCinque.getComponentCount() <5) {
+                    Button topicSingolo = new Button(topic.toString().toLowerCase());
+                    topicSingolo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+                    topicSingolo.setEnabled(false);
+                    layoutTopicCinque.add(topicSingolo);
+                }
+            });;
 
-                Button topicSingolo = new Button(topic.toString().toLowerCase());
-                topicSingolo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-                topicSingolo.setEnabled(false);
-                layoutTopic.add(topicSingolo);
-
-
-            });
             Span interessi = new Span("Interessato a: " + studente.getProfilo().getInteressi().toString().toLowerCase());
-            layout_info.add(nome_cognome, layoutTopic, interessi);
+            VerticalLayout interessiLayout = new VerticalLayout();
+            interessiLayout.setSpacing(false);
+            interessiLayout.add(interessi);
 
-            contenitore.add(layout_foto, layout_info);
+            layoutTotalTopic.add(titleTopic,layoutTopicUno,layoutTopicDue,layoutTopicTre,layoutTopicQuattro,layoutTopicCinque);
+            layoutTotalTopic.setSpacing(false);
+
+            layout_info.add(interessiLayout,layoutTotalTopic);
+
+            contenitore.add(nome_cognome,layout_foto, layout_info);
+            contenitore.setAlignItems(FlexComponent.Alignment.CENTER);
         }
         return contenitore;
     }
