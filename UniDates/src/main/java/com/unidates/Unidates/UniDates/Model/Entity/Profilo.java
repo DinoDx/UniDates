@@ -35,7 +35,7 @@ public class Profilo implements Serializable {
     private String numeroTelefono, nickInstagram;
 
     @ElementCollection
-    private List<Hobby> hobbyList;
+    private List<String> hobbyList;
 
 
     public Profilo() {
@@ -43,7 +43,7 @@ public class Profilo implements Serializable {
     }
 
 
-    public Profilo(String nome, String cognome, String luogoNascita, String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso, Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi,Foto fotoProfilo, List<Hobby> hobbyList) {
+    public Profilo(String nome, String cognome, String luogoNascita, String residenza, LocalDate dataDiNascita, double altezza, Sesso sesso, Interessi interessi, Colori_Capelli colori_capelli, Colore_Occhi colore_occhi,Foto fotoProfilo, List<String> hobbyList) {
         this.nome = nome;
         this.cognome = cognome;
         this.luogoNascita = luogoNascita;
@@ -163,11 +163,11 @@ public class Profilo implements Serializable {
         this.listaFoto = listaFoto;
     }
 
-    public List<Hobby> getHobbyList() {
+    public List<String> getHobbyList() {
         return hobbyList;
     }
 
-    public void setHobbyList(List<Hobby> hobbyList) {
+    public void setHobbyList(List<String> hobbyList) {
         this.hobbyList = hobbyList;
     }
 

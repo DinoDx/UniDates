@@ -44,11 +44,11 @@ public class TestUserManager {
     @Test
     public void registrazioneStudente_valid(){
         Studente s = new Studente("marcoprova1@gmail.com","ciao");
-        ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+        ArrayList<String> hobbyArrayList = new ArrayList<String>();
 
-        hobbyArrayList.add(Hobby.ARTE);
-        hobbyArrayList.add(Hobby.ANIME);
-        hobbyArrayList.add(Hobby.CALCIO);
+        hobbyArrayList.add(Hobby.ARTE.toString());
+        hobbyArrayList.add(Hobby.ANIME.toString());
+        hobbyArrayList.add(Hobby.CALCIO.toString());
 
         Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto() ,hobbyArrayList);
 

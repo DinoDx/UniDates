@@ -53,10 +53,10 @@ public class Populator implements ApplicationRunner {
         Studente s1 = new Studente("studenteprova1@gmail.com","studenteprova1");
         s1.setActive(true);
 
-        ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
-        hobbyArrayList.add(Hobby.ARTE);
-        hobbyArrayList.add(Hobby.ANIME);
-        hobbyArrayList.add(Hobby.CALCIO);
+        ArrayList<String> hobbyArrayList = new ArrayList<String>();
+        hobbyArrayList.add(Hobby.ARTE.toString());
+        hobbyArrayList.add(Hobby.ANIME.toString());
+        hobbyArrayList.add(Hobby.CALCIO.toString());
 
 
         Profilo p1 = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto(downloadUrl(LINK)) ,hobbyArrayList);
@@ -396,7 +396,9 @@ public class Populator implements ApplicationRunner {
     public Studente createStudente(String email, String password, String nome, String cognome, String luogodinasciata, String residenza, LocalDate compleanno, Double altezza, Sesso sesso, Interessi interessi, Colori_Capelli capelli, Colore_Occhi occhi, Foto foto, ArrayList<Hobby> hobby){
         Studente studenteCluster = new Studente(email, password);
         studenteCluster.setActive(true);
-        Profilo profiloCluster = new Profilo(nome,cognome,luogodinasciata,residenza,compleanno,altezza,sesso,interessi,capelli,occhi,foto,hobby);
+        ArrayList<String> hobbyList = new ArrayList<>();
+        hobby.forEach(hobby1 -> hobbyList.add(hobby1.toString()));
+        Profilo profiloCluster = new Profilo(nome,cognome,luogodinasciata,residenza,compleanno,altezza,sesso,interessi,capelli,occhi,foto,hobbyList);
         studenteCluster.setProfilo(profiloCluster);
         utenteService.registrazioneStudente(studenteCluster,profiloCluster);
         return studenteCluster;

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+
 @Controller
 @RequestMapping("/api/ProfileManager")
 public class ModifyProfileControl {
@@ -97,9 +99,11 @@ public class ModifyProfileControl {
     public boolean modificaProfilo(String emailStudenteToModify, ProfiloDTO profiloDTO) throws InvalidFormatException {
         if(checkEmail(emailStudenteToModify)) {
             if (SecurityUtils.getLoggedIn().getEmail().equals(emailStudenteToModify)) {
+                ArrayList<String> hobbyList = new ArrayList<>();
+                profiloDTO.getHobbyList().forEach(hobby -> hobbyList.add(hobby.toString()));
                 Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
                         profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
-                        new Foto(), profiloDTO.getHobbyList());
+                        new Foto(), hobbyList);
 
                 if (profiloDTO.getNumeroTelefono() != null)
                     p.setNickInstagram(profiloDTO.getNickInstagram());

@@ -49,11 +49,11 @@ public class TestNotificaManager {
         Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocationOnMock -> {
             Studente s= new Studente(invocationOnMock.getArgument(0, String.class), "password");
 
-            ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+            ArrayList<String> hobbyArrayList = new ArrayList<String>();
 
-            hobbyArrayList.add(Hobby.ARTE);
-            hobbyArrayList.add(Hobby.ANIME);
-            hobbyArrayList.add(Hobby.CALCIO);
+            hobbyArrayList.add(Hobby.ARTE.toString());
+            hobbyArrayList.add(Hobby.ANIME.toString());
+            hobbyArrayList.add(Hobby.CALCIO.toString());
 
             Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto() ,hobbyArrayList);
             s.setProfilo(p);
@@ -107,11 +107,11 @@ public class TestNotificaManager {
         Mockito.when(utenteRepository.findByEmail(anyString())).thenAnswer(invocation -> {
             Studente s= new Studente(invocation.getArgument(0, String.class), "password");
 
-            ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
+            ArrayList<String> hobbyArrayList = new ArrayList<String>();
 
-            hobbyArrayList.add(Hobby.ARTE);
-            hobbyArrayList.add(Hobby.ANIME);
-            hobbyArrayList.add(Hobby.CALCIO);
+            hobbyArrayList.add(Hobby.ARTE.toString());
+            hobbyArrayList.add(Hobby.ANIME.toString());
+            hobbyArrayList.add(Hobby.CALCIO.toString());
 
             Profilo p = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto() ,hobbyArrayList);
             s.setProfilo(p);

@@ -190,7 +190,12 @@ public class EntityToDto {
                 .setAltezza(profilo.getAltezza()).setColore_occhi(profilo.getColore_occhi())
                 .setColori_capelli(profilo.getColori_capelli()).setDataDiNascita(profilo.getDataDiNascita())
                 .setLuogoNascita(profilo.getLuogoNascita()).setResidenza(profilo.getResidenza())
-                .setSesso(profilo.getSesso()).setInteressi(profilo.getInteressi()).setHobbyList(new ArrayList<Hobby>(profilo.getHobbyList()));
+                .setSesso(profilo.getSesso()).setInteressi(profilo.getInteressi());
+
+        ArrayList<Hobby> hobbies = new ArrayList<>();
+        profilo.getHobbyList().forEach(hobby -> hobbies.add(Hobby.valueOf(hobby)));
+
+        profiloDTO.setHobbyList(hobbies);
 
         if(profilo.getNickInstagram() != null) profiloDTO.setNickInstagram(profilo.getNickInstagram());
         if(profilo.getNumeroTelefono() != null) profiloDTO.setNumeroTelefono(profilo.getNumeroTelefono());

@@ -49,9 +49,11 @@ public class UserManagementControl {
     public void registrazioneStudente(@RequestBody StudenteDTO studenteDTO, @RequestBody HttpServletRequest request) throws InvalidFormatException, AlreadyExistException {
 
         ProfiloDTO profiloDTO = studenteDTO.getProfilo();
+        ArrayList<String> hobbyList = new ArrayList<>();
+        profiloDTO.getHobbyList().forEach(hobby -> hobbyList.add(hobby.toString()));
         Profilo p = new Profilo(profiloDTO.getNome(), profiloDTO.getCognome(), profiloDTO.getLuogoNascita(), profiloDTO.getResidenza(),
         profiloDTO.getDataDiNascita(), profiloDTO.getAltezza(), profiloDTO.getSesso(), profiloDTO.getInteressi(), profiloDTO.getColori_capelli(), profiloDTO.getColore_occhi(),
-        new Foto(profiloDTO.getFotoProfilo().getImg()),profiloDTO.getHobbyList());
+        new Foto(profiloDTO.getFotoProfilo().getImg()),hobbyList);
         if(profiloDTO.getNumeroTelefono()!= null)
             p.setNickInstagram(profiloDTO.getNickInstagram());
         if(profiloDTO.getNickInstagram() != null)
