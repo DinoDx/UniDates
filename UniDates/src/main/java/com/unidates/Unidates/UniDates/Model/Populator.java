@@ -49,12 +49,9 @@ public class Populator implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         //Aggiungo 3 utenti
+
         Studente s1 = new Studente("studenteprova1@gmail.com","studenteprova1");
         s1.setActive(true);
-        Studente s2 = new Studente("studenteprova2@gmail.com","studenteprova2");
-        s2.setActive(true);
-        Studente s3 = new Studente("studenteprova3@gmail.com", "studenteprova3");
-        s3.setActive(false);
 
         ArrayList<Hobby> hobbyArrayList = new ArrayList<Hobby>();
         hobbyArrayList.add(Hobby.ARTE);
@@ -65,22 +62,11 @@ public class Populator implements ApplicationRunner {
         Profilo p1 = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto(downloadUrl(LINK)) ,hobbyArrayList);
         p1.setNumeroTelefono("3333339900");
         p1.setNickInstagram("marco.prova1");
-        p1.addFoto(new Foto(downloadUrl(LINK)),false);
-        p1.addFoto(new Foto(downloadUrl(LINK)), false);
-        p1.addFoto(new Foto(downloadUrl(LINK)), false);
-        Profilo p2 = new Profilo("Paolo", "Prova2", "Napoli", "Napoli", LocalDate.of(1995,7,15), 185, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.ROSSI, Colore_Occhi.VERDI,new Foto(downloadUrl(LINK)), hobbyArrayList);
-        p2.setNumeroTelefono("3335559900");
-        p2.setNickInstagram("PaoloSonoBello.prova2");
-        p2.addFoto(new Foto(downloadUrl(LINK)), false);
-        p2.addFoto(new Foto(downloadUrl(LINK)), false);
-        p2.addFoto(new Foto(downloadUrl(LINK)),false);
-        Profilo p3 = new Profilo("Lucia", "Prova3", "Napoli", "Napoli", LocalDate.of(1991,1,25), 164, Sesso.DONNA, Interessi.ENTRAMBI, Colori_Capelli.CASTANI, Colore_Occhi.CASTANI,new Foto(downloadUrl(LINK)), hobbyArrayList);
-        p3.setNickInstagram("SimpyLucia");
-        p3.addFoto(new Foto(downloadUrl(LINK)),false);
-        p3.addFoto(new Foto(downloadUrl(LINK)), false);
-        p3.addFoto(new Foto(downloadUrl(LINK)), false);
+
+
 
         Foto f = new Foto(downloadUrl(LINK));
+
         ArrayList<Hobby> hobbies;
         hobbies = new ArrayList<>(Arrays.asList(new Hobby[]{
                 Hobby.MUSICA,Hobby.SERIE_TV,Hobby.TV,Hobby.VIDEOGIOCHI,Hobby.VIAGGI,Hobby.STORIA,Hobby.CUCINA,Hobby.NATURA,Hobby.FOTOGRAFIA
@@ -367,8 +353,6 @@ public class Populator implements ApplicationRunner {
 
         try {
             utenteService.registrazioneStudente(s1, p1); //usati solo per skippare l'invio email di conferma
-            utenteService.registrazioneStudente(s2, p2);
-            utenteService.registrazioneStudente(s3, p3);
 
             utenteService.registrazioneCommunityManager(cm1, p5);
             utenteService.registrazioneModeratore(m1, p4);
@@ -376,23 +360,23 @@ public class Populator implements ApplicationRunner {
 
 
 
-            matchManager.aggiungiMatch(s1.getEmail(), s2.getEmail());
+            /*matchManager.aggiungiMatch(s1.getEmail(), s2.getEmail());
             matchManager.aggiungiMatch(s2.getEmail(), s1.getEmail());
             notificaManager.generateNotificaMatch(s1.getEmail(), s2.getEmail());
             matchManager.aggiungiMatch(s1.getEmail(), s3.getEmail());
             matchManager.aggiungiMatch(s3.getEmail(), s1.getEmail());
-            notificaManager.generateNotificaMatch(s1.getEmail(), s3.getEmail());
+            notificaManager.generateNotificaMatch(s1.getEmail(), s3.getEmail());*/
 
             moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli1"),utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
-            moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.NUDITA, "dettagli2"),utenteService.trovaStudente(s2.getEmail()).getProfilo().getFotoProfilo().getId());
+          /*  moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.NUDITA, "dettagli2"),utenteService.trovaStudente(s2.getEmail()).getProfilo().getFotoProfilo().getId());
             moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.VIOLENZA , "dettagli3"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
             moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.NUDITA, "dettagli5"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
-            moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.VIOLENZA, "dettagli6"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(2).getId());
+            moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.VIOLENZA, "dettagli6"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(2).getId()); */
 
             moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli1"), m1.getEmail(), s1.getEmail(), utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
             notificaManager.genereateNotificaWarning(s1.getEmail(), utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
-            moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.SPAM, "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
-            notificaManager.genereateNotificaWarning(s3.getEmail(), utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
+           /* moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.SPAM, "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
+            notificaManager.genereateNotificaWarning(s3.getEmail(), utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId()); */
 
             System.out.println("Populator eseguito correttamente!");
         }
