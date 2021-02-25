@@ -4,6 +4,6 @@ import com.unidates.Unidates.UniDates.Model.Entity.Profilo;
 import com.unidates.Unidates.UniDates.Model.Entity.Studente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProfiloRepository extends JpaRepository<Profilo, Long> {
-    Profilo findProfiloById(Long id);
+public interface StudenteRepository extends JpaRepository<Studente, String> {
+    Studente findByProfilo(Profilo profilo);
 }

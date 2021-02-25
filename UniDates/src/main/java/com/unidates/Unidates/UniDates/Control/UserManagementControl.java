@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -43,6 +45,9 @@ public class UserManagementControl {
 
     @Autowired
     VerificationTokenRepository verificationTokenRepository;
+
+    @Autowired
+    RestTemplate restTemplate;
 
 
     @RequestMapping("/registrazioneStudente")
@@ -105,12 +110,16 @@ public class UserManagementControl {
         return "home";
     }
 
-    @RequestMapping("/trovaTuttuStudenti")
-    public List<StudenteDTO> trovaTuttiStudenti(){
-        List<StudenteDTO> lista = new ArrayList<StudenteDTO>();
-        userManager.findAllStudenti().forEach(studente -> lista.add(EntityToDto.toDTO(studente)));
-        return lista;
+    @RequestMapping("/trovaStudentiAffini")
+    public List<StudenteDTO> trovaStudentiAffini(String email){
+        String id = restTemplate.getForObject("http://localhost:5000/?email=" + email, String.class);
+        ArrayList<Long> idList = new ArrayList<>();
+        Arrays.asList(id.split(" ")).forEach(ids -> idList.add(Long.parseLong(ids)));
+        List<StudenteDTO> toReturn = new ArrayList<>();
+        userManager.trovaStudentiAffini(idList).forEach(studente -> toReturn.add(EntityToDto.toDTO(studente)));
+        return toReturn ;
     }
+
 
 
     private boolean checkEmail(String email){

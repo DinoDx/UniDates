@@ -43,7 +43,7 @@ public class HomePage extends VerticalLayout {
 
     public void create() {
         StudenteDTO s = (StudenteDTO) userManagementControl.studenteInSessione();
-        listaStudenti = userManagementControl.trovaTuttiStudenti();
+        listaStudenti = userManagementControl.trovaStudentiAffini(userManagementControl.studenteInSessione().getEmail());
         setAlignItems(Alignment.CENTER);
         VerticalLayout utenti = new VerticalLayout();
         utenti.setAlignItems(Alignment.CENTER);
@@ -55,7 +55,6 @@ public class HomePage extends VerticalLayout {
 
         for(StudenteDTO studenteDTO: listaStudenti){
             if(!(studenteDTO.getEmail().equals(utente.getEmail())) && !(s.getListaBloccatiEmail().contains(studenteDTO.getEmail())) && !(studenteDTO.isBanned()) && !(studenteDTO.getListaBloccatiEmail().contains(s.getEmail()))) {
-
                         utenti.add(new CardUtenteHome(userManagementControl, interactionControl, studenteDTO, moderationControl));
             }
         }

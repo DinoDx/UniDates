@@ -3,6 +3,8 @@ package com.unidates.Unidates.UniDates.Manager;
 import com.unidates.Unidates.UniDates.Exception.AlreadyExistException;
 import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
 import com.unidates.Unidates.UniDates.Model.Entity.*;
+import com.unidates.Unidates.UniDates.Repository.ProfiloRepository;
+import com.unidates.Unidates.UniDates.Repository.StudenteRepository;
 import com.unidates.Unidates.UniDates.Repository.UtenteRepository;
 import com.unidates.Unidates.UniDates.Repository.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,12 @@ public class UserManager {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UtenteRepository utenteRepository;
+
+    @Autowired
+    private StudenteRepository studenteRepository;
+
+    @Autowired
+    private ProfiloRepository profiloRepository;
 
    /* @Autowired
     private RestTemplate restTemplate;
@@ -154,6 +162,12 @@ public class UserManager {
             utenteRepository.save(toChange);
             return toChange;
         } else throw new EntityNotFoundException("Utente non trovato!");
+    }
+
+    public List<Studente> trovaStudentiAffini(ArrayList<Long> idProfili){
+        List<Studente> toReturn = new ArrayList<>();
+        idProfili.forEach( idProfilo -> toReturn.add(studenteRepository.findByProfilo(profiloRepository.findProfiloById(idProfilo))));
+        return toReturn;
     }
 
 
