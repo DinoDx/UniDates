@@ -4,11 +4,7 @@ import pandas as pd
 import psycopg2
 from sklearn.preprocessing import LabelEncoder
 from sklearn.cluster import KMeans
-import matplotlib.pyplot as plt
 import numpy as np
-from random import randint
-from random import random
-from sklearn import metrics
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -64,12 +60,18 @@ def cluster(scelto, altri):
     listHobby = []
     listaId = []
 
-    ## lo studente scelto è già nella lista
+
+    # 1 = DONNE
+    # 0 = UOMINI
+    # 2 = ENTRAMBI // ALTRO
+
     for studente in altri:
-        listaId.append(studente["studente"][9])
-        listaAltezze.append(studente["studente"][10])
-        listaDate.append(str(studente["studente"][14])[0:4])
-        listHobby.append(studente["hobbies"])
+        ## aggiunti gli studenti al dataset in base ai loro interessi
+        if(scelto['studente'][15] == 0 and studente['studente'][21] == 0) or (scelto['studente'][15] == 1 and studente['studente'][21] == 1) or scelto['studente'][15] ==2:
+            listaId.append(studente["studente"][9])
+            listaAltezze.append(studente["studente"][10])
+            listaDate.append(str(studente["studente"][14])[0:4])
+            listHobby.append(studente["hobbies"])
 
     df = pd.DataFrame(listaAltezze, columns=['altezza'])
     df['date'] = listaDate
@@ -81,9 +83,6 @@ def cluster(scelto, altri):
     hobbies_df = hobbies_df.sum(level=0)
     df = pd.concat([df, hobbies_df], axis=1)
     df = df.drop('hobby', axis=1)
-
-
-
 
     labelEncoder = LabelEncoder()
     labelEncoder.fit(df['altezza'])
@@ -104,7 +103,6 @@ def cluster(scelto, altri):
     label = kmeans.labels_
     u_labels = np.unique(label)
 
-
     """
     for i in u_labels:
         filtered = df[label == i]
@@ -117,16 +115,28 @@ def cluster(scelto, altri):
     for index in range(len(cluster)):
         listaUtenti.append({
             'id_profilo': listaId[index],
-            'cluster' : cluster[index]
+            'cluster': cluster[index]
         })
 
     scelto = listaUtenti.pop()
 
     toReturn = []
 
+    ## suggerisce un massimo di 15 utenti dello stesso cluster
+    print(scelto['cluster'], ' utente scelto')
     for utente in listaUtenti:
-        if utente['cluster'] == scelto['cluster']:
+        if utente['cluster'] == scelto['cluster'] and len(toReturn) < 15:
             toReturn.append(utente['id_profilo'])
+            listaUtenti.remove(utente)
+        elif len(toReturn) >= 15: break
+
+    ## suggerisce 5 utenti di un diverso cluster
+    for utente in listaUtenti:
+        if (utente['cluster'] == scelto['cluster'] + 1 or utente['cluster'] == scelto['cluster'] - 1) and len(toReturn) < 20:
+            toReturn.append(utente['id_profilo'])
+            listaUtenti.remove(utente)
+        elif len(toReturn) >= 20: break
+
 
     return toReturn
 
@@ -135,8 +145,6 @@ def cluster(scelto, altri):
         if cluster[i] == clusterScelto :
             listaUtenti.append(i)
     """
-
-
 
 
 app.run()

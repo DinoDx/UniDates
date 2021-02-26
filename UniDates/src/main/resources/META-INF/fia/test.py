@@ -16,25 +16,39 @@ import seaborn as sns
 
 # print(data[0:5])
 
+sizeCSV = 440
 
 pd.set_option("display.max.columns", None)
 nba = pd.read_csv("UniDates.csv")
 
 # Prendo tutti gli interessi
-arrayInteressi = np.array(nba["Quali sono i tuoi interessi? (possibile scelta multipla)"])
 
 # Rimuovo tutte le colonne inutili
 toDelete = ["Informazioni cronologiche", "Sei interessato a.. (possibile scelta multipla)",
             "Cosa è importante per te in una persona? (possibile scelta multipla)",
             "Quanto reputi utile un sito dating?", "Se si, frequenti..", "Per cosa useresti il nostro sito di dating?",
-            "Quali sono i tuoi interessi? (possibile scelta multipla)"]
+            "Qual è il colore dei tuoi occhi?", "Qual è il colore dei tuoi capelli?", "Studi?"]
+
 toTest = nba.drop(toDelete, axis=1)
+
+for i in range(len(toTest["Quali sono i tuoi interessi? (possibile scelta multipla)"])):
+    toTest["Quali sono i tuoi interessi? (possibile scelta multipla)"][i] = toTest["Quali sono i tuoi interessi? (possibile scelta multipla)"][i].split(";")
+
+
+
+hobbies_df = pd.DataFrame(toTest["Quali sono i tuoi interessi? (possibile scelta multipla)"].tolist())
+hobbies_obj = hobbies_df.stack()
+hobbies_df = pd.get_dummies(hobbies_obj)
+hobbies_df = hobbies_df.sum(level=0)
+toTest = pd.concat([toTest, hobbies_df], axis=1)
+toTest = toTest.drop("Quali sono i tuoi interessi? (possibile scelta multipla)", axis=1)
 
 # Codifica le stringhe in interi
 labelEncoder = LabelEncoder()
+
 for column in toTest:
     if column == "Quanti anni hai?":
-        for i in range(440):
+        for i in range(sizeCSV):
             if toTest[column][i] == "18 - 25":
                 toTest[column][i] = randint(18, 25)
             elif toTest[column][i] == "26 - 35":
@@ -48,41 +62,20 @@ for column in toTest:
             elif toTest[column][i] == "Meno di 18":
                 toTest[column][i] = randint(10, 17)
     else:
+        if column == "Quanto sei alto?":
+            for i in range(sizeCSV):
+                    if toTest[column][i] == "Meno di 1,40m":
+                        toTest[column][i] = randint(100, 140)
+                    elif toTest[column][i] == "1,41m - 1,60m":
+                        toTest[column][i] = randint(141, 160)
+                    elif toTest[column][i] == "1,61m - 1,80m":
+                        toTest[column][i] = randint(161, 180)
+                    elif toTest[column][i] == "1,81m - 2m":
+                        toTest[column][i] = randint(181, 200)
+                    elif toTest[column][i] == "Più di 2m":
+                        toTest[column][i] = randint(200, 210)
         labelEncoder.fit(toTest[column])
         toTest[column] = labelEncoder.transform(toTest[column])
-
-# Aggiungo la l'array di Topic al DataSet
-arrayTopic = []
-allTopics = []
-for i in arrayInteressi:
-    topicSingoloUtente = i.split(";")
-    for topic in topicSingoloUtente:
-        if topic not in allTopics:
-            allTopics.append(topic)
-    arrayTopic.append(topicSingoloUtente)
-
-# Creo una matrice di array di booleani per ogni topic presente
-booleanMatrix = []
-for lista in arrayTopic:
-    booleanArray = []
-    for i in range(len(allTopics)):
-        if allTopics[i] in lista:
-            booleanArray.append(1)
-        else:
-            booleanArray.append(0)
-    booleanMatrix.append(booleanArray)
-
-# Aggiunge per ogni topic una colonna alla tabella e se il topic é stato scelto dall'utente, viene messo 1 nella casella corrispondente
-for topic in allTopics:
-    toTest[topic] = 0
-
-counter = 0
-for topic in allTopics:
-    for i in range(440):
-        toTest[topic][i] = booleanMatrix[i][counter]
-    counter += 1
-
-# kmeans con indice di silhouette
 
 
 k_to_test = range(2, 40, 1)
@@ -106,19 +99,17 @@ label = kmeans.labels_
 u_labels = np.unique(label)
 
 toTest["cluster"] = kmeans.labels_
-toTest["combinazione"] = toTest["Quanti anni hai?"] * random() * 0.2 + toTest["Sei.."] * toTest[
-    "Quanto sei alto?"] * random() * toTest["Qual è il colore dei tuoi occhi?"] * toTest[
-                             "Qual è il colore dei tuoi capelli?"]
-
 for i in u_labels:
     filtered = toTest[label == i]
-    plt.scatter(filtered["combinazione"], filtered["Quanti anni hai?"])
+    plt.scatter(filtered["Quanto sei alto?"], filtered["Quanti anni hai?"])
 plt.show()
 
 plt.plot(k_to_test, inertia, 'bx-')
 plt.xlabel('k')
 plt.ylabel('Inertia')
 plt.show()
+
+print(toTest.head())
 
 """
 pca = PCA(2)
