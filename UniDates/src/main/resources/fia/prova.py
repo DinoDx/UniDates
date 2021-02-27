@@ -61,13 +61,17 @@ def cluster(scelto, altri):
     listaId = []
 
 
+    #15 interesse, 21 sesso
     # 1 = DONNE
     # 0 = UOMINI
     # 2 = ENTRAMBI // ALTRO
 
     for studente in altri:
         ## aggiunti gli studenti al dataset in base ai loro interessi
-        if(scelto['studente'][15] == 0 and studente['studente'][21] == 0) or (scelto['studente'][15] == 1 and studente['studente'][21] == 1) or scelto['studente'][15] ==2:
+        if(scelto['studente'][15] != 2 and studente['studente'][15] != 2 and scelto['studente'][15] == studente['studente'][21] and scelto['studente'][21] == studente['studente'][15]) or \
+                (scelto['studente'][15] == 2 and studente['studente'][15] != 2 and scelto['studente'][21] == studente['studente'][15]) or \
+                (scelto['studente'][15] != 2 and studente['studente'][15] == 2 and scelto['studente'][15] == studente['studente'][21]) or \
+                (scelto['studente'][15] == 2 and studente['studente'][15] == 2):
             listaId.append(studente["studente"][9])
             listaAltezze.append(studente["studente"][10])
             listaDate.append(str(studente["studente"][14])[0:4])
@@ -81,34 +85,21 @@ def cluster(scelto, altri):
     hobbies_obj = hobbies_df.stack()
     hobbies_df = pd.get_dummies(hobbies_obj)
     hobbies_df = hobbies_df.sum(level=0)
+
     df = pd.concat([df, hobbies_df], axis=1)
     df = df.drop('hobby', axis=1)
 
-    labelEncoder = LabelEncoder()
-    labelEncoder.fit(df['altezza'])
-    df['altezza'] = labelEncoder.transform(df['altezza'])
+    #labelEncoder = LabelEncoder()
+    #labelEncoder.fit(df['altezza'])
+    #df['altezza'] = labelEncoder.transform(df['altezza'])
 
-    """
-    for column in df:
-        labelEncoder.fit(df[column])
-        df[column] = labelEncoder.transform(df[column])
-    """
 
-    kmeans = KMeans(n_clusters=4)
+    kmeans = KMeans(n_clusters=5)
     kmeans.fit(df)
 
     df['cluster'] = kmeans.labels_
     df['idProfilo'] = listaId
 
-    label = kmeans.labels_
-    u_labels = np.unique(label)
-
-    """
-    for i in u_labels:
-        filtered = df[label == i]
-        plt.scatter(filtered['date'], filtered['altezza'])
-    plt.show()
-    """
 
     listaUtenti = []
     cluster = df['cluster'].tolist()
@@ -123,7 +114,6 @@ def cluster(scelto, altri):
     toReturn = []
 
     ## suggerisce un massimo di 15 utenti dello stesso cluster
-    print(scelto['cluster'], ' utente scelto')
     for utente in listaUtenti:
         if utente['cluster'] == scelto['cluster'] and len(toReturn) < 15:
             toReturn.append(utente['id_profilo'])
@@ -139,12 +129,6 @@ def cluster(scelto, altri):
 
 
     return toReturn
-
-    """
-    for i in range(len(cluster)):
-        if cluster[i] == clusterScelto :
-            listaUtenti.append(i)
-    """
 
 
 app.run()
