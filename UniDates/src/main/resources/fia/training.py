@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from random import randint
 from sklearn.cluster import KMeans
 from sklearn import metrics
+from sklearn.decomposition import PCA
 
 pd.set_option("display.max.columns", None)
 nba = pd.read_csv("UniDates.csv")
@@ -109,6 +110,36 @@ for i in u_labels:
     plt.scatter(filtered["Quanto sei alto?"],
                 filtered["Quanti anni hai?"])
 plt.show()
+
+""" provato ad applicare la PCA ma non migliora l'indice di forma
+pca = PCA(10)
+pca.fit(toTest)
+pca_data = pd.DataFrame(pca.transform(toTest))
+
+best_number = 0
+best_score = 0
+
+silhouette_scores = []
+inertia = []
+
+for k in k_to_test:
+    model_kmeans_k = KMeans(n_clusters=k)
+    model_kmeans_k.fit(pca_data)
+    labels_k = model_kmeans_k.labels_
+    score_k = metrics.silhouette_score(pca_data, labels_k)
+    silhouette_scores.append(score_k)
+    inertia.append(model_kmeans_k.inertia_)
+    if score_k > best_score:
+        best_score = score_k
+        best_number = k
+
+plt.plot(k_to_test, silhouette_scores, 'bx-')
+plt.xlabel('k')
+plt.ylabel('silhouette_scores')
+plt.show()
+"""
+
+
 
 # print(k_to_test, " ", len(k_to_test))
 # print(silhouette_scores, " ", len(silhouette_scores))
