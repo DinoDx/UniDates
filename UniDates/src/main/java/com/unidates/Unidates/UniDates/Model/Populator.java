@@ -48,26 +48,17 @@ public class Populator implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        //Aggiungo 3 utenti
 
-        Studente s1 = new Studente("studenteprova1@gmail.com","studenteprova1");
-        s1.setActive(true);
-
-        ArrayList<String> hobbyArrayList = new ArrayList<String>();
-        hobbyArrayList.add(Hobby.ARTE.toString());
-        hobbyArrayList.add(Hobby.ANIME.toString());
-        hobbyArrayList.add(Hobby.CALCIO.toString());
-
-
-        Profilo p1 = new Profilo("Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,new Foto(downloadUrl(LINK)) ,hobbyArrayList);
-        p1.setNumeroTelefono("3333339900");
-        p1.setNickInstagram("marco.prova1");
-
-
-
-        Foto f = new Foto(downloadUrl(LINK));
+        byte[] img = {1,3,4}; // download(LINK)
+        Foto f = new Foto(img);
 
         ArrayList<Hobby> hobbies;
+        hobbies = new ArrayList<>(Arrays.asList(new Hobby[]{
+                Hobby.MUSICA,Hobby.SERIE_TV,Hobby.TV,Hobby.VIDEOGIOCHI,Hobby.VIAGGI,Hobby.STORIA,Hobby.CUCINA,Hobby.NATURA,Hobby.FOTOGRAFIA
+        }));
+
+        createStudente("studenteprova1@gmail.com","studenteprova1", "Marco", "Prova1", "Napoli", "Napoli", LocalDate.of(1999,2,10), 1.70, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.AMBRA, Colore_Occhi.AZZURRI,f, hobbies );
+
         hobbies = new ArrayList<>(Arrays.asList(new Hobby[]{
                 Hobby.MUSICA,Hobby.SERIE_TV,Hobby.TV,Hobby.VIDEOGIOCHI,Hobby.VIAGGI,Hobby.STORIA,Hobby.CUCINA,Hobby.NATURA,Hobby.FOTOGRAFIA
         }));
@@ -332,64 +323,68 @@ public class Populator implements ApplicationRunner {
         }));
         createStudente("dario50@gmail.com","dario50","Dario","Moccia","Livorno","Livorno",LocalDate.of(1997,01,01),1.80,Sesso.UOMO,Interessi.DONNE, Colori_Capelli.CASTANI,Colore_Occhi.CASTANI, f,hobbies);
 
+        ArrayList<String> hobbyArrayList = new ArrayList<>();
+        hobbyArrayList.add(Hobby.CALCIO.toString());
+        hobbyArrayList.add(Hobby.ANIME.toString());
 
         //Aggiungo un moderatore
-        Moderatore m1 = new Moderatore("moderatore@gmail.com", "moderatore");
-        Profilo p4 = new Profilo("Marcello", "Moderatore", "Napoli", "Napoli", LocalDate.of(1999,6,12), 170, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.GRIGI, Colore_Occhi.AZZURRI,new Foto(downloadUrl(LINK)),hobbyArrayList );
-        p4.addFoto(new Foto(downloadUrl(LINK)), false);
-        p4.addFoto(new Foto(downloadUrl(LINK)), false);
-        p4.addFoto(new Foto(downloadUrl(LINK)), false);
-
-
-
-
-        //Aggiungo un communityManager
-
-        CommunityManager cm1 = new CommunityManager("communitymanager@gmail.com","communitymanager");
-        Profilo p5 = new Profilo("Francesca", "CM", "Napoli", "Napoli", LocalDate.of(1980,7,12), 170, Sesso.DONNA, Interessi.UOMINI, Colori_Capelli.CASTANI, Colore_Occhi.AZZURRI, new Foto(downloadUrl(LINK)),hobbyArrayList);
-        p5.addFoto(new Foto(downloadUrl(LINK)), false);
-        p5.addFoto(new Foto(downloadUrl(LINK)), false);
-        p5.addFoto(new Foto(downloadUrl(LINK)), false);
-
+        createModeratore("moderatore@gmail.com", "moderatore", "Marcello", "Moderatore", "Napoli", "Napoli", LocalDate.of(1999,6,12), 1.70, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.GRIGI, Colore_Occhi.AZZURRI,f,hobbies);
+        createCommunityManager("communitymanager@gmail.com","communitymanager", "Francesca", "CM", "Napoli", "Napoli", LocalDate.of(1980,7,12), 1.70, Sesso.DONNA, Interessi.UOMINI, Colori_Capelli.CASTANI, Colore_Occhi.AZZURRI,f,hobbies);
+        /*
         try {
+
             utenteService.registrazioneStudente(s1, p1); //usati solo per skippare l'invio email di conferma
 
-            utenteService.registrazioneCommunityManager(cm1, p5);
-            utenteService.registrazioneModeratore(m1, p4);
 
 
-
-
-            /*matchManager.aggiungiMatch(s1.getEmail(), s2.getEmail());
+            matchManager.aggiungiMatch(s1.getEmail(), s2.getEmail());
             matchManager.aggiungiMatch(s2.getEmail(), s1.getEmail());
             notificaManager.generateNotificaMatch(s1.getEmail(), s2.getEmail());
             matchManager.aggiungiMatch(s1.getEmail(), s3.getEmail());
             matchManager.aggiungiMatch(s3.getEmail(), s1.getEmail());
-            notificaManager.generateNotificaMatch(s1.getEmail(), s3.getEmail());*/
+            notificaManager.generateNotificaMatch(s1.getEmail(), s3.getEmail());
 
             moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli1"),utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
-          /*  moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.NUDITA, "dettagli2"),utenteService.trovaStudente(s2.getEmail()).getProfilo().getFotoProfilo().getId());
+            moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.NUDITA, "dettagli2"),utenteService.trovaStudente(s2.getEmail()).getProfilo().getFotoProfilo().getId());
             moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.VIOLENZA , "dettagli3"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
             moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.NUDITA, "dettagli5"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
-            moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.VIOLENZA, "dettagli6"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(2).getId()); */
+            moderazioneManager.inviaSegnalazione(new Segnalazione(Motivazione.VIOLENZA, "dettagli6"),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(2).getId());
 
             moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.CONETNUTO_NON_PERTINENTE, "dettagli1"), m1.getEmail(), s1.getEmail(), utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
             notificaManager.genereateNotificaWarning(s1.getEmail(), utenteService.trovaStudente(s1.getEmail()).getProfilo().getFotoProfilo().getId());
-           /* moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.SPAM, "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
-            notificaManager.genereateNotificaWarning(s3.getEmail(), utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId()); */
+            moderazioneManager.inviaAmmonimento(new Ammonimento(Motivazione.SPAM, "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
+            notificaManager.genereateNotificaWarning(s3.getEmail(), utenteService.trovaStudente(s3.getEmail()).getProfilo().getFotoProfilo().getId());
 
             System.out.println("Populator eseguito correttamente!");
         }
         catch (AlreadyExistException existUserException){
             existUserException.printStackTrace();
         }
+        */
 
 
+    }
 
+    private CommunityManager createCommunityManager(String email, String password, String nome, String cognome, String luogodinasciata, String residenza, LocalDate compleanno, Double altezza, Sesso sesso, Interessi interessi, Colori_Capelli capelli, Colore_Occhi occhi, Foto foto, ArrayList<Hobby> hobby) {
+        CommunityManager studenteCluster = new CommunityManager(email, password);
+        studenteCluster.setActive(true);
+        ArrayList<String> hobbyList = new ArrayList<>();
+        hobby.forEach(hobby1 -> hobbyList.add(hobby1.toString()));
+        Profilo profiloCluster = new Profilo(nome,cognome,luogodinasciata,residenza,compleanno,altezza,sesso,interessi,capelli,occhi,foto,hobbyList);
+        studenteCluster.setProfilo(profiloCluster);
+        utenteService.registrazioneCommunityManager(studenteCluster,profiloCluster);
+        return studenteCluster;
+    }
 
-       // moderazioneService.inviaAmmonimento(new Ammonimento("motivazione3", "dettagli3"), m1.getEmail(), s3.getEmail(),utenteService.trovaStudente(s3.getEmail()).getProfilo().getListaFoto().get(1).getId());
-
-
+    private Moderatore createModeratore(String email, String password, String nome, String cognome, String luogodinasciata, String residenza, LocalDate compleanno, Double altezza, Sesso sesso, Interessi interessi, Colori_Capelli capelli, Colore_Occhi occhi, Foto foto, ArrayList<Hobby> hobby) {
+        Moderatore studenteCluster = new Moderatore(email, password);
+        studenteCluster.setActive(true);
+        ArrayList<String> hobbyList = new ArrayList<>();
+        hobby.forEach(hobby1 -> hobbyList.add(hobby1.toString()));
+        Profilo profiloCluster = new Profilo(nome,cognome,luogodinasciata,residenza,compleanno,altezza,sesso,interessi,capelli,occhi,foto,hobbyList);
+        studenteCluster.setProfilo(profiloCluster);
+        utenteService.registrazioneModeratore(studenteCluster,profiloCluster);
+        return studenteCluster;
     }
 
 

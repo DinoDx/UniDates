@@ -51,7 +51,7 @@ public class UserManager {
         if(!isPresent(m.getEmail())) {
             m.setProfilo(p);
             m.setPassword(passwordEncoder.encode(m.getPassword()));
-            utenteRepository.save(m);
+            utenteRepository.saveAndFlush(m);
             return m;
         }
         else throw new AlreadyExistException("Utente giá registrato con questa email!!");
@@ -61,7 +61,7 @@ public class UserManager {
         if(!isPresent(cm.getEmail())) {
             cm.setProfilo(p);
             cm.setPassword(passwordEncoder.encode(cm.getPassword()));
-            utenteRepository.save(cm);
+            utenteRepository.saveAndFlush(cm);
             return cm;
         }
         else throw new AlreadyExistException("Utente giá registrato con questa email!!");

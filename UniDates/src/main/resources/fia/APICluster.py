@@ -14,13 +14,20 @@ app.config["DEBUG"] = True
 def home():
     query_parameters = request.args
     email = query_parameters.get('email')
-    toreturn = ""
-    for id in query(email):
+
+    studente_scelto, lista_altri_studenti = seleziona_studenti(email)
+    cluster_effettuato = effettua_cluster(studente_scelto, lista_altri_studenti)
+
+    # viene ritornata una lista di id profilo per lo studente scelto, ne creo una stringa
+
+    toreturn = ''
+
+    for id in cluster_effettuato:
         toreturn += str(id) + " "
     return toreturn
 
 
-def query(email):
+def seleziona_studenti(email):
     connection = psycopg2.connect(
         host="localhost",
         database="spring_unidates",
@@ -35,9 +42,11 @@ def query(email):
     tuttiGliStudenti = cursor.fetchall()
     listaStudenti = []
     studenteScelto = {}
+
     for studente in tuttiGliStudenti:
         hobbyListStudente = []
         cursor.execute("SELECT * FROM Profilo_hobby_list as phl WHERE phl.profilo_id =" + str(studente[8]))
+
         for hobby in cursor.fetchall():
             hobbyListStudente.append(hobby[1])
         studenteCompleto = {
@@ -49,33 +58,44 @@ def query(email):
         else:
             listaStudenti.append(studenteCompleto)
 
-    listaStudenti.append(studenteCompleto)
-    return cluster(studenteScelto, listaStudenti)
+    return studenteScelto, listaStudenti
 
 
-def cluster(scelto, altri):
+def effettua_cluster(studente_scelto, altri_studenti):
     pd.set_option("display.max.columns", None)
+
     listaAltezze = []
     listaDate = []
     listHobby = []
     listaId = []
 
-
-    #15 interesse, 21 sesso
+    # 15 interesse, 21 sesso
     # 1 = DONNE
     # 0 = UOMINI
     # 2 = ENTRAMBI // ALTRO
 
-    for studente in altri:
-        ## aggiunti gli studenti al dataset in base ai loro interessi
-        if(scelto['studente'][15] != 2 and studente['studente'][15] != 2 and scelto['studente'][15] == studente['studente'][21] and scelto['studente'][21] == studente['studente'][15]) or \
-                (scelto['studente'][15] == 2 and studente['studente'][15] != 2 and scelto['studente'][21] == studente['studente'][15]) or \
-                (scelto['studente'][15] != 2 and studente['studente'][15] == 2 and scelto['studente'][15] == studente['studente'][21]) or \
-                (scelto['studente'][15] == 2 and studente['studente'][15] == 2):
+    # Aggiungo gli studenti al dataset in base agli interessi dello scelto
+    for studente in altri_studenti:
+        if (studente_scelto['studente'][15] != 2 and studente['studente'][15] != 2 and studente_scelto['studente'][
+            15] ==
+            studente['studente'][21] and studente_scelto['studente'][21] == studente['studente'][15]) or \
+                (studente_scelto['studente'][15] == 2 and studente['studente'][15] != 2 and studente_scelto['studente'][
+                    21] ==
+                 studente['studente'][15]) or \
+                (studente_scelto['studente'][15] != 2 and studente['studente'][15] == 2 and studente_scelto['studente'][
+                    15] ==
+                 studente['studente'][21]) or \
+                (studente_scelto['studente'][15] == 2 and studente['studente'][15] == 2):
             listaId.append(studente["studente"][9])
             listaAltezze.append(studente["studente"][10])
             listaDate.append(str(studente["studente"][14])[0:4])
             listHobby.append(studente["hobbies"])
+
+    # Aggiungo lo studente scelto al dataset
+    listaId.append(studente_scelto["studente"][9])
+    listaAltezze.append(studente_scelto["studente"][10])
+    listaDate.append(str(studente_scelto["studente"][14])[0:4])
+    listHobby.append(studente_scelto["hobbies"])
 
     df = pd.DataFrame(listaAltezze, columns=['altezza'])
     df['date'] = listaDate
@@ -89,17 +109,11 @@ def cluster(scelto, altri):
     df = pd.concat([df, hobbies_df], axis=1)
     df = df.drop('hobby', axis=1)
 
-    #labelEncoder = LabelEncoder()
-    #labelEncoder.fit(df['altezza'])
-    #df['altezza'] = labelEncoder.transform(df['altezza'])
-
-
     kmeans = KMeans(n_clusters=5)
     kmeans.fit(df)
 
     df['cluster'] = kmeans.labels_
     df['idProfilo'] = listaId
-
 
     listaUtenti = []
     cluster = df['cluster'].tolist()
@@ -118,15 +132,17 @@ def cluster(scelto, altri):
         if utente['cluster'] == scelto['cluster'] and len(toReturn) < 15:
             toReturn.append(utente['id_profilo'])
             listaUtenti.remove(utente)
-        elif len(toReturn) >= 15: break
+        elif len(toReturn) >= 15:
+            break
 
     ## suggerisce 5 utenti di un diverso cluster
     for utente in listaUtenti:
-        if (utente['cluster'] == scelto['cluster'] + 1 or utente['cluster'] == scelto['cluster'] - 1) and len(toReturn) < 20:
+        if (utente['cluster'] == scelto['cluster'] + 1 or utente['cluster'] == scelto['cluster'] - 1) and len(
+                toReturn) < 20:
             toReturn.append(utente['id_profilo'])
             listaUtenti.remove(utente)
-        elif len(toReturn) >= 20: break
-
+        elif len(toReturn) >= 20:
+            break
 
     return toReturn
 
