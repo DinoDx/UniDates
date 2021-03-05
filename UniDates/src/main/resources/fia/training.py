@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from random import randint
 from sklearn.cluster import KMeans
 from sklearn import metrics
+import random
 from sklearn.decomposition import PCA
 
 pd.set_option("display.max.columns", None)
@@ -31,6 +32,21 @@ hobbies_df = pd.DataFrame(toTest["Quali sono i tuoi interessi? (possibile scelta
 hobbies_obj = hobbies_df.stack()
 hobbies_df = pd.get_dummies(hobbies_obj)
 hobbies_df = hobbies_df.sum(level=0)
+
+""" modifiche proposte dal professore ma per ora sembrano non migliorare l'indice di forma
+lista_contatore = []
+
+for row in range(sizeCSV):
+    contatore = 0;
+    for column in hobbies_df:
+        if hobbies_df[column][row] == 1:
+            contatore+=1
+    lista_contatore.append(contatore)
+
+for row in range(sizeCSV):
+    for column in hobbies_df:
+        hobbies_df[column][row] = hobbies_df[column][row] * ((24 - lista_contatore[row])/25) *10
+"""
 toTest = pd.concat([toTest, hobbies_df], axis=1)
 toTest = toTest.drop("Quali sono i tuoi interessi? (possibile scelta multipla)", axis=1)
 
@@ -65,6 +81,8 @@ for column in toTest:
 k_to_test = range(2, 40, 1)
 
 plt.scatter(toTest["Quanto sei alto?"], toTest["Quanti anni hai?"])
+plt.xlabel("Altezza (cm)")
+plt.ylabel("Etá")
 plt.show()
 
 toTest["cluster"] = 0
@@ -109,9 +127,13 @@ for i in u_labels:
     filtered = toTest[label == i]
     plt.scatter(filtered["Quanto sei alto?"],
                 filtered["Quanti anni hai?"])
+
+plt.xlabel("Altezza (cm) ")
+plt.ylabel("Etá")
 plt.show()
 
-""" provato ad applicare la PCA ma non migliora l'indice di forma
+"""
+#provato ad applicare la PCA ma non migliora l'indice di forma
 pca = PCA(10)
 pca.fit(toTest)
 pca_data = pd.DataFrame(pca.transform(toTest))
@@ -138,7 +160,6 @@ plt.xlabel('k')
 plt.ylabel('silhouette_scores')
 plt.show()
 """
-
 
 
 # print(k_to_test, " ", len(k_to_test))
