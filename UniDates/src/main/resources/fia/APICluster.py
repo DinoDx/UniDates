@@ -109,7 +109,7 @@ def effettua_cluster(studente_scelto, altri_studenti):
     df = pd.concat([df, hobbies_df], axis=1)
     df = df.drop('hobby', axis=1)
 
-    kmeans = KMeans(n_clusters=5)
+    kmeans = KMeans(n_clusters=6)
     kmeans.fit(df)
 
     df['cluster'] = kmeans.labels_
@@ -127,7 +127,7 @@ def effettua_cluster(studente_scelto, altri_studenti):
 
     toReturn = []
 
-    ## suggerisce un massimo di 15 utenti dello stesso cluster
+    # suggerisce un massimo di 15 utenti dello stesso cluster
     for utente in listaUtenti:
         if utente['cluster'] == scelto['cluster'] and len(toReturn) < 15:
             toReturn.append(utente['id_profilo'])
@@ -135,7 +135,7 @@ def effettua_cluster(studente_scelto, altri_studenti):
         elif len(toReturn) >= 15:
             break
 
-    ## suggerisce 5 utenti di un diverso cluster
+    # suggerisce 5 utenti di un diverso cluster
     for utente in listaUtenti:
         if (utente['cluster'] == scelto['cluster'] + 1 or utente['cluster'] == scelto['cluster'] - 1) and len(
                 toReturn) < 20:

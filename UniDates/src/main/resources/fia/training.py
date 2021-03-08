@@ -89,29 +89,30 @@ toTest["cluster"] = 0
 best_number = 0
 best_score = 0
 
-silhouette_scores = []
-inertia = []
+for i in range(5):
+    silhouette_scores = []
+    inertia = []
 
-for k in k_to_test:
-    model_kmeans_k = KMeans(n_clusters=k)
-    model_kmeans_k.fit(toTest.drop("cluster", axis=1))
-    labels_k = model_kmeans_k.labels_
-    score_k = metrics.silhouette_score(toTest.drop("cluster", axis=1), labels_k)
-    silhouette_scores.append(score_k)
-    inertia.append(model_kmeans_k.inertia_)
-    if score_k > best_score:
-        best_score = score_k
-        best_number = k
+    for k in k_to_test:
+        model_kmeans_k = KMeans(n_clusters=k)
+        model_kmeans_k.fit(toTest.drop("cluster", axis=1))
+        labels_k = model_kmeans_k.labels_
+        score_k = metrics.silhouette_score(toTest.drop("cluster", axis=1), labels_k)
+        silhouette_scores.append(score_k)
+        inertia.append(model_kmeans_k.inertia_)
+        if score_k > best_score:
+            best_score = score_k
+            best_number = k
 
-plt.plot(k_to_test, inertia, 'bx-')
-plt.xlabel('k')
-plt.ylabel('Inertia')
-plt.show()
+    plt.plot(k_to_test, inertia, 'bx-')
+    plt.xlabel('k')
+    plt.ylabel('Inertia')
+    plt.show()
 
-plt.plot(k_to_test, silhouette_scores, 'bp-')
-plt.xlabel("k")
-plt.ylabel("Indice di forma")
-plt.show()
+    plt.plot(k_to_test, silhouette_scores, 'bp-')
+    plt.xlabel("k")
+    plt.ylabel("Indice di forma")
+    plt.show()
 
 # print("Testato il K-Means con k =%d\tIndice di silhouette: %5.4f" % (k, score_k))
 
