@@ -143,6 +143,7 @@ public class ProfiloPersonalePage extends VerticalLayout {
         img.getStyle().set("width","200px");
         img.getStyle().set("height","200px");
         image.add(img, cambiaFotoProfilo());
+        image.setAlignItems(Alignment.CENTER);
         return image;
     }
 
@@ -306,13 +307,13 @@ public class ProfiloPersonalePage extends VerticalLayout {
 
         numero.setId("numero-mod");
         if(studente.getProfilo().getNumeroTelefono() == null)
-            numero.setValue("Numero non presente!");
+            numero.setPlaceholder("Numero non presente!");
         else numero.setValue(studente.getProfilo().getNumeroTelefono());
         numero.setEnabled(false);
 
         instagram.setId("contatto-mod");
         if(studente.getProfilo().getNickInstagram() == null)
-            instagram.setValue("Nickname instagram non presente!");
+            instagram.setPlaceholder("Nickname instagram non presente!");
         else instagram.setValue(studente.getProfilo().getNickInstagram());
 
         instagram.setEnabled(false);

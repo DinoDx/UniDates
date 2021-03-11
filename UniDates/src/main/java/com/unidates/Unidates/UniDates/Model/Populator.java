@@ -49,7 +49,7 @@ public class Populator implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        byte[] img = {1,3,4}; // download(LINK)
+        byte[] img = downloadUrl(LINK); //{1,3,4}; //
         Foto f = new Foto(img);
 
         ArrayList<Hobby> hobbies;
