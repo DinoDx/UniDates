@@ -8,16 +8,14 @@ import com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.InvalidFormatException;
 import com.unidates.Unidates.UniDates.Model.Enum.Hobby;
+import com.unidates.Unidates.UniDates.Model.Enum.Interessi;
 import com.unidates.Unidates.UniDates.Model.Enum.Motivazione;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -62,11 +60,12 @@ public class CardUtenteHome extends Div {
         //layput padre
         VerticalLayout contenitore = new VerticalLayout();
         contenitore.setSpacing(false);
-        contenitore.getStyle().set("background-color",  "var(--lumo-tint-30pct)");
-        contenitore.getStyle().set("border", "1px solid var(--lumo-tint-80pct) ");
-        contenitore.getStyle().set("border-radius", "5px");
-        contenitore.getStyle().set("width","640px");
-        contenitore.getStyle().set("height","725px");
+        contenitore.getStyle().set("background-color",  "var(--lumo-tint-5pct)");
+        contenitore.getStyle().set("border", "1px solid var(--lumo-tint-30pct) ");
+        contenitore.getStyle().set("border-radius", "1rem");
+        contenitore.getStyle().set("margin", "1rem auto");
+        contenitore.getStyle().set("min-width", "650px");
+        contenitore.getStyle().set("min-height", "800px");
 
         //layout sinistra con foto e pulsanti
         VerticalLayout layout_foto = new VerticalLayout();
@@ -77,8 +76,12 @@ public class CardUtenteHome extends Div {
             fotoCard = studente.getProfilo().getFotoProfilo();
             StreamResource resource = new StreamResource("ciao", () -> new ByteArrayInputStream(studente.getProfilo().getFotoProfilo().getImg()));
             image_profilo = new Image(resource, "");
-            image_profilo.getStyle().set("width", "350px");
-            image_profilo.getStyle().set("height", "350px");
+            image_profilo.getStyle().set("width", "500px");
+            image_profilo.getStyle().set("height", "500px");
+            image_profilo.getStyle().set("border", "5px solid var(--lumo-tint-10pct) ");
+            image_profilo.getStyle().set("border-radius", "1rem");
+
+            image_profilo.getStyle().set("object-fit", "cover");
         }
         else {
 
@@ -109,7 +112,7 @@ public class CardUtenteHome extends Div {
             nome_cognome.setSpacing(false);
 
             Anchor profilo = new Anchor("ricercaprofilo/" + studente.getEmail());
-            Span nome = new Span(studente.getProfilo().getNome() + " " + studente.getProfilo().getCognome());
+            H2 nome = new H2(studente.getProfilo().getNome());
             profilo.add(nome);
             nome_cognome.add(profilo);
 
@@ -130,37 +133,60 @@ public class CardUtenteHome extends Div {
                     Button topicSingolo = new Button(topic.toString().toLowerCase());
                     topicSingolo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
                     topicSingolo.setEnabled(false);
+
                     layoutTopicUno.add(topicSingolo);
+
                 }else if(layoutTopicDue.getComponentCount() <5){
                     Button topicSingolo = new Button(topic.toString().toLowerCase());
                     topicSingolo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
                     topicSingolo.setEnabled(false);
+
                     layoutTopicDue.add(topicSingolo);
+
                 }else if(layoutTopicTre.getComponentCount() <5) {
                     Button topicSingolo = new Button(topic.toString().toLowerCase());
                     topicSingolo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
                     topicSingolo.setEnabled(false);
+
                     layoutTopicTre.add(topicSingolo);
+
                 }else if(layoutTopicQuattro.getComponentCount() <5) {
                     Button topicSingolo = new Button(topic.toString().toLowerCase());
                     topicSingolo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
                     topicSingolo.setEnabled(false);
+
                     layoutTopicQuattro.add(topicSingolo);
+
                 }else if(layoutTopicCinque.getComponentCount() <5) {
                     Button topicSingolo = new Button(topic.toString().toLowerCase());
                     topicSingolo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
                     topicSingolo.setEnabled(false);
+
                     layoutTopicCinque.add(topicSingolo);
+
                 }
             });;
 
-            Span interessi = new Span("Interessato a: " + studente.getProfilo().getInteressi().toString().toLowerCase());
+            Span interessi = new Span("Interessi:");
+            Image interessiImage = new Image();
+            if (studente.getProfilo().getInteressi().equals(Interessi.UOMINI))
+                interessiImage.setSrc("./images/icons/male.png");
+            else if (studente.getProfilo().getInteressi().equals(Interessi.DONNE))
+                interessiImage.setSrc("./images/icons/female.png");
+            else if (studente.getProfilo().getInteressi().equals(Interessi.ENTRAMBI))
+                interessiImage.setSrc("./images/icons/bisex.png");
+
+            interessiImage.setHeight("30px");
+            interessiImage.setWidth("30px");
+
             VerticalLayout interessiLayout = new VerticalLayout();
             interessiLayout.setSpacing(false);
-            interessiLayout.add(interessi);
+            interessiLayout.add(interessi,interessiImage);
+            interessiLayout.setAlignItems(FlexComponent.Alignment.CENTER);
 
             layoutTotalTopic.add(titleTopic,layoutTopicUno,layoutTopicDue,layoutTopicTre,layoutTopicQuattro,layoutTopicCinque);
             layoutTotalTopic.setSpacing(false);
+            layoutTotalTopic.setAlignItems(FlexComponent.Alignment.CENTER);
 
             layout_info.add(interessiLayout,layoutTotalTopic);
 
