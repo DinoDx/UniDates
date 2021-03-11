@@ -112,28 +112,23 @@ public class Navbar extends AppLayout {
         //Layout Principale
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
-        layout.setWidthFull();
-        layout.setHeight("100px");
-        layout.setAlignItems(FlexComponent.Alignment.CENTER);
 
-       Anchor home = new Anchor("/");
-        viewTitle = new H1("UniDates");
-        viewTitle.getStyle().set("margin-left","30px");
-        viewTitle.getStyle().set("font-size","30px");
-        home.add(viewTitle);
+        Image logo = new Image("./images/logos/logo.png", "");
+        logo.setId("img");
+        Anchor home = new Anchor("/");
+        home.add(logo);
 
 
         //Ricerca
         HorizontalLayout filter = SearchFilter();
-        filter.setAlignItems(FlexComponent.Alignment.CENTER);
 
-        layout.add(home);
-        layout.add(SearchFilter(),menuBar,notification);
+        layout.add(home,filter,menuBar,notification);
         return layout;
     }
 
     private HorizontalLayout SearchFilter() {
        HorizontalLayout SearchBox = new HorizontalLayout();
+       SearchBox.setId("ricerca");
        SearchBox.setAlignItems(FlexComponent.Alignment.CENTER);
        SearchBox.setSpacing(false);
 
