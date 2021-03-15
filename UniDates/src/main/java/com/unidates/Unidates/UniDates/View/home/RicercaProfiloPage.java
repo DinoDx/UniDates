@@ -5,6 +5,8 @@ import com.unidates.Unidates.UniDates.Control.UserManagementControl;
 import com.unidates.Unidates.UniDates.DTOs.FotoDTO;
 import com.unidates.Unidates.UniDates.DTOs.StudenteDTO;
 import com.unidates.Unidates.UniDates.Exception.EntityNotFoundException;
+import com.unidates.Unidates.UniDates.Model.Enum.Hobby;
+import com.unidates.Unidates.UniDates.Model.Enum.Interessi;
 import com.unidates.Unidates.UniDates.View.navbar.Navbar;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -15,9 +17,11 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.component.html.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayInputStream;
+import java.util.Locale;
 
 @Route(value = "ricercaprofilo",layout = Navbar.class)
 public class RicercaProfiloPage extends VerticalLayout implements HasUrlParameter<String> {
@@ -31,10 +35,9 @@ public class RicercaProfiloPage extends VerticalLayout implements HasUrlParamete
     StudenteDTO daCercare;
     StudenteDTO inSessione;
 
-    Span nome;
-    Span cognome = new Span();
+    H3 nome;
+    H3 cognome;
     Span topics = new Span();
-    Span interessi = new Span();
     Span residenza = new Span();
     Span nascita = new Span();
     Span colore_occhi = new Span();
@@ -43,6 +46,7 @@ public class RicercaProfiloPage extends VerticalLayout implements HasUrlParamete
     Span compleanno = new Span();
     Span numero = new Span();
     Span instagram = new Span();
+    Image interessiImage = new Image();
 
     public RicercaProfiloPage(){
     }
@@ -81,12 +85,30 @@ public class RicercaProfiloPage extends VerticalLayout implements HasUrlParamete
 
 
         HorizontalLayout nome_cognome = new HorizontalLayout();
-        nome = new Span(daCercare.getProfilo().getNome());
-        cognome = new Span(daCercare.getProfilo().getCognome());
+        nome = new H3(daCercare.getProfilo().getNome());
+        cognome = new H3(daCercare.getProfilo().getCognome());
         nome_cognome.add(nome, cognome);
 
-        topics = new Span("Topics: " + daCercare.getProfilo().getHobbyList().toString());
-        interessi = new Span("Interessato a: " + daCercare.getProfilo().getInteressi().toString());
+        String iter = "";
+        for(Hobby  h : daCercare.getProfilo().getHobbyList())
+            iter += h.toString().toLowerCase()+ ", " ;
+
+        topics = new Span("Topics: " + iter.toLowerCase());
+
+
+        if (daCercare.getProfilo().getInteressi().equals(Interessi.UOMINI))
+            interessiImage.setSrc("./images/icons/male.png");
+        else if (daCercare.getProfilo().getInteressi().equals(Interessi.DONNE))
+            interessiImage.setSrc("./images/icons/female.png");
+        else if (daCercare.getProfilo().getInteressi().equals(Interessi.ENTRAMBI))
+            interessiImage.setSrc("./images/icons/bisex.png");
+
+        interessiImage.setWidth("50px");
+        interessiImage.setHeight("50px");
+        Span didascalia = new Span("Interessi:");
+        HorizontalLayout didascaliaInteressi = new HorizontalLayout();
+        didascaliaInteressi.add(didascalia,interessiImage);
+
 
         HorizontalLayout città = new HorizontalLayout();
         residenza = new Span("Residenza: " + daCercare.getProfilo().getResidenza());
@@ -101,9 +123,16 @@ public class RicercaProfiloPage extends VerticalLayout implements HasUrlParamete
         caratteristiche.add(colore_capelli, colore_occhi, altezza, compleanno);
 
         HorizontalLayout contatti = new HorizontalLayout();
-        numero = new Span("Numero di cellulare: " + daCercare.getProfilo().getNumeroTelefono());
-        instagram = new Span("Contatto instagram: " + daCercare.getProfilo().getNickInstagram());
-        contatti.add(numero,instagram);
+        if(daCercare.getProfilo().getNumeroTelefono() != null){
+            numero = new Span("Numero di cellulare: " +  daCercare.getProfilo().getNumeroTelefono());
+            contatti.add(numero);
+        }
+        if(daCercare.getProfilo().getNickInstagram() != null){
+            instagram = new Span("Contatto instagram: " + daCercare.getProfilo().getNickInstagram());
+            contatti.add(instagram);
+        }
+
+
 
 
         HorizontalLayout listaFoto = new HorizontalLayout();
@@ -119,12 +148,12 @@ public class RicercaProfiloPage extends VerticalLayout implements HasUrlParamete
 
         if(interactionControl.isValidMatch(inSessione.getEmail(), daCercare.getEmail())){
             VerticalLayout info_layout = new VerticalLayout();
-            info_layout.add(nome_cognome, topics, interessi, città,contatti, caratteristiche);
+            info_layout.add(nome_cognome, topics, didascaliaInteressi, città,contatti, caratteristiche);
             horizontal.add(image_layout, info_layout);
             allPage.add(horizontal,listaFoto);
         }else {
             VerticalLayout noMatch = new VerticalLayout();
-            noMatch.add(nome_cognome,topics,interessi);
+            noMatch.add(nome_cognome,topics, didascaliaInteressi);
             horizontal.add(image_layout,noMatch);
             allPage.add(horizontal);
         }

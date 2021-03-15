@@ -43,3 +43,8 @@
     background: #7cb5ec;
     color: white;
 }
+
+#list-topic{
+    max-width:160px;
+    max-height:160px ;
+}

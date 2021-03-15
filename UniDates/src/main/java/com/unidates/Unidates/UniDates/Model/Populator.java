@@ -330,16 +330,20 @@ public class Populator implements ApplicationRunner {
         //Aggiungo un moderatore
         createModeratore("moderatore@gmail.com", "moderatore", "Marcello", "Moderatore", "Napoli", "Napoli", LocalDate.of(1999,6,12), 1.70, Sesso.UOMO, Interessi.DONNE, Colori_Capelli.GRIGI, Colore_Occhi.AZZURRI,f,hobbies);
         createCommunityManager("communitymanager@gmail.com","communitymanager", "Francesca", "CM", "Napoli", "Napoli", LocalDate.of(1980,7,12), 1.70, Sesso.DONNA, Interessi.UOMINI, Colori_Capelli.CASTANI, Colore_Occhi.AZZURRI,f,hobbies);
+
+
+
+        matchManager.aggiungiMatch("francesca49@gmail.com","dario50@gmail.com");
+        matchManager.aggiungiMatch("dario50@gmail.com","francesca49@gmail.com");
+        notificaManager.generateNotificaMatch("francesca49@gmail.com","dario50@gmail.com");
+
         /*
         try {
 
-            utenteService.registrazioneStudente(s1, p1); //usati solo per skippare l'invio email di conferma
+            //utenteService.registrazioneStudente("francesca49@gmail.com", p1); //usati solo per skippare l'invio email di conferma
 
 
 
-            matchManager.aggiungiMatch(s1.getEmail(), s2.getEmail());
-            matchManager.aggiungiMatch(s2.getEmail(), s1.getEmail());
-            notificaManager.generateNotificaMatch(s1.getEmail(), s2.getEmail());
             matchManager.aggiungiMatch(s1.getEmail(), s3.getEmail());
             matchManager.aggiungiMatch(s3.getEmail(), s1.getEmail());
             notificaManager.generateNotificaMatch(s1.getEmail(), s3.getEmail());
@@ -359,8 +363,8 @@ public class Populator implements ApplicationRunner {
         }
         catch (AlreadyExistException existUserException){
             existUserException.printStackTrace();
-        }
-        */
+        }*/
+
 
 
     }

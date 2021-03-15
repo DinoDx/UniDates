@@ -20,7 +20,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -36,6 +36,7 @@ import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
+import org.apache.coyote.http11.Http11AprProtocol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -130,8 +131,8 @@ public class ProfiloPersonalePage extends VerticalLayout {
 
     public HorizontalLayout NomeUtente(){
         HorizontalLayout nome = new HorizontalLayout();
-        Span nome_utente = new Span(profilo.getNome());
-        Span cognome_utente = new Span(profilo.getCognome());
+        H3 nome_utente = new H3(profilo.getNome());
+        H3 cognome_utente = new H3(profilo.getCognome());
         nome.add(nome_utente,cognome_utente);
         return nome;
     }
@@ -284,15 +285,44 @@ public class ProfiloPersonalePage extends VerticalLayout {
 
 
 
-    public VerticalLayout Info5(){
-        VerticalLayout info5 =  new VerticalLayout();
-        Span interessi = new Span("Interessi : " + studente.getProfilo().getInteressi().toString());
+    public HorizontalLayout Info5(){
+        Image interessiImage = new Image();
+        interessiImage.setHeight("50px");
+        interessiImage.setWidth("50px");
+
+        HorizontalLayout totaleInfo5 = new HorizontalLayout();
+
+        VerticalLayout info5Uno =  new VerticalLayout();
+
         Span capelli = new Span("Capelli : " + studente.getProfilo().getColori_capelli().toString());
         Span occhi = new Span("Occhi : " + studente.getProfilo().getColore_occhi().toString());
-        Span topic = new Span("Topic : " + studente.getProfilo().getHobbyList().toString());
 
-        info5.add(capelli, occhi, interessi, topic);
-        return info5;
+        if (studente.getProfilo().getInteressi().equals(Interessi.UOMINI))
+            interessiImage.setSrc("./images/icons/male.png");
+        else if (studente.getProfilo().getInteressi().equals(Interessi.DONNE))
+            interessiImage.setSrc("./images/icons/female.png");
+        else if (studente.getProfilo().getInteressi().equals(Interessi.ENTRAMBI))
+            interessiImage.setSrc("./images/icons/bisex.png");
+
+
+        VerticalLayout info5Due = new VerticalLayout();
+        String iter = "";
+        for(Hobby  h : studente.getProfilo().getHobbyList())
+            iter += h.toString().toLowerCase()+ ", " ;
+
+        Span topic = new Span("Topic : " + iter);
+        info5Due.setId("list-topic");
+
+
+        Span didascalia = new Span("Interessi:");
+
+        HorizontalLayout didascaliaInteressi = new HorizontalLayout();
+        didascaliaInteressi.add(didascalia,interessiImage);
+
+        info5Uno.add(capelli,occhi,didascaliaInteressi);
+        info5Due.add(topic);
+        totaleInfo5.add(info5Uno,info5Due);
+        return totaleInfo5;
     }
 
     public VerticalLayout Contatti(){
