@@ -181,7 +181,7 @@ public class ProfiloPersonalePage extends VerticalLayout {
         interessi.setLabel("Interessi");
         interessi.setValue(studente.getProfilo().getInteressi().toString());
         Interessi [] arrayInteressi = Interessi.values();
-        interessi.setItems(arrayInteressi[0].toString(),arrayInteressi[1].toString(),arrayInteressi[2].toString(),arrayInteressi[3].toString());
+        interessi.setItems(arrayInteressi[0].toString(),arrayInteressi[1].toString(),arrayInteressi[2].toString());
         interessi.setEnabled(false);
         interessi.setId("interessi-mod");
 
