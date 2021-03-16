@@ -337,6 +337,7 @@ public class Populator implements ApplicationRunner {
         matchManager.aggiungiMatch("dario50@gmail.com","francesca49@gmail.com");
         notificaManager.generateNotificaMatch("francesca49@gmail.com","dario50@gmail.com");
 
+        System.out.println("Populator eseguito correttamente");
         /*
         try {
 

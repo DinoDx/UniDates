@@ -9,9 +9,9 @@
 
 
 #img {
-  height: 90px;
+  height: 80px;
   margin-left: 10px;
-  padding: 8px;
+  padding-top: 8px;
   overflow: hidden;
 }
 
@@ -26,11 +26,11 @@
 
 #ricerca{
   width: auto;
-  margin-left: 38%;
+  margin-left: auto;
 }
 
 #ricerca-field{
-  width: 20em;
+  width: 30em;
 }
 
 #logo-navbar{
