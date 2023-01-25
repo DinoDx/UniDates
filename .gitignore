@@ -12,6 +12,7 @@ UniDates/package-lock.json
 UniDates/.idea
 UniDates/webpack.generated.js
 UniDates/webpack.config.js
+UniDates/**/venv/**
 
 UniDates/HELP.md
 UniDates/target/

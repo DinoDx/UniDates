@@ -1,0 +1,10 @@
+#layout {
+    background: black;
+    height: var(--lumo-size-xl);
+}
+
+#layout h1{
+    font-family: var(--lumo-font-family);
+    margin-left: 1rem;
+    margin-bottom: 3rem;
+}

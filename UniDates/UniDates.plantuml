@@ -1,0 +1,1020 @@
+@startuml
+
+title __UNIDATES's Class Diagram__\n
+
+  namespace  {
+    class MavenWrapperDownloader {
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Control {
+        class com.unidates.Unidates.UniDates.Control.InteractionControl {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Control {
+        class com.unidates.Unidates.UniDates.Control.ModerationControl {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Control {
+        class com.unidates.Unidates.UniDates.Control.ModifyProfileControl {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Control {
+        class com.unidates.Unidates.UniDates.Control.UserManagementControl {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.CommunityManagerDTO {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.EntityToDto {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.FotoDTO {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.MatchDTO {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.NotificaDTO {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.ProfiloDTO {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.SospensioneDTO {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.StudenteDTO {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.UtenteDTO {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Exception {
+        class com.unidates.Unidates.UniDates.Exception.AlreadyExistException {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Exception {
+        class com.unidates.Unidates.UniDates.Exception.BannedUserException {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Exception {
+        class com.unidates.Unidates.UniDates.Exception.EntityNotFoundException {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Exception {
+        class com.unidates.Unidates.UniDates.Exception.InvalidFormatException {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Exception {
+        class com.unidates.Unidates.UniDates.Exception.NotAuthorizedException {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Exception {
+        class com.unidates.Unidates.UniDates.Exception.NotConfirmedAccountException {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Exception {
+        class com.unidates.Unidates.UniDates.Exception.PasswordMissmatchException {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Manager {
+        class com.unidates.Unidates.UniDates.Manager.MatchManager {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Manager {
+        class com.unidates.Unidates.UniDates.Manager.ModerazioneManager {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Manager {
+        class com.unidates.Unidates.UniDates.Manager.NotificaManager {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Manager {
+        class com.unidates.Unidates.UniDates.Manager.ProfiloManager {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Manager {
+        namespace Registrazione {
+          interface com.unidates.Unidates.UniDates.Manager.Registrazione.ConfermaRegistrazione {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Manager {
+        namespace Registrazione {
+          class com.unidates.Unidates.UniDates.Manager.Registrazione.OnRegistrationCompleteEvent {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Manager {
+        namespace Registrazione {
+          class com.unidates.Unidates.UniDates.Manager.Registrazione.Publisher {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Manager {
+        namespace Registrazione {
+          class com.unidates.Unidates.UniDates.Manager.Registrazione.RegistrationListener {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Manager {
+        class com.unidates.Unidates.UniDates.Manager.UserManager {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Ammonimento {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.CommunityManager {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Foto {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Match {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Moderatore {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Notifica {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Profilo {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Segnalazione {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Sospensione {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Studente {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          abstract class com.unidates.Unidates.UniDates.Model.Entity.Utente {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.VerificationToken {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Enum {
+          enum Colore_Occhi {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Enum {
+          enum Colori_Capelli {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Enum {
+          enum Hobby {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Enum {
+          enum Interessi {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Enum {
+          enum Motivazione {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Enum {
+          enum Ruolo {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Enum {
+          enum Sesso {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Enum {
+          enum Tipo_Notifica {
+          }
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        class com.unidates.Unidates.UniDates.Model.Populator {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Repository {
+        interface com.unidates.Unidates.UniDates.Repository.AmmonimentiRepository {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Repository {
+        interface com.unidates.Unidates.UniDates.Repository.FotoRepository {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Repository {
+        interface com.unidates.Unidates.UniDates.Repository.MatchRepository {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Repository {
+        interface com.unidates.Unidates.UniDates.Repository.NotificaRepository {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Repository {
+        interface com.unidates.Unidates.UniDates.Repository.ProfiloRepository {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Repository {
+        interface com.unidates.Unidates.UniDates.Repository.SegnalazioniRepository {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Repository {
+        interface com.unidates.Unidates.UniDates.Repository.SospensioniRepository {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Repository {
+        interface com.unidates.Unidates.UniDates.Repository.UtenteRepository {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Repository {
+        interface com.unidates.Unidates.UniDates.Repository.VerificationTokenRepository {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Security {
+        class com.unidates.Unidates.UniDates.Security.ConfigureUIServiceInitListener {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Security {
+        class com.unidates.Unidates.UniDates.Security.CustomAuthenticationFailureHandler {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Security {
+        class com.unidates.Unidates.UniDates.Security.CustomRequestCache {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Security {
+        class com.unidates.Unidates.UniDates.Security.SecurityConfiguration {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Security {
+        class com.unidates.Unidates.UniDates.Security.SecurityUtils {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace Security {
+        class com.unidates.Unidates.UniDates.Security.UserDetailsService {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      class com.unidates.Unidates.UniDates.UniDatesApplication {
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace View.home {
+        class com.unidates.Unidates.UniDates.View.home.CardUtenteHome {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace View.home {
+        class com.unidates.Unidates.UniDates.View.home.HomePage {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace View.home {
+        class com.unidates.Unidates.UniDates.View.home.RicercaProfiloPage {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace View.loginRegistrazione {
+        class com.unidates.Unidates.UniDates.View.loginRegistrazione.LoginPage {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace View.loginRegistrazione {
+        class com.unidates.Unidates.UniDates.View.loginRegistrazione.RegistrazioneAccountPage {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace View.loginRegistrazione {
+        class com.unidates.Unidates.UniDates.View.loginRegistrazione.RegistrazioneProfiloPage {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace View.moderazione {
+        class com.unidates.Unidates.UniDates.View.moderazione.InfoModeratoreCard {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace View.moderazione {
+        class com.unidates.Unidates.UniDates.View.moderazione.ListaSegnalazioni {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace View.moderazione {
+        class com.unidates.Unidates.UniDates.View.moderazione.ModerazionePage {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace View.navbar {
+        class com.unidates.Unidates.UniDates.View.navbar.CardNotifica {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace View.navbar {
+        class com.unidates.Unidates.UniDates.View.navbar.Navbar {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace View.profilo {
+        class com.unidates.Unidates.UniDates.View.profilo.ProfiloPersonalePage {
+        }
+      }
+    }
+  }
+  
+
+  com.unidates.Unidates.UniDates.Control.InteractionControl o-- com.unidates.Unidates.UniDates.Manager.MatchManager : matchManager
+  com.unidates.Unidates.UniDates.Control.InteractionControl o-- com.unidates.Unidates.UniDates.Manager.NotificaManager : notificaManager
+  com.unidates.Unidates.UniDates.Control.InteractionControl o-- com.unidates.Unidates.UniDates.Manager.UserManager : userManager
+  com.unidates.Unidates.UniDates.Control.ModerationControl o-- com.unidates.Unidates.UniDates.Manager.ModerazioneManager : moderazioneManager
+  com.unidates.Unidates.UniDates.Control.ModerationControl o-- com.unidates.Unidates.UniDates.Manager.NotificaManager : notificaManager
+  com.unidates.Unidates.UniDates.Control.ModerationControl o-- com.unidates.Unidates.UniDates.Manager.UserManager : userManager
+  com.unidates.Unidates.UniDates.Control.ModifyProfileControl o-- com.unidates.Unidates.UniDates.Manager.ProfiloManager : profiloManager
+  com.unidates.Unidates.UniDates.Control.ModifyProfileControl o-- com.unidates.Unidates.UniDates.Manager.UserManager : userManager
+  com.unidates.Unidates.UniDates.Control.UserManagementControl o-- com.unidates.Unidates.UniDates.Manager.Registrazione.Publisher : publisher
+  com.unidates.Unidates.UniDates.Control.UserManagementControl o-- com.unidates.Unidates.UniDates.Manager.UserManager : userManager
+  com.unidates.Unidates.UniDates.Control.UserManagementControl o-- com.unidates.Unidates.UniDates.Repository.VerificationTokenRepository : verificationTokenRepository
+  com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO o-- com.unidates.Unidates.UniDates.DTOs.FotoDTO : foto
+  com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Motivazione : motivazione
+  com.unidates.Unidates.UniDates.DTOs.CommunityManagerDTO -up-|> com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO
+  com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO -up-|> com.unidates.Unidates.UniDates.DTOs.StudenteDTO
+  com.unidates.Unidates.UniDates.DTOs.NotificaDTO o-- com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO : ammonimento
+  com.unidates.Unidates.UniDates.DTOs.NotificaDTO o-- com.unidates.Unidates.UniDates.DTOs.FotoDTO : foto
+  com.unidates.Unidates.UniDates.DTOs.NotificaDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica : tipo_notifica
+  com.unidates.Unidates.UniDates.DTOs.ProfiloDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Colore_Occhi : colore_occhi
+  com.unidates.Unidates.UniDates.DTOs.ProfiloDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Colori_Capelli : colori_capelli
+  com.unidates.Unidates.UniDates.DTOs.ProfiloDTO o-- com.unidates.Unidates.UniDates.DTOs.FotoDTO : fotoProfilo
+  com.unidates.Unidates.UniDates.DTOs.ProfiloDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Interessi : interessi
+  com.unidates.Unidates.UniDates.DTOs.ProfiloDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Sesso : sesso
+  com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Motivazione : motivazione
+  com.unidates.Unidates.UniDates.DTOs.StudenteDTO -up-|> com.unidates.Unidates.UniDates.DTOs.UtenteDTO
+  com.unidates.Unidates.UniDates.DTOs.StudenteDTO o-- com.unidates.Unidates.UniDates.DTOs.ProfiloDTO : profilo
+  com.unidates.Unidates.UniDates.DTOs.UtenteDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Ruolo : ruolo
+  com.unidates.Unidates.UniDates.Manager.MatchManager o-- com.unidates.Unidates.UniDates.Repository.MatchRepository : matchRepository
+  com.unidates.Unidates.UniDates.Manager.MatchManager o-- com.unidates.Unidates.UniDates.Repository.UtenteRepository : utenteRepository
+  com.unidates.Unidates.UniDates.Manager.ModerazioneManager o-- com.unidates.Unidates.UniDates.Repository.AmmonimentiRepository : ammonimentiRepository
+  com.unidates.Unidates.UniDates.Manager.ModerazioneManager o-- com.unidates.Unidates.UniDates.Repository.FotoRepository : fotoRepository
+  com.unidates.Unidates.UniDates.Manager.ModerazioneManager o-- com.unidates.Unidates.UniDates.Manager.Registrazione.Publisher : publisher
+  com.unidates.Unidates.UniDates.Manager.ModerazioneManager o-- com.unidates.Unidates.UniDates.Repository.SegnalazioniRepository : segnalazioniRepository
+  com.unidates.Unidates.UniDates.Manager.ModerazioneManager o-- com.unidates.Unidates.UniDates.Repository.SospensioniRepository : sospensioniRepository
+  com.unidates.Unidates.UniDates.Manager.ModerazioneManager o-- com.unidates.Unidates.UniDates.Repository.UtenteRepository : utenteRepository
+  com.unidates.Unidates.UniDates.Manager.NotificaManager o-- com.unidates.Unidates.UniDates.Repository.AmmonimentiRepository : ammonimentiRepository
+  com.unidates.Unidates.UniDates.Manager.NotificaManager o-- com.unidates.Unidates.UniDates.Repository.FotoRepository : fotoRepository
+  com.unidates.Unidates.UniDates.Manager.NotificaManager o-- com.unidates.Unidates.UniDates.Repository.NotificaRepository : notificaRepository
+  com.unidates.Unidates.UniDates.Manager.NotificaManager o-- com.unidates.Unidates.UniDates.Repository.UtenteRepository : utenteRepository
+  com.unidates.Unidates.UniDates.Manager.ProfiloManager o-- com.unidates.Unidates.UniDates.Repository.FotoRepository : fotoRepository
+  com.unidates.Unidates.UniDates.Manager.ProfiloManager o-- com.unidates.Unidates.UniDates.Repository.ProfiloRepository : profiloRepository
+  com.unidates.Unidates.UniDates.Manager.ProfiloManager o-- com.unidates.Unidates.UniDates.Repository.UtenteRepository : utenteRepository
+  com.unidates.Unidates.UniDates.Manager.Registrazione.OnRegistrationCompleteEvent -up-|> org.springframework.context.ApplicationEvent
+  com.unidates.Unidates.UniDates.Manager.Registrazione.OnRegistrationCompleteEvent o-- com.unidates.Unidates.UniDates.Model.Entity.Utente : utente
+  com.unidates.Unidates.UniDates.Manager.Registrazione.RegistrationListener .up.|> org.springframework.context.ApplicationListener
+  com.unidates.Unidates.UniDates.Manager.Registrazione.RegistrationListener o-- com.unidates.Unidates.UniDates.Manager.Registrazione.ConfermaRegistrazione : confermaRegistrazione
+  com.unidates.Unidates.UniDates.Manager.Registrazione.RegistrationListener o-- com.unidates.Unidates.UniDates.Manager.UserManager : service
+  com.unidates.Unidates.UniDates.Manager.UserManager o-- com.unidates.Unidates.UniDates.Repository.UtenteRepository : utenteRepository
+  com.unidates.Unidates.UniDates.Manager.UserManager o-- com.unidates.Unidates.UniDates.Repository.VerificationTokenRepository : verificationTokenRepository
+  com.unidates.Unidates.UniDates.Model.Entity.Ammonimento o-- com.unidates.Unidates.UniDates.Model.Entity.Foto : foto
+  com.unidates.Unidates.UniDates.Model.Entity.Ammonimento o-- com.unidates.Unidates.UniDates.Model.Entity.Moderatore : moderatore
+  com.unidates.Unidates.UniDates.Model.Entity.Ammonimento o-- com.unidates.Unidates.UniDates.Model.Enum.Motivazione : motivazione
+  com.unidates.Unidates.UniDates.Model.Entity.Ammonimento o-- com.unidates.Unidates.UniDates.Model.Entity.Studente : studente
+  com.unidates.Unidates.UniDates.Model.Entity.CommunityManager -up-|> com.unidates.Unidates.UniDates.Model.Entity.Moderatore
+  com.unidates.Unidates.UniDates.Model.Entity.Foto .up.|> java.lang.Cloneable
+  com.unidates.Unidates.UniDates.Model.Entity.Foto o-- com.unidates.Unidates.UniDates.Model.Entity.Profilo : profilo
+  com.unidates.Unidates.UniDates.Model.Entity.Match o-- com.unidates.Unidates.UniDates.Model.Entity.Studente : studente1
+  com.unidates.Unidates.UniDates.Model.Entity.Match o-- com.unidates.Unidates.UniDates.Model.Entity.Studente : studente2
+  com.unidates.Unidates.UniDates.Model.Entity.Moderatore -up-|> com.unidates.Unidates.UniDates.Model.Entity.Studente
+  com.unidates.Unidates.UniDates.Model.Entity.Notifica .up.|> java.io.Serializable
+  com.unidates.Unidates.UniDates.Model.Entity.Notifica o-- com.unidates.Unidates.UniDates.Model.Entity.Ammonimento : ammonimento
+  com.unidates.Unidates.UniDates.Model.Entity.Notifica o-- com.unidates.Unidates.UniDates.Model.Entity.Foto : foto
+  com.unidates.Unidates.UniDates.Model.Entity.Notifica o-- com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica : tipo_notifica
+  com.unidates.Unidates.UniDates.Model.Entity.Notifica o-- com.unidates.Unidates.UniDates.Model.Entity.Utente : utente
+  com.unidates.Unidates.UniDates.Model.Entity.Profilo .up.|> java.io.Serializable
+  com.unidates.Unidates.UniDates.Model.Entity.Profilo o-- com.unidates.Unidates.UniDates.Model.Enum.Colore_Occhi : colore_occhi
+  com.unidates.Unidates.UniDates.Model.Entity.Profilo o-- com.unidates.Unidates.UniDates.Model.Enum.Colori_Capelli : colori_capelli
+  com.unidates.Unidates.UniDates.Model.Entity.Profilo o-- com.unidates.Unidates.UniDates.Model.Enum.Interessi : interessi
+  com.unidates.Unidates.UniDates.Model.Entity.Profilo o-- com.unidates.Unidates.UniDates.Model.Enum.Sesso : sesso
+  com.unidates.Unidates.UniDates.Model.Entity.Profilo o-- com.unidates.Unidates.UniDates.Model.Entity.Studente : studente
+  com.unidates.Unidates.UniDates.Model.Entity.Segnalazione o-- com.unidates.Unidates.UniDates.Model.Entity.Foto : foto
+  com.unidates.Unidates.UniDates.Model.Entity.Segnalazione o-- com.unidates.Unidates.UniDates.Model.Entity.Moderatore : moderatore
+  com.unidates.Unidates.UniDates.Model.Entity.Segnalazione o-- com.unidates.Unidates.UniDates.Model.Enum.Motivazione : motivazione
+  com.unidates.Unidates.UniDates.Model.Entity.Sospensione o-- com.unidates.Unidates.UniDates.Model.Entity.Studente : studente
+  com.unidates.Unidates.UniDates.Model.Entity.Studente -up-|> com.unidates.Unidates.UniDates.Model.Entity.Utente
+  com.unidates.Unidates.UniDates.Model.Entity.Studente o-- com.unidates.Unidates.UniDates.Model.Entity.Profilo : profilo
+  com.unidates.Unidates.UniDates.Model.Entity.Utente .up.|> java.io.Serializable
+  com.unidates.Unidates.UniDates.Model.Entity.Utente o-- com.unidates.Unidates.UniDates.Model.Enum.Ruolo : ruolo
+  com.unidates.Unidates.UniDates.Model.Entity.Utente o-- com.unidates.Unidates.UniDates.Model.Entity.VerificationToken : verificationToken
+  com.unidates.Unidates.UniDates.Model.Entity.VerificationToken o-- com.unidates.Unidates.UniDates.Model.Entity.Utente : utente
+  com.unidates.Unidates.UniDates.Model.Populator .up.|> org.springframework.boot.ApplicationRunner
+  com.unidates.Unidates.UniDates.Model.Populator o-- com.unidates.Unidates.UniDates.Manager.MatchManager : matchManager
+  com.unidates.Unidates.UniDates.Model.Populator o-- com.unidates.Unidates.UniDates.Manager.ModerazioneManager : moderazioneManager
+  com.unidates.Unidates.UniDates.Model.Populator o-- com.unidates.Unidates.UniDates.Manager.NotificaManager : notificaManager
+  com.unidates.Unidates.UniDates.Model.Populator o-- com.unidates.Unidates.UniDates.Manager.UserManager : utenteService
+  com.unidates.Unidates.UniDates.Security.ConfigureUIServiceInitListener .up.|> com.vaadin.flow.server.VaadinServiceInitListener
+  com.unidates.Unidates.UniDates.Security.CustomAuthenticationFailureHandler -up-|> org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler
+  com.unidates.Unidates.UniDates.Security.CustomRequestCache -up-|> org.springframework.security.web.savedrequest.HttpSessionRequestCache
+  com.unidates.Unidates.UniDates.Security.SecurityConfiguration -up-|> org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+  com.unidates.Unidates.UniDates.Security.SecurityConfiguration o-- com.unidates.Unidates.UniDates.Security.UserDetailsService : userDetailsService
+  com.unidates.Unidates.UniDates.Security.UserDetailsService .up.|> org.springframework.security.core.userdetails.UserDetailsService
+  com.unidates.Unidates.UniDates.Security.UserDetailsService o-- com.unidates.Unidates.UniDates.Repository.UtenteRepository : utenteRepository
+  com.unidates.Unidates.UniDates.View.home.CardUtenteHome -up-|> com.vaadin.flow.component.html.Div
+  com.unidates.Unidates.UniDates.View.home.CardUtenteHome o-- com.unidates.Unidates.UniDates.Control.InteractionControl : interactionControl
+  com.unidates.Unidates.UniDates.View.home.CardUtenteHome o-- com.unidates.Unidates.UniDates.Control.ModerationControl : moderationControl
+  com.unidates.Unidates.UniDates.View.home.CardUtenteHome o-- com.unidates.Unidates.UniDates.Control.UserManagementControl : userManagementControl
+  com.unidates.Unidates.UniDates.View.home.HomePage -up-|> com.vaadin.flow.component.orderedlayout.VerticalLayout
+  com.unidates.Unidates.UniDates.View.home.HomePage o-- com.unidates.Unidates.UniDates.Control.InteractionControl : interactionControl
+  com.unidates.Unidates.UniDates.View.home.HomePage o-- com.unidates.Unidates.UniDates.Control.ModerationControl : moderationControl
+  com.unidates.Unidates.UniDates.View.home.HomePage o-- com.unidates.Unidates.UniDates.Control.UserManagementControl : userManagementControl
+  com.unidates.Unidates.UniDates.View.home.RicercaProfiloPage .up.|> com.vaadin.flow.router.HasUrlParameter
+  com.unidates.Unidates.UniDates.View.home.RicercaProfiloPage -up-|> com.vaadin.flow.component.orderedlayout.VerticalLayout
+  com.unidates.Unidates.UniDates.View.home.RicercaProfiloPage o-- com.unidates.Unidates.UniDates.DTOs.StudenteDTO : daCercare
+  com.unidates.Unidates.UniDates.View.home.RicercaProfiloPage o-- com.unidates.Unidates.UniDates.DTOs.StudenteDTO : inSessione
+  com.unidates.Unidates.UniDates.View.home.RicercaProfiloPage o-- com.unidates.Unidates.UniDates.Control.InteractionControl : interactionControl
+  com.unidates.Unidates.UniDates.View.home.RicercaProfiloPage o-- com.unidates.Unidates.UniDates.Control.UserManagementControl : userManagementControl
+  com.unidates.Unidates.UniDates.View.loginRegistrazione.LoginPage -up-|> com.vaadin.flow.component.orderedlayout.FlexLayout
+  com.unidates.Unidates.UniDates.View.loginRegistrazione.RegistrazioneAccountPage -up-|> com.vaadin.flow.component.orderedlayout.FlexLayout
+  com.unidates.Unidates.UniDates.View.loginRegistrazione.RegistrazioneAccountPage o-- com.unidates.Unidates.UniDates.Control.UserManagementControl : userManagementControl
+  com.unidates.Unidates.UniDates.View.loginRegistrazione.RegistrazioneProfiloPage -up-|> com.vaadin.flow.component.orderedlayout.VerticalLayout
+  com.unidates.Unidates.UniDates.View.loginRegistrazione.RegistrazioneProfiloPage o-- com.unidates.Unidates.UniDates.Control.ModifyProfileControl : modifyProfileControl
+  com.unidates.Unidates.UniDates.View.loginRegistrazione.RegistrazioneProfiloPage o-- com.unidates.Unidates.UniDates.Control.UserManagementControl : userManagementControl
+  com.unidates.Unidates.UniDates.View.loginRegistrazione.RegistrazioneProfiloPage o-- com.unidates.Unidates.UniDates.DTOs.FotoDTO : toadd
+  com.unidates.Unidates.UniDates.View.moderazione.InfoModeratoreCard -up-|> com.vaadin.flow.component.html.Div
+  com.unidates.Unidates.UniDates.View.moderazione.InfoModeratoreCard o-- com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO : moderatore
+  com.unidates.Unidates.UniDates.View.moderazione.ListaSegnalazioni -up-|> com.vaadin.flow.component.orderedlayout.VerticalLayout
+  com.unidates.Unidates.UniDates.View.moderazione.ListaSegnalazioni o-- com.unidates.Unidates.UniDates.Control.InteractionControl : interactionControl
+  com.unidates.Unidates.UniDates.View.moderazione.ListaSegnalazioni o-- com.unidates.Unidates.UniDates.Control.ModerationControl : moderationControl
+  com.unidates.Unidates.UniDates.View.moderazione.ListaSegnalazioni o-- com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO : moderatore
+  com.unidates.Unidates.UniDates.View.moderazione.ListaSegnalazioni o-- com.unidates.Unidates.UniDates.Control.ModifyProfileControl : modifyProfileControl
+  com.unidates.Unidates.UniDates.View.moderazione.ListaSegnalazioni o-- com.unidates.Unidates.UniDates.Control.UserManagementControl : userManagementControl
+  com.unidates.Unidates.UniDates.View.moderazione.ModerazionePage -up-|> com.vaadin.flow.component.orderedlayout.VerticalLayout
+  com.unidates.Unidates.UniDates.View.moderazione.ModerazionePage o-- com.unidates.Unidates.UniDates.Control.InteractionControl : interactionControl
+  com.unidates.Unidates.UniDates.View.moderazione.ModerazionePage o-- com.unidates.Unidates.UniDates.Control.ModerationControl : moderationControl
+  com.unidates.Unidates.UniDates.View.moderazione.ModerazionePage o-- com.unidates.Unidates.UniDates.Control.ModifyProfileControl : modifyProfileControl
+  com.unidates.Unidates.UniDates.View.moderazione.ModerazionePage o-- com.unidates.Unidates.UniDates.Control.UserManagementControl : userManagementControl
+  com.unidates.Unidates.UniDates.View.navbar.CardNotifica -up-|> com.vaadin.flow.component.html.Div
+  com.unidates.Unidates.UniDates.View.navbar.CardNotifica o-- com.unidates.Unidates.UniDates.DTOs.FotoDTO : foto
+  com.unidates.Unidates.UniDates.View.navbar.CardNotifica o-- com.unidates.Unidates.UniDates.DTOs.NotificaDTO : notifica
+  com.unidates.Unidates.UniDates.View.navbar.CardNotifica o-- com.unidates.Unidates.UniDates.DTOs.ProfiloDTO : profilo
+  com.unidates.Unidates.UniDates.View.navbar.CardNotifica o-- com.unidates.Unidates.UniDates.Control.ModifyProfileControl : profiloController
+  com.unidates.Unidates.UniDates.View.navbar.CardNotifica o-- com.unidates.Unidates.UniDates.Control.UserManagementControl : userManagementControl
+  com.unidates.Unidates.UniDates.View.navbar.Navbar -up-|> com.vaadin.flow.component.applayout.AppLayout
+  com.unidates.Unidates.UniDates.View.navbar.Navbar o-- com.unidates.Unidates.UniDates.Control.InteractionControl : interactionControl
+  com.unidates.Unidates.UniDates.View.navbar.Navbar o-- com.unidates.Unidates.UniDates.Control.ModifyProfileControl : profiloController
+  com.unidates.Unidates.UniDates.View.navbar.Navbar o-- com.unidates.Unidates.UniDates.DTOs.StudenteDTO : studente
+  com.unidates.Unidates.UniDates.View.navbar.Navbar o-- com.unidates.Unidates.UniDates.Control.UserManagementControl : userManagementControl
+  com.unidates.Unidates.UniDates.View.profilo.ProfiloPersonalePage -up-|> com.vaadin.flow.component.orderedlayout.VerticalLayout
+  com.unidates.Unidates.UniDates.View.profilo.ProfiloPersonalePage o-- com.unidates.Unidates.UniDates.DTOs.FotoDTO : foto
+  com.unidates.Unidates.UniDates.View.profilo.ProfiloPersonalePage o-- com.unidates.Unidates.UniDates.Control.InteractionControl : interactionControl
+  com.unidates.Unidates.UniDates.View.profilo.ProfiloPersonalePage o-- com.unidates.Unidates.UniDates.Control.ModifyProfileControl : modifyProfileControl
+  com.unidates.Unidates.UniDates.View.profilo.ProfiloPersonalePage o-- com.unidates.Unidates.UniDates.DTOs.ProfiloDTO : profilo
+  com.unidates.Unidates.UniDates.View.profilo.ProfiloPersonalePage o-- com.unidates.Unidates.UniDates.DTOs.StudenteDTO : studente
+  com.unidates.Unidates.UniDates.View.profilo.ProfiloPersonalePage o-- com.unidates.Unidates.UniDates.Control.UserManagementControl : userManagementControl
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

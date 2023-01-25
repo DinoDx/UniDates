@@ -1,0 +1,383 @@
+@startuml
+
+title __ENTITY's Class Diagram__\n
+
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Ammonimento {
+              - dettagli : String
+              - id : Long
++getId(): Long
++setId(Long id): void
++getStudente(): Studente
++setStudente(Studente s): void
++getModeratore(): Moderatore
++setModeratore(Moderatore m): void
++getFoto(): Foto
++setFoto(Foto f): void
++getMotivazione(): Motivazione
++setMotivazione(Motivazione m): void
++getDettagli(): String
++setDettagli(String d): void
+
+          }
+        }
+      }
+    }
+  
+
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.CommunityManager {
+
+          }
+        }
+      }
+    }
+
+  
+
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Foto {
+              - creazione : LocalDateTime
+              - id : Long
+              - img : byte[]
+              - isFotoProfilo : boolean
+              - isVisible : boolean
+              - notifiche : List<Notifica>
+              - segnalazioneRicevute : List<Segnalazione>
+
++getId(): Long
++setId(Long id): void
++getProfilo(): Profilo
++setProfilo(Profilo profilo): void
++setImg( byte[] img): void
++setSegnalazioniRicevuto(List<Segnalazione> segnalazioneRicevuto): void
++getSegnalazioneRicevute(): List<Segnalazione>
++setSegnalazioneRicevute(List<Segnalazione> segnalazioneRicevute): void
++isVisible() : booelan
++setVisible(boolean visibile) : void
++getNotifiche(): List<Notifiche>
++setNotifiche(List<Notica> notifiche): void
++getCreazione(): LocalDateTime
++setCreazione(LocalDateTime creazione): void
++isFotoProfilo(): boolean
++setFotoProfilo(boolean fotoProfilo): void
+          }
+        }
+      }
+    }
+
+  
+
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Match {
+              - id : Long
+              - likeByStudent2 : boolean
+              - likedByStudent1 : boolean
+             +getId(): Long
+             +setId(Long id): void
+             +getStudente1(): Studente
+             +setStudente1(Studente s1): void
+             +getStudente2(): Studente
+             +setStudente2(Studente s2): void
+             +isLikedByStudent1(): boolean
+             +setLikedByStudent1(boolean liked): void
+             +isLikedByStudent2(): boolean
+             +setLikedByStudent2(boolean liked): void
+
+          }
+        }
+      }
+    }
+
+  
+
+
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Moderatore {
+              - ammonimentoInviati : List<Ammonimento>
+              - segnalazioneRicevute : List<Segnalazione>
+              +getAmmonimetoInviati(): List<Amminimento>
+              +setAmmonimentoInviati(List<Ammoniemento ammonimentoInviati>): void
+              +getSegnalazioneRicevute(): List<Segnalazione>
+              +addSegnalazione(Segnalazione segnalazione): void
+              +setSegnalazioneRicevute(List<Segnalazione> segnalazioneRicevute): List<Segnalazione>
+
+          }
+        }
+      }
+    }
+
+  
+
+
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Notifica {
+              - creationTime : LocalDate
+              - emailToMatchWith : String
+              - id : Long
+              - testoNotifica : String
+              +getId(): Long
+              +setId(Long id): void
+              +getUtente(): Utente
+              +setUtente(Utente u): void
+              +getEmailToMatchWith(): String
+              +setEmailToMatchWith(String e): void
+              +getFoto(): Foto
+              +setFoto(Foto f): void
+              +getTestoNotifica(): String
+              +setTestoNotifica(String t): void
+              +getTipo_notifica(): String
+              +setTipo_notifica(Tipo_Notifica tn): void
+              +getAmmonimento(): Ammonimento
+              +setAmmonimento(Ammonimento a): void
+              +getCreationTime(): LocalDate
+              +setCreationTime(LocalDate ld): void
+
+          }
+        }
+      }
+    }
+
+  
+
+
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Profilo {
+              - altezza : double
+              - cognome : String
+              - dataDiNascita : LocalDate
+              - hobbyList : List<Hobby>
+              - id : Long
+              - listaFoto : List<Foto>
+              - luogoNascita : String
+              - nickInstagram : String
+              - nome : String
+              - numeroTelefono : String
+              - residenza : String
+              +getId(): Long
+              +getStudente(): Studente
+              +getListaFoto(): List<Foto>
+              +getNome(): String
+              +getCognome(): String
+              +getLuogoNascita: String
+              +getResidenza(): String
+              +getDataDiNascita(): LocalData
+              +getAltezza(): Double
+              +getSesso(): Sesso
+              +getInteressi(): Interessi
+              +getColore_Occhi(): Colore_Occhi
+              +getColore_Capelli(): Colore_Capelli
+              +getNumeroTelefono(): String
+              +getNickInstagram(): String
+              +getHobbyList(): List<Hobby>
+              +addFoto(Foto foto, boolean isProfile): void
+              +removeFoto(Foto foto): void
+              +setId(Long id): void
+              +setStudente(Studente studente): void
+              +setListaFoto(List<Foto> listaFoto): void
+              +setNome(Sting nome): void
+              +setCognome(String cognome): void
+              +setLuogoNascita(String luogoNascita): void
+              +setResidenza(String residenza): void
+              +setDataDiNascita(String dataDiNascita): void
+              +setAltezza(double altezza): void
+              +setSesso(Sesso sesso): void
+              +setInteressi(Interessi interessi): void
+              +setColori_capelli(Colori_capelli colori_capelli): void
+              +setColore_occhi(Colore_occhi colore_occhi): void
+              +setNumeroTelefono(String numeroTelefono):void
+              +setNickInstagram(String nickInstagram):void
+              +setHobbyList(List<Hobby> hobbyList): void
+
+          }
+        }
+      }
+    }
+
+  
+
+
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Segnalazione {
+              - dettagli : String
+              - id : Long
+             +setModeratore(Moderatore moderatore)
+             +getModeratore(): Moderatore
+             +getId() : Long
+             +setId(Long id) : void
+             +getFoto(): Foto
+             +setFoto(Foto foto): void
+             +getMotivazione() : Motivazione
+             +setMotivazione(Motivazione motivazione): void
+             +getDettagli(): String
+             +setDettagli(String dettagli) : void
+
+          }
+        }
+      }
+    }
+
+  
+
+
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Sospensione {
+              - dettagli : String
+              - durata : int
+              - id : Long
+              +getId(): Long
+              +setId(Long id): void
+              +getStudente(): Studente
+              +setStudente(Studente studente): void
+              +getDurata(): int
+              +setDurata(int durata): void
+              +getDettagli(): String
+              +setDettagli(String dettagli): void
+
+          }
+        }
+      }
+    }
+
+  
+
+
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.Studente {
+              - ammonimentiAttivi : int
+              - isBanned : boolean
+              - listaAmmonimenti : List<Ammonimento>
+              - listaBloccati : List<Studente>
+              - listaMatch : List<Match>
+              - listaMatchRicevuti : List<Match>
+              - listaNotifica : List<Notifica>
+              - listaSospensioni : List<Sospensione>
+              +isBanned(): boolean
+              +setBanned(boolean b): void
+              +getProfilo(): Profilo
+              +setProfilo(Profilo p): void
+              +getListaBloccati(): List<Studente>
+              +setListaBlocati(List<Studente> lb): void
+              +getListaSospensioni(): List<Sospensione>
+              +setListaSospensioni(List<Sospensione> ls): void
+              +getListaAmmonimenti(): List<Ammonimento>
+              +setListaAmmonimenti(List<Ammonimento> la): void
+              +getListaMatch(): List<Match>
+              +setListaMatch(List<Match> lm): void
+              +getListaMatchRicevuti(): List<Match>
+              +setListaMatchRicevuti(List<Match> lmr): void
+              +addBloccato(Studente s): void
+              +removeBloccato(Studente s): void
+              +addAmmonimentoattivo(): void
+              +removeAmmonimentoattivo(): void
+              +resetAmmonimentoattivi(): void
+              +getAmmonimentiAttivi(): int
+              +getListaNotifica(): List<Notifica>
+              +setListaNotifica(List<Notifica> listaNotifica): void
+
+          }
+        }
+      }
+    }
+
+  
+
+
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          abstract class com.unidates.Unidates.UniDates.Model.Entity.Utente {
+              - email : String
+              - isActive : boolean
+              - password : String
+              +getEmail(): String
+              +setEmail(String emial): void
+              +getPassword() : String
+              +setPassword(String password): void
+              +getRuolo(): Ruolo
+              +setRuolo(Ruolo ruolo): void
+              +isActive(): booelan
+              +setActive(boolean active): void
+
+          }
+        }
+      }
+    }
+
+  
+
+
+    namespace om.unidates.Unidates.UniDates {
+      namespace Model {
+        namespace Entity {
+          class com.unidates.Unidates.UniDates.Model.Entity.VerificationToken {
+              {static} - EXPIRATION : int
+              - expiryDate : Date
+              - id : Long
+              - token : String
+              +{static} getEXPIRATION(): int
+              +getId(): Long
+              +setId(Long id): void
+              +getToken(): String
+              +setToken(String token): void
+              +getUtente(): Utente
+              +setUtente(Utente utente): void
+              +getExpiryDate(): Date
+              +setExpiryDate(Date expiryDate): void
+
+          }
+        }
+      }
+    }
+
+  
+
+  com.unidates.Unidates.UniDates.Model.Entity.Ammonimento o-- com.unidates.Unidates.UniDates.Model.Entity.Foto
+  com.unidates.Unidates.UniDates.Model.Entity.Ammonimento o-- com.unidates.Unidates.UniDates.Model.Entity.Moderatore
+  com.unidates.Unidates.UniDates.Model.Entity.Ammonimento o-- com.unidates.Unidates.UniDates.Model.Entity.Studente
+  com.unidates.Unidates.UniDates.Model.Entity.CommunityManager -up-|> com.unidates.Unidates.UniDates.Model.Entity.Moderatore
+  com.unidates.Unidates.UniDates.Model.Entity.Foto o-- com.unidates.Unidates.UniDates.Model.Entity.Profilo
+  com.unidates.Unidates.UniDates.Model.Entity.Match o-- com.unidates.Unidates.UniDates.Model.Entity.Studente
+  com.unidates.Unidates.UniDates.Model.Entity.Match o-- com.unidates.Unidates.UniDates.Model.Entity.Studente
+  com.unidates.Unidates.UniDates.Model.Entity.Moderatore -up-|> com.unidates.Unidates.UniDates.Model.Entity.Studente
+  com.unidates.Unidates.UniDates.Model.Entity.Notifica o-- com.unidates.Unidates.UniDates.Model.Entity.Ammonimento
+  com.unidates.Unidates.UniDates.Model.Entity.Notifica o-- com.unidates.Unidates.UniDates.Model.Entity.Foto
+  com.unidates.Unidates.UniDates.Model.Entity.Notifica o-- com.unidates.Unidates.UniDates.Model.Entity.Utente
+  com.unidates.Unidates.UniDates.Model.Entity.Profilo o-- com.unidates.Unidates.UniDates.Model.Entity.Studente
+  com.unidates.Unidates.UniDates.Model.Entity.Segnalazione o-- com.unidates.Unidates.UniDates.Model.Entity.Foto
+  com.unidates.Unidates.UniDates.Model.Entity.Segnalazione o-- com.unidates.Unidates.UniDates.Model.Entity.Moderatore
+  com.unidates.Unidates.UniDates.Model.Entity.Sospensione o-- com.unidates.Unidates.UniDates.Model.Entity.Studente
+  com.unidates.Unidates.UniDates.Model.Entity.Studente -up-|> com.unidates.Unidates.UniDates.Model.Entity.Utente
+  com.unidates.Unidates.UniDates.Model.Entity.Studente o-- com.unidates.Unidates.UniDates.Model.Entity.Profilo
+  com.unidates.Unidates.UniDates.Model.Entity.Utente o-- com.unidates.Unidates.UniDates.Model.Entity.VerificationToken
+  com.unidates.Unidates.UniDates.Model.Entity.VerificationToken o-- com.unidates.Unidates.UniDates.Model.Entity.Utente
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

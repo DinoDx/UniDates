@@ -1,0 +1,366 @@
+@startuml
+
+title __DTOS's Class Diagram__\n
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO {
+            - dettagli : String
+            - emailModeratore : String
+            - emailStudente : String
+            - id : Long
+            + AmmonimentoDTO()
+            + AmmonimentoDTO()
+            + getDettagli()
+            + getEmailModeratore()
+            + getEmailStudente()
+            + getFoto()
+            + getId()
+            + getMotivazione()
+            + setDettagli()
+            + setEmailModeratore()
+            + setEmailStudente()
+            + setFoto()
+            + setId()
+            + setMotivazione()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.CommunityManagerDTO {
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.EntityToDto {
+            {static} + toDTO()
+            {static} + toDTO()
+            {static} + toDTO()
+            {static} + toDTO()
+            {static} + toDTO()
+            {static} + toDTO()
+            {static} + toDTO()
+            {static} + toDTO()
+            {static} + toDTO()
+            {static} + toDTO()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.FotoDTO {
+            - Id : Long
+            - creazione : LocalDateTime
+            - img : byte[]
+            - isFotoProfilo : boolean
+            - isVisible : boolean
+            - profiloId : Long
+            - segnalazioneRicevute : List<SegnalazioneDTO>
+            + FotoDTO()
+            + FotoDTO()
+            + getCreazione()
+            + getId()
+            + getImg()
+            + getProfiloId()
+            + getSegnalazioneRicevute()
+            + isFotoProfilo()
+            + isVisible()
+            + setCreazione()
+            + setFotoProfilo()
+            + setId()
+            + setImg()
+            + setProfiloId()
+            + setSegnalazioneRicevute()
+            + setVisible()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.MatchDTO {
+            - id : Long
+            - likeByStudent2 : boolean
+            - likedByStudent1 : boolean
+            - studente1Email : String
+            - studente2Email : String
+            + getId()
+            + getStudente1Email()
+            + getStudente2Email()
+            + isLikeByStudent2()
+            + isLikedByStudent1()
+            + setId()
+            + setLikeByStudent2()
+            + setLikedByStudent1()
+            + setStudente1Email()
+            + setStudente2Email()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO {
+            - ammonimentoInviati : List<AmmonimentoDTO>
+            - segnalazioneRicevute : List<SegnalazioneDTO>
+            + ModeratoreDTO()
+            + ModeratoreDTO()
+            + ModeratoreDTO()
+            + getAmmonimentoInviati()
+            + getSegnalazioneRicevute()
+            + setAmmonimentoInviati()
+            + setSegnalazioneRicevute()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.NotificaDTO {
+            - creationTime : LocalDate
+            - emailToMatchWith : String
+            - id : Long
+            - testoNotifica : String
+            - utenteEmail : String
+            + getAmmonimento()
+            + getCreationTime()
+            + getEmailToMatchWith()
+            + getFoto()
+            + getId()
+            + getTestoNotifica()
+            + getTipo_notifica()
+            + getUtenteEmail()
+            + setAmmonimento()
+            + setCreationTime()
+            + setEmailToMatchWith()
+            + setFoto()
+            + setId()
+            + setTestoNotifica()
+            + setTipo_notifica()
+            + setUtenteEmail()
+            + toString()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.ProfiloDTO {
+            - altezza : double
+            - cognome : String
+            - dataDiNascita : LocalDate
+            - emailStudente : String
+            - hobbyList : List<Hobby>
+            - id : Long
+            - listaFoto : List<FotoDTO>
+            - luogoNascita : String
+            - nickInstagram : String
+            - nome : String
+            - numeroTelefono : String
+            - residenza : String
+            + ProfiloDTO()
+            + ProfiloDTO()
+            + getAltezza()
+            + getCognome()
+            + getColore_occhi()
+            + getColori_capelli()
+            + getDataDiNascita()
+            + getEmailStudente()
+            + getFotoProfilo()
+            + getHobbyList()
+            + getId()
+            + getInteressi()
+            + getListaFoto()
+            + getLuogoNascita()
+            + getNickInstagram()
+            + getNome()
+            + getNumeroTelefono()
+            + getResidenza()
+            + getSesso()
+            + setAltezza()
+            + setCognome()
+            + setColore_occhi()
+            + setColori_capelli()
+            + setDataDiNascita()
+            + setEmailStudente()
+            + setFotoProfilo()
+            + setHobbyList()
+            + setId()
+            + setInteressi()
+            + setListaFoto()
+            + setLuogoNascita()
+            + setNickInstagram()
+            + setNome()
+            + setNumeroTelefono()
+            + setResidenza()
+            + setSesso()
+            + toString()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO {
+            - dettagli : String
+            - fotoId : Long
+            - id : Long
+            - moderatoreEmail : String
+            + SegnalazioneDTO()
+            + SegnalazioneDTO()
+            + getDettagli()
+            + getFotoId()
+            + getId()
+            + getModeratoreEmail()
+            + getMotivazione()
+            + setDettagli()
+            + setFotoId()
+            + setId()
+            + setModeratoreEmail()
+            + setMotivazione()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.SospensioneDTO {
+            - dettagli : String
+            - durata : int
+            - id : Long
+            - studente : String
+            + SospensioneDTO()
+            + SospensioneDTO()
+            + getDettagli()
+            + getDurata()
+            + getId()
+            + getStudente()
+            + setDettagli()
+            + setDurata()
+            + setId()
+            + setStudente()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.StudenteDTO {
+            - ammonimentiAttivi : int
+            - isBanned : boolean
+            - listaAmmonimenti : List<AmmonimentoDTO>
+            - listaBloccatiEmail : List<String>
+            - listaMatch : List<MatchDTO>
+            - listaMatchRicevuti : List<MatchDTO>
+            - listaNotifiche : List<NotificaDTO>
+            - listaSospensione : List<SospensioneDTO>
+            + StudenteDTO()
+            + StudenteDTO()
+            + getAmmonimentiAttivi()
+            + getListaAmmonimenti()
+            + getListaBloccatiEmail()
+            + getListaMatch()
+            + getListaMatchRicevuti()
+            + getListaNotifica()
+            + getListaSospensione()
+            + getProfilo()
+            + isBanned()
+            + setAmmonimentiAttivi()
+            + setBanned()
+            + setListaAmmonimenti()
+            + setListaBloccatiEmail()
+            + setListaMatch()
+            + setListaMatchRicevuti()
+            + setListaNotifica()
+            + setListaSospensione()
+            + setProfilo()
+            + toString()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace om.unidates.Unidates.UniDates {
+      namespace DTOs {
+        class com.unidates.Unidates.UniDates.DTOs.UtenteDTO {
+            - email : String
+            - password : String
+            + UtenteDTO()
+            + UtenteDTO()
+            + getEmail()
+            + getPassword()
+            + getRuolo()
+            + setEmail()
+            + setPassword()
+            + setRuolo()
+            + toString()
+        }
+      }
+    }
+  }
+  
+
+  com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO o-- com.unidates.Unidates.UniDates.DTOs.FotoDTO : foto
+  com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Motivazione : motivazione
+  com.unidates.Unidates.UniDates.DTOs.CommunityManagerDTO -up-|> com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO
+  com.unidates.Unidates.UniDates.DTOs.ModeratoreDTO -up-|> com.unidates.Unidates.UniDates.DTOs.StudenteDTO
+  com.unidates.Unidates.UniDates.DTOs.NotificaDTO o-- com.unidates.Unidates.UniDates.DTOs.AmmonimentoDTO : ammonimento
+  com.unidates.Unidates.UniDates.DTOs.NotificaDTO o-- com.unidates.Unidates.UniDates.DTOs.FotoDTO : foto
+  com.unidates.Unidates.UniDates.DTOs.NotificaDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Tipo_Notifica : tipo_notifica
+  com.unidates.Unidates.UniDates.DTOs.ProfiloDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Colore_Occhi : colore_occhi
+  com.unidates.Unidates.UniDates.DTOs.ProfiloDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Colori_Capelli : colori_capelli
+  com.unidates.Unidates.UniDates.DTOs.ProfiloDTO o-- com.unidates.Unidates.UniDates.DTOs.FotoDTO : fotoProfilo
+  com.unidates.Unidates.UniDates.DTOs.ProfiloDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Interessi : interessi
+  com.unidates.Unidates.UniDates.DTOs.ProfiloDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Sesso : sesso
+  com.unidates.Unidates.UniDates.DTOs.SegnalazioneDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Motivazione : motivazione
+  com.unidates.Unidates.UniDates.DTOs.StudenteDTO -up-|> com.unidates.Unidates.UniDates.DTOs.UtenteDTO
+  com.unidates.Unidates.UniDates.DTOs.StudenteDTO o-- com.unidates.Unidates.UniDates.DTOs.ProfiloDTO : profilo
+  com.unidates.Unidates.UniDates.DTOs.UtenteDTO o-- com.unidates.Unidates.UniDates.Model.Enum.Ruolo : ruolo
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

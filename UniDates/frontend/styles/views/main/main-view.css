@@ -1,0 +1,39 @@
+#header {
+  height: 100%;
+  background: var(--lumo-primary-color-10pct);
+  display: flex;
+  align-items: center !important;
+  flex-basis: 100% !important;
+}
+
+
+
+#img {
+  height: 80px;
+  margin-left: 10px;
+  padding-top: 8px;
+  overflow: hidden;
+}
+
+#profile-img{
+  height: auto;
+  width: auto;
+  margin-right: 10px;
+  margin-left: auto;
+  overflow: hidden;
+  align-items: center;
+}
+
+#ricerca{
+  width: auto;
+  margin-left: auto;
+}
+
+#ricerca-field{
+  width: 30em;
+}
+
+#logo-navbar{
+  height: 100px;
+  width:  100px;
+}

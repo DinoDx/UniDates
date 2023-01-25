@@ -1,0 +1,31 @@
+
+@media only screen and (max-width: 980px) {
+    .layout-esterno {
+        flex-direction: column;
+        height: auto;
+        align-items: center;
+
+    }
+
+    #info-boxing {
+        align-items: center;
+        justify-content: center;
+        margin-left: 10rem;
+        margin-right: 10rem;
+    }
+    #logo{
+        max-height: 150px;
+        max-width: 200px;
+    }
+    #layout-form{
+        padding-left: 10em;
+        padding-right: 10em;
+    }
+}
+#layout-form{
+    padding-left: 3em;
+    padding-right: 3em;
+}
+#layout-sinistro{
+    background: var(--lumo-shade-80pct);
+}

@@ -1,0 +1,50 @@
+.personal-profile vaadin-grid {
+    line-height: var(--lumo-line-height-m);
+    height: 100%;
+}
+
+.personal-profile vaadin-grid,
+.personal-profile vaadin-grid-cell-content {
+    background-color: tan;
+    height: 100%;
+}
+.personal-profile .bottom-layout{
+    margin-top: 10em;
+
+}
+
+.personal-profile .nome{
+    font-family: "Arial Black";
+    size: 8em;
+}
+
+#foto{
+    margin-top: 4em;
+}
+
+#confirm{
+    align-items: center;
+    position: center;
+    margin-left: 1em;
+    border-radius: 10%;
+    background: #7cb5ec;
+    color: white;
+}
+
+#modifica{
+    margin-left: 5em;
+    border-radius: 10%;
+    background: #7cb5ec;
+    color: white;
+}
+
+#pass{
+    border-radius: 10%;
+    background: #7cb5ec;
+    color: white;
+}
+
+#list-topic{
+    max-width:160px;
+    max-height:160px ;
+}
